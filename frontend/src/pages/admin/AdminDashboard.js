@@ -61,7 +61,7 @@ export default function AdminDashboard() {
     api.get('/admin/inquiries').then(r => setRecentInquiries(r.data.slice(0, 5))).catch(() => {});
   }, []);
 
-  const statusMap = { new: 'Neu', in_review: 'In Pr\u00fcfung', offer_sent: 'Offerte', confirmed: 'Best\u00e4tigt', cancelled: 'Abgesagt' };
+  const statusMap = { new: 'Neu', in_review: 'In Pruefung', offer_sent: 'Offerte', confirmed: 'Bestaetigt', cancelled: 'Abgesagt' };
 
   return (
     <AdminLayout title="Dashboard">
@@ -75,7 +75,7 @@ export default function AdminDashboard() {
           <div className="sf-stat-card-num" data-testid="stat-new">{stats.new_inquiries}</div>
         </div>
         <div className="sf-stat-card">
-          <div className="sf-stat-card-label">Best\u00e4tigt</div>
+          <div className="sf-stat-card-label">Bestätigt</div>
           <div className="sf-stat-card-num" data-testid="stat-confirmed">{stats.confirmed}</div>
         </div>
         <div className="sf-stat-card">
@@ -94,7 +94,7 @@ export default function AdminDashboard() {
               <th>Name</th>
               <th>Datum</th>
               <th>Event</th>
-              <th>G\u00e4ste</th>
+              <th>Gäste</th>
               <th>Status</th>
               <th>Erstellt</th>
             </tr>

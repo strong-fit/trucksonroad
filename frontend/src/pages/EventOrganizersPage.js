@@ -9,12 +9,12 @@ export default function EventOrganizersPage() {
   const isDE = lang === 'de';
 
   const features = [
-    { icon: <Zap size={20} />, title: isDE ? 'Schnelle Ausgabe' : 'Fast Service', text: isDE ? 'Bis zu 300 G\u00e4ste pro Stunde \u2013 keine Staus, keine langen Wartezeiten.' : 'Up to 300 guests per hour \u2013 no queues, no long waiting times.' },
-    { icon: <Users size={20} />, title: isDE ? 'Erfahrenes Team' : 'Experienced Team', text: isDE ? 'Professionelles, eingespieltes Personal f\u00fcr reibungslose Abl\u00e4ufe.' : 'Professional, well-coordinated staff for smooth operations.' },
-    { icon: <Shield size={20} />, title: isDE ? 'Saubere Abl\u00e4ufe' : 'Clean Processes', text: isDE ? 'Klare Strukturen von Aufbau bis Abbau \u2013 ihr k\u00f6nnt euch auf uns verlassen.' : 'Clear structures from setup to teardown \u2013 you can rely on us.' },
-    { icon: <Eye size={20} />, title: isDE ? 'Auff\u00e4llige Optik' : 'Eye-catching Look', text: isDE ? 'Unsere Trucks sind ein Hingucker und machen jedes Event besonders.' : 'Our trucks are eye-catchers and make every event special.' },
-    { icon: <Truck size={20} />, title: isDE ? 'Mehrere Konzepte' : 'Multiple Concepts', text: isDE ? '6 spezialisierte Trucks \u2013 kombinierbar f\u00fcr maximale Vielfalt.' : '6 specialized trucks \u2013 combinable for maximum variety.' },
-    { icon: <Clock size={20} />, title: isDE ? 'Zuverl\u00e4ssig' : 'Reliable', text: isDE ? 'P\u00fcnktlicher Aufbau, professionelle Durchf\u00fchrung, sauberer Abbau.' : 'Punctual setup, professional execution, clean teardown.' },
+    { icon: <Zap size={20} />, title: isDE ? 'Schnelle Ausgabe' : 'Fast Service', text: isDE ? 'Bis zu 300 Gäste pro Stunde – keine Staus, keine langen Wartezeiten.' : 'Up to 300 guests per hour – no queues, no long waiting times.' },
+    { icon: <Users size={20} />, title: isDE ? 'Erfahrenes Team' : 'Experienced Team', text: isDE ? 'Professionelles, eingespieltes Personal für reibungslose Abläufe.' : 'Professional, well-coordinated staff for smooth operations.' },
+    { icon: <Shield size={20} />, title: isDE ? 'Saubere Abläufe' : 'Clean Processes', text: isDE ? 'Klare Strukturen von Aufbau bis Abbau – ihr könnt euch auf uns verlassen.' : 'Clear structures from setup to teardown – you can rely on us.' },
+    { icon: <Eye size={20} />, title: isDE ? 'Auffällige Optik' : 'Eye-catching Look', text: isDE ? 'Unsere Trucks sind ein Hingucker und machen jedes Event besonders.' : 'Our trucks are eye-catchers and make every event special.' },
+    { icon: <Truck size={20} />, title: isDE ? 'Mehrere Konzepte' : 'Multiple Concepts', text: isDE ? '6 spezialisierte Trucks – kombinierbar für maximale Vielfalt.' : '6 specialized trucks – combinable for maximum variety.' },
+    { icon: <Clock size={20} />, title: isDE ? 'Zuverlässig' : 'Reliable', text: isDE ? 'Pünktlicher Aufbau, professionelle Durchführung, sauberer Abbau.' : 'Punctual setup, professional execution, clean teardown.' },
   ];
 
   return (
@@ -27,7 +27,7 @@ export default function EventOrganizersPage() {
       </div>
 
       <section className="sf-section">
-        <div className="sf-section-tag">{isDE ? 'Warum Veranstalter uns w\u00e4hlen' : 'Why organizers choose us'}</div>
+        <div className="sf-section-tag">{isDE ? 'Warum Veranstalter uns wählen' : 'Why organizers choose us'}</div>
         <h2 className="sf-section-title">{isDE ? 'Eventbereit.\nProfessionell.' : 'Event-ready.\nProfessional.'}</h2>
         <div className="sf-info-grid">
           {features.map((f, i) => (
@@ -46,13 +46,13 @@ export default function EventOrganizersPage() {
         <div className="sf-whom" style={{ gap: '3rem' }}>
           <div>
             <div className="sf-section-tag">{isDE ? 'Technische Daten' : 'Technical Data'}</div>
-            <h2 className="sf-section-title" style={{ fontSize: '1.8rem' }}>{isDE ? 'Was Veranstalter\nwissen m\u00fcssen' : 'What organizers\nneed to know'}</h2>
+            <h2 className="sf-section-title" style={{ fontSize: '1.8rem' }}>{isDE ? 'Was Veranstalter\nwissen müssen' : 'What organizers\nneed to know'}</h2>
             <ul className="sf-truck-list" style={{ marginTop: '1.5rem' }}>
-              <li>{isDE ? 'Platzbedarf: 4\u20136m x 2.5\u20133m je Truck' : 'Space: 4-6m x 2.5-3m per truck'}</li>
+              <li>{isDE ? 'Platzbedarf: 4–6m x 2.5–3m je Truck' : 'Space: 4-6m x 2.5-3m per truck'}</li>
               <li>{isDE ? 'Strom: 230V / 16A pro Truck' : 'Power: 230V / 16A per truck'}</li>
               <li>{isDE ? 'Wasser: Je nach Konzept' : 'Water: Depends on concept'}</li>
-              <li>{isDE ? 'Aufbauzeit: 30\u201360 Minuten' : 'Setup: 30-60 minutes'}</li>
-              <li>{isDE ? 'Ausgabe: bis 400 G\u00e4ste/h' : 'Output: up to 400 guests/h'}</li>
+              <li>{isDE ? 'Aufbauzeit: 30–60 Minuten' : 'Setup: 30-60 minutes'}</li>
+              <li>{isDE ? 'Ausgabe: bis 400 Gäste/h' : 'Output: up to 400 guests/h'}</li>
               <li>{isDE ? 'Einsatzgebiet: Ganze Schweiz' : 'Service area: All of Switzerland'}</li>
             </ul>
           </div>
@@ -64,7 +64,7 @@ export default function EventOrganizersPage() {
       </section>
 
       <section className="sf-cta">
-        <div className="sf-cta-eyebrow">{isDE ? 'F\u00fcr Veranstalter' : 'For Organizers'}</div>
+        <div className="sf-cta-eyebrow">{isDE ? 'Für Veranstalter' : 'For Organizers'}</div>
         <h2 className="sf-cta-title">
           {isDE ? 'Interesse? Wir senden euch gerne unsere Unterlagen.' : 'Interested? We\'ll gladly send you our documents.'}
         </h2>

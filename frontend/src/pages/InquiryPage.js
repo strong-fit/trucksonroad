@@ -60,7 +60,10 @@ export default function InquiryPage() {
     }
   };
 
-  const blockedDates = calendarBlocks.filter(b => b.status === 'blocked' || b.status === 'confirmed').map(b => new Date(b.date));
+  const blockedDates = calendarBlocks.filter(b => b.status === 'blocked' || b.status === 'confirmed').map(b => {
+    const parts = b.date.split('-');
+    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+  });
 
   const dayModifiers = {
     booked: blockedDates,
@@ -93,7 +96,7 @@ export default function InquiryPage() {
         <div className="sf-form-info">
           <div className="sf-section-tag">{t('avail_tag')}</div>
           <h3 className="sf-section-title" style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>
-            {lang === 'de' ? 'Datum w\u00e4hlen' : 'Choose date'}
+            {lang === 'de' ? 'Datum wählen' : 'Choose date'}
           </h3>
           <div style={{ background: 'var(--sf-surface)', border: '1px solid var(--sf-border)', borderRadius: '12px', padding: '1rem', display: 'inline-block' }}>
             <Calendar
@@ -116,7 +119,7 @@ export default function InquiryPage() {
           <div style={{ marginTop: '3rem' }}>
             <div className="sf-form-contact"><Mail size={16} className="sf-form-contact-icon" /> <span>info@strongfood.ch</span></div>
             <div className="sf-form-contact"><Phone size={16} className="sf-form-contact-icon" /> <span>+41 xx xxx xx xx</span></div>
-            <div className="sf-form-contact"><MapPin size={16} className="sf-form-contact-icon" /> <span>Z\u00fcrich & ganze Schweiz</span></div>
+            <div className="sf-form-contact"><MapPin size={16} className="sf-form-contact-icon" /> <span>Zürich & ganze Schweiz</span></div>
           </div>
         </div>
 
@@ -148,17 +151,17 @@ export default function InquiryPage() {
           <div className="sf-form-row">
             <div className="sf-form-group">
               <label>{t('form_date')} *</label>
-              <input type="text" readOnly value={selectedDate ? format(selectedDate, 'dd.MM.yyyy') : ''} placeholder={lang === 'de' ? 'Im Kalender w\u00e4hlen' : 'Select in calendar'} data-testid="input-date" />
+              <input type="text" readOnly value={selectedDate ? format(selectedDate, 'dd.MM.yyyy') : ''} placeholder={lang === 'de' ? 'Im Kalender wählen' : 'Select in calendar'} data-testid="input-date" />
             </div>
             <div className="sf-form-group">
               <label>{t('form_time')}</label>
-              <input value={form.event_time} onChange={e => setForm({...form, event_time: e.target.value})} placeholder="z.B. 12:00 \u2013 20:00" data-testid="input-time" />
+              <input value={form.event_time} onChange={e => setForm({...form, event_time: e.target.value})} placeholder="z.B. 12:00 – 20:00" data-testid="input-time" />
             </div>
           </div>
           <div className="sf-form-row">
             <div className="sf-form-group">
               <label>{t('form_location')} *</label>
-              <input required value={form.location} onChange={e => setForm({...form, location: e.target.value})} placeholder="Z\u00fcrich, Halle 7..." data-testid="input-location" />
+              <input required value={form.location} onChange={e => setForm({...form, location: e.target.value})} placeholder="Zürich, Halle 7..." data-testid="input-location" />
             </div>
             <div className="sf-form-group">
               <label>{t('form_guests')} *</label>
@@ -168,7 +171,7 @@ export default function InquiryPage() {
           <div className="sf-form-group">
             <label>{t('form_event_type')} *</label>
             <select required value={form.event_type} onChange={e => setForm({...form, event_type: e.target.value})} data-testid="select-event-type">
-              <option value="">{lang === 'de' ? 'Bitte w\u00e4hlen...' : 'Please select...'}</option>
+              <option value="">{lang === 'de' ? 'Bitte wählen...' : 'Please select...'}</option>
               {t('form_event_types').map(type => <option key={type} value={type}>{type}</option>)}
             </select>
           </div>

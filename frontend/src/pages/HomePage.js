@@ -28,7 +28,7 @@ function FadeUp({ children, delay = 0, className = '' }) {
   );
 }
 
-const tickerItems = ["Burger Truck", "Bowl Truck", "Empanadas Truck", "Pocket Bowl Truck", "Retro Trailer", "Festivals", "Firmenanl\u00e4sse", "Privatevents"];
+const tickerItems = ["Burger Truck", "Bowl Truck", "Empanadas Truck", "Pocket Bowl Truck", "Retro Trailer", "Festivals", "Firmenanlässe", "Privatevents"];
 
 export default function HomePage() {
   const { lang, t } = useLanguage();

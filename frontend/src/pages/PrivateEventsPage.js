@@ -12,15 +12,15 @@ export default function PrivateEventsPage() {
     { icon: <Gift size={20} />, name: isDE ? 'Geburtstag' : 'Birthday' },
     { icon: <Heart size={20} />, name: isDE ? 'Hochzeit' : 'Wedding' },
     { icon: <Building2 size={20} />, name: isDE ? 'Firmenfeier' : 'Corporate Party' },
-    { icon: <PartyPopper size={20} />, name: isDE ? 'Er\u00f6ffnung' : 'Opening' },
+    { icon: <PartyPopper size={20} />, name: isDE ? 'Eröffnung' : 'Opening' },
     { icon: <Trophy size={20} />, name: isDE ? 'Vereinsanlass' : 'Club Event' },
     { icon: <CalendarDays size={20} />, name: isDE ? 'Kundenevent' : 'Client Event' },
   ];
 
   const steps = [
-    { num: '1', title: isDE ? 'Anfrage' : 'Inquiry', text: isDE ? 'F\u00fcllt unser Formular aus mit euren W\u00fcnschen und Details.' : 'Fill out our form with your wishes and details.' },
-    { num: '2', title: isDE ? 'Angebot' : 'Offer', text: isDE ? 'Wir pr\u00fcfen und senden euch eine massgeschneiderte Offerte.' : 'We review and send you a tailored offer.' },
-    { num: '3', title: isDE ? 'Best\u00e4tigung' : 'Confirmation', text: isDE ? 'Nach Best\u00e4tigung planen wir alles f\u00fcr euren Anlass.' : 'After confirmation, we plan everything for your event.' },
+    { num: '1', title: isDE ? 'Anfrage' : 'Inquiry', text: isDE ? 'Füllt unser Formular aus mit euren Wünschen und Details.' : 'Fill out our form with your wishes and details.' },
+    { num: '2', title: isDE ? 'Angebot' : 'Offer', text: isDE ? 'Wir prüfen und senden euch eine massgeschneiderte Offerte.' : 'We review and send you a tailored offer.' },
+    { num: '3', title: isDE ? 'Bestätigung' : 'Confirmation', text: isDE ? 'Nach Bestätigung planen wir alles für euren Anlass.' : 'After confirmation, we plan everything for your event.' },
   ];
 
   return (
@@ -33,8 +33,8 @@ export default function PrivateEventsPage() {
       </div>
 
       <section className="sf-section">
-        <div className="sf-section-tag">{isDE ? 'Anl\u00e4sse' : 'Event Types'}</div>
-        <h2 className="sf-section-title">{isDE ? 'F\u00fcr diese Anl\u00e4sse\nsind wir bereit.' : 'We\'re ready for\nthese occasions.'}</h2>
+        <div className="sf-section-tag">{isDE ? 'Anlässe' : 'Event Types'}</div>
+        <h2 className="sf-section-title">{isDE ? 'Für diese Anlässe\nsind wir bereit.' : 'We\'re ready for\nthese occasions.'}</h2>
         <div className="sf-info-grid">
           {eventTypes.map((ev, i) => (
             <div key={i} className="sf-info-card" data-testid={`event-type-${i}`} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.5rem' }}>
@@ -63,14 +63,14 @@ export default function PrivateEventsPage() {
         <div className="sf-whom">
           <div>
             <div className="sf-section-tag">{isDE ? 'Gut zu wissen' : 'Good to know'}</div>
-            <h2 className="sf-section-title" style={{ fontSize: '1.8rem' }}>{isDE ? 'Was ihr wissen\nm\u00fcsst' : 'What you need\nto know'}</h2>
+            <h2 className="sf-section-title" style={{ fontSize: '1.8rem' }}>{isDE ? 'Was ihr wissen\nmüsst' : 'What you need\nto know'}</h2>
             <ul className="sf-truck-list" style={{ marginTop: '1.5rem' }}>
-              <li>{isDE ? 'Buchung ab ca. 50 G\u00e4sten' : 'Booking from approx. 50 guests'}</li>
+              <li>{isDE ? 'Buchung ab ca. 50 Gästen' : 'Booking from approx. 50 guests'}</li>
               <li>{isDE ? 'Individuell kalkuliert nach Konzept und Ort' : 'Individually calculated by concept and location'}</li>
-              <li>{isDE ? 'Mindestens 4\u20138 Wochen im Voraus buchen' : 'Book at least 4-8 weeks in advance'}</li>
-              <li>{isDE ? 'Men\u00fc individuell anpassbar' : 'Menu individually customizable'}</li>
+              <li>{isDE ? 'Mindestens 4–8 Wochen im Voraus buchen' : 'Book at least 4-8 weeks in advance'}</li>
+              <li>{isDE ? 'Menü individuell anpassbar' : 'Menu individually customizable'}</li>
               <li>{isDE ? 'Einsatzgebiet: Ganze Schweiz' : 'Service area: All of Switzerland'}</li>
-              <li>{isDE ? 'Vegetarische und vegane Optionen verf\u00fcgbar' : 'Vegetarian and vegan options available'}</li>
+              <li>{isDE ? 'Vegetarische und vegane Optionen verfügbar' : 'Vegetarian and vegan options available'}</li>
             </ul>
           </div>
           <div className="sf-whom-visual">
@@ -80,7 +80,7 @@ export default function PrivateEventsPage() {
       </section>
 
       <section className="sf-cta">
-        <div className="sf-cta-eyebrow">{isDE ? 'Bereit f\u00fcr euren Anlass?' : 'Ready for your event?'}</div>
+        <div className="sf-cta-eyebrow">{isDE ? 'Bereit für euren Anlass?' : 'Ready for your event?'}</div>
         <h2 className="sf-cta-title">
           {isDE ? 'Jetzt unverbindlich anfragen.' : 'Inquire without obligation.'}
         </h2>

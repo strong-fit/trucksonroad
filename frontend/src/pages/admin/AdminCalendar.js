@@ -93,7 +93,7 @@ export default function AdminCalendar() {
                 <select value={blockStatus} onChange={e => setBlockStatus(e.target.value)} style={{ background: 'var(--sf-bg)', border: '1px solid var(--sf-border)', borderRadius: '6px', padding: '0.5rem', color: 'var(--sf-white)' }} data-testid="block-status-select">
                   <option value="blocked">Blockiert</option>
                   <option value="reserved">Reserviert</option>
-                  <option value="confirmed">Best\u00e4tigt</option>
+                  <option value="confirmed">Bestätigt</option>
                 </select>
               </div>
               <div className="sf-form-group" style={{ marginBottom: '0.8rem' }}>
@@ -113,7 +113,7 @@ export default function AdminCalendar() {
           </h4>
           <div className="sf-cal-block-list">
             {truckBlocks.length === 0 ? (
-              <p style={{ color: 'var(--sf-gray)', fontSize: '0.85rem' }}>Keine Blockierungen f\u00fcr diesen Truck.</p>
+              <p style={{ color: 'var(--sf-gray)', fontSize: '0.85rem' }}>Keine Blockierungen für diesen Truck.</p>
             ) : (
               truckBlocks.sort((a, b) => a.date.localeCompare(b.date)).map(block => (
                 <div key={block.id || block.date} className="sf-cal-block-item" data-testid={`block-${block.date}`}>

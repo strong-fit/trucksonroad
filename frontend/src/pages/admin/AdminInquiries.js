@@ -6,9 +6,9 @@ import { Trash2, Eye } from 'lucide-react';
 
 const STATUS_OPTIONS = [
   { value: 'new', label: 'Neu', class: 'sf-status-new' },
-  { value: 'in_review', label: 'In Pr\u00fcfung', class: 'sf-status-in_review' },
+  { value: 'in_review', label: 'In Prüfung', class: 'sf-status-in_review' },
   { value: 'offer_sent', label: 'Offerte gesendet', class: 'sf-status-offer_sent' },
-  { value: 'confirmed', label: 'Best\u00e4tigt', class: 'sf-status-confirmed' },
+  { value: 'confirmed', label: 'Bestätigt', class: 'sf-status-confirmed' },
   { value: 'cancelled', label: 'Abgesagt', class: 'sf-status-cancelled' },
 ];
 
@@ -33,10 +33,10 @@ export default function AdminInquiries() {
   };
 
   const deleteInquiry = async (id) => {
-    if (!window.confirm('Anfrage wirklich l\u00f6schen?')) return;
+    if (!window.confirm('Anfrage wirklich löschen?')) return;
     try {
       await api.delete(`/admin/inquiries/${id}`);
-      toast.success('Anfrage gel\u00f6scht');
+      toast.success('Anfrage gelöscht');
       load();
       if (selected?.id === id) setSelected(null);
     } catch { toast.error('Fehler'); }
@@ -65,7 +65,7 @@ export default function AdminInquiries() {
           ) : (
             <table className="sf-admin-table" data-testid="inquiries-table">
               <thead>
-                <tr><th>Name</th><th>Datum</th><th>Typ</th><th>G\u00e4ste</th><th>Status</th><th></th></tr>
+                <tr><th>Name</th><th>Datum</th><th>Typ</th><th>Gäste</th><th>Status</th><th></th></tr>
               </thead>
               <tbody>
                 {filtered.map(inq => (
@@ -101,7 +101,7 @@ export default function AdminInquiries() {
               <div><strong>Datum:</strong> {selected.event_date || '-'}</div>
               <div><strong>Uhrzeit:</strong> {selected.event_time || '-'}</div>
               <div><strong>Ort:</strong> {selected.location || '-'}</div>
-              <div><strong>G\u00e4ste:</strong> {selected.guest_count || '-'}</div>
+              <div><strong>Gäste:</strong> {selected.guest_count || '-'}</div>
               <div><strong>Eventtyp:</strong> {selected.event_type || selected.concept || '-'}</div>
               <div><strong>Indoor/Outdoor:</strong> {selected.indoor_outdoor || '-'}</div>
               {selected.selected_trucks?.length > 0 && <div><strong>Trucks:</strong> {selected.selected_trucks.join(', ')}</div>}
@@ -112,7 +112,7 @@ export default function AdminInquiries() {
             </div>
 
             <div style={{ marginTop: '1.5rem', borderTop: '1px solid var(--sf-border)', paddingTop: '1rem' }}>
-              <label style={{ fontSize: '0.75rem', color: 'var(--sf-gray)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Status \u00e4ndern</label>
+              <label style={{ fontSize: '0.75rem', color: 'var(--sf-gray)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Status ändern</label>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
                 {STATUS_OPTIONS.map(s => (
                   <button key={s.value} className={`sf-truck-btn ${selected.status === s.value ? 'active' : ''}`} onClick={() => updateStatus(selected.id, s.value)} data-testid={`set-status-${s.value}`}>

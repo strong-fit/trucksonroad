@@ -267,6 +267,9 @@
 }
 .sf-form-group textarea { min-height: 100px; resize: vertical; }
 .sf-form-group select { cursor: pointer; appearance: none; }
+.sf-form-group select option {
+  background: var(--sf-surface); color: var(--sf-white); padding: 0.5rem;
+}
 .sf-form-trucks { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .sf-truck-btn {
   background: var(--sf-surface); border: 1px solid var(--sf-border); color: var(--sf-gray-light);
