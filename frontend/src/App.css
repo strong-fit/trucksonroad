@@ -176,7 +176,7 @@
   letter-spacing: 0.2em; color: var(--sf-bg); padding: 0 2.5rem;
 }
 .sf-ticker-item::after {
-  content: '\u25C6'; margin-left: 2.5rem; opacity: 0.4;
+  content: '\25C6'; margin-left: 2.5rem; opacity: 0.4;
 }
 @keyframes sfTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
