@@ -27,8 +27,8 @@ export default function AdminLogin() {
     <div className="sf-login" data-testid="admin-login-page">
       <div className="sf-login-card">
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <span className="sf-logo-text" style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.3rem', fontWeight: 800 }}>STRONG</span>
-          <span className="sf-logo-accent" style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.3rem', fontWeight: 800 }}>FOOD</span>
+          <span className="sf-logo-text" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.3rem', fontWeight: 400 }}>STRONG</span>
+          <span className="sf-logo-accent" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.3rem', fontWeight: 400 }}>FOOD</span>
         </div>
         <h2 className="sf-login-title">Admin Login</h2>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

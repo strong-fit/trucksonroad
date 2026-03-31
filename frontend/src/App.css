@@ -11,8 +11,8 @@
   display: flex; align-items: center; justify-content: space-between;
 }
 .sf-nav-logo {
-  font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800;
-  text-decoration: none; letter-spacing: 0.05em;
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; font-weight: 400;
+  text-decoration: none; letter-spacing: 0.08em;
 }
 .sf-logo-text { color: var(--sf-white); }
 .sf-logo-accent { color: var(--sf-gold); }
@@ -95,11 +95,15 @@
   text-transform: uppercase; margin-bottom: 1.5rem; font-weight: 500;
 }
 .sf-hero-title {
-  font-family: 'Syne', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 800; line-height: 1.05; margin-bottom: 1.5rem;
-  text-transform: uppercase; letter-spacing: -0.02em;
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 400; line-height: 0.95; margin-bottom: 1.5rem;
+  text-transform: uppercase; letter-spacing: 0.01em;
 }
-.sf-hero-title .italic { font-style: italic; font-weight: 400; text-transform: lowercase; opacity: 0.7; }
+.sf-hero-title .italic {
+  font-family: 'Playfair Display', serif; font-style: italic; font-weight: 400;
+  text-transform: none; opacity: 0.85; display: block; font-size: 0.55em;
+  margin-bottom: 0.1em; letter-spacing: 0.02em;
+}
 .sf-hero-title .gold { color: var(--sf-gold); }
 .sf-hero-subtitle {
   color: var(--sf-gray-light); font-size: 1rem; line-height: 1.8;
@@ -110,7 +114,7 @@
   display: flex; gap: 3rem; padding-top: 2rem; border-top: 1px solid var(--sf-border);
 }
 .sf-stat-num {
-  font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--sf-gold);
+  font-family: 'Bebas Neue', sans-serif; font-size: 2rem; font-weight: 400; color: var(--sf-gold);
 }
 .sf-stat-label { color: var(--sf-gray); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
 
@@ -131,8 +135,8 @@
   width: max-content;
 }
 .sf-ticker-item {
-  font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.15em; color: var(--sf-gray);
+  font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; font-weight: 400;
+  text-transform: uppercase; letter-spacing: 0.2em; color: var(--sf-gray);
 }
 .sf-ticker-item::after { content: '\00b7'; margin-left: 3rem; color: var(--sf-gold); }
 @keyframes sfTicker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -146,8 +150,8 @@
   text-transform: uppercase; margin-bottom: 1rem; font-weight: 600;
 }
 .sf-section-title {
-  font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 3rem);
-  font-weight: 800; line-height: 1.1; margin-bottom: 1rem;
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 400; line-height: 1.05; margin-bottom: 1rem;
 }
 @media (max-width: 768px) { .sf-section { padding: 4rem 1.5rem; } }
 
@@ -180,7 +184,8 @@
   background: linear-gradient(transparent, rgba(0,0,0,0.85));
 }
 .sf-truck-card-name {
-  font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.3rem;
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; font-weight: 400; margin-bottom: 0.3rem;
+  letter-spacing: 0.03em;
 }
 .sf-truck-card-sub { color: var(--sf-gray-light); font-size: 0.8rem; }
 @media (max-width: 768px) {
@@ -198,7 +203,7 @@
   border-bottom: 1px solid var(--sf-border); transition: all 0.3s; cursor: default;
 }
 .sf-whom-item:hover { padding-left: 0.5rem; }
-.sf-whom-num { color: var(--sf-gold); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; min-width: 30px; }
+.sf-whom-num { color: var(--sf-gold); font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 0.9rem; min-width: 30px; }
 .sf-whom-name { flex: 1; font-size: 1.1rem; font-weight: 500; }
 .sf-whom-arrow { color: var(--sf-gold); font-size: 1.2rem; opacity: 0; transition: opacity 0.3s; }
 .sf-whom-item:hover .sf-whom-arrow { opacity: 1; }
@@ -220,8 +225,8 @@
 
 /* --- WHY US --- */
 .sf-why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3rem; }
-.sf-why-num { color: var(--sf-gold); font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
-.sf-why-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.8rem; }
+.sf-why-num { color: var(--sf-gold); font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; font-weight: 400; margin-bottom: 1rem; }
+.sf-why-title { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 1.2rem; margin-bottom: 0.8rem; letter-spacing: 0.03em; }
 .sf-why-text { color: var(--sf-gray); font-size: 0.85rem; line-height: 1.7; }
 @media (max-width: 900px) { .sf-why-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .sf-why-grid { grid-template-columns: 1fr; } }
@@ -236,10 +241,10 @@
   text-transform: uppercase; margin-bottom: 1.5rem;
 }
 .sf-cta-title {
-  font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3.2rem);
-  font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem;
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400; line-height: 1.1; margin-bottom: 1.5rem;
 }
-.sf-cta-title em { font-style: italic; color: var(--sf-gold); font-weight: 400; }
+.sf-cta-title em { font-family: 'Playfair Display', serif; font-style: italic; color: var(--sf-gold); font-weight: 400; }
 .sf-cta-sub { color: var(--sf-gray); font-size: 0.9rem; margin-bottom: 2.5rem; }
 .sf-cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
@@ -320,7 +325,7 @@
   display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
 }
 .sf-footer-heading {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem;
+  font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 0.85rem;
   margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em;
 }
 .sf-footer-desc { color: var(--sf-gray); font-size: 0.85rem; line-height: 1.7; max-width: 300px; }
@@ -368,8 +373,8 @@
   font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;
 }
 .sf-truck-name {
-  font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800; margin-bottom: 0.5rem;
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 400; margin-bottom: 0.5rem; letter-spacing: 0.02em;
 }
 .sf-truck-tagline { color: var(--sf-gold); font-size: 1rem; margin-bottom: 2rem; }
 .sf-truck-desc { color: var(--sf-gray-light); font-size: 1rem; line-height: 1.8; margin-bottom: 3rem; }
@@ -399,7 +404,7 @@
   padding: 2rem 0; display: flex; flex-direction: column;
 }
 .sf-admin-sidebar-logo {
-  padding: 0 1.5rem 2rem; font-family: 'Syne', sans-serif; font-weight: 800;
+  padding: 0 1.5rem 2rem; font-family: 'Bebas Neue', sans-serif; font-weight: 400;
   font-size: 1.1rem; border-bottom: 1px solid var(--sf-border); margin-bottom: 1rem;
 }
 .sf-admin-nav-link {
@@ -413,7 +418,7 @@
 }
 .sf-admin-main { flex: 1; padding: 2rem; overflow-y: auto; }
 .sf-admin-header { margin-bottom: 2rem; }
-.sf-admin-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; }
+.sf-admin-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; font-weight: 400; }
 
 .sf-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
 .sf-stat-card {
@@ -422,7 +427,7 @@
 }
 .sf-stat-card:hover { border-color: rgba(200,168,78,0.3); }
 .sf-stat-card-label { color: var(--sf-gray); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; }
-.sf-stat-card-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 700; color: var(--sf-gold); margin-top: 0.5rem; }
+.sf-stat-card-num { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; font-weight: 400; color: var(--sf-gold); margin-top: 0.5rem; }
 
 .sf-admin-table {
   width: 100%; border-collapse: collapse; background: var(--sf-surface);
@@ -463,7 +468,7 @@
   border-radius: 12px; padding: 3rem; width: 100%; max-width: 400px;
 }
 .sf-login-title {
-  font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800;
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; font-weight: 400;
   text-align: center; margin-bottom: 2rem;
 }
 
@@ -512,11 +517,11 @@
 }
 .sf-info-card:hover { border-color: rgba(200,168,78,0.3); }
 .sf-info-card-num {
-  color: var(--sf-gold); font-family: 'Syne', sans-serif; font-size: 1.5rem;
-  font-weight: 700; margin-bottom: 0.8rem;
+  color: var(--sf-gold); font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+  font-weight: 400; margin-bottom: 0.8rem;
 }
 .sf-info-card-title {
-  font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 0.6rem;
+  font-family: 'Bebas Neue', sans-serif; font-weight: 400; margin-bottom: 0.6rem;
 }
 .sf-info-card-text { color: var(--sf-gray); font-size: 0.85rem; line-height: 1.7; }
 @media (max-width: 768px) { .sf-info-grid { grid-template-columns: 1fr; } }
@@ -535,9 +540,9 @@
   width: 48px; height: 48px; border-radius: 50%; background: rgba(200,168,78,0.1);
   border: 1px solid var(--sf-gold); color: var(--sf-gold); display: flex;
   align-items: center; justify-content: center; margin: 0 auto 1rem;
-  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-family: 'Bebas Neue', sans-serif; font-weight: 400;
 }
-.sf-process-title { font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 0.5rem; }
+.sf-process-title { font-family: 'Bebas Neue', sans-serif; font-weight: 400; margin-bottom: 0.5rem; }
 .sf-process-text { color: var(--sf-gray); font-size: 0.85rem; line-height: 1.6; }
 
 /* Admin Calendar specifics */

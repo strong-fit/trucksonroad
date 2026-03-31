@@ -84,7 +84,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '1rem' }}>Letzte Anfragen</h3>
+      <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 400, marginBottom: '1rem' }}>Letzte Anfragen</h3>
       {recentInquiries.length === 0 ? (
         <p style={{ color: 'var(--sf-gray)' }}>Noch keine Anfragen vorhanden.</p>
       ) : (

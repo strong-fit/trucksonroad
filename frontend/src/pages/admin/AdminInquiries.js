@@ -90,7 +90,7 @@ export default function AdminInquiries() {
         {selected && (
           <div style={{ background: 'var(--sf-surface)', border: '1px solid var(--sf-border)', borderRadius: '8px', padding: '1.5rem' }} data-testid="inquiry-detail">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>Anfrage Details</h3>
+              <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 400 }}>Anfrage Details</h3>
               <button onClick={() => setSelected(null)} style={{ background: 'none', border: 'none', color: 'var(--sf-gray)', cursor: 'pointer' }}>&times;</button>
             </div>
             <div style={{ display: 'grid', gap: '0.8rem', fontSize: '0.85rem' }}>

@@ -85,7 +85,7 @@ export default function AdminCalendar() {
 
           {selectedDate && (
             <div style={{ marginTop: '1.5rem', background: 'var(--sf-surface)', border: '1px solid var(--sf-border)', borderRadius: '8px', padding: '1.5rem' }}>
-              <h4 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '1rem' }}>
+              <h4 style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 400, marginBottom: '1rem' }}>
                 {format(selectedDate, 'dd.MM.yyyy')} blockieren
               </h4>
               <div className="sf-form-group" style={{ marginBottom: '0.8rem' }}>
@@ -108,7 +108,7 @@ export default function AdminCalendar() {
         </div>
 
         <div>
-          <h4 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: '1rem' }}>
+          <h4 style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 400, marginBottom: '1rem' }}>
             Blockierte Daten: {trucks.find(t => t.slug === selectedTruck)?.name_de || ''}
           </h4>
           <div className="sf-cal-block-list">
