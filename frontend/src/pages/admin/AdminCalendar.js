@@ -3,7 +3,7 @@ import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Calendar } from '@/components/ui/calendar';
-import { Trash2 } from 'lucide-react';
+import { Trash2, CalendarX } from 'lucide-react';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 
@@ -51,27 +51,29 @@ export default function AdminCalendar() {
     } catch { toast.error('Fehler'); }
   };
 
-  const dayModifiers = {
-    blocked: blockedDates,
-  };
-
+  const dayModifiers = { blocked: blockedDates };
   const dayModifiersStyles = {
-    blocked: { backgroundColor: 'rgba(239,68,68,0.2)', color: '#f87171', borderRadius: '4px' },
+    blocked: { backgroundColor: 'rgba(239,68,68,0.12)', color: '#dc2626', borderRadius: '6px' },
   };
 
   return (
     <AdminLayout title="Kalender">
-      <div className="sf-cal-truck-selector">
+      <div className="adm-filters" style={{ marginBottom: '1.25rem' }} data-testid="calendar-truck-selector">
         {trucks.map(t => (
-          <button key={t.slug} className={`sf-truck-btn ${selectedTruck === t.slug ? 'active' : ''}`} onClick={() => setSelectedTruck(t.slug)} data-testid={`cal-truck-${t.slug}`}>
+          <button
+            key={t.slug}
+            className={`adm-filter-btn ${selectedTruck === t.slug ? 'active' : ''}`}
+            onClick={() => setSelectedTruck(t.slug)}
+            data-testid={`cal-truck-${t.slug}`}
+          >
             {t.name_de}
           </button>
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+      <div className="adm-cal-wrap">
         <div>
-          <div style={{ background: 'var(--sf-surface)', border: '1px solid var(--sf-border)', borderRadius: '12px', padding: '1rem', display: 'inline-block' }}>
+          <div className="adm-cal-card" data-testid="calendar-card">
             <Calendar
               mode="single"
               selected={selectedDate}
@@ -84,23 +86,21 @@ export default function AdminCalendar() {
           </div>
 
           {selectedDate && (
-            <div style={{ marginTop: '1.5rem', background: 'var(--sf-surface)', border: '1px solid var(--sf-border)', borderRadius: '8px', padding: '1.5rem' }}>
-              <h4 style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 400, marginBottom: '1rem' }}>
-                {format(selectedDate, 'dd.MM.yyyy')} blockieren
-              </h4>
-              <div className="sf-form-group" style={{ marginBottom: '0.8rem' }}>
-                <label>Status</label>
-                <select value={blockStatus} onChange={e => setBlockStatus(e.target.value)} style={{ background: 'var(--sf-bg)', border: '1px solid var(--sf-border)', borderRadius: '6px', padding: '0.5rem', color: 'var(--sf-white)' }} data-testid="block-status-select">
+            <div className="adm-cal-card" style={{ marginTop: '1rem' }} data-testid="block-form">
+              <h4>{format(selectedDate, 'dd.MM.yyyy')} blockieren</h4>
+              <div style={{ marginBottom: '0.75rem' }}>
+                <div className="adm-form-label">Status</div>
+                <select className="adm-select" value={blockStatus} onChange={e => setBlockStatus(e.target.value)} data-testid="block-status-select">
                   <option value="blocked">Blockiert</option>
                   <option value="reserved">Reserviert</option>
-                  <option value="confirmed">Bestätigt</option>
+                  <option value="confirmed">Bestaetigt</option>
                 </select>
               </div>
-              <div className="sf-form-group" style={{ marginBottom: '0.8rem' }}>
-                <label>Notizen</label>
-                <input value={blockNotes} onChange={e => setBlockNotes(e.target.value)} placeholder="Optional..." style={{ background: 'var(--sf-bg)', border: '1px solid var(--sf-border)', borderRadius: '6px', padding: '0.5rem', color: 'var(--sf-white)', width: '100%' }} data-testid="block-notes-input" />
+              <div style={{ marginBottom: '0.75rem' }}>
+                <div className="adm-form-label">Notizen</div>
+                <input className="adm-input" value={blockNotes} onChange={e => setBlockNotes(e.target.value)} placeholder="Optional..." data-testid="block-notes-input" />
               </div>
-              <button className="sf-btn-primary sf-btn-sm" onClick={addBlock} data-testid="add-block-btn">
+              <button className="adm-btn adm-btn-primary adm-btn-sm" onClick={addBlock} data-testid="add-block-btn">
                 Blockierung setzen
               </button>
             </div>
@@ -108,19 +108,23 @@ export default function AdminCalendar() {
         </div>
 
         <div>
-          <h4 style={{ fontFamily: 'Bebas Neue, sans-serif', fontWeight: 400, marginBottom: '1rem' }}>
-            Blockierte Daten: {trucks.find(t => t.slug === selectedTruck)?.name_de || ''}
-          </h4>
-          <div className="sf-cal-block-list">
+          <div className="adm-cal-card" data-testid="blocks-list-card">
+            <h4>Blockierte Daten: {trucks.find(t => t.slug === selectedTruck)?.name_de || ''}</h4>
             {truckBlocks.length === 0 ? (
-              <p style={{ color: 'var(--sf-gray)', fontSize: '0.85rem' }}>Keine Blockierungen für diesen Truck.</p>
+              <div className="adm-empty" data-testid="no-blocks-msg">
+                <div className="adm-empty-icon"><CalendarX size={20} /></div>
+                Keine Blockierungen fuer diesen Truck.
+              </div>
             ) : (
               truckBlocks.sort((a, b) => a.date.localeCompare(b.date)).map(block => (
-                <div key={block.id || block.date} className="sf-cal-block-item" data-testid={`block-${block.date}`}>
-                  <div>
+                <div key={block.id || block.date} className="adm-block-item" data-testid={`block-${block.date}`}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
                     <strong>{block.date}</strong>
-                    <span style={{ marginLeft: '0.8rem' }} className={`sf-status-badge sf-status-${block.status}`}>{block.status}</span>
-                    {block.notes && <span style={{ marginLeft: '0.8rem', color: 'var(--sf-gray)', fontSize: '0.8rem' }}>{block.notes}</span>}
+                    <span className={`adm-badge adm-badge-${block.status === 'blocked' ? 'cancelled' : block.status === 'reserved' ? 'in_review' : 'confirmed'}`}>
+                      <span className="adm-badge-dot" />
+                      {block.status}
+                    </span>
+                    {block.notes && <span style={{ color: 'var(--adm-text-muted)', fontSize: '0.78rem' }}>{block.notes}</span>}
                   </div>
                   <button onClick={() => removeBlock(block.id)} data-testid={`remove-block-${block.date}`}>
                     <Trash2 size={14} />
