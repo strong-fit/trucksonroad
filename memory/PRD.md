@@ -16,8 +16,8 @@ Premium Foodtruck Webseite für Schweizer Foodtruck-Unternehmen mit:
 - **Frontend**: React (CRA) + Tailwind CSS + Shadcn UI + Custom Dark Theme CSS
 - **Backend**: FastAPI + MongoDB (Motor async)
 - **Auth**: JWT with httpOnly cookies, bcrypt password hashing
-- **Design**: Dark premium theme (#0a0a0a bg, #c8a84e gold accents)
-- **Fonts**: Syne (headings) + Outfit (body)
+- **Design**: Dark premium theme (#0a0a0a bg, #e8b84b gold accents)
+- **Fonts**: Bebas Neue (headings), Playfair Display (italic accents), DM Sans (body)
 
 ## User Personas
 1. **Festival-Veranstalter** - Sucht zuverlässige Trucks für Grossevents
@@ -26,7 +26,7 @@ Premium Foodtruck Webseite für Schweizer Foodtruck-Unternehmen mit:
 4. **Admin** - Verwaltet Anfragen, Kalender, Trucks
 
 ## Core Requirements (Static)
-- Premium Dark Design matching reference
+- Premium Dark Design matching reference HTML
 - 6 Truck-Konzepte mit eigenem Profil
 - Umfassendes Anfrageformular (kein automatisches Buchen)
 - Kalender-Verfügbarkeit pro Truck
@@ -34,11 +34,13 @@ Premium Foodtruck Webseite für Schweizer Foodtruck-Unternehmen mit:
 - Anfrage-Management (Status: Neu → In Prüfung → Offerte → Bestätigt/Abgesagt)
 - Mehrsprachig DE/EN
 
-## What's Been Implemented (2026-03-30)
-### Frontend
-- [x] Homepage with Hero, Ticker, Trucks Grid, For-Whom, Why-Us, CTA, FAQ Preview
+## What's Been Implemented
+
+### Frontend (DONE)
+- [x] Homepage with Hero (2 floating truck images), Ticker, Trucks Grid, For-Whom, Why-Us (gold bg), CTA, FAQ Preview
+- [x] CSS/DOM structure aligned with user's HTML reference (sf-trucks-wrap, sf-why-section, sf-hero-truck-main/accent, sf-nav-cta)
 - [x] 6 Individual Truck Detail Pages with menu, specs, CTA
-- [x] Full Inquiry Form with calendar, truck selection, extras, all fields
+- [x] Full Inquiry Form with calendar, truck selection, extras
 - [x] FAQ Page with expandable accordion
 - [x] Event Organizers Page with features grid and tech specs
 - [x] Private Events Page with event types and 3-step process
@@ -46,12 +48,12 @@ Premium Foodtruck Webseite für Schweizer Foodtruck-Unternehmen mit:
 - [x] Admin Dashboard with stats and recent inquiries
 - [x] Admin Inquiry Management with filtering, detail view, status updates, notes
 - [x] Admin Calendar with per-truck blocking
-- [x] Navigation with language toggle (DE/EN)
+- [x] Navigation with language toggle (DE/EN) and sf-nav-cta gold button
 - [x] WhatsApp floating button
-- [x] Footer with links and contact info
+- [x] Footer with 4-column direct grid (Brand, Trucks, Events, Kontakt) + footer-bottom
 - [x] Responsive design
 
-### Backend
+### Backend (DONE)
 - [x] JWT auth with brute-force protection
 - [x] Trucks CRUD + seed data (6 trucks)
 - [x] Inquiries CRUD (public POST + admin management)
