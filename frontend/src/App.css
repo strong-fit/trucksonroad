@@ -26,7 +26,7 @@
 .sf-nav-link:hover, .sf-nav-link.active { opacity: 1; color: var(--sf-gold); }
 .sf-nav-actions { display: flex; align-items: center; gap: 1rem; }
 .sf-lang-toggle {
-  background: transparent; border: 1px solid rgba(76,175,80,0.3); color: var(--sf-cream);
+  background: transparent; border: 1px solid rgba(77,182,172,0.3); color: var(--sf-cream);
   padding: 0.3rem 0.8rem; border-radius: 2px; font-size: 0.7rem; cursor: pointer;
   font-family: 'DM Sans', sans-serif; transition: all 0.2s; letter-spacing: 0.15em;
   opacity: 0.75;
@@ -62,7 +62,7 @@
 }
 .sf-btn-primary:hover { background: var(--sf-gold-light); transform: translateY(-2px); }
 .sf-btn-outline {
-  display: inline-block; border: 1px solid rgba(76,175,80,0.4); color: var(--sf-cream);
+  display: inline-block; border: 1px solid rgba(77,182,172,0.4); color: var(--sf-cream);
   font-family: 'DM Sans', sans-serif; font-size: 0.8rem; letter-spacing: 0.12em;
   text-transform: uppercase; padding: 1rem 2rem; text-decoration: none;
   cursor: pointer; transition: border-color 0.2s, color 0.2s; background: transparent;
@@ -85,14 +85,14 @@
 .sf-hero-bg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 70% 40%, rgba(76,175,80,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 70% 40%, rgba(77,182,172,0.08) 0%, transparent 70%),
     radial-gradient(ellipse 40% 60% at 20% 80%, rgba(10,10,8,0.9) 0%, transparent 60%);
 }
 .sf-hero-grid {
   position: absolute; inset: 0;
   background-image:
-    linear-gradient(rgba(76,175,80,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(76,175,80,0.04) 1px, transparent 1px);
+    linear-gradient(rgba(77,182,172,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(77,182,172,0.04) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 80%);
@@ -328,7 +328,7 @@
 }
 .sf-cta::before {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(76,175,80,0.07) 0%, transparent 70%);
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(77,182,172,0.07) 0%, transparent 70%);
 }
 .sf-cta-eyebrow {
   font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase;
@@ -363,8 +363,8 @@
   font-size: 0.85rem; color: var(--sf-cream); opacity: 0.7;
 }
 .sf-form-contact-icon {
-  width: 36px; height: 36px; background: rgba(76,175,80,0.1);
-  border: 1px solid rgba(76,175,80,0.2); display: flex; align-items: center;
+  width: 36px; height: 36px; background: rgba(77,182,172,0.1);
+  border: 1px solid rgba(77,182,172,0.2); display: flex; align-items: center;
   justify-content: center; color: var(--sf-gold); flex-shrink: 0;
 }
 .sf-form { display: flex; flex-direction: column; gap: 1rem; }
@@ -528,8 +528,8 @@
   --adm-text: #1a1a18;
   --adm-text-secondary: #6b6b64;
   --adm-text-muted: #9c9c94;
-  --adm-gold: #388e3c;
-  --adm-gold-light: #d4f0d6;
+  --adm-gold: #3d9189;
+  --adm-gold-light: #d4f0ee;
   --adm-border: #e8e7e3;
   --adm-border-subtle: #f0efeb;
   --adm-hover: #faf9f6;
@@ -666,7 +666,7 @@
   box-shadow: var(--adm-shadow); transition: box-shadow 0.2s, border-color 0.2s;
 }
 .adm-stat-card:hover {
-  box-shadow: var(--adm-shadow-lg); border-color: rgba(56,142,60,0.25);
+  box-shadow: var(--adm-shadow-lg); border-color: rgba(61,145,137,0.25);
 }
 .adm-stat-label {
   font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
@@ -796,7 +796,7 @@
 .adm-btn-primary {
   background: var(--adm-gold); color: #fff;
 }
-.adm-btn-primary:hover { background: #2e7d32; }
+.adm-btn-primary:hover { background: #2e7d76; }
 .adm-btn-secondary {
   background: var(--adm-bg); color: var(--adm-text-secondary);
   border: 1px solid var(--adm-border);
@@ -916,7 +916,7 @@
   font-weight: 400; letter-spacing: 0.08em;
 }
 .adm-login-logo .t { color: #1a1a18; }
-.adm-login-logo .on { color: #388e3c; }
+.adm-login-logo .on { color: #3d9189; }
 .adm-login-logo .r { color: #1a1a18; }
 .adm-login-subtitle {
   text-align: center; font-size: 0.75rem; color: #9c9c94;
@@ -939,15 +939,15 @@
   color: #1a1a18; font-family: 'DM Sans', sans-serif;
   outline: none; transition: border-color 0.2s;
 }
-.adm-login-group input:focus { border-color: #388e3c; }
+.adm-login-group input:focus { border-color: #3d9189; }
 .adm-login-group input::placeholder { color: #bbbbb4; }
 .adm-login-btn {
   width: 100%; padding: 0.75rem; font-size: 0.85rem; font-weight: 600;
-  background: #388e3c; color: #fff; border: none; border-radius: 8px;
+  background: #3d9189; color: #fff; border: none; border-radius: 8px;
   cursor: pointer; font-family: 'DM Sans', sans-serif;
   transition: background 0.2s; letter-spacing: 0.03em; margin-top: 0.5rem;
 }
-.adm-login-btn:hover { background: #2e7d32; }
+.adm-login-btn:hover { background: #2e7d76; }
 .adm-login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* --- PAGE HERO --- */
@@ -957,7 +957,7 @@
 }
 .sf-page-hero::before {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(76,175,80,0.06) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(77,182,172,0.06) 0%, transparent 60%);
 }
 .sf-page-hero-desc {
   color: var(--sf-cream); opacity: 0.65; font-size: 1rem; line-height: 1.7;
@@ -992,7 +992,7 @@
   background: var(--sf-anthrazit); border: 1px solid var(--sf-border-subtle);
   padding: 2rem; transition: border-color 0.3s;
 }
-.sf-info-card:hover { border-color: rgba(76,175,80,0.3); }
+.sf-info-card:hover { border-color: rgba(77,182,172,0.3); }
 .sf-info-card-num {
   color: var(--sf-gold); font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
   margin-bottom: 0.8rem;
@@ -1010,8 +1010,8 @@
 }
 .sf-process-step:hover { border-color: var(--sf-gold); }
 .sf-process-num {
-  width: 48px; height: 48px; background: rgba(76,175,80,0.1);
-  border: 1px solid rgba(76,175,80,0.3); color: var(--sf-gold);
+  width: 48px; height: 48px; background: rgba(77,182,172,0.1);
+  border: 1px solid rgba(77,182,172,0.3); color: var(--sf-gold);
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 1rem; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
 }
