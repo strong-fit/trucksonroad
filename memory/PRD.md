@@ -13,10 +13,10 @@ Premium Foodtruck Webseite für Schweizer Foodtruck-Unternehmen mit:
 - Automatische E-Mails (für spätere Phase)
 
 ## Architecture
-- **Frontend**: React (CRA) + Tailwind CSS + Shadcn UI + Custom Dark Theme CSS
+- **Frontend**: React (CRA) + Tailwind CSS + Shadcn UI + Custom CSS
 - **Backend**: FastAPI + MongoDB (Motor async)
 - **Auth**: JWT with httpOnly cookies, bcrypt password hashing
-- **Design**: Dark premium theme (#0a0a0a bg, #e8b84b gold accents)
+- **Design**: Public site: Dark premium theme (#0a0a0a bg, #e8b84b gold accents). Admin: Light theme (#f4f3ef bg, #b8922e gold accents)
 - **Fonts**: Bebas Neue (headings), Playfair Display (italic accents), DM Sans (body)
 
 ## User Personas
@@ -36,22 +36,26 @@ Premium Foodtruck Webseite für Schweizer Foodtruck-Unternehmen mit:
 
 ## What's Been Implemented
 
-### Frontend (DONE)
-- [x] Homepage with Hero (2 floating truck images), Ticker, Trucks Grid, For-Whom, Why-Us (gold bg), CTA, FAQ Preview
-- [x] CSS/DOM structure aligned with user's HTML reference (sf-trucks-wrap, sf-why-section, sf-hero-truck-main/accent, sf-nav-cta)
+### Frontend - Public Site (DONE)
+- [x] Homepage with Hero, Ticker, Trucks Grid, For-Whom, Why-Us, CTA, FAQ Preview
 - [x] 6 Individual Truck Detail Pages with menu, specs, CTA
 - [x] Full Inquiry Form with calendar, truck selection, extras
 - [x] FAQ Page with expandable accordion
 - [x] Event Organizers Page with features grid and tech specs
 - [x] Private Events Page with event types and 3-step process
-- [x] Admin Login with JWT auth
-- [x] Admin Dashboard with stats and recent inquiries
-- [x] Admin Inquiry Management with filtering, detail view, status updates, notes
-- [x] Admin Calendar with per-truck blocking
-- [x] Navigation with language toggle (DE/EN) and sf-nav-cta gold button
+- [x] Navigation with language toggle (DE/EN) and gold CTA button
 - [x] WhatsApp floating button
-- [x] Footer with 4-column direct grid (Brand, Trucks, Events, Kontakt) + footer-bottom
+- [x] Footer with 4-column grid
 - [x] Responsive design
+
+### Frontend - Admin Area (DONE - 31.03.2026)
+- [x] Admin Login (light theme, TruckOnRoad branding)
+- [x] Admin Dashboard with stat cards + recent inquiries table (light theme)
+- [x] Admin Inquiry Management with filter pills, detail panel, status changes, notes
+- [x] Admin Calendar with truck selector, date blocking, block list
+- [x] Shared AdminLayout with sidebar, topbar, search, user pill
+- [x] Mobile responsive sidebar with toggle
+- [x] Light theme (adm-* CSS classes, #f4f3ef bg, white cards, gold accents)
 
 ### Backend (DONE)
 - [x] JWT auth with brute-force protection
@@ -90,7 +94,7 @@ Premium Foodtruck Webseite für Schweizer Foodtruck-Unternehmen mit:
 
 ## Next Tasks
 1. E-Mail-Benachrichtigungen implementieren (Gmail SMTP konfigurierbar im Admin)
-2. SEO-Tags und Sitemap
-3. Admin FAQ-Verwaltung UI
-4. Über uns & Kontakt Seiten
+2. Über uns & Kontakt Seiten erstellen
+3. SEO-Tags und Sitemap
+4. Admin FAQ-Verwaltung UI
 5. PDF-Download für Veranstalter
