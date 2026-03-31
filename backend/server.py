@@ -375,7 +375,7 @@ TRUCKS_SEED = [
         "tagline_en": "Classic \u00b7 Chicken \u00b7 Veggie \u2014 up to 300 guests/h",
         "description_de": "Unser Burger Truck ist auf schnelle, hochwertige Ausgabe ausgelegt und ideal f\u00fcr Events mit hoher Besucherzahl. Saftige Patties, frische Zutaten und unser Signature-Style machen jeden Burger zu einem Erlebnis.",
         "description_en": "Our Burger Truck is designed for fast, high-quality service and is ideal for events with large crowds. Juicy patties, fresh ingredients, and our signature style make every burger an experience.",
-        "image": "https://customer-assets.emergentagent.com/job_c07f57bf-6530-44da-b908-62d9516a565b/artifacts/apahq84l_Bildschirmfoto%202026-03-23%20um%2017.15.39.png",
+        "image": "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=1200&q=80",
         "tag": "Flagship",
         "menu_de": ["Classic Burger", "Chicken Burger", "Veggie Burger", "Loaded Fries"],
         "menu_en": ["Classic Burger", "Chicken Burger", "Veggie Burger", "Loaded Fries"],
@@ -391,7 +391,7 @@ TRUCKS_SEED = [
         "tagline_en": "Crispy \u00b7 Spicy \u00b7 Unique",
         "description_de": "Unser Chicken Burger Truck bietet ein spezialisiertes Konzept rund um knusprige Chicken Burger mit hauseigenen Marinaden und frischen Saucen.",
         "description_en": "Our Chicken Burger Truck offers a specialized concept centered around crispy chicken burgers with house-made marinades and fresh sauces.",
-        "image": "https://customer-assets.emergentagent.com/job_c07f57bf-6530-44da-b908-62d9516a565b/artifacts/apahq84l_Bildschirmfoto%202026-03-23%20um%2017.15.39.png",
+        "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80",
         "tag": "",
         "menu_de": ["Classic Chicken Burger", "Spicy Chicken", "BBQ Chicken", "Veggie Alternative"],
         "menu_en": ["Classic Chicken Burger", "Spicy Chicken", "BBQ Chicken", "Veggie Alternative"],
@@ -407,7 +407,7 @@ TRUCKS_SEED = [
         "tagline_en": "Signature \u00b7 Protein \u00b7 Veggie",
         "description_de": "Unser Bowl Truck liefert frische, gesunde Bowls mit saisonalen Zutaten. Ideal f\u00fcr gesundheitsbewusste G\u00e4ste und moderne Events.",
         "description_en": "Our Bowl Truck delivers fresh, healthy bowls with seasonal ingredients. Ideal for health-conscious guests and modern events.",
-        "image": "https://customer-assets.emergentagent.com/job_c07f57bf-6530-44da-b908-62d9516a565b/artifacts/6dfmnt16_Bildschirmfoto%202026-03-23%20um%2017.15.33.png",
+        "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80",
         "tag": "",
         "menu_de": ["Signature Bowl", "Protein Bowl", "Veggie Bowl", "Vegan Bowl"],
         "menu_en": ["Signature Bowl", "Protein Bowl", "Veggie Bowl", "Vegan Bowl"],
@@ -423,7 +423,7 @@ TRUCKS_SEED = [
         "tagline_en": "Ideal for high frequency",
         "description_de": "Der Pocket Bowl Truck ist unser schnellstes Konzept. Kleine, handliche Bowls ideal f\u00fcr Events mit schnellem Durchlauf und hoher G\u00e4stefrequenz.",
         "description_en": "The Pocket Bowl Truck is our fastest concept. Small, handy bowls ideal for events with fast throughput and high guest frequency.",
-        "image": "https://customer-assets.emergentagent.com/job_c07f57bf-6530-44da-b908-62d9516a565b/artifacts/9fk5box5_Bildschirmfoto%202026-03-25%20um%2023.23.44.png",
+        "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80",
         "tag": "Speed",
         "menu_de": ["Pocket Bowl Classic", "Pocket Bowl Spicy", "Pocket Bowl Veggie"],
         "menu_en": ["Pocket Bowl Classic", "Pocket Bowl Spicy", "Pocket Bowl Veggie"],
@@ -439,7 +439,7 @@ TRUCKS_SEED = [
         "tagline_en": "Savory \u00b7 Vegetarian \u00b7 Fast",
         "description_de": "Unser Empanadas Truck bringt s\u00fcdamerikanisches Flair auf jedes Event. Handgemachte Empanadas in verschiedenen Sorten \u2013 herzhaft und vegetarisch.",
         "description_en": "Our Empanadas Truck brings South American flair to every event. Handmade empanadas in various flavors \u2013 savory and vegetarian.",
-        "image": "https://customer-assets.emergentagent.com/job_c07f57bf-6530-44da-b908-62d9516a565b/artifacts/3kne14pi_Bildschirmfoto%202026-03-23%20um%2017.09.13.png",
+        "image": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=600&q=80",
         "tag": "",
         "menu_de": ["Classic Beef", "Chicken Empanada", "Veggie Empanada", "Cheese Empanada"],
         "menu_en": ["Classic Beef", "Chicken Empanada", "Veggie Empanada", "Cheese Empanada"],
@@ -455,7 +455,7 @@ TRUCKS_SEED = [
         "tagline_en": "Horse Trailer \u00b7 Vintage Charm",
         "description_de": "Unser Retro Trailer im Pferdeanh\u00e4nger-Stil ist ein echter Hingucker. Perfekt f\u00fcr Hochzeiten, Privatanl\u00e4sse und \u00fcberall dort, wo Charme und Stil gefragt sind.",
         "description_en": "Our Retro Trailer in horse trailer style is a real eye-catcher. Perfect for weddings, private events, and wherever charm and style are needed.",
-        "image": "https://customer-assets.emergentagent.com/job_c07f57bf-6530-44da-b908-62d9516a565b/artifacts/d3mmcf6i_Bildschirmfoto%202026-03-25%20um%2023.21.42.png",
+        "image": "https://images.unsplash.com/photo-1509315811345-672d83ef2fbc?w=600&q=80",
         "tag": "Retro",
         "menu_de": ["Individuell nach Absprache", "Kaffee & Desserts", "Alpine Spezialit\u00e4ten"],
         "menu_en": ["Customized by arrangement", "Coffee & Desserts", "Alpine Specialties"],
@@ -496,9 +496,13 @@ async def startup():
         await db.users.update_one({"email": admin_email}, {"$set": {"password_hash": hash_password(admin_password)}})
 
     for t in TRUCKS_SEED:
-        if not await db.trucks.find_one({"slug": t["slug"]}):
+        existing_truck = await db.trucks.find_one({"slug": t["slug"]})
+        if not existing_truck:
             await db.trucks.insert_one(t.copy())
             logger.info(f"Truck seeded: {t['slug']}")
+        else:
+            await db.trucks.update_one({"slug": t["slug"]}, {"$set": {"image": t["image"]}})
+            logger.info(f"Truck image updated: {t['slug']}")
 
     if await db.faqs.count_documents({}) == 0:
         for f in FAQS_SEED:
