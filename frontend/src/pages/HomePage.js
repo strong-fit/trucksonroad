@@ -67,7 +67,7 @@ export default function HomePage() {
           <FadeUp delay={0.2}>
             <h1 className="sf-hero-title">
               <span className="italic">{t('hero_title_1')}</span>{' '}
-              {t('hero_title_2')}<span className="gold">{t('hero_title_3')}</span>ROAD
+              {t('hero_title_2')}<span className="gold">{t('hero_title_3')}</span>
               <br />{t('hero_title_4')}<br />{t('hero_title_5')}
             </h1>
           </FadeUp>
