@@ -56,7 +56,7 @@ export default function Navbar() {
           >
             {lang === 'de' ? 'EN' : 'DE'}
           </button>
-          <Link to="/anfrage" className="sf-btn-primary sf-btn-sm" data-testid="nav-cta-button">
+          <Link to="/anfrage" className="sf-nav-cta" data-testid="nav-cta-button">
             {t('nav_cta')}
           </Link>
           <button

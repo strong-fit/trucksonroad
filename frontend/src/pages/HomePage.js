@@ -4,9 +4,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { ArrowRight } from 'lucide-react';
 
-const HERO_IMG = "https://customer-assets.emergentagent.com/job_c07f57bf-6530-44da-b908-62d9516a565b/artifacts/apahq84l_Bildschirmfoto%202026-03-23%20um%2017.15.39.png";
-const EVENT_IMG = "https://images.pexels.com/photos/35120750/pexels-photo-35120750.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
-const ACCENT_IMG = "https://customer-assets.emergentagent.com/job_c07f57bf-6530-44da-b908-62d9516a565b/artifacts/6dfmnt16_Bildschirmfoto%202026-03-23%20um%2017.15.33.png";
+const HERO_IMG_MAIN = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=900&q=80";
+const HERO_IMG_ACCENT = "https://images.unsplash.com/photo-1509315811345-672d83ef2fbc?w=600&q=80";
+const EVENT_IMG = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=700&q=80";
+const ACCENT_IMG = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=400&q=80";
 
 function useInView() {
   const ref = useRef();
@@ -56,7 +57,8 @@ export default function HomePage() {
         <div className="sf-hero-bg" />
         <div className="sf-hero-grid" />
         <div className="sf-hero-trucks">
-          <img src={HERO_IMG} alt="Foodtruck" className="sf-hero-truck-img" />
+          <img src={HERO_IMG_MAIN} alt="Foodtruck" className="sf-hero-truck-main" />
+          <img src={HERO_IMG_ACCENT} alt="Foodtruck" className="sf-hero-truck-accent" />
         </div>
         <div className="sf-hero-content">
           <FadeUp delay={0.1}>
@@ -78,13 +80,11 @@ export default function HomePage() {
               <a href="#trucks" className="sf-btn-outline" data-testid="hero-trucks-btn">{t('hero_btn_trucks')}</a>
             </div>
           </FadeUp>
-          <FadeUp delay={0.5}>
-            <div className="sf-hero-stats">
-              <div><div className="sf-stat-num">{t('hero_stat_1_num')}</div><div className="sf-stat-label">{t('hero_stat_1_label')}</div></div>
-              <div><div className="sf-stat-num">{t('hero_stat_2_num')}</div><div className="sf-stat-label">{t('hero_stat_2_label')}</div></div>
-              <div><div className="sf-stat-num">{t('hero_stat_3_num')}</div><div className="sf-stat-label">{t('hero_stat_3_label')}</div></div>
-            </div>
-          </FadeUp>
+        </div>
+        <div className="sf-hero-stats">
+          <div className="sf-stat"><div className="sf-stat-num">{t('hero_stat_1_num')}</div><div className="sf-stat-label">{t('hero_stat_1_label')}</div></div>
+          <div className="sf-stat"><div className="sf-stat-num">{t('hero_stat_2_num')}</div><div className="sf-stat-label">{t('hero_stat_2_label')}</div></div>
+          <div className="sf-stat"><div className="sf-stat-num">{t('hero_stat_3_num')}</div><div className="sf-stat-label">{t('hero_stat_3_label')}</div></div>
         </div>
       </section>
 
@@ -98,7 +98,7 @@ export default function HomePage() {
       </div>
 
       {/* TRUCKS */}
-      <section className="sf-section" id="trucks" data-testid="trucks-section">
+      <section className="sf-trucks-wrap" id="trucks" data-testid="trucks-section">
         <div className="sf-trucks-header">
           <div>
             <div className="sf-section-tag">{t('trucks_tag')}</div>
@@ -154,7 +154,7 @@ export default function HomePage() {
       </section>
 
       {/* WHY US */}
-      <section className="sf-section" data-testid="why-section">
+      <section className="sf-why-section" data-testid="why-section">
         <div className="sf-section-tag">{t('why_tag')}</div>
         <h2 className="sf-section-title">{t('why_title_1')}<br />{t('why_title_2')}</h2>
         <div className="sf-why-grid">
