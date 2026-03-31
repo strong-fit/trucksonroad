@@ -10,8 +10,9 @@ export default function Footer() {
       <footer className="sf-footer" data-testid="main-footer">
         <div>
           <div className="sf-nav-logo" style={{ marginBottom: '0.8rem' }}>
-            <span className="sf-logo-text">STRONG</span>
-            <span className="sf-logo-accent">FOOD</span>
+            <span className="sf-logo-accent">TRUCK</span>
+            <span className="sf-logo-text">ON</span>
+            <span className="sf-logo-accent">ROAD</span>
           </div>
           <p className="sf-footer-desc">{t('footer_desc')}</p>
         </div>
@@ -37,7 +38,7 @@ export default function Footer() {
         <div>
           <div className="sf-footer-heading">{t('footer_contact')}</div>
           <div className="sf-footer-contact">
-            <Mail size={14} /> <span>info@strongfood.ch</span>
+            <Mail size={14} /> <span>info@truckonroad.ch</span>
           </div>
           <div className="sf-footer-contact">
             <Phone size={14} /> <span>+41 xx xxx xx xx</span>
@@ -49,7 +50,7 @@ export default function Footer() {
       </footer>
 
       <div className="sf-footer-bottom" data-testid="footer-bottom">
-        <span>&copy; 2026 StrongFood &ndash; {t('footer_rights')}</span>
+        <span>&copy; 2026 TruckOnRoad &ndash; {t('footer_rights')}</span>
         <div style={{ display: 'flex', gap: '2rem' }}>
           <a href="#">{t('footer_privacy')}</a>
           <a href="#">{t('footer_imprint')}</a>

@@ -30,8 +30,9 @@ export default function Navbar() {
     <nav className="sf-nav" data-testid="main-navbar">
       <div className="sf-nav-inner">
         <Link to="/" className="sf-nav-logo" data-testid="nav-logo">
-          <span className="sf-logo-text">STRONG</span>
-          <span className="sf-logo-accent">FOOD</span>
+          <span className="sf-logo-accent">TRUCK</span>
+          <span className="sf-logo-text">ON</span>
+          <span className="sf-logo-accent">ROAD</span>
         </Link>
 
         <div className="sf-nav-links">

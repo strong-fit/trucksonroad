@@ -34,7 +34,7 @@ export default function AdminLogin() {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div className="sf-form-group">
             <label>E-Mail</label>
-            <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="admin@strongfood.ch" data-testid="admin-email-input" />
+            <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="admin@truckonroad.ch" data-testid="admin-email-input" />
           </div>
           <div className="sf-form-group">
             <label>Passwort</label>

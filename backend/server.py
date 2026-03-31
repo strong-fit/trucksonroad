@@ -345,7 +345,7 @@ async def admin_stats(request: Request):
 async def admin_get_settings(request: Request):
     await get_current_user(request)
     s = await db.settings.find_one({"type": "general"}, {"_id": 0})
-    return s or {"type": "general", "company_name": "StrongFood", "email_notifications": False, "notification_email": "", "whatsapp_number": "+41791234567"}
+    return s or {"type": "general", "company_name": "TruckOnRoad", "email_notifications": False, "notification_email": "", "whatsapp_number": "+41791234567"}
 
 @api_router.put("/admin/settings")
 async def admin_update_settings(request: Request):
@@ -486,8 +486,8 @@ async def startup():
     await db.calendar_blocks.create_index([("truck_slug", 1), ("date", 1)])
     await db.login_attempts.create_index("identifier")
 
-    admin_email = os.environ.get("ADMIN_EMAIL", "admin@strongfood.ch")
-    admin_password = os.environ.get("ADMIN_PASSWORD", "StrongFood2026!")
+    admin_email = os.environ.get("ADMIN_EMAIL", "admin@truckonroad.ch")
+    admin_password = os.environ.get("ADMIN_PASSWORD", "TruckOnRoad2026!")
     existing = await db.users.find_one({"email": admin_email})
     if not existing:
         await db.users.insert_one({"email": admin_email, "password_hash": hash_password(admin_password), "name": "Admin", "role": "admin", "created_at": datetime.now(timezone.utc).isoformat()})
