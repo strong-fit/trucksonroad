@@ -195,16 +195,28 @@ export default function AdminSettings() {
 
         {preview && (
           <>
-            <div className="adm-filters" style={{ marginBottom: '1rem' }}>
+            <div className="adm-filters" style={{ marginBottom: '1rem', flexWrap: 'wrap' }}>
               <button className={`adm-filter-btn ${previewType === 'confirmation' ? 'active' : ''}`} onClick={() => setPreviewType('confirmation')} data-testid="preview-confirmation-btn">
-                Bestaetigungsmail (Kunde)
+                Bestaetigungsmail
               </button>
               <button className={`adm-filter-btn ${previewType === 'notification' ? 'active' : ''}`} onClick={() => setPreviewType('notification')} data-testid="preview-notification-btn">
-                Benachrichtigung (Admin)
+                Admin-Info
+              </button>
+              <button className={`adm-filter-btn ${previewType === 'status_confirmed' ? 'active' : ''}`} onClick={() => setPreviewType('status_confirmed')}>
+                Buchung bestaetigt
+              </button>
+              <button className={`adm-filter-btn ${previewType === 'status_completed' ? 'active' : ''}`} onClick={() => setPreviewType('status_completed')}>
+                Abgeschlossen
+              </button>
+              <button className={`adm-filter-btn ${previewType === 'invoice_sent' ? 'active' : ''}`} onClick={() => setPreviewType('invoice_sent')}>
+                Rechnung
+              </button>
+              <button className={`adm-filter-btn ${previewType === 'invoice_paid' ? 'active' : ''}`} onClick={() => setPreviewType('invoice_paid')}>
+                Zahlung OK
               </button>
             </div>
             <div style={{ border: '1px solid var(--adm-border)', borderRadius: '8px', padding: '1rem', background: '#fff' }} data-testid="email-preview-content">
-              <div dangerouslySetInnerHTML={{ __html: previewType === 'confirmation' ? preview.confirmation : preview.notification }} />
+              <div dangerouslySetInnerHTML={{ __html: preview[previewType] || preview.confirmation }} />
             </div>
           </>
         )}

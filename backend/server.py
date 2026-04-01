@@ -264,6 +264,102 @@ def build_offer_email(inquiry: dict) -> str:
       </div>
     </div>"""
 
+# --- STATUS & INVOICE NOTIFICATION EMAILS ---
+STATUS_LABELS = {
+    "new": "Neu",
+    "in_review": "In Pruefung",
+    "offer_sent": "Angebot gesendet",
+    "confirmed": "Bestaetigt",
+    "completed": "Abgeschlossen",
+    "cancelled": "Storniert",
+}
+
+INVOICE_LABELS = {
+    "none": "Keine",
+    "pending": "Offen",
+    "sent": "Gesendet",
+    "paid": "Bezahlt",
+    "overdue": "Ueberfaellig",
+}
+
+def build_status_notification_email(inquiry: dict, new_status: str) -> str:
+    name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or "Kunde"
+    status_label = STATUS_LABELS.get(new_status, new_status)
+    status_color = {"confirmed": "#22c55e", "completed": "#6b7280", "cancelled": "#ef4444", "offer_sent": "#8b5cf6"}.get(new_status, "#4db6ac")
+    messages = {
+        "in_review": "Ihre Anfrage wird aktuell von unserem Team geprueft. Wir melden uns in Kuerze bei Ihnen.",
+        "offer_sent": "Wir haben ein Angebot fuer Sie erstellt. Bitte pruefen Sie die Details und melden Sie sich bei Fragen.",
+        "confirmed": "Ihre Buchung ist bestaetigt! Wir freuen uns auf Ihren Event.",
+        "completed": "Vielen Dank fuer Ihren Auftrag! Wir hoffen, der Event war ein voller Erfolg.",
+        "cancelled": "Ihre Anfrage wurde leider storniert. Bei Fragen kontaktieren Sie uns gerne.",
+    }
+    msg = messages.get(new_status, f"Der Status Ihrer Anfrage wurde aktualisiert: {status_label}")
+    return f"""
+    <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+      <div style="background:#1a1a18;padding:1.5rem 2rem;text-align:center;">
+        <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.4rem;letter-spacing:0.08em;">
+          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+        </span>
+        <span style="color:#4db6ac;font-size:0.7rem;margin-left:0.5rem;">STATUS-UPDATE</span>
+      </div>
+      <div style="padding:2rem;">
+        <h2 style="color:#1a1a18;margin:0 0 0.5rem;">Hallo {name},</h2>
+        <div style="display:inline-block;background:{status_color};color:#fff;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600;margin:0.5rem 0 1rem;">
+          {status_label}
+        </div>
+        <p style="color:#6b6b64;line-height:1.7;margin-top:0.5rem;">{msg}</p>
+        <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1rem;margin:1.5rem 0;">
+          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>Event:</strong> {inquiry.get('event_type', '-')} am {inquiry.get('event_date', '-')}</p>
+          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>Ort:</strong> {inquiry.get('location', '-')}</p>
+          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>Gaeste:</strong> {inquiry.get('guest_count', '-')}</p>
+        </div>
+        <p style="color:#6b6b64;font-size:0.85rem;">Bei Fragen erreichen Sie uns unter info@truckonroad.ch oder +41 79 696 98 99.</p>
+        <p style="color:#6b6b64;font-size:0.85rem;margin-top:1rem;">Herzliche Gruesse,<br/><strong>TruckOnRoad Team</strong></p>
+      </div>
+      <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
+        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+      </div>
+    </div>"""
+
+def build_invoice_notification_email(inquiry: dict, invoice_status: str, invoice_amount: float = 0) -> str:
+    name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or "Kunde"
+    inv_label = INVOICE_LABELS.get(invoice_status, invoice_status)
+    inv_color = {"pending": "#e8b931", "sent": "#8b5cf6", "paid": "#22c55e", "overdue": "#ef4444"}.get(invoice_status, "#6b7280")
+    messages = {
+        "pending": "Fuer Ihren Event wurde eine Rechnung erstellt.",
+        "sent": "Wir haben Ihnen eine Rechnung zugesendet. Bitte beachten Sie die Zahlungsfrist.",
+        "paid": "Vielen Dank! Ihre Zahlung ist bei uns eingegangen.",
+        "overdue": "Ihre Rechnung ist ueberfaellig. Bitte ueberpruefen Sie die Zahlung.",
+    }
+    msg = messages.get(invoice_status, f"Ihr Rechnungsstatus wurde aktualisiert: {inv_label}")
+    amount_line = f'<p style="font-size:1.3rem;font-weight:700;color:#1a1a18;margin:0.5rem 0;">CHF {invoice_amount:,.2f}</p>' if invoice_amount > 0 else ""
+    return f"""
+    <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+      <div style="background:#1a1a18;padding:1.5rem 2rem;text-align:center;">
+        <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.4rem;letter-spacing:0.08em;">
+          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+        </span>
+        <span style="color:#4db6ac;font-size:0.7rem;margin-left:0.5rem;">RECHNUNG</span>
+      </div>
+      <div style="padding:2rem;">
+        <h2 style="color:#1a1a18;margin:0 0 0.5rem;">Hallo {name},</h2>
+        <div style="display:inline-block;background:{inv_color};color:#fff;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600;margin:0.5rem 0 1rem;">
+          Rechnung: {inv_label}
+        </div>
+        <p style="color:#6b6b64;line-height:1.7;margin-top:0.5rem;">{msg}</p>
+        <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1.25rem;margin:1.5rem 0;text-align:center;">
+          {amount_line}
+          <p style="margin:0.3rem 0;font-size:0.88rem;color:#6b6b64;"><strong>Event:</strong> {inquiry.get('event_type', '-')} am {inquiry.get('event_date', '-')}</p>
+          <p style="margin:0.3rem 0;font-size:0.88rem;color:#6b6b64;"><strong>Ort:</strong> {inquiry.get('location', '-')}</p>
+        </div>
+        <p style="color:#6b6b64;font-size:0.85rem;">Bei Fragen erreichen Sie uns unter info@truckonroad.ch oder +41 79 696 98 99.</p>
+        <p style="color:#6b6b64;font-size:0.85rem;margin-top:1rem;">Herzliche Gruesse,<br/><strong>TruckOnRoad Team</strong></p>
+      </div>
+      <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
+        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+      </div>
+    </div>"""
+
 def generate_offer_pdf(inquiry: dict) -> bytes:
     name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or inquiry.get('name', '')
     pdf = FPDF()
@@ -538,6 +634,19 @@ async def admin_update_inquiry(inquiry_id: str, update: InquiryStatusUpdate, req
         if inquiry and inquiry.get("email"):
             offer_html = build_offer_email(inquiry)
             background_tasks.add_task(send_email_background, inquiry["email"], "Ihr Angebot von TruckOnRoad", offer_html)
+    # Send status notification email for other status changes
+    elif update.status in ("in_review", "confirmed", "completed", "cancelled"):
+        inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
+        if inquiry and inquiry.get("email"):
+            status_html = build_status_notification_email(inquiry, update.status)
+            subject_map = {
+                "in_review": "Ihre Anfrage wird geprueft",
+                "confirmed": "Ihre Buchung ist bestaetigt!",
+                "completed": "Event abgeschlossen – Vielen Dank!",
+                "cancelled": "Anfrage storniert",
+            }
+            subject = f"{subject_map.get(update.status, 'Status-Update')} – TruckOnRoad"
+            background_tasks.add_task(send_email_background, inquiry["email"], subject, status_html)
     return {"message": "Updated"}
 
 @api_router.delete("/admin/inquiries/{inquiry_id}")
@@ -549,7 +658,7 @@ async def admin_delete_inquiry(inquiry_id: str, request: Request):
     return {"message": "Deleted"}
 
 @api_router.put("/admin/inquiries/{inquiry_id}/invoice")
-async def admin_update_invoice(inquiry_id: str, request: Request):
+async def admin_update_invoice(inquiry_id: str, request: Request, background_tasks: BackgroundTasks):
     await get_current_user(request)
     body = await request.json()
     updates = {"updated_at": datetime.now(timezone.utc).isoformat()}
@@ -560,6 +669,19 @@ async def admin_update_invoice(inquiry_id: str, request: Request):
     result = await db.inquiries.update_one({"id": inquiry_id}, {"$set": updates})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Not found")
+    # Send invoice notification email
+    if "invoice_status" in body and body["invoice_status"] not in ("none", ""):
+        inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
+        if inquiry and inquiry.get("email"):
+            inv_html = build_invoice_notification_email(inquiry, body["invoice_status"], body.get("invoice_amount", inquiry.get("invoice_amount", 0)))
+            subject_map = {
+                "pending": "Rechnung erstellt",
+                "sent": "Rechnung zugestellt",
+                "paid": "Zahlung eingegangen – Danke!",
+                "overdue": "Zahlungserinnerung",
+            }
+            subject = f"{subject_map.get(body['invoice_status'], 'Rechnungs-Update')} – TruckOnRoad"
+            background_tasks.add_task(send_email_background, inquiry["email"], subject, inv_html)
     return {"message": "Invoice updated"}
 
 # --- ADMIN CALENDAR ---
@@ -920,6 +1042,10 @@ async def admin_email_preview(request: Request):
     return {
         "confirmation": build_confirmation_email(sample),
         "notification": build_admin_notification_email(sample),
+        "status_confirmed": build_status_notification_email(sample, "confirmed"),
+        "status_completed": build_status_notification_email(sample, "completed"),
+        "invoice_sent": build_invoice_notification_email(sample, "sent", 4500),
+        "invoice_paid": build_invoice_notification_email(sample, "paid", 4500),
     }
 
 # --- ADMIN FAQS GET ---
