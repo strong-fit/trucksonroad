@@ -17,6 +17,8 @@ import AdminCalendar from "@/pages/admin/AdminCalendar";
 import AdminSettings from "@/pages/admin/AdminSettings";
 import AdminTrucks from "@/pages/admin/AdminTrucks";
 import AdminFAQs from "@/pages/admin/AdminFAQs";
+import AdminEmployees from "@/pages/admin/AdminEmployees";
+import AdminExport from "@/pages/admin/AdminExport";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import "@/App.css";
@@ -53,6 +55,8 @@ function App() {
             <Route path="/admin/einstellungen" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
             <Route path="/admin/trucks" element={<ProtectedRoute><AdminTrucks /></ProtectedRoute>} />
             <Route path="/admin/faqs" element={<ProtectedRoute><AdminFAQs /></ProtectedRoute>} />
+            <Route path="/admin/personal" element={<ProtectedRoute><AdminEmployees /></ProtectedRoute>} />
+            <Route path="/admin/export" element={<ProtectedRoute><AdminExport /></ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
       </LanguageProvider>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Save, Send, Building2, Server, Eye, Download } from 'lucide-react';
+import { Save, Send, Building2, Server, Eye, Download, Instagram, Plus, Trash2 } from 'lucide-react';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState(null);
@@ -166,6 +166,39 @@ export default function AdminSettings() {
           <a href={`${process.env.REACT_APP_BACKEND_URL}/api/download/veranstalter-pdf`} target="_blank" rel="noopener noreferrer" className="adm-btn adm-btn-primary adm-btn-sm" data-testid="download-pdf-btn">
             <Download size={13} /> PDF herunterladen
           </a>
+        </div>
+      </div>
+
+      {/* Instagram Gallery Settings */}
+      <div className="adm-detail" style={{ marginTop: '1.25rem' }} data-testid="instagram-settings">
+        <div className="adm-detail-header" style={{ borderBottom: '1px solid var(--adm-border)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+          <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Instagram size={18} /> Instagram Feed</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div>
+            <div className="adm-form-label">Instagram Benutzername</div>
+            <input className="adm-input" value={settings.instagram_username || ''} onChange={e => update('instagram_username', e.target.value)} placeholder="truckonroad" data-testid="settings-instagram-username" />
+          </div>
+          <div>
+            <div className="adm-form-label">Bilder (URLs) - werden auf der Homepage als Galerie angezeigt</div>
+            {(settings.instagram_images || []).map((img, idx) => (
+              <div key={idx} style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.3rem' }}>
+                <input className="adm-input" value={img} onChange={e => {
+                  const imgs = [...(settings.instagram_images || [])];
+                  imgs[idx] = e.target.value;
+                  update('instagram_images', imgs);
+                }} placeholder="https://..." />
+                <button className="adm-btn adm-btn-danger adm-btn-sm" onClick={() => {
+                  const imgs = [...(settings.instagram_images || [])];
+                  imgs.splice(idx, 1);
+                  update('instagram_images', imgs);
+                }} style={{ padding: '0.25rem 0.4rem' }}><Trash2 size={13} /></button>
+              </div>
+            ))}
+            <button className="adm-btn adm-btn-secondary adm-btn-sm" onClick={() => update('instagram_images', [...(settings.instagram_images || []), ''])} data-testid="add-insta-image-btn">
+              <Plus size={13} /> Bild hinzufuegen
+            </button>
+          </div>
         </div>
       </div>
     </AdminLayout>

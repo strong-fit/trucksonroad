@@ -98,6 +98,7 @@ class InquiryCreate(BaseModel):
 class InquiryStatusUpdate(BaseModel):
     status: str
     internal_notes: Optional[str] = ""
+    assigned_employees: Optional[List[str]] = None
 
 class CalendarBlockCreate(BaseModel):
     truck_slug: str
@@ -133,6 +134,13 @@ class SettingsUpdate(BaseModel):
     smtp_port: Optional[int] = 587
     smtp_email: Optional[str] = ""
     smtp_password: Optional[str] = ""
+
+class EmployeeCreate(BaseModel):
+    name: str
+    phone: Optional[str] = ""
+    role: Optional[str] = ""
+    notes: Optional[str] = ""
+    is_active: Optional[bool] = True
 
 # --- EMAIL ---
 async def get_email_settings():
@@ -213,6 +221,105 @@ def build_admin_notification_email(inquiry: dict) -> str:
         </table>
       </div>
     </div>"""
+
+def build_offer_email(inquiry: dict) -> str:
+    name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or inquiry.get('name', '')
+    trucks = ', '.join(inquiry.get('selected_trucks', [])) or '-'
+    return f"""
+    <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+      <div style="background:#1a1a18;padding:2rem;text-align:center;">
+        <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
+          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+        </span>
+      </div>
+      <div style="padding:2rem;">
+        <h2 style="color:#1a1a18;margin:0 0 1rem;">Ihr Angebot, {name}</h2>
+        <p style="color:#6b6b64;line-height:1.6;">Vielen Dank fuer Ihr Interesse! Basierend auf Ihrer Anfrage haben wir folgendes Angebot fuer Sie zusammengestellt:</p>
+        <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1.25rem;margin:1.5rem 0;">
+          <p style="margin:0.3rem 0;"><strong>Event-Datum:</strong> {inquiry.get('event_date', '-')}</p>
+          <p style="margin:0.3rem 0;"><strong>Ort:</strong> {inquiry.get('location', '-')}</p>
+          <p style="margin:0.3rem 0;"><strong>Gaeste:</strong> {inquiry.get('guest_count', '-')}</p>
+          <p style="margin:0.3rem 0;"><strong>Trucks:</strong> {trucks}</p>
+          <p style="margin:0.3rem 0;"><strong>Eventtyp:</strong> {inquiry.get('event_type', inquiry.get('concept', '-'))}</p>
+        </div>
+        <p style="color:#6b6b64;line-height:1.6;">Wir melden uns in Kuerze mit den detaillierten Konditionen. Bei Fragen stehen wir Ihnen gerne zur Verfuegung.</p>
+        <p style="color:#6b6b64;font-size:0.85rem;margin-top:1.5rem;">Herzliche Gruesse,<br/><strong>TruckOnRoad Team</strong></p>
+      </div>
+      <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
+        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+      </div>
+    </div>"""
+
+def generate_offer_pdf(inquiry: dict) -> bytes:
+    name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or inquiry.get('name', '')
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=20)
+    pdf.add_page()
+    pdf.set_font("Helvetica", "B", 24)
+    pdf.cell(0, 12, "TRUCKONROAD", ln=True, align="C")
+    pdf.set_font("Helvetica", "", 10)
+    pdf.cell(0, 6, "Bahnhofstrasse 75, 8620 Wetzikon | +41 79 696 98 99 | info@truckonroad.ch", ln=True, align="C")
+    pdf.ln(8)
+    pdf.set_draw_color(77, 182, 172)
+    pdf.line(20, pdf.get_y(), 190, pdf.get_y())
+    pdf.ln(10)
+    pdf.set_font("Helvetica", "B", 18)
+    pdf.cell(0, 10, "Angebot", ln=True)
+    pdf.ln(3)
+    pdf.set_font("Helvetica", "", 10)
+    pdf.cell(0, 7, f"Erstellt am: {datetime.now(timezone.utc).strftime('%d.%m.%Y')}", ln=True)
+    pdf.cell(0, 7, f"Anfrage-Nr.: {inquiry.get('id', '-')[:8]}", ln=True)
+    pdf.ln(8)
+    pdf.set_font("Helvetica", "B", 13)
+    pdf.set_text_color(77, 182, 172)
+    pdf.cell(0, 8, "Kundendaten", ln=True)
+    pdf.set_text_color(0, 0, 0)
+    pdf.set_font("Helvetica", "", 10)
+    fields = [
+        ("Name", name), ("E-Mail", inquiry.get("email", "-")), ("Telefon", inquiry.get("phone", "-")),
+        ("Firma", inquiry.get("company", "-")),
+    ]
+    for label, val in fields:
+        if val and val != "-":
+            pdf.cell(50, 7, label + ":", 0)
+            pdf.cell(0, 7, str(val), ln=True)
+    pdf.ln(6)
+    pdf.set_font("Helvetica", "B", 13)
+    pdf.set_text_color(77, 182, 172)
+    pdf.cell(0, 8, "Event-Details", ln=True)
+    pdf.set_text_color(0, 0, 0)
+    pdf.set_font("Helvetica", "", 10)
+    event_fields = [
+        ("Datum", inquiry.get("event_date", "-")), ("Ort", inquiry.get("location", "-")),
+        ("Gaeste", str(inquiry.get("guest_count", "-"))), ("Eventtyp", inquiry.get("event_type", inquiry.get("concept", "-"))),
+        ("Indoor/Outdoor", inquiry.get("indoor_outdoor", "-")), ("Budget", inquiry.get("budget", "-")),
+    ]
+    for label, val in event_fields:
+        if val and val != "-":
+            pdf.cell(50, 7, label + ":", 0)
+            pdf.cell(0, 7, str(val), ln=True)
+    trucks = inquiry.get("selected_trucks", [])
+    if trucks:
+        pdf.cell(50, 7, "Trucks:", 0)
+        pdf.cell(0, 7, ", ".join(trucks), ln=True)
+    extras = inquiry.get("extras", [])
+    if extras:
+        pdf.cell(50, 7, "Extras:", 0)
+        pdf.cell(0, 7, ", ".join(extras), ln=True)
+    if inquiry.get("remarks"):
+        pdf.ln(4)
+        pdf.set_font("Helvetica", "B", 11)
+        pdf.cell(0, 7, "Bemerkungen:", ln=True)
+        pdf.set_font("Helvetica", "", 10)
+        pdf.multi_cell(0, 5, inquiry["remarks"])
+    pdf.ln(10)
+    pdf.set_font("Helvetica", "I", 9)
+    pdf.set_text_color(120, 120, 120)
+    pdf.multi_cell(0, 5, "Dieses Angebot ist unverbindlich und 30 Tage gueltig. Fuer Fragen stehen wir Ihnen gerne zur Verfuegung.")
+    buf = io.BytesIO()
+    pdf.output(buf)
+    buf.seek(0)
+    return buf.getvalue()
 
 # --- AUTH ---
 @api_router.post("/auth/login")
@@ -346,14 +453,21 @@ async def admin_get_inquiry(inquiry_id: str, request: Request):
     return doc
 
 @api_router.put("/admin/inquiries/{inquiry_id}")
-async def admin_update_inquiry(inquiry_id: str, update: InquiryStatusUpdate, request: Request):
+async def admin_update_inquiry(inquiry_id: str, update: InquiryStatusUpdate, request: Request, background_tasks: BackgroundTasks):
     await get_current_user(request)
-    result = await db.inquiries.update_one(
-        {"id": inquiry_id},
-        {"$set": {"status": update.status, "internal_notes": update.internal_notes, "updated_at": datetime.now(timezone.utc).isoformat()}}
-    )
+    updates = {"status": update.status, "internal_notes": update.internal_notes, "updated_at": datetime.now(timezone.utc).isoformat()}
+    # Auto-assign employees if provided
+    if hasattr(update, 'assigned_employees') and update.assigned_employees is not None:
+        updates["assigned_employees"] = update.assigned_employees
+    result = await db.inquiries.update_one({"id": inquiry_id}, {"$set": updates})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Not found")
+    # Auto-send offer email when status changes to offer_sent
+    if update.status == "offer_sent":
+        inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
+        if inquiry and inquiry.get("email"):
+            offer_html = build_offer_email(inquiry)
+            background_tasks.add_task(send_email_background, inquiry["email"], "Ihr Angebot von TruckOnRoad", offer_html)
     return {"message": "Updated"}
 
 @api_router.delete("/admin/inquiries/{inquiry_id}")
@@ -617,6 +731,124 @@ async def admin_email_preview(request: Request):
 async def admin_get_faqs(request: Request):
     await get_current_user(request)
     return await db.faqs.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+
+# --- ADMIN EMPLOYEES ---
+@api_router.get("/admin/employees")
+async def admin_get_employees(request: Request):
+    await get_current_user(request)
+    return await db.employees.find({}, {"_id": 0}).sort("name", 1).to_list(500)
+
+@api_router.post("/admin/employees")
+async def admin_create_employee(emp: EmployeeCreate, request: Request):
+    await get_current_user(request)
+    doc = emp.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    await db.employees.insert_one(doc)
+    return {"message": "Created", "id": doc["id"]}
+
+@api_router.put("/admin/employees/{emp_id}")
+async def admin_update_employee(emp_id: str, request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    body.pop("_id", None)
+    body.pop("id", None)
+    result = await db.employees.update_one({"id": emp_id}, {"$set": body})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"message": "Updated"}
+
+@api_router.delete("/admin/employees/{emp_id}")
+async def admin_delete_employee(emp_id: str, request: Request):
+    await get_current_user(request)
+    result = await db.employees.delete_one({"id": emp_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"message": "Deleted"}
+
+# --- OFFER PDF ---
+@api_router.get("/admin/inquiries/{inquiry_id}/offer-pdf")
+async def admin_offer_pdf(inquiry_id: str, request: Request):
+    await get_current_user(request)
+    inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
+    if not inquiry:
+        raise HTTPException(status_code=404, detail="Not found")
+    pdf_bytes = generate_offer_pdf(inquiry)
+    name = f"{inquiry.get('first_name', '')}_{inquiry.get('last_name', '')}".strip("_") or "Anfrage"
+    return FastAPIResponse(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename=Angebot_{name}.pdf"})
+
+# --- EXPORT ---
+@api_router.get("/admin/export/{data_type}")
+async def admin_export(data_type: str, format: str = "csv", request: Request = None):
+    await get_current_user(request)
+    import csv as csv_module
+    if data_type == "inquiries":
+        docs = await db.inquiries.find({}, {"_id": 0}).sort("created_at", -1).to_list(10000)
+        fields = ["id", "first_name", "last_name", "email", "phone", "event_date", "location", "guest_count", "event_type", "status", "budget", "assigned_employees", "internal_notes", "created_at"]
+    elif data_type == "calendar":
+        docs = await db.calendar_blocks.find({}, {"_id": 0}).sort("date", 1).to_list(10000)
+        fields = ["id", "truck_slug", "date", "status", "notes", "created_at"]
+    elif data_type == "employees":
+        docs = await db.employees.find({}, {"_id": 0}).sort("name", 1).to_list(500)
+        fields = ["id", "name", "phone", "role", "notes", "is_active", "created_at"]
+    elif data_type == "faqs":
+        docs = await db.faqs.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+        fields = ["id", "question_de", "answer_de", "question_en", "answer_en", "order"]
+    elif data_type == "trucks":
+        docs = await db.trucks.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+        fields = ["slug", "name_de", "name_en", "capacity", "space_required", "tag", "is_active"]
+    else:
+        raise HTTPException(status_code=400, detail="Invalid data type")
+    if format == "csv":
+        output = io.StringIO()
+        writer = csv_module.DictWriter(output, fieldnames=fields, extrasaction="ignore")
+        writer.writeheader()
+        for doc in docs:
+            row = {}
+            for f in fields:
+                val = doc.get(f, "")
+                if isinstance(val, list):
+                    val = ", ".join(str(v) for v in val)
+                row[f] = val
+            writer.writerow(row)
+        return FastAPIResponse(content=output.getvalue(), media_type="text/csv", headers={"Content-Disposition": f"attachment; filename={data_type}_export.csv"})
+    else:
+        pdf = FPDF()
+        pdf.set_auto_page_break(auto=True, margin=15)
+        pdf.add_page("L")
+        pdf.set_font("Helvetica", "B", 14)
+        pdf.cell(0, 10, f"TruckOnRoad - {data_type.title()} Export", ln=True)
+        pdf.set_font("Helvetica", "", 8)
+        pdf.cell(0, 5, f"Erstellt: {datetime.now(timezone.utc).strftime('%d.%m.%Y %H:%M')}", ln=True)
+        pdf.ln(5)
+        col_w = 277 / min(len(fields), 7)
+        display_fields = fields[:7]
+        pdf.set_font("Helvetica", "B", 7)
+        pdf.set_fill_color(240, 240, 240)
+        for f in display_fields:
+            pdf.cell(col_w, 6, f.replace("_", " ").title(), 1, 0, "C", True)
+        pdf.ln()
+        pdf.set_font("Helvetica", "", 7)
+        for doc in docs[:200]:
+            for f in display_fields:
+                val = doc.get(f, "")
+                if isinstance(val, list):
+                    val = ", ".join(str(v) for v in val)
+                pdf.cell(col_w, 5, str(val)[:40], 1, 0)
+            pdf.ln()
+        buf = io.BytesIO()
+        pdf.output(buf)
+        buf.seek(0)
+        return FastAPIResponse(content=buf.getvalue(), media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename={data_type}_export.pdf"})
+
+# --- INSTAGRAM GALLERY ---
+@api_router.get("/instagram-gallery")
+async def get_instagram_gallery():
+    s = await db.settings.find_one({"type": "general"}, {"_id": 0})
+    return {
+        "username": (s or {}).get("instagram_username", ""),
+        "images": (s or {}).get("instagram_images", []),
+    }
 
 app.include_router(api_router)
 

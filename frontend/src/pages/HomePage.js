@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Instagram } from 'lucide-react';
 
 const HERO_IMG_MAIN = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=900&q=80";
 const HERO_IMG_ACCENT = "https://images.unsplash.com/photo-1509315811345-672d83ef2fbc?w=600&q=80";
@@ -36,10 +36,12 @@ export default function HomePage() {
   const [trucks, setTrucks] = useState([]);
   const [faqs, setFaqs] = useState([]);
   const [openFaq, setOpenFaq] = useState(null);
+  const [instaData, setInstaData] = useState({ username: '', images: [] });
 
   useEffect(() => {
     api.get('/trucks').then(r => setTrucks(r.data)).catch(() => {});
     api.get('/faqs').then(r => setFaqs(r.data)).catch(() => {});
+    api.get('/instagram-gallery').then(r => setInstaData(r.data)).catch(() => {});
   }, []);
 
   const whomItems = [t('whom_1'), t('whom_2'), t('whom_3'), t('whom_4'), t('whom_5')];
@@ -182,6 +184,33 @@ export default function HomePage() {
           <Link to="/faq" className="sf-btn-outline">{t('cta_btn_faq')}</Link>
         </div>
       </section>
+
+      {/* --- INSTAGRAM --- */}
+      {instaData.images.length > 0 && (
+        <section className="sf-section" data-testid="instagram-section">
+          <div className="sf-section-inner">
+            <div className="sf-tag">{lang === 'de' ? 'Folge uns' : 'Follow us'}</div>
+            <h2 className="sf-section-title">
+              <Instagram size={28} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '0.5rem', color: 'var(--sf-gold)' }} />
+              {instaData.username ? `@${instaData.username}` : 'Instagram'}
+            </h2>
+            <div className="sf-insta-grid" data-testid="instagram-grid">
+              {instaData.images.map((img, i) => (
+                <a key={i} href={instaData.username ? `https://instagram.com/${instaData.username}` : '#'} target="_blank" rel="noopener noreferrer" className="sf-insta-item">
+                  <img src={img} alt={`Instagram ${i + 1}`} loading="lazy" />
+                </a>
+              ))}
+            </div>
+            {instaData.username && (
+              <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+                <a href={`https://instagram.com/${instaData.username}`} target="_blank" rel="noopener noreferrer" className="sf-btn-outline" style={{ textDecoration: 'none' }}>
+                  <Instagram size={16} style={{ marginRight: '0.4rem' }} /> {lang === 'de' ? 'Auf Instagram folgen' : 'Follow on Instagram'}
+                </a>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* FAQ PREVIEW */}
       <section className="sf-section" data-testid="faq-preview">
