@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Calendar } from '@/components/ui/calendar';
@@ -12,6 +13,7 @@ const TRUCK_OPTIONS = ["Burger Truck", "Chicken Burger", "Bowl Truck", "Pocket B
 
 export default function InquiryPage() {
   const { lang, t } = useLanguage();
+  const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const preselectedTruck = searchParams.get('truck') || '';
   const [calendarBlocks, setCalendarBlocks] = useState([]);
@@ -80,6 +82,21 @@ export default function InquiryPage() {
           {lang === 'de' ? 'Vielen Dank!' : 'Thank you!'}
         </h2>
         <p style={{ color: 'var(--sf-gray)', textAlign: 'center', maxWidth: 500 }}>{t('form_success')}</p>
+        {user && user.role === 'customer' && (
+          <Link to="/konto" className="sf-btn-primary" style={{ marginTop: '1.5rem', textDecoration: 'none' }} data-testid="go-to-portal-btn">
+            {lang === 'de' ? 'Zum Kundenportal' : 'Go to Portal'}
+          </Link>
+        )}
+        {!user && (
+          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+            <p style={{ color: 'var(--sf-gray)', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
+              {lang === 'de' ? 'Erstelle ein Konto, um den Status deiner Anfrage zu verfolgen:' : 'Create an account to track your inquiry:'}
+            </p>
+            <Link to="/konto/registrieren" className="sf-btn-outline" style={{ textDecoration: 'none' }} data-testid="register-after-inquiry">
+              {lang === 'de' ? 'Konto erstellen' : 'Create Account'}
+            </Link>
+          </div>
+        )}
       </div>
     );
   }

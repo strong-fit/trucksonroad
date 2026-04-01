@@ -148,6 +148,14 @@ class EmployeeCreate(BaseModel):
     notes: Optional[str] = ""
     is_active: Optional[bool] = True
 
+class CustomerRegister(BaseModel):
+    email: str
+    password: str
+    first_name: str
+    last_name: str
+    company: Optional[str] = ""
+    phone: Optional[str] = ""
+
 # --- EMAIL ---
 async def get_email_settings():
     s = await db.settings.find_one({"type": "general"}, {"_id": 0})
@@ -383,6 +391,51 @@ async def refresh(request: Request, response: Response):
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         raise HTTPException(status_code=401, detail="Invalid refresh token")
 
+# --- CUSTOMER REGISTRATION ---
+@api_router.post("/auth/register")
+async def register_customer(body: CustomerRegister, response: Response):
+    email = body.email.lower().strip()
+    existing = await db.users.find_one({"email": email})
+    if existing:
+        raise HTTPException(status_code=400, detail="E-Mail bereits registriert")
+    user_doc = {
+        "email": email,
+        "password_hash": hash_password(body.password),
+        "name": f"{body.first_name} {body.last_name}",
+        "first_name": body.first_name,
+        "last_name": body.last_name,
+        "company": body.company or "",
+        "phone": body.phone or "",
+        "role": "customer",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    result = await db.users.insert_one(user_doc)
+    uid = str(result.inserted_id)
+    at = create_access_token(uid, email)
+    rt = create_refresh_token(uid)
+    response.set_cookie(key="access_token", value=at, httponly=True, secure=False, samesite="lax", max_age=7200, path="/")
+    response.set_cookie(key="refresh_token", value=rt, httponly=True, secure=False, samesite="lax", max_age=604800, path="/")
+    return {"id": uid, "email": email, "name": user_doc["name"], "role": "customer"}
+
+# --- CUSTOMER PORTAL ---
+@api_router.get("/customer/inquiries")
+async def customer_get_inquiries(request: Request):
+    user = await get_current_user(request)
+    return await db.inquiries.find({"customer_id": str(user["_id"])}, {"_id": 0}).sort("created_at", -1).to_list(200)
+
+@api_router.get("/customer/inquiries/{inquiry_id}")
+async def customer_get_inquiry(inquiry_id: str, request: Request):
+    user = await get_current_user(request)
+    doc = await db.inquiries.find_one({"id": inquiry_id, "customer_id": str(user["_id"])}, {"_id": 0})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Nicht gefunden")
+    return doc
+
+@api_router.get("/customer/profile")
+async def customer_get_profile(request: Request):
+    user = await get_current_user(request)
+    return {"email": user["email"], "name": user.get("name", ""), "first_name": user.get("first_name", ""), "last_name": user.get("last_name", ""), "company": user.get("company", ""), "phone": user.get("phone", ""), "role": user.get("role", "customer")}
+
 # --- PUBLIC TRUCKS ---
 @api_router.get("/trucks")
 async def get_trucks():
@@ -397,19 +450,30 @@ async def get_truck(slug: str):
 
 # --- INQUIRIES ---
 @api_router.post("/inquiries")
-async def create_inquiry(inquiry: InquiryCreate, background_tasks: BackgroundTasks):
+async def create_inquiry(inquiry: InquiryCreate, request: Request, background_tasks: BackgroundTasks):
     doc = inquiry.model_dump()
     doc["id"] = str(uuid.uuid4())
     doc["status"] = "new"
     doc["internal_notes"] = ""
+    doc["invoice_status"] = "none"
+    doc["invoice_amount"] = 0
     doc["created_at"] = datetime.now(timezone.utc).isoformat()
     doc["updated_at"] = datetime.now(timezone.utc).isoformat()
+    # Link to customer account if logged in
+    try:
+        user = await get_current_user(request)
+        doc["customer_id"] = str(user["_id"])
+    except Exception:
+        doc["customer_id"] = ""
+    # Check auto-confirmation setting
+    settings = await get_email_settings()
+    if settings.get("auto_confirmation"):
+        doc["status"] = "confirmed"
     await db.inquiries.insert_one(doc)
     # Send confirmation email to customer
     if doc.get("email"):
         background_tasks.add_task(send_email_background, doc["email"], "Anfrage erhalten – TruckOnRoad", build_confirmation_email(doc))
     # Send notification to admin
-    settings = await get_email_settings()
     if settings.get("email_notifications") and settings.get("notification_email"):
         background_tasks.add_task(send_email_background, settings["notification_email"], f"Neue Anfrage: {doc.get('first_name', '')} {doc.get('last_name', '')}", build_admin_notification_email(doc))
     return {"message": "Anfrage erfolgreich gesendet", "id": doc["id"]}
@@ -483,6 +547,20 @@ async def admin_delete_inquiry(inquiry_id: str, request: Request):
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Not found")
     return {"message": "Deleted"}
+
+@api_router.put("/admin/inquiries/{inquiry_id}/invoice")
+async def admin_update_invoice(inquiry_id: str, request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    updates = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    if "invoice_status" in body:
+        updates["invoice_status"] = body["invoice_status"]
+    if "invoice_amount" in body:
+        updates["invoice_amount"] = body["invoice_amount"]
+    result = await db.inquiries.update_one({"id": inquiry_id}, {"$set": updates})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"message": "Invoice updated"}
 
 # --- ADMIN CALENDAR ---
 @api_router.get("/admin/calendar")
@@ -578,6 +656,7 @@ async def admin_get_settings(request: Request):
         "whatsapp_number": "+41796969899",
         "social_google_business": "", "social_instagram": "", "social_facebook": "",
         "social_tiktok": "", "social_linkedin": "",
+        "auto_confirmation": False,
         "email_notifications": False, "notification_email": "",
         "smtp_host": "smtp.gmail.com", "smtp_port": 587,
         "smtp_email": "", "smtp_password": ""
@@ -1282,7 +1361,7 @@ async def startup():
 
     Path("/app/memory").mkdir(exist_ok=True)
     with open("/app/memory/test_credentials.md", "w") as f:
-        f.write(f"# Test Credentials\n\n## Admin\n- Email: {admin_email}\n- Password: {admin_password}\n- Role: admin\n\n## Auth Endpoints\n- POST /api/auth/login\n- POST /api/auth/logout\n- GET /api/auth/me\n- POST /api/auth/refresh\n")
+        f.write(f"# Test Credentials\n\n## Admin\n- Email: {admin_email}\n- Password: {admin_password}\n- Role: admin\n\n## Customer (Test)\n- Register at /konto/registrieren\n- Or use API: POST /api/auth/register\n\n## Auth Endpoints\n- POST /api/auth/login\n- POST /api/auth/register\n- POST /api/auth/logout\n- GET /api/auth/me\n- POST /api/auth/refresh\n\n## Customer Portal Endpoints\n- GET /api/customer/inquiries\n- GET /api/customer/inquiries/{{id}}\n- GET /api/customer/profile\n")
     logger.info("Startup complete")
 
 @app.on_event("shutdown")

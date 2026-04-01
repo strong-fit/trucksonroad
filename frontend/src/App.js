@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider, ProtectedRoute } from "@/contexts/AuthContext";
+import { AuthProvider, ProtectedRoute, CustomerProtectedRoute } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Toaster } from "sonner";
 import Navbar from "@/components/Navbar";
@@ -22,6 +22,9 @@ import AdminExport from "@/pages/admin/AdminExport";
 import AdminFinance from "@/pages/admin/AdminFinance";
 import AdminRoutes from "@/pages/admin/AdminRoutes";
 import AdminReviews from "@/pages/admin/AdminReviews";
+import CustomerLogin from "@/pages/customer/CustomerLogin";
+import CustomerRegister from "@/pages/customer/CustomerRegister";
+import CustomerPortal from "@/pages/customer/CustomerPortal";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import "@/App.css";
@@ -53,6 +56,9 @@ function App() {
             <Route path="/private-events" element={<PublicLayout><PrivateEventsPage /></PublicLayout>} />
             <Route path="/ueber-uns" element={<PublicLayout><AboutPage /></PublicLayout>} />
             <Route path="/kontakt" element={<PublicLayout><ContactPage /></PublicLayout>} />
+            <Route path="/konto/login" element={<PublicLayout><CustomerLogin /></PublicLayout>} />
+            <Route path="/konto/registrieren" element={<PublicLayout><CustomerRegister /></PublicLayout>} />
+            <Route path="/konto" element={<CustomerProtectedRoute><CustomerPortal /></CustomerProtectedRoute>} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
             <Route path="/admin/anfragen" element={<ProtectedRoute><AdminInquiries /></ProtectedRoute>} />

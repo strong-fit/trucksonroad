@@ -1,0 +1,115 @@
+{
+  "summary": "Completed comprehensive testing of Customer Portal features (Batch 9). All 15 backend API tests passed. All frontend features verified working correctly including Customer Registration, Customer Login, Customer Portal dashboard, Admin Invoice Management, and Auto-confirmation toggle in Admin Settings.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_customer_portal.py",
+    "/app/test_reports/pytest/pytest_batch9_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_customer_portal.py"
+  ],
+  "success_rate": {
+    "backend": "100% (15/15 tests passed)",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "admin": "admin@truckonroad.ch / TruckOnRoad2026!",
+    "test_customer": "Register at /konto/registrieren or POST /api/auth/register"
+  },
+  "seed_data_creation": "Multiple test customers created during testing (playwright_test_*, login_test_*, portal_test_*, etc.)",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Batch 9 Customer Portal features fully verified. Customer registration creates user with role='customer'. Customer login works with httpOnly cookies. Customer portal at /konto shows inquiry list with status and invoice badges. Admin Anfragen page has 'Rechnung' column and 'Abgeschlossen' status filter. Admin inquiry detail panel has invoice management (status select + amount input). Admin Einstellungen has 'Buchungseinstellungen' section with auto-confirmation toggle.",
+  "features_verified": {
+    "backend_api": {
+      "customer_registration": {
+        "endpoint": "POST /api/auth/register",
+        "status": "✓ Creates customer with role='customer'",
+        "duplicate_email": "✓ Returns 400 for duplicate email",
+        "cookies": "✓ Sets httpOnly access_token and refresh_token cookies"
+      },
+      "customer_login": {
+        "endpoint": "POST /api/auth/login",
+        "status": "✓ Works for customer accounts",
+        "invalid_password": "✓ Returns 401 for wrong password"
+      },
+      "customer_portal_endpoints": {
+        "profile": "✓ GET /api/customer/profile returns customer data",
+        "inquiries": "✓ GET /api/customer/inquiries returns only customer's inquiries",
+        "auth_required": "✓ Returns 401 without authentication"
+      },
+      "inquiry_customer_linking": {
+        "status": "✓ POST /api/inquiries links to customer_id when logged in",
+        "verification": "✓ Inquiry appears in customer's inquiry list"
+      },
+      "auto_confirmation": {
+        "setting": "✓ GET /api/admin/settings includes auto_confirmation field",
+        "toggle": "✓ PUT /api/admin/settings can toggle auto_confirmation",
+        "behavior": "✓ Inquiry status='new' when auto_confirmation is off"
+      },
+      "invoice_management": {
+        "endpoint": "PUT /api/admin/inquiries/{id}/invoice",
+        "status_update": "✓ Updates invoice_status",
+        "amount_update": "✓ Updates invoice_amount",
+        "combined": "✓ Can update both status and amount together"
+      },
+      "completed_status": {
+        "status": "✓ PUT /api/admin/inquiries/{id} can set status='completed'"
+      }
+    },
+    "frontend_pages": {
+      "customer_login": {
+        "route": "/konto/login",
+        "elements": ["customer-email-input", "customer-password-input", "customer-login-btn", "register-link"],
+        "layout": "✓ Uses PublicLayout with Navbar/Footer"
+      },
+      "customer_register": {
+        "route": "/konto/registrieren",
+        "elements": ["reg-first-name", "reg-last-name", "reg-email", "reg-company", "reg-phone", "reg-password", "reg-password2", "reg-submit-btn", "login-link"],
+        "layout": "✓ Uses PublicLayout with Navbar/Footer"
+      },
+      "customer_portal": {
+        "route": "/konto",
+        "elements": ["customer-portal", "portal-header", "portal-title", "portal-stats", "portal-logout-btn", "new-inquiry-btn"],
+        "layout": "✓ Has own header (no PublicLayout)",
+        "stats": ["Anfragen count", "Bestätigt count", "Bezahlt count"],
+        "inquiry_list": "✓ Shows inquiries with status and invoice badges"
+      },
+      "navbar_login_link": {
+        "element": "nav-login-btn",
+        "text": "Anmelden",
+        "visibility": "✓ Shows for non-logged-in users"
+      },
+      "admin_inquiries": {
+        "route": "/admin/anfragen",
+        "rechnung_column": "✓ 'Rechnung' column visible in table",
+        "completed_filter": "✓ 'Abgeschlossen' filter button present",
+        "detail_panel": {
+          "invoice_status_select": "✓ data-testid='invoice-status-select'",
+          "invoice_amount_input": "✓ data-testid='invoice-amount-input'",
+          "completed_status_btn": "✓ data-testid='set-status-completed'"
+        }
+      },
+      "admin_settings": {
+        "route": "/admin/einstellungen",
+        "buchungseinstellungen_section": "✓ data-testid='settings-booking'",
+        "auto_confirmation_toggle": "✓ data-testid='settings-auto-confirmation'",
+        "mode_indicator": "✓ Shows 'MANUELL' or 'AUTOMATISCH' based on setting"
+      }
+    }
+  },
+  "test_data_created": {
+    "customers": "Multiple test customers created (cleaned up by test isolation)"
+  },
+  "notes": "All Batch 9 Customer Portal features implemented correctly. Cookie-based auth works for customer endpoints. Customer registration auto-logs in user. Inquiry linking to customer_id works when customer is authenticated. Invoice management in admin panel works correctly. Auto-confirmation toggle affects new inquiry status."
+}

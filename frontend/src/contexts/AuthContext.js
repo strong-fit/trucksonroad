@@ -53,3 +53,14 @@ export function ProtectedRoute({ children }) {
   if (!user) return <Navigate to="/admin/login" />;
   return children;
 }
+
+export function CustomerProtectedRoute({ children }) {
+  const { user, loading } = useAuth();
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--sf-bg)' }}>
+      <div className="sf-spinner" />
+    </div>
+  );
+  if (!user) return <Navigate to="/konto/login" />;
+  return children;
+}

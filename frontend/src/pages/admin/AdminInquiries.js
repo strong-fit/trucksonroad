@@ -2,14 +2,23 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Trash2, Inbox, FileDown, Users } from 'lucide-react';
+import { Trash2, Inbox, FileDown, Users, Receipt } from 'lucide-react';
 
 const STATUS_OPTIONS = [
   { value: 'new', label: 'Neu' },
   { value: 'in_review', label: 'In Pruefung' },
   { value: 'offer_sent', label: 'Offerte gesendet' },
   { value: 'confirmed', label: 'Bestaetigt' },
+  { value: 'completed', label: 'Abgeschlossen' },
   { value: 'cancelled', label: 'Abgesagt' },
+];
+
+const INVOICE_OPTIONS = [
+  { value: 'none', label: 'Keine' },
+  { value: 'pending', label: 'Offen' },
+  { value: 'sent', label: 'Gesendet' },
+  { value: 'paid', label: 'Bezahlt' },
+  { value: 'overdue', label: 'Ueberfaellig' },
 ];
 
 export default function AdminInquiries() {
@@ -79,6 +88,7 @@ export default function AdminInquiries() {
                   <th>Typ</th>
                   <th>Gaeste</th>
                   <th>Status</th>
+                  <th>Rechnung</th>
                   <th></th>
                 </tr>
               </thead>
@@ -99,6 +109,15 @@ export default function AdminInquiries() {
                         <span className="adm-badge-dot" />
                         {STATUS_OPTIONS.find(s => s.value === inq.status)?.label || inq.status}
                       </span>
+                    </td>
+                    <td>
+                      {inq.invoice_status && inq.invoice_status !== 'none' && (
+                        <span className={`adm-badge adm-badge-${inq.invoice_status === 'paid' ? 'confirmed' : inq.invoice_status === 'overdue' ? 'cancelled' : 'new'}`}>
+                          <span className="adm-badge-dot" />
+                          {INVOICE_OPTIONS.find(o => o.value === inq.invoice_status)?.label || '–'}
+                          {inq.invoice_amount > 0 && ` CHF ${inq.invoice_amount}`}
+                        </span>
+                      )}
                     </td>
                     <td>
                       <button
@@ -204,6 +223,42 @@ export default function AdminInquiries() {
                 </button>
               </div>
             )}
+
+            {/* Invoice Management */}
+            <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem' }}>
+              <div className="adm-form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Receipt size={12} /> Rechnung</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: '0.5rem', marginTop: '0.3rem' }}>
+                <select
+                  className="adm-input"
+                  value={selected.invoice_status || 'none'}
+                  onChange={async (e) => {
+                    try {
+                      await api.put(`/admin/inquiries/${selected.id}/invoice`, { invoice_status: e.target.value });
+                      toast.success('Rechnungsstatus aktualisiert');
+                      load();
+                      setSelected(prev => ({ ...prev, invoice_status: e.target.value }));
+                    } catch { toast.error('Fehler'); }
+                  }}
+                  data-testid="invoice-status-select"
+                >
+                  {INVOICE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                </select>
+                <input
+                  className="adm-input"
+                  type="number"
+                  placeholder="CHF"
+                  value={selected.invoice_amount || ''}
+                  onChange={(e) => setSelected(prev => ({ ...prev, invoice_amount: parseFloat(e.target.value) || 0 }))}
+                  onBlur={async () => {
+                    try {
+                      await api.put(`/admin/inquiries/${selected.id}/invoice`, { invoice_amount: selected.invoice_amount || 0 });
+                      load();
+                    } catch {}
+                  }}
+                  data-testid="invoice-amount-input"
+                />
+              </div>
+            </div>
 
             {/* Offer PDF */}
             <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem', display: 'flex', gap: '0.5rem' }}>

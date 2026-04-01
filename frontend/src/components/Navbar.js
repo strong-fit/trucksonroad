@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Menu, X, User } from 'lucide-react';
 
 export default function Navbar() {
   const { lang, setLang, t } = useLanguage();
+  const { user } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
@@ -59,6 +61,15 @@ export default function Navbar() {
           >
             {lang === 'de' ? 'EN' : 'DE'}
           </button>
+          {user && user.role !== 'admin' ? (
+            <Link to="/konto" className="sf-nav-account" data-testid="nav-account-btn">
+              <User size={15} /> {lang === 'de' ? 'Mein Konto' : 'My Account'}
+            </Link>
+          ) : !user ? (
+            <Link to="/konto/login" className="sf-nav-account" data-testid="nav-login-btn">
+              <User size={15} /> {lang === 'de' ? 'Anmelden' : 'Login'}
+            </Link>
+          ) : null}
           <Link to="/anfrage" className="sf-nav-cta" data-testid="nav-cta-button">
             {t('nav_cta')}
           </Link>

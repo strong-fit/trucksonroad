@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Save, Send, Building2, Server, Eye, Download, Instagram, Plus, Trash2, Globe, Facebook, Linkedin } from 'lucide-react';
+import { Save, Send, Building2, Server, Eye, Download, Instagram, Plus, Trash2, Globe, Facebook, Linkedin, Zap } from 'lucide-react';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState(null);
@@ -122,6 +122,30 @@ export default function AdminSettings() {
       </div>
 
       <div style={{ marginTop: '1.25rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', alignItems: 'start' }}>
+        {/* Booking Auto-Confirmation */}
+        <div className="adm-detail" data-testid="settings-booking">
+          <div className="adm-detail-header" style={{ borderBottom: '1px solid var(--adm-border)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+            <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Zap size={18} /> Buchungseinstellungen</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', cursor: 'pointer', fontSize: '0.82rem' }}>
+              <input type="checkbox" checked={settings.auto_confirmation || false} onChange={e => update('auto_confirmation', e.target.checked)} data-testid="settings-auto-confirmation" style={{ marginTop: '0.15rem' }} />
+              <div>
+                <div style={{ fontWeight: 600 }}>Automatische Bestätigung</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--adm-text-secondary)', marginTop: '0.2rem' }}>
+                  Wenn aktiviert, werden neue Anfragen automatisch bestätigt. Wenn deaktiviert, müssen Anfragen manuell bestätigt werden.
+                </div>
+              </div>
+            </label>
+            <div style={{ padding: '0.6rem 0.8rem', borderRadius: '6px', fontSize: '0.78rem', background: settings.auto_confirmation ? '#dcfce7' : '#fef3c7', color: settings.auto_confirmation ? '#166534' : '#92400e' }}>
+              {settings.auto_confirmation
+                ? 'Modus: AUTOMATISCH – Anfragen werden sofort bestätigt.'
+                : 'Modus: MANUELL – Anfragen müssen im Admin-Bereich geprüft und bestätigt werden.'}
+            </div>
+          </div>
+        </div>
+
+        {/* Social Media */}
         <div className="adm-detail" data-testid="settings-social">
           <div className="adm-detail-header" style={{ borderBottom: '1px solid var(--adm-border)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
             <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Globe size={18} /> Social Media & SEO</span>
