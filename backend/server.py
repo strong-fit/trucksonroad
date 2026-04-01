@@ -1009,6 +1009,36 @@ async def admin_delete_review(review_id: str, request: Request):
     await get_current_user(request)
     await db.reviews.delete_one({"id": review_id})
     return {"message": "Deleted"}
+
+@api_router.get("/robots.txt")
+async def robots_txt():
+    content = """User-agent: *
+Allow: /
+Sitemap: https://truckonroad.ch/api/sitemap.xml
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+"""
+    return FastAPIResponse(content=content, media_type="text/plain")
+
 @api_router.get("/sitemap.xml")
 async def sitemap():
     base = "https://truckonroad.ch"

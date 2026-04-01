@@ -13,10 +13,19 @@
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="de_CH" />
         <meta property="og:site_name" content="TruckOnRoad" />
+        <meta property="og:url" content="https://truckonroad.ch" />
+        <meta property="og:image" content="https://images.unsplash.com/photo-1602716012490-6351b2cf961b?w=1200&h=630&fit=crop" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="TruckOnRoad – Premium Foodtrucks bei einem Event" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="TruckOnRoad – Premium Foodtrucks" />
         <meta name="twitter:description" content="Burger, Bowls, Empanadas & mehr – direkt an eurem Event." />
+        <meta name="twitter:image" content="https://images.unsplash.com/photo-1602716012490-6351b2cf961b?w=1200&h=630&fit=crop" />
         <link rel="canonical" href="https://truckonroad.ch" />
+        <link rel="alternate" hreflang="de" href="https://truckonroad.ch" />
+        <link rel="alternate" hreflang="en" href="https://truckonroad.ch?lang=en" />
+        <link rel="alternate" hreflang="x-default" href="https://truckonroad.ch" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet" />
@@ -34,6 +43,43 @@
         Learn how to configure a non-root public URL by running `npm run build`.
         -->
         <title>TruckOnRoad – Premium Foodtrucks für jeden Anlass</title>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FoodEstablishment",
+            "name": "TruckOnRoad",
+            "alternateName": "TruckOnRoad - Premium Foodtrucks",
+            "description": "Premium Foodtrucks für Festivals, Firmenanlässe und Private Events in der ganzen Schweiz. 6 einzigartige Truck-Konzepte: Burger, Chicken Burger, Bowls, Pocket Bowls, Empanadas und Retro Trailer.",
+            "url": "https://truckonroad.ch",
+            "telephone": "+41 79 696 98 99",
+            "email": "info@truckonroad.ch",
+            "image": "https://images.unsplash.com/photo-1602716012490-6351b2cf961b?w=1200&h=630&fit=crop",
+            "servesCuisine": ["Burger", "Bowls", "Empanadas", "Street Food"],
+            "priceRange": "$$",
+            "address": {"@type": "PostalAddress", "streetAddress": "Bahnhofstrasse 75", "addressLocality": "Wetzikon", "postalCode": "8620", "addressCountry": "CH"},
+            "geo": {"@type": "GeoCoordinates", "latitude": 47.3769, "longitude": 8.5417},
+            "areaServed": {"@type": "Country", "name": "Schweiz"},
+            "additionalType": "https://schema.org/CateringService",
+            "knowsAbout": ["Foodtruck Catering", "Festival Catering", "Firmenanlass Catering", "Hochzeit Catering", "Event Catering Schweiz"],
+            "makesOffer": [
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Foodtruck Catering für Festivals"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Foodtruck für Firmenanlässe"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Foodtruck für Private Events"}}
+            ]
+        }
+        </script>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Wie kann ich einen Foodtruck buchen?", "acceptedAnswer": {"@type": "Answer", "text": "Füllen Sie unser Anfrageformular aus mit Angaben zu Datum, Ort, Gästeanzahl und gewünschten Trucks. Wir melden uns innert 24 Stunden mit einem individuellen Angebot."}},
+                {"@type": "Question", "name": "Wie viele Gäste können bedient werden?", "acceptedAnswer": {"@type": "Answer", "text": "Je nach Truck-Kombination können wir Events von 50 bis 5000+ Gästen bedienen. Für Grossevents setzen wir mehrere Trucks gleichzeitig ein."}},
+                {"@type": "Question", "name": "Welche Trucks stehen zur Verfügung?", "acceptedAnswer": {"@type": "Answer", "text": "Wir bieten 6 einzigartige Konzepte: Burger Truck, Chicken Burger Truck, Bowl Truck, Pocket Bowl Truck, Empanadas Truck und Retro Trailer."}},
+                {"@type": "Question", "name": "In welchem Gebiet seid ihr tätig?", "acceptedAnswer": {"@type": "Answer", "text": "Wir sind in der ganzen Schweiz unterwegs – von Zürich über Bern bis Genf und überall dazwischen."}}
+            ]
+        }
+        </script>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
         <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
     </head>
