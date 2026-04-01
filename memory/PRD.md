@@ -1,45 +1,39 @@
 # TruckOnRoad - Premium Foodtruck Website
 
-## Original Problem Statement
-Premium Foodtruck Webseite für Schweizer Foodtruck-Unternehmen.
-
 ## Architecture
-- **Frontend**: React (CRA) + Tailwind CSS + Shadcn UI + Custom CSS
-- **Backend**: FastAPI + MongoDB (Motor async)
-- **Auth**: JWT with httpOnly cookies, bcrypt
-- **Email**: Gmail SMTP via Python smtplib (configurable in Admin)
-- **PDF**: fpdf2 library (Veranstalter-PDF + Offerten-PDF)
-- **Design**: Public: Dark (#0a0a0a bg, Petrol #4db6ac). Admin: Light (#f4f3ef bg)
+- **Frontend**: React + Tailwind + Shadcn UI + Leaflet (Maps)
+- **Backend**: FastAPI + MongoDB + fpdf2 + httpx
+- **Email**: Gmail SMTP (configurable)
+- **Maps**: OpenStreetMap + OSRM (free, no API key)
+- **Design**: Public: Dark + Petrol. Admin: Light
 
-## What's Been Implemented
+## Implemented Features
 
 ### Public Site (DONE)
-- [x] Homepage (Hero, Ticker, Trucks Grid, CTA, FAQ Preview, Instagram Gallery)
-- [x] 6 Truck Detail Pages
-- [x] Inquiry Form (calendar, truck selection, extras)
-- [x] FAQ, Veranstalter, Private Events, Über uns, Kontakt Seiten
-- [x] Navigation (DE/EN), WhatsApp, Footer
-- [x] SEO Meta Tags + Sitemap.xml
-- [x] PDF Download für Veranstalter
-- [x] Instagram Gallery (admin-konfigurierbar)
+- Homepage (Hero, Ticker, Trucks, CTA, FAQ, Instagram Gallery)
+- 6 Truck Detail Pages, Inquiry Form, FAQ, Veranstalter, Private Events
+- Über uns, Kontakt (with real company info)
+- SEO Meta Tags, Sitemap.xml, PDF Download
+- DE/EN Navigation, WhatsApp Button
 
-### Admin Area (DONE)
-- [x] Login, Dashboard, Anfragen (mit Personal-Zuweisung + Offerten-PDF)
-- [x] Kalender, Trucks (Bearbeitung), FAQ (CRUD)
-- [x] Personal (Mitarbeiter-CRUD + Zuweisung zu Events)
-- [x] Export (CSV/PDF für Anfragen, Mitarbeiter, Kalender, Trucks, FAQs)
-- [x] Einstellungen (Firma, SMTP, Instagram Feed, E-Mail-Vorschau)
-- [x] Offerten-PDF (auto bei Status "Offerte gesendet" + manuell)
+### Admin Area - 10 Sections (DONE)
+1. Dashboard (stats + recent inquiries)
+2. Anfragen (filters, detail, status, notes, employee assignment, offer PDF)
+3. Kalender (truck selector, date blocking)
+4. Trucks (edit name, desc, image, menu, capacity)
+5. Personal (employee CRUD + assignment to events)
+6. Finanzen (revenue, costs, profit per event/truck/month)
+7. Routen (Leaflet map, geocoding, OSRM routing/optimization)
+8. FAQ (CRUD DE/EN)
+9. Export (CSV/PDF for all data)
+10. Einstellungen (company, SMTP, Instagram gallery, email preview)
 
-### Backend (DONE)
-- [x] JWT Auth, Trucks/Inquiries/FAQs/Calendar CRUD
-- [x] Employees CRUD + Assignment
-- [x] Offer PDF Generation + Email
-- [x] Export (CSV/PDF all data types)
-- [x] Sitemap, Instagram Gallery, Contact Info, Settings
-- [x] Gmail SMTP (background tasks)
+### Backend APIs (DONE)
+- Auth, Trucks, Inquiries, FAQs, Calendar, Employees CRUD
+- Finance tracking, Offer PDF, Export (CSV/PDF)
+- Geocoding (Nominatim), Routing (OSRM), Route optimization
+- Sitemap, Instagram gallery, Contact info, Settings
+- Gmail SMTP email (confirmation + admin notification + offer)
 
 ## Backlog
-- [ ] FR/IT Übersetzungen (nach Fertigstellung)
-- [ ] Umsatz-Tracking pro Anlass
-- [ ] Routenplanung
+- [ ] FR/IT Übersetzungen
