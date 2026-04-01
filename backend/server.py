@@ -22,6 +22,7 @@ from email.mime.multipart import MIMEMultipart
 from fastapi.responses import Response as FastAPIResponse
 from fpdf import FPDF
 import io
+import httpx
 
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
@@ -849,6 +850,165 @@ async def get_instagram_gallery():
         "username": (s or {}).get("instagram_username", ""),
         "images": (s or {}).get("instagram_images", []),
     }
+
+# --- FINANCE: Update inquiry financials ---
+@api_router.put("/admin/inquiries/{inquiry_id}/finance")
+async def admin_update_finance(inquiry_id: str, request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    allowed = ["revenue", "personnel_cost", "material_cost", "travel_cost", "other_cost", "finance_notes"]
+    updates = {k: body[k] for k in allowed if k in body}
+    updates["updated_at"] = datetime.now(timezone.utc).isoformat()
+    result = await db.inquiries.update_one({"id": inquiry_id}, {"$set": updates})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"message": "Finance updated"}
+
+# --- FINANCE: Dashboard overview ---
+@api_router.get("/admin/finance/overview")
+async def admin_finance_overview(request: Request):
+    await get_current_user(request)
+    inquiries = await db.inquiries.find({}, {"_id": 0}).to_list(10000)
+    total_revenue = 0
+    total_costs = 0
+    by_month = {}
+    by_truck = {}
+    events_with_finance = 0
+    for inq in inquiries:
+        rev = float(inq.get("revenue", 0) or 0)
+        p_cost = float(inq.get("personnel_cost", 0) or 0)
+        m_cost = float(inq.get("material_cost", 0) or 0)
+        t_cost = float(inq.get("travel_cost", 0) or 0)
+        o_cost = float(inq.get("other_cost", 0) or 0)
+        costs = p_cost + m_cost + t_cost + o_cost
+        if rev > 0 or costs > 0:
+            events_with_finance += 1
+        total_revenue += rev
+        total_costs += costs
+        # By month
+        date_str = inq.get("event_date", "")
+        if date_str and date_str != "-":
+            month_key = date_str[:7]
+            if month_key not in by_month:
+                by_month[month_key] = {"revenue": 0, "costs": 0, "count": 0}
+            by_month[month_key]["revenue"] += rev
+            by_month[month_key]["costs"] += costs
+            by_month[month_key]["count"] += 1
+        # By truck
+        for truck in inq.get("selected_trucks", []):
+            if truck not in by_truck:
+                by_truck[truck] = {"revenue": 0, "costs": 0, "count": 0}
+            share = 1 / max(len(inq.get("selected_trucks", [])), 1)
+            by_truck[truck]["revenue"] += rev * share
+            by_truck[truck]["costs"] += costs * share
+            by_truck[truck]["count"] += 1
+    return {
+        "total_revenue": round(total_revenue, 2),
+        "total_costs": round(total_costs, 2),
+        "total_profit": round(total_revenue - total_costs, 2),
+        "events_with_finance": events_with_finance,
+        "by_month": dict(sorted(by_month.items())),
+        "by_truck": by_truck,
+    }
+
+# --- ROUTING: Geocode address ---
+BASE_LOCATION = {"lat": 47.3231, "lon": 8.7994, "name": "Wetzikon"}
+
+@api_router.get("/admin/geocode")
+async def admin_geocode(address: str, request: Request):
+    await get_current_user(request)
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(
+            "https://nominatim.openstreetmap.org/search",
+            params={"q": address, "format": "json", "limit": 1, "countrycodes": "ch"},
+            headers={"User-Agent": "TruckOnRoad/1.0"},
+            timeout=10,
+        )
+        results = resp.json()
+        if not results:
+            return {"found": False}
+        r = results[0]
+        return {"found": True, "lat": float(r["lat"]), "lon": float(r["lon"]), "display_name": r["display_name"]}
+
+@api_router.get("/admin/route")
+async def admin_route(from_lat: float, from_lon: float, to_lat: float, to_lon: float, request: Request):
+    await get_current_user(request)
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(
+            f"https://router.project-osrm.org/route/v1/driving/{from_lon},{from_lat};{to_lon},{to_lat}",
+            params={"overview": "full", "geometries": "geojson"},
+            timeout=10,
+        )
+        data = resp.json()
+        if data.get("code") != "Ok" or not data.get("routes"):
+            return {"found": False}
+        route = data["routes"][0]
+        return {
+            "found": True,
+            "distance_km": round(route["distance"] / 1000, 1),
+            "duration_min": round(route["duration"] / 60),
+            "geometry": route["geometry"],
+        }
+
+@api_router.get("/admin/route/optimize")
+async def admin_route_optimize(request: Request):
+    await get_current_user(request)
+    params = dict(request.query_params)
+    coords_str = params.get("coords", "")
+    if not coords_str:
+        return {"found": False, "error": "No coordinates"}
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(
+            f"https://router.project-osrm.org/trip/v1/driving/{coords_str}",
+            params={"overview": "full", "geometries": "geojson", "roundtrip": "true", "source": "first"},
+            timeout=15,
+        )
+        data = resp.json()
+        if data.get("code") != "Ok" or not data.get("trips"):
+            return {"found": False}
+        trip = data["trips"][0]
+        waypoints = data.get("waypoints", [])
+        return {
+            "found": True,
+            "distance_km": round(trip["distance"] / 1000, 1),
+            "duration_min": round(trip["duration"] / 60),
+            "geometry": trip["geometry"],
+            "waypoint_order": [w.get("waypoint_index", i) for i, w in enumerate(waypoints)],
+        }
+
+# --- ROUTING: Save/get coordinates for inquiry ---
+@api_router.put("/admin/inquiries/{inquiry_id}/coords")
+async def admin_update_coords(inquiry_id: str, request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    updates = {"lat": body.get("lat"), "lon": body.get("lon"), "updated_at": datetime.now(timezone.utc).isoformat()}
+    result = await db.inquiries.update_one({"id": inquiry_id}, {"$set": updates})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"message": "Coordinates updated"}
+
+# --- ROUTING: Get events with locations for map ---
+@api_router.get("/admin/events-map")
+async def admin_events_map(request: Request):
+    await get_current_user(request)
+    inquiries = await db.inquiries.find(
+        {"status": {"$in": ["confirmed", "offer_sent", "in_review"]}},
+        {"_id": 0}
+    ).sort("event_date", 1).to_list(500)
+    events = []
+    for inq in inquiries:
+        events.append({
+            "id": inq.get("id"),
+            "name": f"{inq.get('first_name', '')} {inq.get('last_name', '')}".strip() or inq.get("name", ""),
+            "event_date": inq.get("event_date", ""),
+            "location": inq.get("location", ""),
+            "lat": inq.get("lat"),
+            "lon": inq.get("lon"),
+            "status": inq.get("status"),
+            "selected_trucks": inq.get("selected_trucks", []),
+            "guest_count": inq.get("guest_count"),
+        })
+    return {"events": events, "base": BASE_LOCATION}
 
 app.include_router(api_router)
 

@@ -19,6 +19,8 @@ import AdminTrucks from "@/pages/admin/AdminTrucks";
 import AdminFAQs from "@/pages/admin/AdminFAQs";
 import AdminEmployees from "@/pages/admin/AdminEmployees";
 import AdminExport from "@/pages/admin/AdminExport";
+import AdminFinance from "@/pages/admin/AdminFinance";
+import AdminRoutes from "@/pages/admin/AdminRoutes";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import "@/App.css";
@@ -57,6 +59,8 @@ function App() {
             <Route path="/admin/faqs" element={<ProtectedRoute><AdminFAQs /></ProtectedRoute>} />
             <Route path="/admin/personal" element={<ProtectedRoute><AdminEmployees /></ProtectedRoute>} />
             <Route path="/admin/export" element={<ProtectedRoute><AdminExport /></ProtectedRoute>} />
+            <Route path="/admin/finanzen" element={<ProtectedRoute><AdminFinance /></ProtectedRoute>} />
+            <Route path="/admin/routen" element={<ProtectedRoute><AdminRoutes /></ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
       </LanguageProvider>
