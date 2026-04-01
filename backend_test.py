@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import json
 
 class StrongFoodAPITester:
-    def __init__(self, base_url="https://truck-admin-redesign.preview.emergentagent.com"):
+    def __init__(self, base_url="https://hellpetrol-staging.preview.emergentagent.com"):
         self.base_url = base_url
         self.session = requests.Session()
         self.tests_run = 0
