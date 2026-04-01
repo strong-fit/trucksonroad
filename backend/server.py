@@ -19,6 +19,9 @@ from bson import ObjectId
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from fastapi.responses import Response as FastAPIResponse
+from fpdf import FPDF
+import io
 
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
@@ -491,6 +494,129 @@ async def get_contact_info():
         "email": (s or {}).get("company_email", "info@truckonroad.ch"),
         "whatsapp": (s or {}).get("whatsapp_number", "+41796969899"),
     }
+
+# --- SITEMAP ---
+@api_router.get("/sitemap.xml")
+async def sitemap():
+    base = "https://truckonroad.ch"
+    trucks_list = await db.trucks.find({"is_active": True}, {"slug": 1, "_id": 0}).to_list(100)
+    urls = [
+        (base + "/", "1.0", "weekly"),
+        (base + "/fuer-veranstalter", "0.8", "monthly"),
+        (base + "/private-events", "0.8", "monthly"),
+        (base + "/ueber-uns", "0.7", "monthly"),
+        (base + "/kontakt", "0.7", "monthly"),
+        (base + "/anfrage", "0.9", "weekly"),
+        (base + "/faq", "0.6", "monthly"),
+    ]
+    for t in trucks_list:
+        urls.append((f"{base}/trucks/{t['slug']}", "0.7", "monthly"))
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    for loc, pri, freq in urls:
+        xml += f"  <url><loc>{loc}</loc><priority>{pri}</priority><changefreq>{freq}</changefreq></url>\n"
+    xml += "</urlset>"
+    return FastAPIResponse(content=xml, media_type="application/xml")
+
+# --- PDF DOWNLOAD ---
+@api_router.get("/download/veranstalter-pdf")
+async def download_veranstalter_pdf():
+    trucks = await db.trucks.find({"is_active": True}, {"_id": 0}).sort("order", 1).to_list(100)
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=20)
+    pdf.add_page()
+    pdf.set_font("Helvetica", "B", 28)
+    pdf.cell(0, 15, "TRUCKONROAD", ln=True, align="C")
+    pdf.set_font("Helvetica", "", 12)
+    pdf.cell(0, 8, "Premium Foodtrucks fuer jeden Anlass", ln=True, align="C")
+    pdf.ln(5)
+    pdf.set_font("Helvetica", "", 9)
+    pdf.cell(0, 6, "Bahnhofstrasse 75, 8620 Wetzikon  |  +41 79 696 98 99  |  info@truckonroad.ch", ln=True, align="C")
+    pdf.ln(10)
+    pdf.set_draw_color(77, 182, 172)
+    pdf.line(20, pdf.get_y(), 190, pdf.get_y())
+    pdf.ln(8)
+    pdf.set_font("Helvetica", "B", 16)
+    pdf.cell(0, 10, "Unsere Truck-Konzepte", ln=True)
+    pdf.ln(3)
+    for t in trucks:
+        pdf.set_font("Helvetica", "B", 13)
+        pdf.set_text_color(77, 182, 172)
+        pdf.cell(0, 8, t.get("name_de", ""), ln=True)
+        pdf.set_text_color(0, 0, 0)
+        pdf.set_font("Helvetica", "", 9)
+        desc = t.get("desc_de", "")
+        if desc:
+            pdf.multi_cell(0, 5, desc)
+        pdf.ln(2)
+        menu = t.get("menu_de", [])
+        if menu:
+            pdf.set_font("Helvetica", "I", 9)
+            pdf.cell(0, 5, "Menu: " + ", ".join(menu), ln=True)
+        cap = t.get("capacity", "")
+        if cap:
+            pdf.set_font("Helvetica", "", 9)
+            pdf.cell(0, 5, f"Kapazitaet: {cap}", ln=True)
+        space = t.get("space_required", "")
+        if space:
+            pdf.cell(0, 5, f"Platzbedarf: {space}", ln=True)
+        pdf.ln(5)
+        pdf.set_draw_color(220, 220, 220)
+        pdf.line(20, pdf.get_y(), 190, pdf.get_y())
+        pdf.ln(5)
+    pdf.add_page()
+    pdf.set_font("Helvetica", "B", 16)
+    pdf.cell(0, 10, "Warum TruckOnRoad?", ln=True)
+    pdf.ln(3)
+    pdf.set_font("Helvetica", "", 10)
+    reasons = [
+        ("Schnelle Ausgabe", "Bis zu 300 Gaeste pro Stunde - auch bei Grossevents kein Stau."),
+        ("Mehrere Trucks gleichzeitig", "Koordinierte Logistik und Personal fuer parallelen Einsatz."),
+        ("Professioneller Auftritt", "Einheitliches Branding, klare Ablaeufe, erfahrenes Team."),
+        ("Auffaelliges Design", "Unsere Trucks sind Hingucker und machen Events unvergesslich."),
+    ]
+    for title, text in reasons:
+        pdf.set_font("Helvetica", "B", 10)
+        pdf.set_text_color(77, 182, 172)
+        pdf.cell(0, 7, title, ln=True)
+        pdf.set_text_color(0, 0, 0)
+        pdf.set_font("Helvetica", "", 9)
+        pdf.multi_cell(0, 5, text)
+        pdf.ln(3)
+    pdf.ln(8)
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, "Kontakt & Anfrage", ln=True)
+    pdf.set_font("Helvetica", "", 10)
+    pdf.cell(0, 6, "TruckOnRoad", ln=True)
+    pdf.cell(0, 6, "Bahnhofstrasse 75, 8620 Wetzikon", ln=True)
+    pdf.cell(0, 6, "+41 79 696 98 99", ln=True)
+    pdf.cell(0, 6, "info@truckonroad.ch", ln=True)
+    pdf.cell(0, 6, "www.truckonroad.ch", ln=True)
+    buf = io.BytesIO()
+    pdf.output(buf)
+    buf.seek(0)
+    return FastAPIResponse(content=buf.getvalue(), media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=TruckOnRoad_Veranstalter.pdf"})
+
+# --- EMAIL PREVIEW ---
+@api_router.get("/admin/email-preview")
+async def admin_email_preview(request: Request):
+    await get_current_user(request)
+    sample = {
+        "first_name": "Max", "last_name": "Mustermann",
+        "email": "max@beispiel.ch", "phone": "+41 79 123 45 67",
+        "event_date": "15.06.2026", "location": "Zürich, Sechseläutenplatz",
+        "guest_count": 200, "event_type": "Firmenanlass",
+        "selected_trucks": ["Burger Truck", "Bowl Truck"], "budget": "CHF 5'000 – 10'000",
+    }
+    return {
+        "confirmation": build_confirmation_email(sample),
+        "notification": build_admin_notification_email(sample),
+    }
+
+# --- ADMIN FAQS GET ---
+@api_router.get("/admin/faqs")
+async def admin_get_faqs(request: Request):
+    await get_current_user(request)
+    return await db.faqs.find({}, {"_id": 0}).sort("order", 1).to_list(100)
 
 app.include_router(api_router)
 

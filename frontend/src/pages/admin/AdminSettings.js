@@ -2,17 +2,26 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Save, Send, Building2, Mail, Phone, MapPin, MessageSquare, Server } from 'lucide-react';
+import { Save, Send, Building2, Server, Eye, Download } from 'lucide-react';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState(null);
   const [saving, setSaving] = useState(false);
   const [testEmail, setTestEmail] = useState('');
   const [testingSend, setTestingSend] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [previewType, setPreviewType] = useState('confirmation');
 
   useEffect(() => {
     api.get('/admin/settings').then(r => setSettings(r.data)).catch(() => {});
   }, []);
+
+  const loadPreview = async () => {
+    try {
+      const r = await api.get('/admin/email-preview');
+      setPreview(r.data);
+    } catch { toast.error('Vorschau konnte nicht geladen werden'); }
+  };
 
   const save = async () => {
     setSaving(true);
@@ -40,7 +49,6 @@ export default function AdminSettings() {
   return (
     <AdminLayout title="Einstellungen">
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', alignItems: 'start' }}>
-        {/* Company Info */}
         <div className="adm-detail" data-testid="settings-company">
           <div className="adm-detail-header" style={{ borderBottom: '1px solid var(--adm-border)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
             <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Building2 size={18} /> Firmendaten</span>
@@ -69,18 +77,15 @@ export default function AdminSettings() {
           </div>
         </div>
 
-        {/* SMTP Settings */}
         <div className="adm-detail" data-testid="settings-email">
           <div className="adm-detail-header" style={{ borderBottom: '1px solid var(--adm-border)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
             <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Server size={18} /> E-Mail (SMTP)</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.82rem' }}>
-                <input type="checkbox" checked={settings.email_notifications || false} onChange={e => update('email_notifications', e.target.checked)} data-testid="settings-email-enabled" />
-                E-Mail-Benachrichtigungen aktiviert
-              </label>
-            </div>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.82rem' }}>
+              <input type="checkbox" checked={settings.email_notifications || false} onChange={e => update('email_notifications', e.target.checked)} data-testid="settings-email-enabled" />
+              E-Mail-Benachrichtigungen aktiviert
+            </label>
             <div>
               <div className="adm-form-label">Benachrichtigung an (Admin E-Mail)</div>
               <input className="adm-input" type="email" value={settings.notification_email || ''} onChange={e => update('notification_email', e.target.value)} placeholder="admin@truckonroad.ch" data-testid="settings-notification-email" />
@@ -120,6 +125,48 @@ export default function AdminSettings() {
         <button className="adm-btn adm-btn-primary" onClick={save} disabled={saving} data-testid="settings-save-btn">
           <Save size={15} /> {saving ? 'Speichern...' : 'Einstellungen speichern'}
         </button>
+      </div>
+
+      {/* Email Preview */}
+      <div className="adm-detail" style={{ marginTop: '1.5rem' }} data-testid="email-preview-section">
+        <div className="adm-detail-header" style={{ borderBottom: '1px solid var(--adm-border)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+          <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Eye size={18} /> E-Mail Vorschau</span>
+          <button className="adm-btn adm-btn-secondary adm-btn-sm" onClick={loadPreview} data-testid="load-preview-btn">
+            <Eye size={13} /> Vorschau laden
+          </button>
+        </div>
+
+        {preview && (
+          <>
+            <div className="adm-filters" style={{ marginBottom: '1rem' }}>
+              <button className={`adm-filter-btn ${previewType === 'confirmation' ? 'active' : ''}`} onClick={() => setPreviewType('confirmation')} data-testid="preview-confirmation-btn">
+                Bestaetigungsmail (Kunde)
+              </button>
+              <button className={`adm-filter-btn ${previewType === 'notification' ? 'active' : ''}`} onClick={() => setPreviewType('notification')} data-testid="preview-notification-btn">
+                Benachrichtigung (Admin)
+              </button>
+            </div>
+            <div style={{ border: '1px solid var(--adm-border)', borderRadius: '8px', padding: '1rem', background: '#fff' }} data-testid="email-preview-content">
+              <div dangerouslySetInnerHTML={{ __html: previewType === 'confirmation' ? preview.confirmation : preview.notification }} />
+            </div>
+          </>
+        )}
+
+        {!preview && (
+          <div className="adm-empty" style={{ padding: '1.5rem' }}>
+            Klicken Sie auf "Vorschau laden", um die E-Mail-Templates zu sehen.
+          </div>
+        )}
+      </div>
+
+      {/* PDF Download */}
+      <div className="adm-detail" style={{ marginTop: '1.25rem' }} data-testid="pdf-download-section">
+        <div className="adm-detail-header" style={{ borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
+          <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Download size={18} /> Veranstalter-PDF</span>
+          <a href={`${process.env.REACT_APP_BACKEND_URL}/api/download/veranstalter-pdf`} target="_blank" rel="noopener noreferrer" className="adm-btn adm-btn-primary adm-btn-sm" data-testid="download-pdf-btn">
+            <Download size={13} /> PDF herunterladen
+          </a>
+        </div>
       </div>
     </AdminLayout>
   );
