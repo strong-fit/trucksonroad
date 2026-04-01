@@ -35,5 +35,8 @@
 - Sitemap, Instagram gallery, Contact info, Settings
 - Gmail SMTP email (confirmation + admin notification + offer)
 
+## Recently Added
+- [x] JSON-LD Structured Data (Schema.org FoodEstablishment) for AI Search Engines (2026-04-01)
+
 ## Backlog
 - [ ] FR/IT Übersetzungen
