@@ -6,80 +6,67 @@ Premium Foodtruck Webseite für Schweizer Foodtruck-Unternehmen mit:
 - Eigene Seiten für 6 Trucks (Burger, Chicken Burger, Bowl, Pocket Bowl, Empanadas, Retro Trailer)
 - Für Veranstalter Seite
 - Private & Firmenanlässe Seite
+- Über uns & Kontakt Seiten
 - Umfassendes Anfrageformular mit Kalenderverfügbarkeit
-- Admin-Bereich mit Anfrageverwaltung, Kalender, Truck-Management
+- Admin-Bereich mit Anfrageverwaltung, Kalender, Truck-Management, Einstellungen
+- E-Mail-Benachrichtigungen (Gmail SMTP)
 - Mehrsprachigkeit (DE/EN)
 - WhatsApp-Button
-- Automatische E-Mails (für spätere Phase)
 
 ## Architecture
 - **Frontend**: React (CRA) + Tailwind CSS + Shadcn UI + Custom CSS
 - **Backend**: FastAPI + MongoDB (Motor async)
 - **Auth**: JWT with httpOnly cookies, bcrypt password hashing
-- **Design**: Public site: Dark premium theme (#0a0a0a bg, #e8b84b gold accents). Admin: Light theme (#f4f3ef bg, #b8922e gold accents)
+- **Email**: Gmail SMTP via Python smtplib (configurable in Admin)
+- **Design**: Public site: Dark premium theme (#0a0a0a bg, Petrol #4db6ac accents). Admin: Light theme (#f4f3ef bg, #3d9189 accents)
 - **Fonts**: Bebas Neue (headings), Playfair Display (italic accents), DM Sans (body)
-
-## User Personas
-1. **Festival-Veranstalter** - Sucht zuverlässige Trucks für Grossevents
-2. **Privatkunde** - Will Foodtruck für Geburtstag/Hochzeit buchen
-3. **Firmen** - Teambuilding, Firmenfeier, Kundenevent
-4. **Admin** - Verwaltet Anfragen, Kalender, Trucks
-
-## Core Requirements (Static)
-- Premium Dark Design matching reference HTML
-- 6 Truck-Konzepte mit eigenem Profil
-- Umfassendes Anfrageformular (kein automatisches Buchen)
-- Kalender-Verfügbarkeit pro Truck
-- Admin-Dashboard mit Statistiken
-- Anfrage-Management (Status: Neu → In Prüfung → Offerte → Bestätigt/Abgesagt)
-- Mehrsprachig DE/EN
 
 ## What's Been Implemented
 
 ### Frontend - Public Site (DONE)
-- [x] Homepage with Hero, Ticker, Trucks Grid, For-Whom, Why-Us, CTA, FAQ Preview
+- [x] Homepage with Hero "FOODTRUCKS FÜR JEDEN ANLASS", Ticker, Trucks Grid, For-Whom, Why-Us, CTA, FAQ Preview
 - [x] 6 Individual Truck Detail Pages with menu, specs, CTA
 - [x] Full Inquiry Form with calendar, truck selection, extras
 - [x] FAQ Page with expandable accordion
 - [x] Event Organizers Page with features grid and tech specs
 - [x] Private Events Page with event types and 3-step process
-- [x] Navigation with language toggle (DE/EN) and gold CTA button
-- [x] WhatsApp floating button
-- [x] Footer with 4-column grid
+- [x] Über uns Page with story, values, numbers (01.04.2026)
+- [x] Kontakt Page with company info + contact form (01.04.2026)
+- [x] Navigation with language toggle (DE/EN), Über uns, Kontakt links
+- [x] WhatsApp floating button (+41 79 696 98 99)
+- [x] Footer with correct address (Bahnhofstrasse 75, 8620 Wetzikon)
 - [x] Responsive design
+- [x] Accent color: Petrol (#4db6ac)
 
-### Frontend - Admin Area (DONE - 31.03.2026)
+### Frontend - Admin Area (DONE)
 - [x] Admin Login (light theme, TruckOnRoad branding)
-- [x] Admin Dashboard with stat cards + recent inquiries table (light theme)
+- [x] Admin Dashboard with stat cards + recent inquiries table
 - [x] Admin Inquiry Management with filter pills, detail panel, status changes, notes
 - [x] Admin Calendar with truck selector, date blocking, block list
-- [x] Shared AdminLayout with sidebar, topbar, search, user pill
-- [x] Mobile responsive sidebar with toggle
-- [x] Light theme (adm-* CSS classes, #f4f3ef bg, white cards, gold accents)
+- [x] Admin Settings with Firmendaten + SMTP config + Test-E-Mail (01.04.2026)
+- [x] Shared AdminLayout with sidebar (Dashboard, Anfragen, Kalender, Einstellungen), topbar
 
 ### Backend (DONE)
 - [x] JWT auth with brute-force protection
-- [x] Trucks CRUD + seed data (6 trucks)
+- [x] Trucks CRUD + seed data (6 trucks with Unsplash images)
 - [x] Inquiries CRUD (public POST + admin management)
 - [x] Calendar availability (public GET + admin block/unblock)
 - [x] FAQ CRUD + seed data (8 FAQs)
 - [x] Admin statistics endpoint
-- [x] Settings endpoint
-- [x] Admin user seed on startup
+- [x] Admin Settings endpoint (company info + SMTP config)
+- [x] Public contact-info endpoint
+- [x] Gmail SMTP email sending (background tasks) (01.04.2026)
+- [x] Confirmation email to customer on inquiry (01.04.2026)
+- [x] Notification email to admin on inquiry (01.04.2026)
+- [x] Test-email endpoint (01.04.2026)
 
 ## Prioritized Backlog
 
-### P0 (Critical - Next Sprint)
-- [ ] Email-Automatisierung (Gmail SMTP) - Bestätigungsmail bei Anfrage
-- [ ] Über uns Seite
-- [ ] Kontakt Seite
-
 ### P1 (High Priority)
-- [ ] SEO-Optimierung (Meta Tags, Sitemap)
+- [ ] SEO-Optimierung (Meta Tags, Sitemap, OG Images)
 - [ ] PDF-Download für Veranstalter (Konzept-PDF)
 - [ ] Admin: Truck-Bearbeitung (Bilder, Texte ändern)
 - [ ] Admin: FAQ-Verwaltung (Hinzufügen, Bearbeiten, Löschen)
-- [ ] Admin: Einstellungen (E-Mail, WhatsApp-Nummer, Firmenname)
 
 ### P2 (Nice to Have)
 - [ ] Offerten automatisch erstellen (PDF)
@@ -91,10 +78,3 @@ Premium Foodtruck Webseite für Schweizer Foodtruck-Unternehmen mit:
 - [ ] Schnellanfrage-Widget auf Homepage
 - [ ] Image Upload in Anfrageformular (Lageplan)
 - [ ] Admin: Export-Funktion (CSV/PDF)
-
-## Next Tasks
-1. E-Mail-Benachrichtigungen implementieren (Gmail SMTP konfigurierbar im Admin)
-2. Über uns & Kontakt Seiten erstellen
-3. SEO-Tags und Sitemap
-4. Admin FAQ-Verwaltung UI
-5. PDF-Download für Veranstalter
