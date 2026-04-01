@@ -5,9 +5,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Calendar } from '@/components/ui/calendar';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, Upload } from 'lucide-react';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
+import FileUpload from '@/components/FileUpload';
 
 const TRUCK_OPTIONS = ["Burger Truck", "Chicken Burger", "Bowl Truck", "Pocket Bowl", "Empanadas", "Retro Trailer", "Mehrere Trucks"];
 
@@ -22,6 +23,8 @@ export default function InquiryPage() {
   const [extras, setExtras] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [inquiryId, setInquiryId] = useState(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [form, setForm] = useState({
     first_name: '', last_name: '', company: '', email: '', phone: '',
     event_time: '', location: '', guest_count: '', event_type: '',
@@ -46,7 +49,7 @@ export default function InquiryPage() {
     if (!form.privacy_accepted) { toast.error(lang === 'de' ? 'Bitte Datenschutz akzeptieren' : 'Please accept privacy policy'); return; }
     setSubmitting(true);
     try {
-      await api.post('/inquiries', {
+      const res = await api.post('/inquiries', {
         ...form,
         guest_count: parseInt(form.guest_count) || 0,
         event_date: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '',
@@ -54,6 +57,7 @@ export default function InquiryPage() {
         extras,
       });
       toast.success(t('form_success'));
+      setInquiryId(res.data.id);
       setSubmitted(true);
     } catch (err) {
       toast.error(lang === 'de' ? 'Fehler beim Senden' : 'Error sending inquiry');

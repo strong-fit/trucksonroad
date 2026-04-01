@@ -4,7 +4,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, BackgroundTasks
+from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, BackgroundTasks, UploadFile, File
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
@@ -23,6 +23,7 @@ from fastapi.responses import Response as FastAPIResponse
 from fpdf import FPDF
 import io
 import httpx
+import requests
 
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
@@ -160,6 +161,33 @@ class CustomerRegister(BaseModel):
 async def get_email_settings():
     s = await db.settings.find_one({"type": "general"}, {"_id": 0})
     return s or {}
+
+# --- OBJECT STORAGE ---
+STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
+EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY")
+APP_NAME = "truckonroad"
+_storage_key = None
+
+def init_storage():
+    global _storage_key
+    if _storage_key:
+        return _storage_key
+    resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_KEY}, timeout=30)
+    resp.raise_for_status()
+    _storage_key = resp.json()["storage_key"]
+    return _storage_key
+
+def put_object(path: str, data: bytes, content_type: str) -> dict:
+    key = init_storage()
+    resp = requests.put(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key, "Content-Type": content_type}, data=data, timeout=120)
+    resp.raise_for_status()
+    return resp.json()
+
+def get_object(path: str):
+    key = init_storage()
+    resp = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
+    resp.raise_for_status()
+    return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
 
 async def send_email_background(to: str, subject: str, html_body: str):
     try:
@@ -573,6 +601,59 @@ async def create_inquiry(inquiry: InquiryCreate, request: Request, background_ta
     if settings.get("email_notifications") and settings.get("notification_email"):
         background_tasks.add_task(send_email_background, settings["notification_email"], f"Neue Anfrage: {doc.get('first_name', '')} {doc.get('last_name', '')}", build_admin_notification_email(doc))
     return {"message": "Anfrage erfolgreich gesendet", "id": doc["id"]}
+
+# --- FILE UPLOAD ---
+MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+MAX_FILES_PER_INQUIRY = 5
+
+@api_router.post("/inquiries/{inquiry_id}/upload")
+async def upload_inquiry_file(inquiry_id: str, file: UploadFile = File(...)):
+    data = await file.read()
+    if len(data) > MAX_FILE_SIZE:
+        raise HTTPException(status_code=400, detail="Datei zu gross (max. 10 MB)")
+    # Check file count
+    existing = await db.files.count_documents({"inquiry_id": inquiry_id, "is_deleted": False})
+    if existing >= MAX_FILES_PER_INQUIRY:
+        raise HTTPException(status_code=400, detail=f"Maximal {MAX_FILES_PER_INQUIRY} Dateien pro Anfrage")
+    ext = file.filename.split(".")[-1].lower() if "." in file.filename else "bin"
+    storage_path = f"{APP_NAME}/inquiries/{inquiry_id}/{uuid.uuid4()}.{ext}"
+    result = put_object(storage_path, data, file.content_type or "application/octet-stream")
+    file_doc = {
+        "id": str(uuid.uuid4()),
+        "inquiry_id": inquiry_id,
+        "storage_path": result["path"],
+        "original_filename": file.filename,
+        "content_type": file.content_type or "application/octet-stream",
+        "size": result.get("size", len(data)),
+        "is_deleted": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.files.insert_one(file_doc)
+    file_doc.pop("_id", None)
+    return file_doc
+
+@api_router.get("/inquiries/{inquiry_id}/files")
+async def get_inquiry_files(inquiry_id: str):
+    files = await db.files.find({"inquiry_id": inquiry_id, "is_deleted": False}, {"_id": 0}).to_list(20)
+    return files
+
+@api_router.get("/files/{file_id}/download")
+async def download_file(file_id: str):
+    record = await db.files.find_one({"id": file_id, "is_deleted": False})
+    if not record:
+        raise HTTPException(status_code=404, detail="Datei nicht gefunden")
+    data, ct = get_object(record["storage_path"])
+    return FastAPIResponse(
+        content=data,
+        media_type=record.get("content_type", ct),
+        headers={"Content-Disposition": f'inline; filename="{record.get("original_filename", "download")}"'}
+    )
+
+@api_router.delete("/files/{file_id}")
+async def delete_file(file_id: str, request: Request):
+    await get_current_user(request)
+    await db.files.update_one({"id": file_id}, {"$set": {"is_deleted": True}})
+    return {"message": "Deleted"}
 
 @api_router.post("/quick-inquiry")
 async def create_quick_inquiry(inquiry: QuickInquiryCreate):
@@ -1489,6 +1570,12 @@ async def startup():
     with open("/app/memory/test_credentials.md", "w") as f:
         f.write(f"# Test Credentials\n\n## Admin\n- Email: {admin_email}\n- Password: {admin_password}\n- Role: admin\n\n## Customer (Test)\n- Register at /konto/registrieren\n- Or use API: POST /api/auth/register\n\n## Auth Endpoints\n- POST /api/auth/login\n- POST /api/auth/register\n- POST /api/auth/logout\n- GET /api/auth/me\n- POST /api/auth/refresh\n\n## Customer Portal Endpoints\n- GET /api/customer/inquiries\n- GET /api/customer/inquiries/{{id}}\n- GET /api/customer/profile\n")
     logger.info("Startup complete")
+    # Init object storage
+    try:
+        init_storage()
+        logger.info("Object storage initialized")
+    except Exception as e:
+        logger.warning(f"Object storage init failed (will retry on first upload): {e}")
 
 @app.on_event("shutdown")
 async def shutdown():

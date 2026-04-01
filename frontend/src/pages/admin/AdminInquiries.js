@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Trash2, Inbox, FileDown, Users, Receipt } from 'lucide-react';
+import { Trash2, Inbox, FileDown, Users, Receipt, Paperclip } from 'lucide-react';
+import FileUpload from '@/components/FileUpload';
 
 const STATUS_OPTIONS = [
   { value: 'new', label: 'Neu' },
@@ -28,6 +29,7 @@ export default function AdminInquiries() {
   const [notes, setNotes] = useState('');
   const [employees, setEmployees] = useState([]);
   const [assignedEmps, setAssignedEmps] = useState([]);
+  const [inquiryFiles, setInquiryFiles] = useState([]);
 
   const load = () => api.get('/admin/inquiries').then(r => setInquiries(r.data)).catch(() => {});
   useEffect(() => {
@@ -97,7 +99,7 @@ export default function AdminInquiries() {
                   <tr
                     key={inq.id}
                     className={selected?.id === inq.id ? 'selected' : ''}
-                    onClick={() => { setSelected(inq); setNotes(inq.internal_notes || ''); setAssignedEmps(inq.assigned_employees || []); }}
+                    onClick={() => { setSelected(inq); setNotes(inq.internal_notes || ''); setAssignedEmps(inq.assigned_employees || []); api.get(`/inquiries/${inq.id}/files`).then(r => setInquiryFiles(r.data)).catch(() => setInquiryFiles([])); }}
                     data-testid={`inquiry-row-${inq.id}`}
                   >
                     <td style={{ fontWeight: 500 }}>{inq.first_name || inq.name || ''} {inq.last_name || ''}</td>
@@ -257,6 +259,16 @@ export default function AdminInquiries() {
                   }}
                   data-testid="invoice-amount-input"
                 />
+              </div>
+            </div>
+
+            {/* Attached Files */}
+            <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem' }}>
+              <div className="adm-form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', marginBottom: '0.5rem' }}>
+                <Paperclip size={12} /> Dateien ({inquiryFiles.length})
+              </div>
+              <div className="adm-file-list">
+                <FileUpload inquiryId={selected.id} files={inquiryFiles} onFilesChange={setInquiryFiles} readOnly={false} />
               </div>
             </div>
 

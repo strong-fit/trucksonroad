@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import api from '@/lib/api';
-import { LogOut, FileText, Clock, CheckCircle2, Send, XCircle, Receipt, Plus, ChevronDown, ChevronUp, User } from 'lucide-react';
+import { LogOut, FileText, Clock, CheckCircle2, Send, XCircle, Receipt, Plus, ChevronDown, ChevronUp, User, Paperclip } from 'lucide-react';
+import FileUpload from '@/components/FileUpload';
 
 const STATUS_MAP = {
   new: { label: 'Neu', color: '#5ba4b5', icon: Clock },
@@ -27,6 +28,7 @@ export default function CustomerPortal() {
   const [inquiries, setInquiries] = useState([]);
   const [expanded, setExpanded] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [inquiryFiles, setInquiryFiles] = useState({});
 
   useEffect(() => {
     api.get('/customer/inquiries').then(r => { setInquiries(r.data); setLoading(false); }).catch(() => setLoading(false));
@@ -37,7 +39,13 @@ export default function CustomerPortal() {
     navigate('/');
   };
 
-  const toggleExpand = (id) => setExpanded(prev => prev === id ? null : id);
+  const toggleExpand = (id) => {
+    const newId = expanded === id ? null : id;
+    setExpanded(newId);
+    if (newId && !inquiryFiles[newId]) {
+      api.get(`/inquiries/${newId}/files`).then(r => setInquiryFiles(prev => ({ ...prev, [newId]: r.data }))).catch(() => {});
+    }
+  };
 
   return (
     <div className="sf-portal" data-testid="customer-portal">
@@ -167,6 +175,17 @@ export default function CustomerPortal() {
                             {inq.invoice_amount > 0 && (
                               <span style={{ fontWeight: 600, color: 'var(--sf-cream)' }}>CHF {inq.invoice_amount.toLocaleString()}</span>
                             )}
+                          </div>
+                        </div>
+                      )}
+                      {/* Files */}
+                      {(inquiryFiles[inq.id] || []).length > 0 && (
+                        <div style={{ marginTop: '0.75rem' }}>
+                          <span className="sf-portal-detail-label" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                            <Paperclip size={12} /> Dateien
+                          </span>
+                          <div style={{ marginTop: '0.3rem' }}>
+                            <FileUpload files={inquiryFiles[inq.id] || []} readOnly />
                           </div>
                         </div>
                       )}

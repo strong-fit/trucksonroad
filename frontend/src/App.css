@@ -1,4 +1,36 @@
 /* === Customer Auth Pages === */
+
+/* --- File Upload --- */
+.sf-dropzone {
+  border: 2px dashed var(--sf-border-subtle, #333); border-radius: 10px; padding: 1.5rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  font-size: 0.82rem; color: var(--sf-gray, #999);
+}
+.sf-dropzone:hover, .sf-dropzone.active {
+  border-color: var(--sf-gold, #5ba4b5); background: rgba(91,164,181,0.05);
+}
+.sf-file-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.75rem; }
+.sf-file-item {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.7rem;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--sf-border-subtle, #333);
+  border-radius: 6px; font-size: 0.82rem;
+}
+.sf-file-name { flex: 1; color: var(--sf-cream, #f5f0e8); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sf-file-name:hover { color: var(--sf-gold, #5ba4b5); }
+.sf-file-size { font-size: 0.72rem; color: var(--sf-gray, #999); white-space: nowrap; }
+.sf-file-remove {
+  background: none; border: none; color: var(--sf-gray, #999); cursor: pointer;
+  padding: 0.15rem; display: flex; transition: color 0.2s;
+}
+.sf-file-remove:hover { color: #ef4444; }
+.sf-spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+/* Admin file list overrides */
+.adm-file-list .sf-file-item { background: #f8f8f6; border-color: var(--adm-border, #e8e7e3); }
+.adm-file-list .sf-file-name { color: var(--adm-text, #1a1a18); }
+.adm-file-list .sf-file-name:hover { color: var(--adm-primary, #5ba4b5); }
+.adm-file-list .sf-file-size { color: var(--adm-text-secondary, #9c9c94); }
 .sf-auth-page {
   min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 2rem;
 }
