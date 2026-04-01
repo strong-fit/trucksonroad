@@ -622,7 +622,7 @@ async def get_contact_info():
 async def get_structured_data():
     s = await db.settings.find_one({"type": "general"}, {"_id": 0}) or {}
     same_as = [v for k in ["social_google_business", "social_instagram", "social_facebook", "social_tiktok", "social_linkedin"] if (v := s.get(k, ""))]
-    return {
+    result = {
         "@context": "https://schema.org",
         "@type": "FoodEstablishment",
         "name": s.get("company_name", "TruckOnRoad"),
@@ -658,8 +658,75 @@ async def get_structured_data():
             {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Foodtruck für Private Events", "description": "Exklusives Foodtruck-Catering für Hochzeiten, Geburtstage und private Feiern"}}
         ]
     }
+    # Add aggregateRating from reviews
+    reviews = await db.reviews.find({"is_active": True}, {"_id": 0}).to_list(500)
+    if reviews:
+        ratings = [r.get("rating", 5) for r in reviews]
+        result["aggregateRating"] = {
+            "@type": "AggregateRating",
+            "ratingValue": round(sum(ratings) / len(ratings), 1),
+            "reviewCount": len(ratings),
+            "bestRating": 5,
+            "worstRating": 1
+        }
+        result["review"] = [
+            {
+                "@type": "Review",
+                "author": {"@type": "Person", "name": r.get("author", "Kunde")},
+                "reviewRating": {"@type": "Rating", "ratingValue": r.get("rating", 5)},
+                "reviewBody": r.get("text", ""),
+                "datePublished": r.get("date", "")
+            }
+            for r in reviews[:5]
+        ]
+    return result
 
-# --- SITEMAP ---
+# --- REVIEWS ---
+@api_router.get("/reviews")
+async def get_public_reviews():
+    reviews = await db.reviews.find({"is_active": True}, {"_id": 0}).sort("date", -1).to_list(50)
+    return reviews
+
+@api_router.get("/admin/reviews")
+async def admin_get_reviews(request: Request):
+    await get_current_user(request)
+    reviews = await db.reviews.find({}, {"_id": 0}).sort("date", -1).to_list(200)
+    return reviews
+
+@api_router.post("/admin/reviews")
+async def admin_create_review(request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    review = {
+        "id": str(uuid.uuid4()),
+        "author": body.get("author", ""),
+        "rating": max(1, min(5, int(body.get("rating", 5)))),
+        "text": body.get("text", ""),
+        "date": body.get("date", datetime.now(timezone.utc).strftime("%Y-%m-%d")),
+        "event_type": body.get("event_type", ""),
+        "is_active": body.get("is_active", True),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.reviews.insert_one(review)
+    review.pop("_id", None)
+    return review
+
+@api_router.put("/admin/reviews/{review_id}")
+async def admin_update_review(review_id: str, request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    body.pop("_id", None)
+    body.pop("id", None)
+    if "rating" in body:
+        body["rating"] = max(1, min(5, int(body["rating"])))
+    await db.reviews.update_one({"id": review_id}, {"$set": body})
+    return {"message": "Updated"}
+
+@api_router.delete("/admin/reviews/{review_id}")
+async def admin_delete_review(review_id: str, request: Request):
+    await get_current_user(request)
+    await db.reviews.delete_one({"id": review_id})
+    return {"message": "Deleted"}
 @api_router.get("/sitemap.xml")
 async def sitemap():
     base = "https://truckonroad.ch"

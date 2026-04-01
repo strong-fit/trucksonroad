@@ -5,7 +5,7 @@ import api from '@/lib/api';
 import {
   LayoutDashboard, FileText, CalendarDays, Truck, LogOut,
   Search, Menu, X, ExternalLink, Inbox, CheckCircle2, Clock,
-  Settings, HelpCircle, Users, Download, DollarSign, MapPin
+  Settings, HelpCircle, Users, Download, DollarSign, MapPin, Star
 } from 'lucide-react';
 
 function AdminLayout({ children, title }) {
@@ -22,6 +22,7 @@ function AdminLayout({ children, title }) {
     { to: '/admin/personal', icon: Users, label: 'Personal' },
     { to: '/admin/finanzen', icon: DollarSign, label: 'Finanzen' },
     { to: '/admin/routen', icon: MapPin, label: 'Routen' },
+    { to: '/admin/bewertungen', icon: Star, label: 'Bewertungen' },
     { to: '/admin/faqs', icon: HelpCircle, label: 'FAQ' },
     { to: '/admin/export', icon: Download, label: 'Export' },
     { to: '/admin/einstellungen', icon: Settings, label: 'Einstellungen' },

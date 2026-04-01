@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
-import { ArrowRight, Instagram } from 'lucide-react';
+import { ArrowRight, Instagram, Star, Quote } from 'lucide-react';
 
 const HERO_IMG_MAIN = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=900&q=80";
 const HERO_IMG_ACCENT = "https://images.unsplash.com/photo-1509315811345-672d83ef2fbc?w=600&q=80";
@@ -37,11 +37,13 @@ export default function HomePage() {
   const [faqs, setFaqs] = useState([]);
   const [openFaq, setOpenFaq] = useState(null);
   const [instaData, setInstaData] = useState({ username: '', images: [] });
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     api.get('/trucks').then(r => setTrucks(r.data)).catch(() => {});
     api.get('/faqs').then(r => setFaqs(r.data)).catch(() => {});
     api.get('/instagram-gallery').then(r => setInstaData(r.data)).catch(() => {});
+    api.get('/reviews').then(r => setReviews(r.data)).catch(() => {});
   }, []);
 
   const whomItems = [t('whom_1'), t('whom_2'), t('whom_3'), t('whom_4'), t('whom_5')];
@@ -184,6 +186,54 @@ export default function HomePage() {
           <Link to="/faq" className="sf-btn-outline">{t('cta_btn_faq')}</Link>
         </div>
       </section>
+
+      {/* TESTIMONIALS / BEWERTUNGEN */}
+      {reviews.length > 0 && (
+        <section className="sf-section" data-testid="reviews-section">
+          <div className="sf-section-inner">
+            <FadeUp>
+              <div className="sf-section-tag">{lang === 'de' ? 'Kundenstimmen' : 'Testimonials'}</div>
+              <h2 className="sf-section-title" style={{ marginBottom: '0.5rem' }}>
+                {lang === 'de' ? 'Was unsere Kunden sagen' : 'What our clients say'}
+              </h2>
+              {(() => {
+                const avg = (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1);
+                return (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '2.5rem', color: 'var(--sf-gray)' }}>
+                    <div style={{ display: 'flex', gap: '2px' }}>
+                      {[1,2,3,4,5].map(s => (
+                        <Star key={s} size={18} style={{ fill: s <= Math.round(parseFloat(avg)) ? '#e8b931' : 'transparent', color: s <= Math.round(parseFloat(avg)) ? '#e8b931' : '#555' }} />
+                      ))}
+                    </div>
+                    <span style={{ fontSize: '0.9rem' }}>{avg} / 5 ({reviews.length} {lang === 'de' ? 'Bewertungen' : 'Reviews'})</span>
+                  </div>
+                );
+              })()}
+            </FadeUp>
+            <div className="sf-reviews-grid" data-testid="reviews-grid">
+              {reviews.slice(0, 6).map((r, i) => (
+                <FadeUp key={r.id} delay={i * 0.1}>
+                  <div className="sf-review-card" data-testid={`review-card-${r.id}`}>
+                    <Quote size={24} className="sf-review-quote" />
+                    <p className="sf-review-text">{r.text}</p>
+                    <div className="sf-review-footer">
+                      <div>
+                        <div className="sf-review-author">{r.author}</div>
+                        {r.event_type && <div className="sf-review-event">{r.event_type}</div>}
+                      </div>
+                      <div style={{ display: 'flex', gap: '2px' }}>
+                        {[1,2,3,4,5].map(s => (
+                          <Star key={s} size={13} style={{ fill: s <= r.rating ? '#e8b931' : 'transparent', color: s <= r.rating ? '#e8b931' : '#555' }} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </FadeUp>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* --- INSTAGRAM --- */}
       {instaData.images.length > 0 && (

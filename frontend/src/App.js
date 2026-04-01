@@ -21,6 +21,7 @@ import AdminEmployees from "@/pages/admin/AdminEmployees";
 import AdminExport from "@/pages/admin/AdminExport";
 import AdminFinance from "@/pages/admin/AdminFinance";
 import AdminRoutes from "@/pages/admin/AdminRoutes";
+import AdminReviews from "@/pages/admin/AdminReviews";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import "@/App.css";
@@ -63,6 +64,7 @@ function App() {
             <Route path="/admin/export" element={<ProtectedRoute><AdminExport /></ProtectedRoute>} />
             <Route path="/admin/finanzen" element={<ProtectedRoute><AdminFinance /></ProtectedRoute>} />
             <Route path="/admin/routen" element={<ProtectedRoute><AdminRoutes /></ProtectedRoute>} />
+            <Route path="/admin/bewertungen" element={<ProtectedRoute><AdminReviews /></ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
       </LanguageProvider>
