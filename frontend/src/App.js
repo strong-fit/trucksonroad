@@ -14,6 +14,9 @@ import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminInquiries from "@/pages/admin/AdminInquiries";
 import AdminCalendar from "@/pages/admin/AdminCalendar";
+import AdminSettings from "@/pages/admin/AdminSettings";
+import AboutPage from "@/pages/AboutPage";
+import ContactPage from "@/pages/ContactPage";
 import "@/App.css";
 
 function PublicLayout({ children }) {
@@ -39,10 +42,13 @@ function App() {
             <Route path="/faq" element={<PublicLayout><FAQPage /></PublicLayout>} />
             <Route path="/fuer-veranstalter" element={<PublicLayout><EventOrganizersPage /></PublicLayout>} />
             <Route path="/private-events" element={<PublicLayout><PrivateEventsPage /></PublicLayout>} />
+            <Route path="/ueber-uns" element={<PublicLayout><AboutPage /></PublicLayout>} />
+            <Route path="/kontakt" element={<PublicLayout><ContactPage /></PublicLayout>} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
             <Route path="/admin/anfragen" element={<ProtectedRoute><AdminInquiries /></ProtectedRoute>} />
             <Route path="/admin/kalender" element={<ProtectedRoute><AdminCalendar /></ProtectedRoute>} />
+            <Route path="/admin/einstellungen" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
       </LanguageProvider>

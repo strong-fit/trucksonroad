@@ -41,10 +41,10 @@ export default function Footer() {
             <Mail size={14} /> <span>info@truckonroad.ch</span>
           </div>
           <div className="sf-footer-contact">
-            <Phone size={14} /> <span>+41 xx xxx xx xx</span>
+            <Phone size={14} /> <span>+41 79 696 98 99</span>
           </div>
           <div className="sf-footer-contact">
-            <MapPin size={14} /> <span>Zürich & ganze Schweiz</span>
+            <MapPin size={14} /> <span>Bahnhofstrasse 75, 8620 Wetzikon</span>
           </div>
         </div>
       </footer>
@@ -59,7 +59,7 @@ export default function Footer() {
       </div>
 
       <a
-        href="https://wa.me/41791234567"
+        href="https://wa.me/41796969899"
         className="sf-whatsapp-btn"
         target="_blank"
         rel="noopener noreferrer"

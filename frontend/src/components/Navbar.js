@@ -13,6 +13,8 @@ export default function Navbar() {
     { to: '/#trucks', label: t('nav_trucks'), isHash: true },
     { to: '/fuer-veranstalter', label: t('nav_organizers') },
     { to: '/private-events', label: t('nav_private') },
+    { to: '/ueber-uns', label: t('nav_about') },
+    { to: '/kontakt', label: t('nav_contact') },
     { to: '/faq', label: t('nav_faq') },
   ];
 

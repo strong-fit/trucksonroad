@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import api from '@/lib/api';
 import {
   LayoutDashboard, FileText, CalendarDays, Truck, LogOut,
-  Search, Menu, X, ExternalLink, Inbox, CheckCircle2, Clock
+  Search, Menu, X, ExternalLink, Inbox, CheckCircle2, Clock, Settings
 } from 'lucide-react';
 
 function AdminLayout({ children, title }) {
@@ -17,6 +17,7 @@ function AdminLayout({ children, title }) {
     { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
     { to: '/admin/anfragen', icon: FileText, label: 'Anfragen' },
     { to: '/admin/kalender', icon: CalendarDays, label: 'Kalender' },
+    { to: '/admin/einstellungen', icon: Settings, label: 'Einstellungen' },
   ];
 
   const handleLogout = async () => {

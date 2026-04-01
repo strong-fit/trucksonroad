@@ -4,7 +4,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-from fastapi import FastAPI, APIRouter, HTTPException, Request, Response
+from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, BackgroundTasks
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
@@ -16,6 +16,9 @@ from datetime import datetime, timezone, timedelta
 import bcrypt
 import jwt
 from bson import ObjectId
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
@@ -115,6 +118,99 @@ class QuickInquiryCreate(BaseModel):
     email: Optional[str] = ""
     phone: Optional[str] = ""
 
+class SettingsUpdate(BaseModel):
+    company_name: Optional[str] = "TruckOnRoad"
+    company_address: Optional[str] = ""
+    company_phone: Optional[str] = ""
+    company_email: Optional[str] = ""
+    whatsapp_number: Optional[str] = ""
+    email_notifications: Optional[bool] = False
+    notification_email: Optional[str] = ""
+    smtp_host: Optional[str] = "smtp.gmail.com"
+    smtp_port: Optional[int] = 587
+    smtp_email: Optional[str] = ""
+    smtp_password: Optional[str] = ""
+
+# --- EMAIL ---
+async def get_email_settings():
+    s = await db.settings.find_one({"type": "general"}, {"_id": 0})
+    return s or {}
+
+async def send_email_background(to: str, subject: str, html_body: str):
+    try:
+        settings = await get_email_settings()
+        host = settings.get("smtp_host", "smtp.gmail.com")
+        port = settings.get("smtp_port", 587)
+        sender = settings.get("smtp_email", "")
+        password = settings.get("smtp_password", "")
+        if not sender or not password:
+            logger.warning("SMTP not configured, skipping email")
+            return
+        msg = MIMEMultipart("alternative")
+        msg["From"] = sender
+        msg["To"] = to
+        msg["Subject"] = subject
+        msg.attach(MIMEText(html_body, "html"))
+        with smtplib.SMTP(host, port) as server:
+            server.starttls()
+            server.login(sender, password)
+            server.sendmail(sender, to, msg.as_string())
+        logger.info(f"Email sent to {to}")
+    except Exception as e:
+        logger.error(f"Email sending failed: {e}")
+
+def build_confirmation_email(inquiry: dict) -> str:
+    name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or inquiry.get('name', '')
+    return f"""
+    <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+      <div style="background:#1a1a18;padding:2rem;text-align:center;">
+        <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
+          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+        </span>
+      </div>
+      <div style="padding:2rem;">
+        <h2 style="color:#1a1a18;margin:0 0 1rem;">Vielen Dank fuer Ihre Anfrage, {name}!</h2>
+        <p style="color:#6b6b64;line-height:1.6;">Wir haben Ihre Anfrage erhalten und melden uns innerhalb von 24 Stunden mit einem individuellen Angebot.</p>
+        <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1.25rem;margin:1.5rem 0;">
+          <p style="margin:0.3rem 0;"><strong>Event-Datum:</strong> {inquiry.get('event_date', '-')}</p>
+          <p style="margin:0.3rem 0;"><strong>Ort:</strong> {inquiry.get('location', '-')}</p>
+          <p style="margin:0.3rem 0;"><strong>Gaeste:</strong> {inquiry.get('guest_count', '-')}</p>
+          <p style="margin:0.3rem 0;"><strong>Eventtyp:</strong> {inquiry.get('event_type', inquiry.get('concept', '-'))}</p>
+        </div>
+        <p style="color:#6b6b64;font-size:0.85rem;">Bei Fragen erreichen Sie uns jederzeit unter info@truckonroad.ch oder +41 79 696 98 99.</p>
+      </div>
+      <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
+        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+      </div>
+    </div>"""
+
+def build_admin_notification_email(inquiry: dict) -> str:
+    name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or inquiry.get('name', '')
+    trucks = ', '.join(inquiry.get('selected_trucks', [])) or '-'
+    return f"""
+    <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+      <div style="background:#1a1a18;padding:1.5rem 2rem;text-align:center;">
+        <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.4rem;letter-spacing:0.08em;">
+          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+        </span>
+        <span style="color:#4db6ac;font-size:0.7rem;margin-left:0.5rem;">NEUE ANFRAGE</span>
+      </div>
+      <div style="padding:1.5rem 2rem;">
+        <h3 style="color:#1a1a18;margin:0 0 1rem;">Neue Anfrage von {name}</h3>
+        <table style="width:100%;font-size:0.85rem;border-collapse:collapse;">
+          <tr><td style="padding:0.4rem 0;color:#6b6b64;width:120px;">Name</td><td>{name}</td></tr>
+          <tr><td style="padding:0.4rem 0;color:#6b6b64;">E-Mail</td><td>{inquiry.get('email', '-')}</td></tr>
+          <tr><td style="padding:0.4rem 0;color:#6b6b64;">Telefon</td><td>{inquiry.get('phone', '-')}</td></tr>
+          <tr><td style="padding:0.4rem 0;color:#6b6b64;">Datum</td><td>{inquiry.get('event_date', '-')}</td></tr>
+          <tr><td style="padding:0.4rem 0;color:#6b6b64;">Ort</td><td>{inquiry.get('location', '-')}</td></tr>
+          <tr><td style="padding:0.4rem 0;color:#6b6b64;">Gaeste</td><td>{inquiry.get('guest_count', '-')}</td></tr>
+          <tr><td style="padding:0.4rem 0;color:#6b6b64;">Eventtyp</td><td>{inquiry.get('event_type', inquiry.get('concept', '-'))}</td></tr>
+          <tr><td style="padding:0.4rem 0;color:#6b6b64;">Trucks</td><td>{trucks}</td></tr>
+          <tr><td style="padding:0.4rem 0;color:#6b6b64;">Budget</td><td>{inquiry.get('budget', '-')}</td></tr>
+        </table>
+      </div>
+    </div>"""
+
 # --- AUTH ---
 @api_router.post("/auth/login")
 async def login(request: Request, response: Response, body: LoginRequest):
@@ -185,7 +281,7 @@ async def get_truck(slug: str):
 
 # --- INQUIRIES ---
 @api_router.post("/inquiries")
-async def create_inquiry(inquiry: InquiryCreate):
+async def create_inquiry(inquiry: InquiryCreate, background_tasks: BackgroundTasks):
     doc = inquiry.model_dump()
     doc["id"] = str(uuid.uuid4())
     doc["status"] = "new"
@@ -193,6 +289,13 @@ async def create_inquiry(inquiry: InquiryCreate):
     doc["created_at"] = datetime.now(timezone.utc).isoformat()
     doc["updated_at"] = datetime.now(timezone.utc).isoformat()
     await db.inquiries.insert_one(doc)
+    # Send confirmation email to customer
+    if doc.get("email"):
+        background_tasks.add_task(send_email_background, doc["email"], "Anfrage erhalten – TruckOnRoad", build_confirmation_email(doc))
+    # Send notification to admin
+    settings = await get_email_settings()
+    if settings.get("email_notifications") and settings.get("notification_email"):
+        background_tasks.add_task(send_email_background, settings["notification_email"], f"Neue Anfrage: {doc.get('first_name', '')} {doc.get('last_name', '')}", build_admin_notification_email(doc))
     return {"message": "Anfrage erfolgreich gesendet", "id": doc["id"]}
 
 @api_router.post("/quick-inquiry")
@@ -345,15 +448,49 @@ async def admin_stats(request: Request):
 async def admin_get_settings(request: Request):
     await get_current_user(request)
     s = await db.settings.find_one({"type": "general"}, {"_id": 0})
-    return s or {"type": "general", "company_name": "TruckOnRoad", "email_notifications": False, "notification_email": "", "whatsapp_number": "+41791234567"}
+    defaults = {
+        "type": "general", "company_name": "TruckOnRoad",
+        "company_address": "Bahnhofstrasse 75, 8620 Wetzikon",
+        "company_phone": "+41 79 696 98 99", "company_email": "info@truckonroad.ch",
+        "whatsapp_number": "+41796969899",
+        "email_notifications": False, "notification_email": "",
+        "smtp_host": "smtp.gmail.com", "smtp_port": 587,
+        "smtp_email": "", "smtp_password": ""
+    }
+    if s:
+        defaults.update(s)
+    return defaults
 
 @api_router.put("/admin/settings")
 async def admin_update_settings(request: Request):
     await get_current_user(request)
     body = await request.json()
     body.pop("_id", None)
+    body["type"] = "general"
     await db.settings.update_one({"type": "general"}, {"$set": body}, upsert=True)
     return {"message": "Updated"}
+
+@api_router.post("/admin/settings/test-email")
+async def admin_test_email(request: Request, background_tasks: BackgroundTasks):
+    await get_current_user(request)
+    body = await request.json()
+    to = body.get("to", "")
+    if not to:
+        raise HTTPException(status_code=400, detail="E-Mail-Adresse fehlt")
+    background_tasks.add_task(send_email_background, to, "TruckOnRoad Test-E-Mail", "<h2>Test erfolgreich!</h2><p>Die E-Mail-Konfiguration funktioniert korrekt.</p>")
+    return {"message": "Test-E-Mail wird gesendet"}
+
+# --- PUBLIC SETTINGS (for contact page) ---
+@api_router.get("/contact-info")
+async def get_contact_info():
+    s = await db.settings.find_one({"type": "general"}, {"_id": 0})
+    return {
+        "company_name": (s or {}).get("company_name", "TruckOnRoad"),
+        "address": (s or {}).get("company_address", "Bahnhofstrasse 75, 8620 Wetzikon"),
+        "phone": (s or {}).get("company_phone", "+41 79 696 98 99"),
+        "email": (s or {}).get("company_email", "info@truckonroad.ch"),
+        "whatsapp": (s or {}).get("whatsapp_number", "+41796969899"),
+    }
 
 app.include_router(api_router)
 
