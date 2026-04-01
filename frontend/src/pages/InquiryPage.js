@@ -86,6 +86,19 @@ export default function InquiryPage() {
           {lang === 'de' ? 'Vielen Dank!' : 'Thank you!'}
         </h2>
         <p style={{ color: 'var(--sf-gray)', textAlign: 'center', maxWidth: 500 }}>{t('form_success')}</p>
+
+        {inquiryId && (
+          <div style={{ width: '100%', maxWidth: 500, marginTop: '2rem' }} data-testid="inquiry-upload-section">
+            <h3 style={{ color: 'var(--sf-cream)', fontSize: '1rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <Upload size={18} /> {lang === 'de' ? 'Dateien hochladen (optional)' : 'Upload files (optional)'}
+            </h3>
+            <p style={{ color: 'var(--sf-gray)', fontSize: '0.82rem', marginBottom: '1rem' }}>
+              {lang === 'de' ? 'Event-Pläne, Logos, Grundrisse oder andere Dokumente.' : 'Event plans, logos, floor plans or other documents.'}
+            </p>
+            <FileUpload inquiryId={inquiryId} files={uploadedFiles} onFilesChange={setUploadedFiles} />
+          </div>
+        )}
+
         {user && user.role === 'customer' && (
           <Link to="/konto" className="sf-btn-primary" style={{ marginTop: '1.5rem', textDecoration: 'none' }} data-testid="go-to-portal-btn">
             {lang === 'de' ? 'Zum Kundenportal' : 'Go to Portal'}
