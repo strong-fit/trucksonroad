@@ -37,6 +37,8 @@
 
 ## Recently Added
 - [x] JSON-LD Structured Data (Schema.org FoodEstablishment) for AI Search Engines (2026-04-01)
+- [x] Social Media & SEO Admin Settings (Google Business, Instagram, Facebook, TikTok, LinkedIn) (2026-04-01)
+- [x] Dynamic JSON-LD API endpoint `/api/seo/structured-data` - auto-updates sameAs from Admin settings (2026-04-01)
 
 ## Backlog
 - [ ] FR/IT Übersetzungen

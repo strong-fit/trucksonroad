@@ -129,6 +129,11 @@ class SettingsUpdate(BaseModel):
     company_phone: Optional[str] = ""
     company_email: Optional[str] = ""
     whatsapp_number: Optional[str] = ""
+    social_google_business: Optional[str] = ""
+    social_instagram: Optional[str] = ""
+    social_facebook: Optional[str] = ""
+    social_tiktok: Optional[str] = ""
+    social_linkedin: Optional[str] = ""
     email_notifications: Optional[bool] = False
     notification_email: Optional[str] = ""
     smtp_host: Optional[str] = "smtp.gmail.com"
@@ -571,6 +576,8 @@ async def admin_get_settings(request: Request):
         "company_address": "Bahnhofstrasse 75, 8620 Wetzikon",
         "company_phone": "+41 79 696 98 99", "company_email": "info@truckonroad.ch",
         "whatsapp_number": "+41796969899",
+        "social_google_business": "", "social_instagram": "", "social_facebook": "",
+        "social_tiktok": "", "social_linkedin": "",
         "email_notifications": False, "notification_email": "",
         "smtp_host": "smtp.gmail.com", "smtp_port": 587,
         "smtp_email": "", "smtp_password": ""
@@ -608,6 +615,48 @@ async def get_contact_info():
         "phone": (s or {}).get("company_phone", "+41 79 696 98 99"),
         "email": (s or {}).get("company_email", "info@truckonroad.ch"),
         "whatsapp": (s or {}).get("whatsapp_number", "+41796969899"),
+    }
+
+# --- PUBLIC STRUCTURED DATA (JSON-LD for SEO & AI Search) ---
+@api_router.get("/seo/structured-data")
+async def get_structured_data():
+    s = await db.settings.find_one({"type": "general"}, {"_id": 0}) or {}
+    same_as = [v for k in ["social_google_business", "social_instagram", "social_facebook", "social_tiktok", "social_linkedin"] if (v := s.get(k, ""))]
+    return {
+        "@context": "https://schema.org",
+        "@type": "FoodEstablishment",
+        "name": s.get("company_name", "TruckOnRoad"),
+        "alternateName": f"{s.get('company_name', 'TruckOnRoad')} - Premium Foodtrucks",
+        "description": "Premium Foodtrucks für Festivals, Firmenanlässe und Private Events in der ganzen Schweiz. 6 einzigartige Truck-Konzepte: Burger, Chicken Burger, Bowls, Pocket Bowls, Empanadas und Retro Trailer.",
+        "url": "https://truckonroad.ch",
+        "telephone": s.get("company_phone", "+41 79 696 98 99"),
+        "email": s.get("company_email", "info@truckonroad.ch"),
+        "servesCuisine": ["Burger", "Bowls", "Empanadas", "Street Food"],
+        "priceRange": "$$",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": s.get("company_address", "Bahnhofstrasse 75, 8620 Wetzikon").split(",")[0].strip(),
+            "addressLocality": s.get("company_address", "Bahnhofstrasse 75, 8620 Wetzikon").split(",")[-1].strip() if "," in s.get("company_address", "") else "Wetzikon",
+            "addressCountry": "CH"
+        },
+        "geo": {"@type": "GeoCoordinates", "latitude": 47.3769, "longitude": 8.5417},
+        "areaServed": {"@type": "Country", "name": "Schweiz"},
+        "sameAs": same_as,
+        "hasMenu": {
+            "@type": "Menu",
+            "hasMenuSection": [
+                {"@type": "MenuSection", "name": "Burger Truck", "description": "Klassische und kreative Burger vom Foodtruck"},
+                {"@type": "MenuSection", "name": "Bowl Truck", "description": "Frische Bowls mit saisonalen Zutaten"},
+                {"@type": "MenuSection", "name": "Empanadas Truck", "description": "Handgemachte Empanadas mit verschiedenen Füllungen"}
+            ]
+        },
+        "additionalType": "https://schema.org/CateringService",
+        "knowsAbout": ["Foodtruck Catering", "Festival Catering", "Firmenanlass Catering", "Hochzeit Catering", "Event Catering Schweiz"],
+        "makesOffer": [
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Foodtruck Catering für Festivals", "description": "Premium Foodtruck-Catering für Open-Air-Festivals und Grossveranstaltungen in der Schweiz"}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Foodtruck für Firmenanlässe", "description": "Individuelles Foodtruck-Erlebnis für Firmenevents, Teambuilding und Firmenanlässe"}},
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Foodtruck für Private Events", "description": "Exklusives Foodtruck-Catering für Hochzeiten, Geburtstage und private Feiern"}}
+        ]
     }
 
 # --- SITEMAP ---

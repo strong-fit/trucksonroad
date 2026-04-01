@@ -24,10 +24,12 @@ import AdminRoutes from "@/pages/admin/AdminRoutes";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import "@/App.css";
+import SeoJsonLd from "@/components/SeoJsonLd";
 
 function PublicLayout({ children }) {
   return (
     <>
+      <SeoJsonLd />
       <Navbar />
       {children}
       <Footer />

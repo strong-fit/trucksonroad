@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Save, Send, Building2, Server, Eye, Download, Instagram, Plus, Trash2 } from 'lucide-react';
+import { Save, Send, Building2, Server, Eye, Download, Instagram, Plus, Trash2, Globe, Facebook, Linkedin } from 'lucide-react';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState(null);
@@ -116,6 +116,39 @@ export default function AdminSettings() {
                   <Send size={13} /> Test
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: '1.25rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', alignItems: 'start' }}>
+        <div className="adm-detail" data-testid="settings-social">
+          <div className="adm-detail-header" style={{ borderBottom: '1px solid var(--adm-border)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+            <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Globe size={18} /> Social Media & SEO</span>
+          </div>
+          <p style={{ fontSize: '0.78rem', color: 'var(--adm-text-secondary)', marginBottom: '0.75rem' }}>
+            Diese Links werden automatisch in die strukturierten Daten (JSON-LD) eingebettet, damit Google und KI-Suchmaschinen euer Unternehmen besser finden.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div>
+              <div className="adm-form-label">Google Business Profil</div>
+              <input className="adm-input" value={settings.social_google_business || ''} onChange={e => update('social_google_business', e.target.value)} placeholder="https://g.page/truckonroad" data-testid="settings-google-business" />
+            </div>
+            <div>
+              <div className="adm-form-label">Instagram</div>
+              <input className="adm-input" value={settings.social_instagram || ''} onChange={e => update('social_instagram', e.target.value)} placeholder="https://instagram.com/truckonroad" data-testid="settings-social-instagram" />
+            </div>
+            <div>
+              <div className="adm-form-label">Facebook</div>
+              <input className="adm-input" value={settings.social_facebook || ''} onChange={e => update('social_facebook', e.target.value)} placeholder="https://facebook.com/truckonroad" data-testid="settings-social-facebook" />
+            </div>
+            <div>
+              <div className="adm-form-label">TikTok</div>
+              <input className="adm-input" value={settings.social_tiktok || ''} onChange={e => update('social_tiktok', e.target.value)} placeholder="https://tiktok.com/@truckonroad" data-testid="settings-social-tiktok" />
+            </div>
+            <div>
+              <div className="adm-form-label">LinkedIn</div>
+              <input className="adm-input" value={settings.social_linkedin || ''} onChange={e => update('social_linkedin', e.target.value)} placeholder="https://linkedin.com/company/truckonroad" data-testid="settings-social-linkedin" />
             </div>
           </div>
         </div>
