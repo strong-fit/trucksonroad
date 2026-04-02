@@ -90,6 +90,17 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Alle hardcoded lang==='de' Ternaries durch t() ersetzt
 - [x] 100% Regression bestanden (15/15 Backend + alle Frontend)
 
+### Passwort-Reset (02.04.2026)
+- [x] "Passwort vergessen" per E-Mail (Token-basiert, 1h Ablauf, Single-Use)
+- [x] "Passwort zuruecksetzen" Seite (Token aus E-Mail-Link)
+- [x] "Passwort aendern" im Kundenportal (altes PW verifiziert)
+- [x] "Passwort aendern" in Admin-Einstellungen (altes PW verifiziert)
+- [x] Alle 4 Sprachen (DE/FR/IT/EN) unterstuetzt
+- [x] 100% Regression bestanden (17/17 Backend + alle Frontend)
+
+### Brand Rename (02.04.2026)
+- [x] TruckOnRoad -> TrucksOnRoad ueberall (Logo, E-Mails, PDFs, SEO, Meta-Tags)
+
 ## Remaining Tasks
 - [ ] Google Search Console setup (manueller Schritt)
 
