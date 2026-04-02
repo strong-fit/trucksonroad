@@ -292,6 +292,22 @@ export default function AdminSettings() {
           </div>
         </div>
       </div>
+
+      {/* Perplexity API Key for Event Scout */}
+      <div className="adm-detail" style={{ marginTop: '1.25rem' }} data-testid="perplexity-settings">
+        <div className="adm-detail-header" style={{ borderBottom: '1px solid var(--adm-border)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+          <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Zap size={18} /> KI Event-Scout (Perplexity)</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div>
+            <div className="adm-form-label">Perplexity API-Key</div>
+            <input className="adm-input" type="password" value={settings.perplexity_api_key || ''} onChange={e => update('perplexity_api_key', e.target.value)} placeholder="pplx-..." data-testid="settings-perplexity-key" />
+            <div style={{ fontSize: '0.72rem', color: 'var(--adm-text-muted)', marginTop: '0.3rem' }}>
+              API-Key von <a href="https://www.perplexity.ai/settings/api" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--adm-accent)' }}>perplexity.ai/settings/api</a> – wird fuer den KI Event-Scout verwendet
+            </div>
+          </div>
+        </div>
+      </div>
     </AdminLayout>
   );
 }

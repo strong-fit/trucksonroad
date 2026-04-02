@@ -689,7 +689,7 @@ async def upload_inquiry_file(inquiry_id: str, request: Request, background_task
             inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
             if inquiry and inquiry.get("email"):
                 html = build_file_upload_notification_email(inquiry, file.filename)
-                background_tasks.add_task(send_email_background, inquiry["email"], f"Neue Datei zu Ihrer Anfrage – TruckOnRoad", html)
+                background_tasks.add_task(send_email_background, inquiry["email"], "Neue Datei zu Ihrer Anfrage – TruckOnRoad", html)
     except Exception:
         pass
     return file_doc
@@ -926,7 +926,8 @@ async def admin_get_settings(request: Request):
         "auto_confirmation": False,
         "email_notifications": False, "notification_email": "",
         "smtp_host": "smtp.gmail.com", "smtp_port": 587,
-        "smtp_email": "", "smtp_password": ""
+        "smtp_email": "", "smtp_password": "",
+        "perplexity_api_key": ""
     }
     if s:
         defaults.update(s)
@@ -1519,8 +1520,6 @@ async def admin_trigger_reminders(request: Request):
     await send_event_reminders()
     return {"message": "Erinnerungen geprüft und gesendet"}
 
-app.include_router(api_router)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[os.environ.get("FRONTEND_URL", "http://localhost:3000"), "http://localhost:3000"],
@@ -1698,6 +1697,192 @@ async def event_reminder_loop():
         await send_event_reminders()
 
 
+# --- PUBLIC AGENDA ---
+@api_router.get("/agenda")
+async def get_public_agenda():
+    """Public endpoint: upcoming confirmed events."""
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    inquiries = await db.inquiries.find(
+        {"status": {"$in": ["confirmed", "completed"]}, "event_date": {"$gte": today}},
+        {"_id": 0, "id": 1, "event_date": 1, "location": 1, "event_type": 1, "event_name": 1, "selected_trucks": 1}
+    ).sort("event_date", 1).to_list(100)
+    return inquiries
+
+
+# --- EVENT SCOUT (Perplexity AI) ---
+PERPLEXITY_API_URL = "https://api.perplexity.ai/chat/completions"
+
+async def get_perplexity_key():
+    s = await db.settings.find_one({"type": "general"}, {"_id": 0})
+    return (s or {}).get("perplexity_api_key", "")
+
+@api_router.post("/admin/event-scout/search")
+async def event_scout_search(request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    query = body.get("query", "")
+    region = body.get("region", "Schweiz")
+    if not query:
+        raise HTTPException(status_code=400, detail="Suchbegriff fehlt")
+    api_key = await get_perplexity_key()
+    if not api_key:
+        raise HTTPException(status_code=400, detail="Perplexity API-Key nicht konfiguriert. Bitte in Einstellungen hinterlegen.")
+
+    system_prompt = f"""Du bist ein Experte fuer Event-Recherche in der Schweiz. 
+Suche nach relevanten Events, Festivals, Weihnachtsmaerkten, Strassenfesten, Firmenfeiern und Maerkten in der Region {region}.
+Antworte IMMER im folgenden JSON-Format (Array von Events):
+[
+  {{
+    "name": "Event-Name",
+    "date": "Datum oder Zeitraum (z.B. 15.-18. Dezember 2026)",
+    "location": "Stadt/Ort",
+    "type": "festival|weihnachtsmarkt|markt|firmenevent|strassenfest|andere",
+    "description": "Kurzbeschreibung (1-2 Saetze)",
+    "organizer_email": "E-Mail des Veranstalters falls verfuegbar, sonst leer",
+    "website": "URL zur Event-Website falls verfuegbar"
+  }}
+]
+Liefere so viele relevante Events wie moeglich (mindestens 5-10). Gib NUR den JSON-Array zurueck, keine zusaetzliche Erklaerung."""
+
+    try:
+        async with httpx.AsyncClient(timeout=60) as http_client:
+            resp = await http_client.post(
+                PERPLEXITY_API_URL,
+                headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+                json={
+                    "model": "sonar-pro",
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": f"Finde aktuelle und kommende Events fuer: {query} in {region} 2025/2026"}
+                    ],
+                    "temperature": 0.3
+                }
+            )
+            if resp.status_code == 401:
+                raise HTTPException(status_code=400, detail="Perplexity API-Key ungueltig.")
+            resp.raise_for_status()
+            data = resp.json()
+            content = data.get("choices", [{}])[0].get("message", {}).get("content", "[]")
+            citations = data.get("citations", [])
+            # Parse JSON from content
+            import json as json_mod
+            try:
+                # Extract JSON array from response (may have markdown code blocks)
+                clean = content.strip()
+                if clean.startswith("```"):
+                    clean = clean.split("\n", 1)[-1]
+                    if clean.endswith("```"):
+                        clean = clean[:-3]
+                    clean = clean.strip()
+                events = json_mod.loads(clean)
+            except (json_mod.JSONDecodeError, Exception):
+                events = []
+                logger.warning(f"Event scout parse error. Raw: {content[:500]}")
+            return {"events": events, "citations": citations, "raw": content}
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=500, detail=f"Perplexity API Fehler: {e.response.status_code}")
+    except Exception as e:
+        logger.error(f"Event scout error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@api_router.get("/admin/event-scout/events")
+async def get_scouted_events(request: Request):
+    await get_current_user(request)
+    events = await db.scouted_events.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return events
+
+@api_router.post("/admin/event-scout/events")
+async def save_scouted_event(request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    doc = {
+        "id": str(uuid.uuid4()),
+        "name": body.get("name", ""),
+        "date": body.get("date", ""),
+        "location": body.get("location", ""),
+        "type": body.get("type", "andere"),
+        "description": body.get("description", ""),
+        "organizer_email": body.get("organizer_email", ""),
+        "website": body.get("website", ""),
+        "status": "new",
+        "notes": "",
+        "source": body.get("source", "perplexity"),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.scouted_events.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
+
+@api_router.put("/admin/event-scout/events/{event_id}")
+async def update_scouted_event(event_id: str, request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    body.pop("_id", None)
+    body.pop("id", None)
+    await db.scouted_events.update_one({"id": event_id}, {"$set": body})
+    return {"message": "Updated"}
+
+@api_router.delete("/admin/event-scout/events/{event_id}")
+async def delete_scouted_event(event_id: str, request: Request):
+    await get_current_user(request)
+    await db.scouted_events.delete_one({"id": event_id})
+    return {"message": "Deleted"}
+
+@api_router.post("/admin/event-scout/events/{event_id}/apply")
+async def send_event_application(event_id: str, request: Request, background_tasks: BackgroundTasks):
+    await get_current_user(request)
+    event = await db.scouted_events.find_one({"id": event_id}, {"_id": 0})
+    if not event:
+        raise HTTPException(status_code=404, detail="Event nicht gefunden")
+    body = await request.json()
+    to_email = body.get("email", event.get("organizer_email", ""))
+    custom_message = body.get("message", "")
+    if not to_email:
+        raise HTTPException(status_code=400, detail="Keine E-Mail-Adresse angegeben")
+
+    settings = await get_email_settings()
+    company = settings.get("company_name", "TruckOnRoad")
+    phone = settings.get("company_phone", "")
+    email = settings.get("company_email", "")
+    address = settings.get("company_address", "")
+
+    html = f"""
+    <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+      <div style="background:#1a1a18;padding:2rem;text-align:center;">
+        <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
+          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+        </span>
+      </div>
+      <div style="padding:2rem;">
+        <h2 style="color:#1a1a18;margin:0 0 1rem;">Bewerbung: {event.get('name', 'Event')}</h2>
+        <p style="color:#6b6b64;line-height:1.6;">{custom_message if custom_message else f"Guten Tag, wir von {company} sind ein Premium-Foodtruck-Unternehmen und moechten uns fuer Ihr Event '{event.get('name', '')}' bewerben."}</p>
+        <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1.25rem;margin:1.5rem 0;">
+          <h3 style="color:#1a1a18;margin:0 0 0.75rem;">Unser Angebot</h3>
+          <p style="color:#6b6b64;line-height:1.6;">Wir bieten massgeschneiderte Foodtruck-Erlebnisse fuer Events jeder Groesse. Unsere Trucks sind spezialisiert auf verschiedene Kuechen und Konzepte – von Gourmet-Burgern ueber Asian Fusion bis hin zu Dessert-Trucks.</p>
+          <ul style="color:#6b6b64;line-height:1.8;">
+            <li>Professionelle Ausstattung &amp; Hygiene</li>
+            <li>Flexible Menuezusammenstellung</li>
+            <li>Erfahrung mit Grossevents (500+ Gaeste)</li>
+            <li>Kompletter Service inkl. Auf-/Abbau</li>
+          </ul>
+        </div>
+        <p style="color:#6b6b64;line-height:1.6;">Wir wuerden uns ueber ein Gespraech freuen. Kontaktieren Sie uns gerne!</p>
+        <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid #e8e7e3;">
+          <p style="color:#1a1a18;font-weight:600;margin:0;">{company}</p>
+          <p style="color:#6b6b64;margin:0.25rem 0;">{address}</p>
+          <p style="color:#6b6b64;margin:0.25rem 0;">Tel: {phone} | E-Mail: {email}</p>
+        </div>
+      </div>
+    </div>"""
+
+    background_tasks.add_task(send_email_background, to_email, f"Bewerbung Foodtruck - {event.get('name', 'Event')} | {company}", html)
+    await db.scouted_events.update_one({"id": event_id}, {"$set": {"status": "contacted", "organizer_email": to_email}})
+    return {"message": "Bewerbung wird gesendet"}
+
+
+app.include_router(api_router)
+
 @app.on_event("startup")
 async def startup():
     await db.users.create_index("email", unique=True)
@@ -1705,6 +1890,7 @@ async def startup():
     await db.inquiries.create_index("id")
     await db.calendar_blocks.create_index([("truck_slug", 1), ("date", 1)])
     await db.login_attempts.create_index("identifier")
+    await db.scouted_events.create_index("id", unique=True)
 
     admin_email = os.environ.get("ADMIN_EMAIL", "admin@truckonroad.ch")
     admin_password = os.environ.get("ADMIN_PASSWORD", "TruckOnRoad2026!")

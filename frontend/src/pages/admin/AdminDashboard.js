@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import {
   LayoutDashboard, FileText, CalendarDays, Truck, LogOut,
   Search, Menu, X, ExternalLink, Inbox, CheckCircle2, Clock,
-  Settings, HelpCircle, Users, Download, DollarSign, MapPin, Star
+  Settings, HelpCircle, Users, Download, DollarSign, MapPin, Star, Sparkles
 } from 'lucide-react';
 
 function AdminLayout({ children, title }) {
@@ -25,6 +25,7 @@ function AdminLayout({ children, title }) {
     { to: '/admin/finanzen', icon: DollarSign, label: t('admin_finance') },
     { to: '/admin/routen', icon: MapPin, label: t('admin_routes') },
     { to: '/admin/bewertungen', icon: Star, label: t('admin_reviews') },
+    { to: '/admin/event-scout', icon: Sparkles, label: t('admin_event_scout') },
     { to: '/admin/faqs', icon: HelpCircle, label: t('admin_faqs') },
     { to: '/admin/export', icon: Download, label: t('admin_export') },
     { to: '/admin/einstellungen', icon: Settings, label: t('admin_settings') },

@@ -22,11 +22,13 @@ import AdminExport from "@/pages/admin/AdminExport";
 import AdminFinance from "@/pages/admin/AdminFinance";
 import AdminRoutes from "@/pages/admin/AdminRoutes";
 import AdminReviews from "@/pages/admin/AdminReviews";
+import AdminEventScout from "@/pages/admin/AdminEventScout";
 import CustomerLogin from "@/pages/customer/CustomerLogin";
 import CustomerRegister from "@/pages/customer/CustomerRegister";
 import CustomerPortal from "@/pages/customer/CustomerPortal";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
+import AgendaPage from "@/pages/AgendaPage";
 import "@/App.css";
 import SeoJsonLd from "@/components/SeoJsonLd";
 
@@ -56,6 +58,7 @@ function App() {
             <Route path="/private-events" element={<PublicLayout><PrivateEventsPage /></PublicLayout>} />
             <Route path="/ueber-uns" element={<PublicLayout><AboutPage /></PublicLayout>} />
             <Route path="/kontakt" element={<PublicLayout><ContactPage /></PublicLayout>} />
+            <Route path="/agenda" element={<PublicLayout><AgendaPage /></PublicLayout>} />
             <Route path="/konto/login" element={<PublicLayout><CustomerLogin /></PublicLayout>} />
             <Route path="/konto/registrieren" element={<PublicLayout><CustomerRegister /></PublicLayout>} />
             <Route path="/konto" element={<CustomerProtectedRoute><CustomerPortal /></CustomerProtectedRoute>} />
@@ -71,6 +74,7 @@ function App() {
             <Route path="/admin/finanzen" element={<ProtectedRoute><AdminFinance /></ProtectedRoute>} />
             <Route path="/admin/routen" element={<ProtectedRoute><AdminRoutes /></ProtectedRoute>} />
             <Route path="/admin/bewertungen" element={<ProtectedRoute><AdminReviews /></ProtectedRoute>} />
+            <Route path="/admin/event-scout" element={<ProtectedRoute><AdminEventScout /></ProtectedRoute>} />
           </Routes>
         </BrowserRouter>
       </LanguageProvider>
