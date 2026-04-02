@@ -142,6 +142,13 @@ export default function AdminSettings() {
                 ? 'Modus: AUTOMATISCH – Anfragen werden sofort bestätigt.'
                 : 'Modus: MANUELL – Anfragen müssen im Admin-Bereich geprüft und bestätigt werden.'}
             </div>
+            <div style={{ marginTop: '0.5rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem' }}>
+              <div className="adm-form-label">Event-Erinnerung (Tage vorher)</div>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input className="adm-input" type="number" min="0" max="30" style={{ width: '80px' }} value={settings.event_reminder_days ?? 3} onChange={e => update('event_reminder_days', parseInt(e.target.value) || 0)} data-testid="settings-reminder-days" />
+                <span style={{ fontSize: '0.78rem', color: 'var(--adm-text-secondary)' }}>Tage vor dem Event wird eine Erinnerung an den Kunden gesendet. 0 = deaktiviert.</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -173,6 +180,13 @@ export default function AdminSettings() {
             <div>
               <div className="adm-form-label">LinkedIn</div>
               <input className="adm-input" value={settings.social_linkedin || ''} onChange={e => update('social_linkedin', e.target.value)} placeholder="https://linkedin.com/company/truckonroad" data-testid="settings-social-linkedin" />
+            </div>
+            <div style={{ marginTop: '0.5rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem' }}>
+              <div className="adm-form-label">Google Search Console Verification</div>
+              <input className="adm-input" value={settings.google_verification || ''} onChange={e => update('google_verification', e.target.value)} placeholder="z.B. abc123def456..." data-testid="settings-google-verification" />
+              <div style={{ fontSize: '0.72rem', color: 'var(--adm-text-secondary)', marginTop: '0.2rem' }}>
+                Kopiere den content-Wert vom Google HTML-Tag hierher (nur den Code, ohne Anführungszeichen).
+              </div>
             </div>
           </div>
         </div>
@@ -213,6 +227,12 @@ export default function AdminSettings() {
               </button>
               <button className={`adm-filter-btn ${previewType === 'invoice_paid' ? 'active' : ''}`} onClick={() => setPreviewType('invoice_paid')}>
                 Zahlung OK
+              </button>
+              <button className={`adm-filter-btn ${previewType === 'file_upload' ? 'active' : ''}`} onClick={() => setPreviewType('file_upload')}>
+                Datei-Upload
+              </button>
+              <button className={`adm-filter-btn ${previewType === 'event_reminder' ? 'active' : ''}`} onClick={() => setPreviewType('event_reminder')}>
+                Erinnerung
               </button>
             </div>
             <div style={{ border: '1px solid var(--adm-border)', borderRadius: '8px', padding: '1rem', background: '#fff' }} data-testid="email-preview-content">

@@ -388,6 +388,59 @@ def build_invoice_notification_email(inquiry: dict, invoice_status: str, invoice
       </div>
     </div>"""
 
+
+def build_file_upload_notification_email(inquiry: dict, filename: str) -> str:
+    name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or "Kunde"
+    return f"""
+    <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+      <div style="background:#1a1a18;padding:1.5rem 2rem;text-align:center;">
+        <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.4rem;letter-spacing:0.08em;">
+          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+        </span>
+        <span style="color:#4db6ac;font-size:0.7rem;margin-left:0.5rem;">NEUE DATEI</span>
+      </div>
+      <div style="padding:2rem;">
+        <h2 style="color:#1a1a18;margin:0 0 1rem;">Hallo {name},</h2>
+        <p style="color:#6b6b64;line-height:1.7;">Wir haben eine neue Datei zu Ihrer Anfrage hinzugefuegt:</p>
+        <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1rem;margin:1rem 0;display:flex;align-items:center;gap:0.5rem;">
+          <span style="font-size:1.2rem;">📎</span>
+          <span style="font-weight:600;color:#1a1a18;">{filename}</span>
+        </div>
+        <p style="color:#6b6b64;font-size:0.88rem;">Sie koennen diese Datei in Ihrem Kundenportal herunterladen.</p>
+        <p style="color:#6b6b64;font-size:0.85rem;margin-top:1rem;">Herzliche Gruesse,<br/><strong>TruckOnRoad Team</strong></p>
+      </div>
+      <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
+        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+      </div>
+    </div>"""
+
+def build_event_reminder_email(inquiry: dict, days_until: int) -> str:
+    name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or "Kunde"
+    return f"""
+    <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+      <div style="background:#1a1a18;padding:1.5rem 2rem;text-align:center;">
+        <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.4rem;letter-spacing:0.08em;">
+          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+        </span>
+        <span style="color:#4db6ac;font-size:0.7rem;margin-left:0.5rem;">ERINNERUNG</span>
+      </div>
+      <div style="padding:2rem;">
+        <h2 style="color:#1a1a18;margin:0 0 1rem;">Hallo {name},</h2>
+        <p style="color:#6b6b64;line-height:1.7;">Nur noch <strong>{days_until} Tage</strong> bis zu Ihrem Event!</p>
+        <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1rem;margin:1.5rem 0;">
+          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>Event:</strong> {inquiry.get('event_type', '-')} am {inquiry.get('event_date', '-')}</p>
+          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>Ort:</strong> {inquiry.get('location', '-')}</p>
+          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>Gaeste:</strong> {inquiry.get('guest_count', '-')}</p>
+          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>Trucks:</strong> {', '.join(inquiry.get('selected_trucks', []))}</p>
+        </div>
+        <p style="color:#6b6b64;font-size:0.88rem;">Wir sind bereit und freuen uns auf Ihren Event! Bei letzten Fragen erreichen Sie uns unter info@truckonroad.ch oder +41 79 696 98 99.</p>
+        <p style="color:#6b6b64;font-size:0.85rem;margin-top:1rem;">Herzliche Gruesse,<br/><strong>TruckOnRoad Team</strong></p>
+      </div>
+      <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
+        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+      </div>
+    </div>"""
+
 def generate_offer_pdf(inquiry: dict) -> bytes:
     name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or inquiry.get('name', '')
     pdf = FPDF()
@@ -607,11 +660,10 @@ MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 MAX_FILES_PER_INQUIRY = 5
 
 @api_router.post("/inquiries/{inquiry_id}/upload")
-async def upload_inquiry_file(inquiry_id: str, file: UploadFile = File(...)):
+async def upload_inquiry_file(inquiry_id: str, request: Request, background_tasks: BackgroundTasks, file: UploadFile = File(...)):
     data = await file.read()
     if len(data) > MAX_FILE_SIZE:
         raise HTTPException(status_code=400, detail="Datei zu gross (max. 10 MB)")
-    # Check file count
     existing = await db.files.count_documents({"inquiry_id": inquiry_id, "is_deleted": False})
     if existing >= MAX_FILES_PER_INQUIRY:
         raise HTTPException(status_code=400, detail=f"Maximal {MAX_FILES_PER_INQUIRY} Dateien pro Anfrage")
@@ -630,6 +682,16 @@ async def upload_inquiry_file(inquiry_id: str, file: UploadFile = File(...)):
     }
     await db.files.insert_one(file_doc)
     file_doc.pop("_id", None)
+    # Notify customer if admin uploads a file
+    try:
+        user = await get_current_user(request)
+        if user.get("role") == "admin":
+            inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
+            if inquiry and inquiry.get("email"):
+                html = build_file_upload_notification_email(inquiry, file.filename)
+                background_tasks.add_task(send_email_background, inquiry["email"], f"Neue Datei zu Ihrer Anfrage – TruckOnRoad", html)
+    except Exception:
+        pass
     return file_doc
 
 @api_router.get("/inquiries/{inquiry_id}/files")
@@ -859,6 +921,8 @@ async def admin_get_settings(request: Request):
         "whatsapp_number": "+41796969899",
         "social_google_business": "", "social_instagram": "", "social_facebook": "",
         "social_tiktok": "", "social_linkedin": "",
+        "google_verification": "",
+        "event_reminder_days": 3,
         "auto_confirmation": False,
         "email_notifications": False, "notification_email": "",
         "smtp_host": "smtp.gmail.com", "smtp_port": 587,
@@ -1039,6 +1103,11 @@ Allow: /
 """
     return FastAPIResponse(content=content, media_type="text/plain")
 
+@api_router.get("/seo/google-verification")
+async def google_verification():
+    s = await db.settings.find_one({"type": "general"}, {"_id": 0}) or {}
+    return {"code": s.get("google_verification", "")}
+
 @api_router.get("/sitemap.xml")
 async def sitemap():
     base = "https://truckonroad.ch"
@@ -1157,6 +1226,8 @@ async def admin_email_preview(request: Request):
         "status_completed": build_status_notification_email(sample, "completed"),
         "invoice_sent": build_invoice_notification_email(sample, "sent", 4500),
         "invoice_paid": build_invoice_notification_email(sample, "paid", 4500),
+        "file_upload": build_file_upload_notification_email(sample, "Event-Plan_2026.pdf"),
+        "event_reminder": build_event_reminder_email(sample, 3),
     }
 
 # --- ADMIN FAQS GET ---
@@ -1442,6 +1513,12 @@ async def admin_events_map(request: Request):
         })
     return {"events": events, "base": BASE_LOCATION}
 
+@api_router.post("/admin/send-reminders")
+async def admin_trigger_reminders(request: Request):
+    await get_current_user(request)
+    await send_event_reminders()
+    return {"message": "Erinnerungen geprüft und gesendet"}
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -1565,6 +1642,62 @@ FAQS_SEED = [
     {"id": str(uuid.uuid4()), "question_de": "Was passiert bei schlechtem Wetter?", "answer_de": "Unsere Trucks sind grunds\u00e4tzlich wetterfest. Bei extremen Bedingungen besprechen wir gemeinsam Alternativen. Details regeln wir im Vertrag.", "question_en": "What happens in bad weather?", "answer_en": "Our trucks are generally weatherproof. In extreme conditions, we discuss alternatives together. Details are regulated in the contract.", "order": 8}
 ]
 
+
+# --- EVENT REMINDER BACKGROUND TASK ---
+import asyncio
+
+async def send_event_reminders():
+    """Check for upcoming events and send reminder emails."""
+    try:
+        settings = await get_email_settings()
+        reminder_days = settings.get("event_reminder_days", 3)
+        if not reminder_days or reminder_days < 1:
+            return
+        target_date = (datetime.now(timezone.utc) + timedelta(days=reminder_days)).strftime("%Y-%m-%d")
+        inquiries = await db.inquiries.find({
+            "event_date": target_date,
+            "status": {"$in": ["confirmed", "offer_sent"]},
+        }, {"_id": 0}).to_list(100)
+        for inq in inquiries:
+            already_sent = await db.reminders.find_one({"inquiry_id": inq["id"], "type": "event_reminder"})
+            if already_sent:
+                continue
+            if inq.get("email"):
+                html = build_event_reminder_email(inq, reminder_days)
+                try:
+                    send_email_sync(inq["email"], f"Noch {reminder_days} Tage bis zu Ihrem Event! – TruckOnRoad", html, settings)
+                except Exception:
+                    pass
+                await db.reminders.insert_one({"inquiry_id": inq["id"], "type": "event_reminder", "sent_at": datetime.now(timezone.utc).isoformat()})
+                logger.info(f"Event reminder sent for inquiry {inq['id']} to {inq['email']}")
+    except Exception as e:
+        logger.warning(f"Event reminder check failed: {e}")
+
+def send_email_sync(to_email, subject, html_body, settings):
+    """Synchronous email sending for background tasks."""
+    smtp_user = settings.get("smtp_user", "")
+    smtp_pass = settings.get("smtp_password", "")
+    smtp_host = settings.get("smtp_host", "smtp.gmail.com")
+    smtp_port = settings.get("smtp_port", 587)
+    if not smtp_user or not smtp_pass:
+        return
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = smtp_user
+    msg["To"] = to_email
+    msg.attach(MIMEText(html_body, "html"))
+    with smtplib.SMTP(smtp_host, smtp_port) as server:
+        server.starttls()
+        server.login(smtp_user, smtp_pass)
+        server.sendmail(smtp_user, to_email, msg.as_string())
+
+async def event_reminder_loop():
+    """Background loop that checks for event reminders every 6 hours."""
+    while True:
+        await asyncio.sleep(6 * 3600)  # Check every 6 hours
+        await send_event_reminders()
+
+
 @app.on_event("startup")
 async def startup():
     await db.users.create_index("email", unique=True)
@@ -1606,6 +1739,9 @@ async def startup():
         logger.info("Object storage initialized")
     except Exception as e:
         logger.warning(f"Object storage init failed (will retry on first upload): {e}")
+    # Start event reminder background task
+    import asyncio
+    asyncio.create_task(event_reminder_loop())
 
 @app.on_event("shutdown")
 async def shutdown():

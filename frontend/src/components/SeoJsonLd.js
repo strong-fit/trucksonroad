@@ -13,6 +13,19 @@ export default function SeoJsonLd() {
       }
       script.textContent = JSON.stringify(r.data);
     }).catch(() => {});
+    // Google verification
+    api.get('/seo/google-verification').then(r => {
+      if (r.data.code) {
+        let meta = document.getElementById('google-site-verification');
+        if (!meta) {
+          meta = document.createElement('meta');
+          meta.id = 'google-site-verification';
+          meta.name = 'google-site-verification';
+          document.head.appendChild(meta);
+        }
+        meta.content = r.data.code;
+      }
+    }).catch(() => {});
     return () => { if (script) script.remove(); };
   }, []);
   return null;
