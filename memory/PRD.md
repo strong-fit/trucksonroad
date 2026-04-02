@@ -83,6 +83,13 @@ Premium, professionelle Website fuer "TruckOnRoad" – Foodtruck-Unternehmen fue
 - [x] 12 Module erstellt (routes/, services/, etc.)
 - [x] 100% Regression bestanden (37/37 Backend + 3/3 Frontend)
 
+### Multi-Language Content (02.04.2026)
+- [x] FR/IT Felder fuer alle 6 Trucks (name, tagline, description, menu, suitable_for)
+- [x] FR/IT Felder fuer alle 8 FAQs (question, answer)
+- [x] ~60 neue Translation-Keys fuer EventOrganizers, PrivateEvents, InquiryPage, Homepage
+- [x] Alle hardcoded lang==='de' Ternaries durch t() ersetzt
+- [x] 100% Regression bestanden (15/15 Backend + alle Frontend)
+
 ## Remaining Tasks
 - [ ] Google Search Console setup (manueller Schritt)
 
