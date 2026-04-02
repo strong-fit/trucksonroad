@@ -1,55 +1,90 @@
-# TruckOnRoad - Premium Foodtruck Website
+# TruckOnRoad - Premium Foodtruck Website (PRD)
 
-## Architecture
-- **Frontend**: React + Tailwind + Shadcn UI + Leaflet (Maps)
-- **Backend**: FastAPI + MongoDB + fpdf2 + httpx + Emergent Object Storage
-- **Email**: Gmail SMTP (configurable, 9 templates, 4 languages)
-- **Maps**: OpenStreetMap + OSRM (free)
-- **Storage**: Emergent Object Storage
-- **AI**: Perplexity API sonar-pro (Event Scout, admin configurable)
-- **Design**: Public: Dark + Petrol. Admin: Light
+## Problem Statement
+Premium, professionelle Website fuer "TruckOnRoad" – Foodtruck-Unternehmen fuer Festivals, Firmenanlaesse und Private Events in der Schweiz.
 
-## Implemented Features
+## Tech Stack
+- **Frontend:** React, Tailwind CSS, Shadcn/UI, React-Leaflet
+- **Backend:** FastAPI, Motor (async MongoDB), JWT Auth
+- **Database:** MongoDB
+- **3rd Party:** Emergent Object Storage, Perplexity API (Event Scout), Gmail SMTP, Leaflet/OpenStreetMap/Nominatim
 
-### Public Site (DONE)
-- Homepage, Truck Details, Inquiry Form, FAQ, Veranstalter, Private Events
-- Über uns, Kontakt, WhatsApp Button, Customer Login/Registration
-- SEO: Meta Tags, JSON-LD, Sitemap, robots.txt
+## Architecture (Post-Refactoring Feb 2026)
+```
+/app/backend/
+  server.py          (~96 Zeilen - App, Middleware, Startup, Router)
+  database.py         (DB-Verbindung)
+  auth.py             (JWT, Passwort-Hashing, get_current_user)
+  models.py           (Pydantic Models)
+  seed.py             (Seed-Daten: 6 Trucks, 8 FAQs)
+  services/
+    email.py          (E-Mail-Templates + 4-Sprachen-i18n + SMTP)
+    pdf.py            (PDF: Angebot, Veranstalter, Export)
+    storage.py        (Emergent Object Storage)
+    event_scout.py    (Perplexity AI + Auto-Scan + Background Tasks)
+  routes/
+    auth_routes.py    (Login, Register, Logout, Refresh, Me)
+    public.py         (Trucks, FAQs, Reviews, SEO, Sitemap, Agenda)
+    customer.py       (Kundenportal: Anfragen, Profil)
+    admin.py          (Admin: Anfragen, Kalender, Trucks, Personal, Finanzen, Export, Event-Scout)
+```
 
-### Public Agenda (DONE)
-- `/agenda` showing upcoming confirmed events
+## Completed Features
 
-### Multi-Language (DONE)
-- Full 4-language: DE, FR, IT, EN – Frontend + Backend Emails + PDFs
-- Language switcher + localStorage persistence
-- Customer's language saved with inquiry, used for all emails/PDFs
+### Public Website
+- [x] Homepage mit Hero, Truck-Karten, Reviews, FAQ, Instagram
+- [x] Dedicated Truck-Seiten mit Details
+- [x] Anfrage-Formular (vollstaendig)
+- [x] Quick-Inquiry fuer schnelle Anfragen
+- [x] Ueber uns, Kontakt Seiten
+- [x] FAQ-Seite
+- [x] Veranstalter PDF Download
+- [x] Verfuegbarkeits-Kalender
+- [x] Agenda (oeffentliche Events)
+- [x] Mehrsprachig (DE/FR/IT/EN) mit Language Switcher
 
-### Customer Portal (DONE)
-- Registration, dashboard, inquiry tracking, invoices, file uploads
+### Admin Dashboard
+- [x] Anfragen-Management (CRUD, Status, Notizen)
+- [x] Kalender/Verfuegbarkeit
+- [x] Truck-Bearbeitung
+- [x] FAQ-Verwaltung
+- [x] Mitarbeiter-Verwaltung & Zuteilung
+- [x] Bewertungs-Verwaltung
+- [x] Finanz-Uebersicht (Umsatz, Kosten, Gewinn pro Event)
+- [x] Routen-Planung mit Karte (Leaflet)
+- [x] Export (CSV/PDF)
+- [x] E-Mail-Vorschau (alle Templates in 4 Sprachen)
+- [x] Einstellungen (SMTP, Firma, Social Media)
+- [x] KI Event-Scout (Perplexity API, Auto-Scan, Bewerbung)
+- [x] Rechnungs-Management (Status + Betrag)
+- [x] Dynamische Sprach-Aenderung pro Anfrage
 
-### Admin Area - 12 Sections (DONE)
-1. Dashboard  2. Anfragen  3. Kalender  4. Trucks  5. Personal
-6. Finanzen  7. Routen  8. Bewertungen  9. Event-Scout
-10. FAQ  11. Export  12. Einstellungen
+### Kundenportal
+- [x] Login/Registrierung
+- [x] Anfragen-Uebersicht
+- [x] Datei-Upload/Download
+- [x] Profil mit Sprach-Wahl
+- [x] Dynamische Sprach-Aenderung
 
-### KI Event-Scout (DONE)
-- Perplexity API search + auto-scan + fixed sources + application emails
+### SEO & AI
+- [x] JSON-LD Structured Data (FoodEstablishment)
+- [x] Sitemap.xml
+- [x] Robots.txt (AI-Crawler erlaubt)
+- [x] Meta-Tags, OpenGraph
+- [x] Google Search Console Verifikation (manuell)
 
-### Multilingual Email Templates (DONE - April 2026)
-- **EMAIL_I18N** dictionary with DE/EN/FR/IT translations for all email content
-- 9 email templates fully translated: Confirmation, Admin Notification, Offer, Status Updates (4), Invoice (4), File Upload, Event Reminder
-- **Offer PDF** fully translated (labels, disclaimer, filename)
-- Language stored per inquiry (`lang` field), used for all communications
-- Email preview endpoint supports `?lang=` parameter
-- Admin notifications always in German (internal)
+### E-Mail-System
+- [x] 7+ Templates (Bestaetigung, Angebot, Status, Rechnung, Erinnerung, Datei, Event-Bewerbung)
+- [x] Alle Templates in 4 Sprachen (DE/FR/IT/EN)
+- [x] SMTP konfigurierbar via Admin
 
-### Email Automation - 9 Templates (DONE)
-All in 4 languages: Confirmation, Admin Notification, Offer, Booking Confirmed, Completed, Cancelled, Invoice (4 states), File Upload, Event Reminder, Event Scout
+### Backend-Refactoring (02.04.2026)
+- [x] server.py von 2353 auf 96 Zeilen reduziert
+- [x] 12 Module erstellt (routes/, services/, etc.)
+- [x] 100% Regression bestanden (37/37 Backend + 3/3 Frontend)
 
-## 3rd Party Integrations
-- Emergent Object Storage
-- Gmail SMTP (admin configurable)
-- Perplexity API (event scout, admin configurable)
+## Remaining Tasks
+- [ ] Google Search Console setup (manueller Schritt)
 
-## Backlog
-- [ ] Google Search Console setup (manual step by user)
+## Test Reports
+- iteration_13.json bis iteration_18.json: Alle 100% bestanden
