@@ -1,19 +1,20 @@
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Download, FileText, CalendarDays, Users, HelpCircle, Truck } from 'lucide-react';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
-const EXPORTS = [
-  { key: 'inquiries', label: 'Anfragen', desc: 'Alle Anfragen mit Status, Kontaktdaten und Details', icon: FileText },
-  { key: 'employees', label: 'Mitarbeiter', desc: 'Personalübersicht mit Rollen und Status', icon: Users },
-  { key: 'calendar', label: 'Kalender', desc: 'Blockierte Daten pro Truck', icon: CalendarDays },
-  { key: 'trucks', label: 'Trucks', desc: 'Truck-Konzepte mit Kapazitäten', icon: Truck },
-  { key: 'faqs', label: 'FAQ', desc: 'Fragen und Antworten (DE/EN)', icon: HelpCircle },
-];
-
 export default function AdminExport() {
+  const { t } = useLanguage();
+  const EXPORTS = [
+    { key: 'inquiries', label: t('admin_inquiries'), icon: FileText },
+    { key: 'employees', label: t('admin_employees'), icon: Users },
+    { key: 'calendar', label: t('admin_calendar'), icon: CalendarDays },
+    { key: 'trucks', label: t('admin_trucks'), icon: Truck },
+    { key: 'faqs', label: t('admin_faqs'), icon: HelpCircle },
+  ];
   return (
-    <AdminLayout title="Export">
+    <AdminLayout title={t('admin_export')}>
       <p style={{ color: 'var(--adm-text-secondary)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
         Exportieren Sie alle Daten als CSV oder PDF.
       </p>

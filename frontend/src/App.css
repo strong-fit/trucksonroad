@@ -167,13 +167,34 @@
 }
 .sf-nav-link:hover, .sf-nav-link.active { opacity: 1; color: var(--sf-gold); }
 .sf-nav-actions { display: flex; align-items: center; gap: 1rem; }
+.sf-lang-dropdown { position: relative; }
 .sf-lang-toggle {
   background: transparent; border: 1px solid rgba(77,182,172,0.3); color: var(--sf-cream);
   padding: 0.3rem 0.8rem; border-radius: 2px; font-size: 0.7rem; cursor: pointer;
   font-family: 'DM Sans', sans-serif; transition: all 0.2s; letter-spacing: 0.15em;
-  opacity: 0.75;
+  opacity: 0.75; display: flex; align-items: center; gap: 2px;
 }
 .sf-lang-toggle:hover { border-color: var(--sf-gold); color: var(--sf-gold); opacity: 1; }
+.sf-lang-menu {
+  position: absolute; top: calc(100% + 6px); right: 0; background: var(--sf-black);
+  border: 1px solid var(--sf-border); border-radius: 4px; min-width: 56px; z-index: 100;
+  padding: 4px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.sf-lang-option {
+  display: block; width: 100%; padding: 6px 14px; background: none; border: none;
+  color: var(--sf-cream); font-size: 0.72rem; letter-spacing: 0.15em; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; text-align: left; transition: background 0.15s;
+}
+.sf-lang-option:hover { background: rgba(77,182,172,0.15); }
+.sf-lang-option.active { color: var(--sf-gold); font-weight: 600; }
+.sf-mobile-lang { display: flex; gap: 0.5rem; padding: 0.5rem 0; }
+.sf-mobile-lang-btn {
+  background: transparent; border: 1px solid var(--sf-border); color: var(--sf-cream);
+  padding: 0.35rem 0.75rem; border-radius: 2px; font-size: 0.75rem; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; letter-spacing: 0.12em; transition: all 0.2s;
+}
+.sf-mobile-lang-btn.active { border-color: var(--sf-gold); color: var(--sf-gold); font-weight: 600; }
+.sf-mobile-lang-btn:hover { border-color: var(--sf-gold); }
 .sf-mobile-toggle { display: none; background: none; border: none; color: var(--sf-cream); cursor: pointer; }
 .sf-mobile-menu {
   display: none; padding: 1.5rem 4rem; border-top: 1px solid var(--sf-border);

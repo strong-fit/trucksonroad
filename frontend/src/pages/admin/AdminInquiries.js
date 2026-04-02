@@ -1,28 +1,13 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Trash2, Inbox, FileDown, Users, Receipt, Paperclip } from 'lucide-react';
 import FileUpload from '@/components/FileUpload';
 
-const STATUS_OPTIONS = [
-  { value: 'new', label: 'Neu' },
-  { value: 'in_review', label: 'In Pruefung' },
-  { value: 'offer_sent', label: 'Offerte gesendet' },
-  { value: 'confirmed', label: 'Bestaetigt' },
-  { value: 'completed', label: 'Abgeschlossen' },
-  { value: 'cancelled', label: 'Abgesagt' },
-];
-
-const INVOICE_OPTIONS = [
-  { value: 'none', label: 'Keine' },
-  { value: 'pending', label: 'Offen' },
-  { value: 'sent', label: 'Gesendet' },
-  { value: 'paid', label: 'Bezahlt' },
-  { value: 'overdue', label: 'Ueberfaellig' },
-];
-
 export default function AdminInquiries() {
+  const { t, lang } = useLanguage();
   const [inquiries, setInquiries] = useState([]);
   const [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState(null);
@@ -30,6 +15,23 @@ export default function AdminInquiries() {
   const [employees, setEmployees] = useState([]);
   const [assignedEmps, setAssignedEmps] = useState([]);
   const [inquiryFiles, setInquiryFiles] = useState([]);
+
+  const STATUS_OPTIONS = [
+    { value: 'new', label: t('status_new') },
+    { value: 'in_review', label: t('status_in_review') },
+    { value: 'offer_sent', label: t('status_offer_sent') },
+    { value: 'confirmed', label: t('status_confirmed') },
+    { value: 'completed', label: t('status_completed') },
+    { value: 'cancelled', label: t('status_cancelled') },
+  ];
+
+  const INVOICE_OPTIONS = [
+    { value: 'none', label: t('admin_invoice_none') },
+    { value: 'pending', label: t('admin_invoice_pending') },
+    { value: 'sent', label: t('admin_invoice_sent') },
+    { value: 'paid', label: t('admin_invoice_paid') },
+    { value: 'overdue', label: t('admin_invoice_overdue') },
+  ];
 
   const load = () => api.get('/admin/inquiries').then(r => setInquiries(r.data)).catch(() => {});
   useEffect(() => {
@@ -42,27 +44,29 @@ export default function AdminInquiries() {
   const updateStatus = async (id, status) => {
     try {
       await api.put(`/admin/inquiries/${id}`, { status, internal_notes: notes, assigned_employees: assignedEmps });
-      toast.success(status === 'offer_sent' ? 'Offerte gesendet (E-Mail wird verschickt)' : 'Status aktualisiert');
+      toast.success(status === 'offer_sent' ? t('admin_offer_sent_msg') : t('admin_status_update'));
       load();
       if (selected?.id === id) setSelected(prev => ({ ...prev, status, assigned_employees: assignedEmps }));
-    } catch { toast.error('Fehler beim Aktualisieren'); }
+    } catch { toast.error(t('admin_update_error')); }
   };
 
   const deleteInquiry = async (id) => {
-    if (!window.confirm('Anfrage wirklich loeschen?')) return;
+    if (!window.confirm(t('admin_delete_confirm'))) return;
     try {
       await api.delete(`/admin/inquiries/${id}`);
-      toast.success('Anfrage geloescht');
+      toast.success(t('admin_deleted'));
       load();
       if (selected?.id === id) setSelected(null);
-    } catch { toast.error('Fehler'); }
+    } catch { toast.error(t('admin_error')); }
   };
 
+  const dateFmt = (d) => d ? new Date(d).toLocaleString(lang === 'de' ? 'de-CH' : lang === 'fr' ? 'fr-CH' : lang === 'it' ? 'it-CH' : 'en-GB') : '–';
+
   return (
-    <AdminLayout title="Anfragen">
+    <AdminLayout title={t('admin_inquiries')}>
       <div className="adm-filters" data-testid="inquiry-filters">
         <button className={`adm-filter-btn ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')} data-testid="filter-all">
-          Alle ({inquiries.length})
+          {t('admin_total')} ({inquiries.length})
         </button>
         {STATUS_OPTIONS.map(s => {
           const count = inquiries.filter(i => i.status === s.value).length;
@@ -79,18 +83,18 @@ export default function AdminInquiries() {
           {filtered.length === 0 ? (
             <div className="adm-empty" data-testid="no-inquiries-msg">
               <div className="adm-empty-icon"><Inbox size={22} /></div>
-              Keine Anfragen gefunden.
+              {t('admin_no_inquiries')}
             </div>
           ) : (
             <table className="adm-table" data-testid="inquiries-table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Datum</th>
-                  <th>Typ</th>
-                  <th>Gaeste</th>
-                  <th>Status</th>
-                  <th>Rechnung</th>
+                  <th>{t('admin_name')}</th>
+                  <th>{t('admin_date')}</th>
+                  <th>{t('event_type')}</th>
+                  <th>{t('admin_guests')}</th>
+                  <th>{t('status')}</th>
+                  <th>{t('invoice')}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -141,36 +145,36 @@ export default function AdminInquiries() {
         {selected && (
           <div className="adm-detail" data-testid="inquiry-detail">
             <div className="adm-detail-header">
-              <span className="adm-detail-title">Anfrage Details</span>
+              <span className="adm-detail-title">{t('admin_inquiries')} – {t('admin_edit')}</span>
               <button className="adm-detail-close" onClick={() => setSelected(null)} data-testid="close-detail-btn">&times;</button>
             </div>
             <div className="adm-detail-grid">
               <div>
-                <div className="label">Name</div>
+                <div className="label">{t('admin_name')}</div>
                 <div className="value">{selected.first_name || selected.name || ''} {selected.last_name || ''}</div>
               </div>
-              {selected.company && <div><div className="label">Firma</div><div className="value">{selected.company}</div></div>}
-              <div><div className="label">E-Mail</div><div className="value">{selected.email || '-'}</div></div>
-              <div><div className="label">Telefon</div><div className="value">{selected.phone || '-'}</div></div>
+              {selected.company && <div><div className="label">{t('auth_company')}</div><div className="value">{selected.company}</div></div>}
+              <div><div className="label">{t('auth_email')}</div><div className="value">{selected.email || '-'}</div></div>
+              <div><div className="label">{t('auth_phone')}</div><div className="value">{selected.phone || '-'}</div></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
-                <div><div className="label">Datum</div><div className="value">{selected.event_date || '-'}</div></div>
-                <div><div className="label">Uhrzeit</div><div className="value">{selected.event_time || '-'}</div></div>
+                <div><div className="label">{t('admin_date')}</div><div className="value">{selected.event_date || '-'}</div></div>
+                <div><div className="label">{t('time')}</div><div className="value">{selected.event_time || '-'}</div></div>
               </div>
-              <div><div className="label">Ort</div><div className="value">{selected.location || '-'}</div></div>
+              <div><div className="label">{t('location')}</div><div className="value">{selected.location || '-'}</div></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
-                <div><div className="label">Gaeste</div><div className="value">{selected.guest_count || '-'}</div></div>
-                <div><div className="label">Indoor/Outdoor</div><div className="value">{selected.indoor_outdoor || '-'}</div></div>
+                <div><div className="label">{t('admin_guests')}</div><div className="value">{selected.guest_count || '-'}</div></div>
+                <div><div className="label">{t('indoor_outdoor')}</div><div className="value">{selected.indoor_outdoor || '-'}</div></div>
               </div>
-              <div><div className="label">Eventtyp</div><div className="value">{selected.event_type || selected.concept || '-'}</div></div>
+              <div><div className="label">{t('event_type')}</div><div className="value">{selected.event_type || selected.concept || '-'}</div></div>
               {selected.selected_trucks?.length > 0 && <div><div className="label">Trucks</div><div className="value">{selected.selected_trucks.join(', ')}</div></div>}
               {selected.extras?.length > 0 && <div><div className="label">Extras</div><div className="value">{selected.extras.join(', ')}</div></div>}
-              {selected.budget && <div><div className="label">Budget</div><div className="value">{selected.budget}</div></div>}
-              {selected.remarks && <div><div className="label">Bemerkungen</div><div className="value">{selected.remarks}</div></div>}
-              <div><div className="label">Erstellt</div><div className="value" style={{ color: 'var(--adm-text-muted)' }}>{selected.created_at ? new Date(selected.created_at).toLocaleString('de-CH') : '-'}</div></div>
+              {selected.budget && <div><div className="label">{t('form_budget')}</div><div className="value">{selected.budget}</div></div>}
+              {selected.remarks && <div><div className="label">{t('remarks')}</div><div className="value">{selected.remarks}</div></div>}
+              <div><div className="label">{t('admin_created_at')}</div><div className="value" style={{ color: 'var(--adm-text-muted)' }}>{dateFmt(selected.created_at)}</div></div>
             </div>
 
             <div style={{ marginTop: '1.25rem', borderTop: '1px solid var(--adm-border)', paddingTop: '1rem' }}>
-              <div className="adm-form-label">Status aendern</div>
+              <div className="adm-form-label">{t('status')}</div>
               <div className="adm-filters" style={{ marginBottom: '0.75rem' }}>
                 {STATUS_OPTIONS.map(s => (
                   <button
@@ -187,23 +191,22 @@ export default function AdminInquiries() {
             </div>
 
             <div style={{ marginTop: '0.75rem' }}>
-              <div className="adm-form-label">Interne Notizen</div>
+              <div className="adm-form-label">{t('remarks')}</div>
               <textarea
                 className="adm-textarea"
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
-                placeholder="Interne Notizen..."
+                placeholder={`${t('remarks')}...`}
                 data-testid="internal-notes"
               />
               <button className="adm-btn adm-btn-primary adm-btn-sm" style={{ marginTop: '0.5rem' }} onClick={() => updateStatus(selected.id, selected.status)} data-testid="save-notes-btn">
-                Notizen speichern
+                {t('admin_save')}
               </button>
             </div>
 
-            {/* Employee Assignment */}
             {employees.length > 0 && (
               <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem' }}>
-                <div className="adm-form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Users size={12} /> Personal zuweisen</div>
+                <div className="adm-form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Users size={12} /> {t('admin_employees')}</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', marginTop: '0.3rem' }}>
                   {employees.filter(e => e.is_active !== false).map(emp => (
                     <label key={emp.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', cursor: 'pointer', padding: '0.25rem 0' }}>
@@ -221,14 +224,13 @@ export default function AdminInquiries() {
                   ))}
                 </div>
                 <button className="adm-btn adm-btn-secondary adm-btn-sm" style={{ marginTop: '0.4rem' }} onClick={() => updateStatus(selected.id, selected.status)} data-testid="save-assignment-btn">
-                  Zuweisung speichern
+                  {t('admin_save')}
                 </button>
               </div>
             )}
 
-            {/* Invoice Management */}
             <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem' }}>
-              <div className="adm-form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Receipt size={12} /> Rechnung</div>
+              <div className="adm-form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Receipt size={12} /> {t('invoice')}</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: '0.5rem', marginTop: '0.3rem' }}>
                 <select
                   className="adm-input"
@@ -236,10 +238,10 @@ export default function AdminInquiries() {
                   onChange={async (e) => {
                     try {
                       await api.put(`/admin/inquiries/${selected.id}/invoice`, { invoice_status: e.target.value });
-                      toast.success('Rechnungsstatus aktualisiert');
+                      toast.success(t('admin_status_update'));
                       load();
                       setSelected(prev => ({ ...prev, invoice_status: e.target.value }));
-                    } catch { toast.error('Fehler'); }
+                    } catch { toast.error(t('admin_error')); }
                   }}
                   data-testid="invoice-status-select"
                 >
@@ -262,17 +264,15 @@ export default function AdminInquiries() {
               </div>
             </div>
 
-            {/* Attached Files */}
             <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem' }}>
               <div className="adm-form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', marginBottom: '0.5rem' }}>
-                <Paperclip size={12} /> Dateien ({inquiryFiles.length})
+                <Paperclip size={12} /> {t('portal_files')} ({inquiryFiles.length})
               </div>
               <div className="adm-file-list">
                 <FileUpload inquiryId={selected.id} files={inquiryFiles} onFilesChange={setInquiryFiles} readOnly={false} />
               </div>
             </div>
 
-            {/* Offer PDF */}
             <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem', display: 'flex', gap: '0.5rem' }}>
               <a
                 href={`${process.env.REACT_APP_BACKEND_URL}/api/admin/inquiries/${selected.id}/offer-pdf`}
@@ -281,7 +281,7 @@ export default function AdminInquiries() {
                 style={{ textDecoration: 'none' }}
                 data-testid="download-offer-pdf"
               >
-                <FileDown size={13} /> Offerten-PDF
+                <FileDown size={13} /> PDF
               </a>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { MapPin, Navigation, Clock, Route, Search } from 'lucide-react';
@@ -32,6 +33,7 @@ function FitBounds({ bounds }) {
 }
 
 export default function AdminRoutes() {
+  const { t } = useLanguage();
   const [mapData, setMapData] = useState({ events: [], base: { lat: 47.3231, lon: 8.7994 } });
   const [routeGeo, setRouteGeo] = useState(null);
   const [routeInfo, setRouteInfo] = useState(null);
@@ -99,7 +101,7 @@ export default function AdminRoutes() {
   const statusColors = { confirmed: '#22c55e', offer_sent: '#a855f7', in_review: '#eab308' };
 
   return (
-    <AdminLayout title="Routenplanung">
+    <AdminLayout title={t('admin_routes')}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '1.25rem', alignItems: 'start' }}>
         {/* Map */}
         <div className="adm-detail" style={{ padding: 0, overflow: 'hidden', height: '520px' }} data-testid="route-map">

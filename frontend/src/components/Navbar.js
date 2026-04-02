@@ -1,14 +1,24 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X, User, ChevronDown } from 'lucide-react';
+
+const LANG_LABELS = { de: 'DE', en: 'EN', fr: 'FR', it: 'IT' };
 
 export default function Navbar() {
-  const { lang, setLang, t } = useLanguage();
+  const { lang, setLang, t, SUPPORTED_LANGS } = useLanguage();
   const { user } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const langRef = useRef(null);
   const location = useLocation();
+
+  useEffect(() => {
+    const handler = (e) => { if (langRef.current && !langRef.current.contains(e.target)) setLangOpen(false); };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const links = [
     { to: '/', label: t('nav_home') },
@@ -42,7 +52,7 @@ export default function Navbar() {
         <div className="sf-nav-links">
           {links.map((link) =>
             link.isHash ? (
-              <button key={link.to} onClick={() => handleHashLink('trucks')} className="sf-nav-link" data-testid={`nav-link-trucks`}>
+              <button key={link.to} onClick={() => handleHashLink('trucks')} className="sf-nav-link" data-testid="nav-link-trucks">
                 {link.label}
               </button>
             ) : (
@@ -54,20 +64,36 @@ export default function Navbar() {
         </div>
 
         <div className="sf-nav-actions">
-          <button
-            className="sf-lang-toggle"
-            onClick={() => setLang(lang === 'de' ? 'en' : 'de')}
-            data-testid="language-toggle"
-          >
-            {lang === 'de' ? 'EN' : 'DE'}
-          </button>
+          <div className="sf-lang-dropdown" ref={langRef} data-testid="language-selector">
+            <button
+              className="sf-lang-toggle"
+              onClick={() => setLangOpen(!langOpen)}
+              data-testid="language-toggle"
+            >
+              {LANG_LABELS[lang]} <ChevronDown size={12} style={{ marginLeft: '2px', transition: 'transform 0.2s', transform: langOpen ? 'rotate(180deg)' : 'none' }} />
+            </button>
+            {langOpen && (
+              <div className="sf-lang-menu" data-testid="language-menu">
+                {SUPPORTED_LANGS.map((l) => (
+                  <button
+                    key={l}
+                    className={`sf-lang-option ${l === lang ? 'active' : ''}`}
+                    onClick={() => { setLang(l); setLangOpen(false); }}
+                    data-testid={`lang-option-${l}`}
+                  >
+                    {LANG_LABELS[l]}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           {user && user.role !== 'admin' ? (
             <Link to="/konto" className="sf-nav-account" data-testid="nav-account-btn">
-              <User size={15} /> {lang === 'de' ? 'Mein Konto' : 'My Account'}
+              <User size={15} /> {t('nav_account')}
             </Link>
           ) : !user ? (
             <Link to="/konto/login" className="sf-nav-account" data-testid="nav-login-btn">
-              <User size={15} /> {lang === 'de' ? 'Anmelden' : 'Login'}
+              <User size={15} /> {t('nav_login')}
             </Link>
           ) : null}
           <Link to="/anfrage" className="sf-nav-cta" data-testid="nav-cta-button">
@@ -96,6 +122,18 @@ export default function Navbar() {
               </Link>
             )
           )}
+          <div className="sf-mobile-lang" data-testid="mobile-lang-selector">
+            {SUPPORTED_LANGS.map((l) => (
+              <button
+                key={l}
+                className={`sf-mobile-lang-btn ${l === lang ? 'active' : ''}`}
+                onClick={() => { setLang(l); }}
+                data-testid={`mobile-lang-${l}`}
+              >
+                {LANG_LABELS[l]}
+              </button>
+            ))}
+          </div>
           <Link to="/anfrage" className="sf-btn-primary" style={{ width: '100%', textAlign: 'center', marginTop: '1rem' }} onClick={() => setMobileOpen(false)}>
             {t('nav_cta')}
           </Link>

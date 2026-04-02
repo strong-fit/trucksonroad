@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Save, Plus, Trash2, Users, Edit2 } from 'lucide-react';
 
 export default function AdminEmployees() {
+  const { t } = useLanguage();
   const [employees, setEmployees] = useState([]);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: '', phone: '', role: '', notes: '', is_active: true });
@@ -49,7 +51,7 @@ export default function AdminEmployees() {
   };
 
   return (
-    <AdminLayout title="Personal">
+    <AdminLayout title={t('admin_employees')}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
         <p style={{ color: 'var(--adm-text-secondary)', fontSize: '0.85rem' }}>{employees.length} Mitarbeiter</p>
         <button className="adm-btn adm-btn-primary" onClick={startNew} data-testid="add-employee-btn">

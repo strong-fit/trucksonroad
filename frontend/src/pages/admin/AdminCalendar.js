@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Calendar } from '@/components/ui/calendar';
@@ -8,6 +9,7 @@ import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 
 export default function AdminCalendar() {
+  const { t } = useLanguage();
   const [trucks, setTrucks] = useState([]);
   const [blocks, setBlocks] = useState([]);
   const [selectedTruck, setSelectedTruck] = useState('');
@@ -57,7 +59,7 @@ export default function AdminCalendar() {
   };
 
   return (
-    <AdminLayout title="Kalender">
+    <AdminLayout title={t('admin_calendar')}>
       <div className="adm-filters" style={{ marginBottom: '1.25rem' }} data-testid="calendar-truck-selector">
         {trucks.map(t => (
           <button

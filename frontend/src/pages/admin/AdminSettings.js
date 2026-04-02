@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Save, Send, Building2, Server, Eye, Download, Instagram, Plus, Trash2, Globe, Facebook, Linkedin, Zap } from 'lucide-react';
 
 export default function AdminSettings() {
+  const { t } = useLanguage();
   const [settings, setSettings] = useState(null);
   const [saving, setSaving] = useState(false);
   const [testEmail, setTestEmail] = useState('');
@@ -44,10 +46,10 @@ export default function AdminSettings() {
 
   const update = (key, value) => setSettings(prev => ({ ...prev, [key]: value }));
 
-  if (!settings) return <AdminLayout title="Einstellungen"><div className="adm-empty">Laden...</div></AdminLayout>;
+  if (!settings) return <AdminLayout title={t('admin_settings')}><div className="adm-empty">{t('loading')}</div></AdminLayout>;
 
   return (
-    <AdminLayout title="Einstellungen">
+    <AdminLayout title={t('admin_settings')}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', alignItems: 'start' }}>
         <div className="adm-detail" data-testid="settings-company">
           <div className="adm-detail-header" style={{ borderBottom: '1px solid var(--adm-border)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>

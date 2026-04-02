@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { DollarSign, TrendingUp, TrendingDown, BarChart3, Save } from 'lucide-react';
 
 export default function AdminFinance() {
+  const { t } = useLanguage();
   const [overview, setOverview] = useState(null);
   const [inquiries, setInquiries] = useState([]);
   const [editing, setEditing] = useState(null);
@@ -37,7 +39,7 @@ export default function AdminFinance() {
   const fmt = (n) => `CHF ${(n || 0).toLocaleString('de-CH', { minimumFractionDigits: 0 })}`;
 
   return (
-    <AdminLayout title="Finanzen">
+    <AdminLayout title={t('admin_finance')}>
       {overview && (
         <div className="adm-stats" data-testid="finance-stats">
           <div className="adm-stat-card">

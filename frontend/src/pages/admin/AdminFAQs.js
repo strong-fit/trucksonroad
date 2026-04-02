@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Save, Plus, Trash2, GripVertical, HelpCircle } from 'lucide-react';
 
 export default function AdminFAQs() {
+  const { t } = useLanguage();
   const [faqs, setFaqs] = useState([]);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ question_de: '', answer_de: '', question_en: '', answer_en: '', order: 0 });
@@ -49,7 +51,7 @@ export default function AdminFAQs() {
   };
 
   return (
-    <AdminLayout title="FAQ Verwaltung">
+    <AdminLayout title={t('admin_faqs')}>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
         <button className="adm-btn adm-btn-primary" onClick={startNew} data-testid="add-faq-btn">
           <Plus size={15} /> Neue FAQ

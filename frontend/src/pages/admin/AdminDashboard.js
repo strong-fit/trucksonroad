@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import {
   LayoutDashboard, FileText, CalendarDays, Truck, LogOut,
@@ -10,22 +11,23 @@ import {
 
 function AdminLayout({ children, title }) {
   const { logout } = useAuth();
+  const { t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const navItems = [
-    { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/admin/anfragen', icon: FileText, label: 'Anfragen' },
-    { to: '/admin/kalender', icon: CalendarDays, label: 'Kalender' },
-    { to: '/admin/trucks', icon: Truck, label: 'Trucks' },
-    { to: '/admin/personal', icon: Users, label: 'Personal' },
-    { to: '/admin/finanzen', icon: DollarSign, label: 'Finanzen' },
-    { to: '/admin/routen', icon: MapPin, label: 'Routen' },
-    { to: '/admin/bewertungen', icon: Star, label: 'Bewertungen' },
-    { to: '/admin/faqs', icon: HelpCircle, label: 'FAQ' },
-    { to: '/admin/export', icon: Download, label: 'Export' },
-    { to: '/admin/einstellungen', icon: Settings, label: 'Einstellungen' },
+    { to: '/admin', icon: LayoutDashboard, label: t('admin_dashboard') },
+    { to: '/admin/anfragen', icon: FileText, label: t('admin_inquiries') },
+    { to: '/admin/kalender', icon: CalendarDays, label: t('admin_calendar') },
+    { to: '/admin/trucks', icon: Truck, label: t('admin_trucks') },
+    { to: '/admin/personal', icon: Users, label: t('admin_employees') },
+    { to: '/admin/finanzen', icon: DollarSign, label: t('admin_finance') },
+    { to: '/admin/routen', icon: MapPin, label: t('admin_routes') },
+    { to: '/admin/bewertungen', icon: Star, label: t('admin_reviews') },
+    { to: '/admin/faqs', icon: HelpCircle, label: t('admin_faqs') },
+    { to: '/admin/export', icon: Download, label: t('admin_export') },
+    { to: '/admin/einstellungen', icon: Settings, label: t('admin_settings') },
   ];
 
   const handleLogout = async () => {
@@ -47,13 +49,13 @@ function AdminLayout({ children, title }) {
         </div>
         <nav className="adm-nav">
           <div className="adm-nav-section">
-            <div className="adm-nav-section-label">Navigation</div>
+            <div className="adm-nav-section-label">{t('admin_navigation')}</div>
             {navItems.map(item => (
               <Link
                 key={item.to}
                 to={item.to}
                 className={`adm-nav-link ${location.pathname === item.to ? 'active' : ''}`}
-                data-testid={`admin-nav-${item.label.toLowerCase()}`}
+                data-testid={`admin-nav-${item.to.split('/').pop()}`}
                 onClick={() => setSidebarOpen(false)}
               >
                 <item.icon size={18} className="adm-nav-icon" />
@@ -64,10 +66,10 @@ function AdminLayout({ children, title }) {
         </nav>
         <div className="adm-sidebar-footer">
           <Link to="/" className="adm-nav-link" data-testid="admin-nav-website" onClick={() => setSidebarOpen(false)}>
-            <ExternalLink size={16} className="adm-nav-icon" /> Zur Webseite
+            <ExternalLink size={16} className="adm-nav-icon" /> {t('admin_go_website')}
           </Link>
           <button className="adm-nav-link" onClick={handleLogout} data-testid="admin-logout-btn">
-            <LogOut size={16} className="adm-nav-icon" /> Abmelden
+            <LogOut size={16} className="adm-nav-icon" /> {t('admin_logout')}
           </button>
         </div>
       </aside>
@@ -83,7 +85,7 @@ function AdminLayout({ children, title }) {
           <div className="adm-topbar-right">
             <div className="adm-search" data-testid="admin-search">
               <Search size={14} />
-              <input type="text" placeholder="Suchen..." />
+              <input type="text" placeholder={`${t('admin_search')}...`} />
             </div>
             <div className="adm-user-pill" data-testid="admin-user-pill">
               <div className="adm-user-avatar">TR</div>
@@ -102,6 +104,7 @@ function AdminLayout({ children, title }) {
 export { AdminLayout };
 
 export default function AdminDashboard() {
+  const { t, lang } = useLanguage();
   const [stats, setStats] = useState({ total_inquiries: 0, new_inquiries: 0, confirmed: 0, total_trucks: 0 });
   const [recentInquiries, setRecentInquiries] = useState([]);
 
@@ -110,34 +113,38 @@ export default function AdminDashboard() {
     api.get('/admin/inquiries').then(r => setRecentInquiries(r.data.slice(0, 5))).catch(() => {});
   }, []);
 
-  const statusMap = { new: 'Neu', in_review: 'In Pruefung', offer_sent: 'Offerte', confirmed: 'Bestaetigt', cancelled: 'Abgesagt' };
+  const statusLabels = {
+    new: t('status_new'), in_review: t('status_in_review'), offer_sent: t('status_offer_sent'),
+    confirmed: t('status_confirmed'), cancelled: t('status_cancelled'), completed: t('status_completed'),
+  };
+  const dateFmt = (d) => d ? new Date(d).toLocaleDateString(lang === 'de' ? 'de-CH' : lang === 'fr' ? 'fr-CH' : lang === 'it' ? 'it-CH' : 'en-GB') : '–';
 
   return (
-    <AdminLayout title="Dashboard">
+    <AdminLayout title={t('admin_dashboard')}>
       <div className="adm-stats" data-testid="admin-stats">
         <div className="adm-stat-card" data-testid="stat-card-total">
-          <div className="adm-stat-label">Anfragen Gesamt</div>
+          <div className="adm-stat-label">{t('admin_total_inquiries')}</div>
           <div className="adm-stat-row">
             <div className="adm-stat-num" data-testid="stat-total">{stats.total_inquiries}</div>
             <div className="adm-stat-icon gold"><Inbox size={18} /></div>
           </div>
         </div>
         <div className="adm-stat-card" data-testid="stat-card-new">
-          <div className="adm-stat-label">Neue Anfragen</div>
+          <div className="adm-stat-label">{t('admin_new_inquiries')}</div>
           <div className="adm-stat-row">
             <div className="adm-stat-num" data-testid="stat-new">{stats.new_inquiries}</div>
             <div className="adm-stat-icon blue"><Clock size={18} /></div>
           </div>
         </div>
         <div className="adm-stat-card" data-testid="stat-card-confirmed">
-          <div className="adm-stat-label">Bestaetigt</div>
+          <div className="adm-stat-label">{t('admin_confirmed_inquiries')}</div>
           <div className="adm-stat-row">
             <div className="adm-stat-num" data-testid="stat-confirmed">{stats.confirmed}</div>
             <div className="adm-stat-icon green"><CheckCircle2 size={18} /></div>
           </div>
         </div>
         <div className="adm-stat-card" data-testid="stat-card-trucks">
-          <div className="adm-stat-label">Aktive Trucks</div>
+          <div className="adm-stat-label">{t('admin_active_trucks')}</div>
           <div className="adm-stat-row">
             <div className="adm-stat-num" data-testid="stat-trucks">{stats.total_trucks}</div>
             <div className="adm-stat-icon purple"><Truck size={18} /></div>
@@ -147,26 +154,26 @@ export default function AdminDashboard() {
 
       <div className="adm-table-wrap" data-testid="recent-inquiries-section">
         <div className="adm-table-header">
-          <span className="adm-table-title">Letzte Anfragen</span>
+          <span className="adm-table-title">{t('admin_recent')}</span>
           <Link to="/admin/anfragen" className="adm-btn adm-btn-secondary adm-btn-sm" data-testid="view-all-inquiries-link">
-            Alle anzeigen
+            {t('admin_show_all')}
           </Link>
         </div>
         {recentInquiries.length === 0 ? (
           <div className="adm-empty" data-testid="no-inquiries-msg">
             <div className="adm-empty-icon"><Inbox size={22} /></div>
-            Noch keine Anfragen vorhanden.
+            {t('admin_no_inquiries')}
           </div>
         ) : (
           <table className="adm-table" data-testid="recent-inquiries-table">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Datum</th>
-                <th>Event</th>
-                <th>Gaeste</th>
-                <th>Status</th>
-                <th>Erstellt</th>
+                <th>{t('admin_name')}</th>
+                <th>{t('admin_date')}</th>
+                <th>{t('admin_event')}</th>
+                <th>{t('admin_guests')}</th>
+                <th>{t('status')}</th>
+                <th>{t('admin_created_at')}</th>
               </tr>
             </thead>
             <tbody>
@@ -179,10 +186,10 @@ export default function AdminDashboard() {
                   <td>
                     <span className={`adm-badge adm-badge-${inq.status}`}>
                       <span className="adm-badge-dot" />
-                      {statusMap[inq.status] || inq.status}
+                      {statusLabels[inq.status] || inq.status}
                     </span>
                   </td>
-                  <td style={{ color: 'var(--adm-text-muted)' }}>{inq.created_at ? new Date(inq.created_at).toLocaleDateString('de-CH') : '-'}</td>
+                  <td style={{ color: 'var(--adm-text-muted)' }}>{dateFmt(inq.created_at)}</td>
                 </tr>
               ))}
             </tbody>

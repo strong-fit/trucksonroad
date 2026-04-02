@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Save, Truck, ChevronDown, ChevronUp } from 'lucide-react';
 
 export default function AdminTrucks() {
+  const { t } = useLanguage();
   const [trucks, setTrucks] = useState([]);
   const [expanded, setExpanded] = useState(null);
 
@@ -49,7 +51,7 @@ export default function AdminTrucks() {
   };
 
   return (
-    <AdminLayout title="Trucks">
+    <AdminLayout title={t('admin_trucks')}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {trucks.map(truck => (
           <div key={truck.slug} className="adm-detail" data-testid={`truck-card-${truck.slug}`} style={{ padding: 0, overflow: 'hidden' }}>

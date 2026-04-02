@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 import { Star, Plus, Trash2, Save, Eye, EyeOff } from 'lucide-react';
@@ -25,6 +26,7 @@ function StarRating({ value, onChange, size = 18 }) {
 }
 
 export default function AdminReviews() {
+  const { t } = useLanguage();
   const [reviews, setReviews] = useState([]);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ author: '', rating: 5, text: '', date: '', event_type: '', is_active: true });
@@ -83,7 +85,7 @@ export default function AdminReviews() {
   };
 
   return (
-    <AdminLayout title="Bewertungen">
+    <AdminLayout title={t('admin_reviews')}>
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '1.25rem' }}>
         <div className="adm-detail" style={{ padding: '1rem', textAlign: 'center' }} data-testid="reviews-total">
