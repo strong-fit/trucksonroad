@@ -5,22 +5,21 @@ import { Gift, Building2, Heart, PartyPopper, Trophy, CalendarDays } from 'lucid
 const BOWL_IMG = "https://customer-assets.emergentagent.com/job_c07f57bf-6530-44da-b908-62d9516a565b/artifacts/9fk5box5_Bildschirmfoto%202026-03-25%20um%2023.23.44.png";
 
 export default function PrivateEventsPage() {
-  const { lang, t } = useLanguage();
-  const isDE = lang === 'de';
+  const { t } = useLanguage();
 
   const eventTypes = [
-    { icon: <Gift size={20} />, name: isDE ? 'Geburtstag' : 'Birthday' },
-    { icon: <Heart size={20} />, name: isDE ? 'Hochzeit' : 'Wedding' },
-    { icon: <Building2 size={20} />, name: isDE ? 'Firmenfeier' : 'Corporate Party' },
-    { icon: <PartyPopper size={20} />, name: isDE ? 'Eröffnung' : 'Opening' },
-    { icon: <Trophy size={20} />, name: isDE ? 'Vereinsanlass' : 'Club Event' },
-    { icon: <CalendarDays size={20} />, name: isDE ? 'Kundenevent' : 'Client Event' },
+    { icon: <Gift size={20} />, name: t('priv_type_1') },
+    { icon: <Heart size={20} />, name: t('priv_type_2') },
+    { icon: <Building2 size={20} />, name: t('priv_type_3') },
+    { icon: <PartyPopper size={20} />, name: t('priv_type_4') },
+    { icon: <Trophy size={20} />, name: t('priv_type_5') },
+    { icon: <CalendarDays size={20} />, name: t('priv_type_6') },
   ];
 
   const steps = [
-    { num: '1', title: isDE ? 'Anfrage' : 'Inquiry', text: isDE ? 'Füllt unser Formular aus mit euren Wünschen und Details.' : 'Fill out our form with your wishes and details.' },
-    { num: '2', title: isDE ? 'Angebot' : 'Offer', text: isDE ? 'Wir prüfen und senden euch eine massgeschneiderte Offerte.' : 'We review and send you a tailored offer.' },
-    { num: '3', title: isDE ? 'Bestätigung' : 'Confirmation', text: isDE ? 'Nach Bestätigung planen wir alles für euren Anlass.' : 'After confirmation, we plan everything for your event.' },
+    { num: '1', title: t('priv_step_1_title'), text: t('priv_step_1_text') },
+    { num: '2', title: t('priv_step_2_title'), text: t('priv_step_2_text') },
+    { num: '3', title: t('priv_step_3_title'), text: t('priv_step_3_text') },
   ];
 
   return (
@@ -33,8 +32,8 @@ export default function PrivateEventsPage() {
       </div>
 
       <section className="sf-section">
-        <div className="sf-section-tag">{isDE ? 'Anlässe' : 'Event Types'}</div>
-        <h2 className="sf-section-title">{isDE ? 'Für diese Anlässe\nsind wir bereit.' : 'We\'re ready for\nthese occasions.'}</h2>
+        <div className="sf-section-tag">{t('priv_events_tag')}</div>
+        <h2 className="sf-section-title">{t('priv_events_title')}</h2>
         <div className="sf-info-grid">
           {eventTypes.map((ev, i) => (
             <div key={i} className="sf-info-card" data-testid={`event-type-${i}`} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.5rem' }}>
@@ -46,8 +45,8 @@ export default function PrivateEventsPage() {
       </section>
 
       <section className="sf-section" style={{ paddingTop: 0 }}>
-        <div className="sf-section-tag">{isDE ? 'So funktioniert es' : 'How it works'}</div>
-        <h2 className="sf-section-title">{isDE ? 'In 3 Schritten\nzu eurem Event.' : 'Your event\nin 3 steps.'}</h2>
+        <div className="sf-section-tag">{t('priv_steps_tag')}</div>
+        <h2 className="sf-section-title">{t('priv_steps_title')}</h2>
         <div className="sf-process">
           {steps.map((step, i) => (
             <div key={i} className="sf-process-step" data-testid={`process-step-${i}`}>
@@ -62,15 +61,15 @@ export default function PrivateEventsPage() {
       <section className="sf-section" style={{ paddingTop: 0 }}>
         <div className="sf-whom">
           <div>
-            <div className="sf-section-tag">{isDE ? 'Gut zu wissen' : 'Good to know'}</div>
-            <h2 className="sf-section-title" style={{ fontSize: '1.8rem' }}>{isDE ? 'Was ihr wissen\nmüsst' : 'What you need\nto know'}</h2>
+            <div className="sf-section-tag">{t('priv_know_tag')}</div>
+            <h2 className="sf-section-title" style={{ fontSize: '1.8rem' }}>{t('priv_know_title')}</h2>
             <ul className="sf-truck-list" style={{ marginTop: '1.5rem' }}>
-              <li>{isDE ? 'Buchung ab ca. 50 Gästen' : 'Booking from approx. 50 guests'}</li>
-              <li>{isDE ? 'Individuell kalkuliert nach Konzept und Ort' : 'Individually calculated by concept and location'}</li>
-              <li>{isDE ? 'Mindestens 4–8 Wochen im Voraus buchen' : 'Book at least 4-8 weeks in advance'}</li>
-              <li>{isDE ? 'Menü individuell anpassbar' : 'Menu individually customizable'}</li>
-              <li>{isDE ? 'Einsatzgebiet: Ganze Schweiz' : 'Service area: All of Switzerland'}</li>
-              <li>{isDE ? 'Vegetarische und vegane Optionen verfügbar' : 'Vegetarian and vegan options available'}</li>
+              <li>{t('priv_know_1')}</li>
+              <li>{t('priv_know_2')}</li>
+              <li>{t('priv_know_3')}</li>
+              <li>{t('priv_know_4')}</li>
+              <li>{t('priv_know_5')}</li>
+              <li>{t('priv_know_6')}</li>
             </ul>
           </div>
           <div className="sf-whom-visual">
@@ -80,10 +79,8 @@ export default function PrivateEventsPage() {
       </section>
 
       <section className="sf-cta">
-        <div className="sf-cta-eyebrow">{isDE ? 'Bereit für euren Anlass?' : 'Ready for your event?'}</div>
-        <h2 className="sf-cta-title">
-          {isDE ? 'Jetzt unverbindlich anfragen.' : 'Inquire without obligation.'}
-        </h2>
+        <div className="sf-cta-eyebrow">{t('priv_cta_eyebrow')}</div>
+        <h2 className="sf-cta-title">{t('priv_cta_title')}</h2>
         <div className="sf-cta-actions">
           <Link to="/anfrage" className="sf-btn-primary">{t('nav_cta')}</Link>
           <Link to="/faq" className="sf-btn-outline">{t('cta_btn_faq')}</Link>

@@ -17,9 +17,7 @@ export default function FAQPage() {
         <div className="sf-section-tag">{t('faq_tag')}</div>
         <h1 className="sf-section-title" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>{t('faq_title')}</h1>
         <p className="sf-page-hero-desc">
-          {lang === 'de'
-            ? 'Hier findest du Antworten auf die häufigsten Fragen rund um unsere Foodtrucks, Buchungen und Abläufe.'
-            : 'Here you will find answers to the most common questions about our food trucks, bookings, and processes.'}
+          {t('faq_desc')}
         </p>
       </div>
       <section className="sf-section" style={{ paddingTop: '2rem' }}>

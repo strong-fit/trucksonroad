@@ -192,9 +192,9 @@ export default function HomePage() {
         <section className="sf-section" data-testid="reviews-section">
           <div className="sf-section-inner">
             <FadeUp>
-              <div className="sf-section-tag">{lang === 'de' ? 'Kundenstimmen' : 'Testimonials'}</div>
+              <div className="sf-section-tag">{t('reviews_tag')}</div>
               <h2 className="sf-section-title" style={{ marginBottom: '0.5rem' }}>
-                {lang === 'de' ? 'Was unsere Kunden sagen' : 'What our clients say'}
+                {t('reviews_title')}
               </h2>
               {(() => {
                 const avg = (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1);
@@ -205,7 +205,7 @@ export default function HomePage() {
                         <Star key={s} size={18} style={{ fill: s <= Math.round(parseFloat(avg)) ? '#e8b931' : 'transparent', color: s <= Math.round(parseFloat(avg)) ? '#e8b931' : '#555' }} />
                       ))}
                     </div>
-                    <span style={{ fontSize: '0.9rem' }}>{avg} / 5 ({reviews.length} {lang === 'de' ? 'Bewertungen' : 'Reviews'})</span>
+                    <span style={{ fontSize: '0.9rem' }}>{avg} / 5 ({reviews.length} {t('reviews_count')})</span>
                   </div>
                 );
               })()}
@@ -239,7 +239,7 @@ export default function HomePage() {
       {instaData.images.length > 0 && (
         <section className="sf-section" data-testid="instagram-section">
           <div className="sf-section-inner">
-            <div className="sf-tag">{lang === 'de' ? 'Folge uns' : 'Follow us'}</div>
+            <div className="sf-tag">{t('instagram_tag')}</div>
             <h2 className="sf-section-title">
               <Instagram size={28} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '0.5rem', color: 'var(--sf-gold)' }} />
               {instaData.username ? `@${instaData.username}` : 'Instagram'}
@@ -254,7 +254,7 @@ export default function HomePage() {
             {instaData.username && (
               <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
                 <a href={`https://instagram.com/${instaData.username}`} target="_blank" rel="noopener noreferrer" className="sf-btn-outline" style={{ textDecoration: 'none' }}>
-                  <Instagram size={16} style={{ marginRight: '0.4rem' }} /> {lang === 'de' ? 'Auf Instagram folgen' : 'Follow on Instagram'}
+                  <Instagram size={16} style={{ marginRight: '0.4rem' }} /> {t('instagram_follow')}
                 </a>
               </div>
             )}

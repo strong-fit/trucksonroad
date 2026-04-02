@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { Calendar } from '@/components/ui/calendar';
 import { Mail, Phone, MapPin, Upload } from 'lucide-react';
 import { format } from 'date-fns';
-import { de } from 'date-fns/locale';
+import { de, fr, it } from 'date-fns/locale';
 import FileUpload from '@/components/FileUpload';
 
 const TRUCK_OPTIONS = ["Burger Truck", "Chicken Burger", "Bowl Truck", "Pocket Bowl", "Empanadas", "Retro Trailer", "Mehrere Trucks"];
@@ -46,7 +46,7 @@ export default function InquiryPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.privacy_accepted) { toast.error(lang === 'de' ? 'Bitte Datenschutz akzeptieren' : 'Please accept privacy policy'); return; }
+    if (!form.privacy_accepted) { toast.error(t('form_privacy_error')); return; }
     setSubmitting(true);
     try {
       const res = await api.post('/inquiries', {
@@ -61,7 +61,7 @@ export default function InquiryPage() {
       setInquiryId(res.data.id);
       setSubmitted(true);
     } catch (err) {
-      toast.error(lang === 'de' ? 'Fehler beim Senden' : 'Error sending inquiry');
+      toast.error(t('form_send_error'));
     } finally {
       setSubmitting(false);
     }
@@ -84,17 +84,17 @@ export default function InquiryPage() {
     return (
       <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }} data-testid="inquiry-success">
         <h2 className="sf-section-title" style={{ textAlign: 'center', marginBottom: '1rem' }}>
-          {lang === 'de' ? 'Vielen Dank!' : 'Thank you!'}
+          {t('form_thank_you')}
         </h2>
         <p style={{ color: 'var(--sf-gray)', textAlign: 'center', maxWidth: 500 }}>{t('form_success')}</p>
 
         {inquiryId && (
           <div style={{ width: '100%', maxWidth: 500, marginTop: '2rem' }} data-testid="inquiry-upload-section">
             <h3 style={{ color: 'var(--sf-cream)', fontSize: '1rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <Upload size={18} /> {lang === 'de' ? 'Dateien hochladen (optional)' : 'Upload files (optional)'}
+              <Upload size={18} /> {t('form_upload_title')}
             </h3>
             <p style={{ color: 'var(--sf-gray)', fontSize: '0.82rem', marginBottom: '1rem' }}>
-              {lang === 'de' ? 'Event-Pläne, Logos, Grundrisse oder andere Dokumente.' : 'Event plans, logos, floor plans or other documents.'}
+              {t('form_upload_desc')}
             </p>
             <FileUpload inquiryId={inquiryId} files={uploadedFiles} onFilesChange={setUploadedFiles} />
           </div>
@@ -102,16 +102,16 @@ export default function InquiryPage() {
 
         {user && user.role === 'customer' && (
           <Link to="/konto" className="sf-btn-primary" style={{ marginTop: '1.5rem', textDecoration: 'none' }} data-testid="go-to-portal-btn">
-            {lang === 'de' ? 'Zum Kundenportal' : 'Go to Portal'}
+            {t('form_go_portal')}
           </Link>
         )}
         {!user && (
           <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
             <p style={{ color: 'var(--sf-gray)', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
-              {lang === 'de' ? 'Erstelle ein Konto, um den Status deiner Anfrage zu verfolgen:' : 'Create an account to track your inquiry:'}
+              {t('form_register_hint')}
             </p>
             <Link to="/konto/registrieren" className="sf-btn-outline" style={{ textDecoration: 'none' }} data-testid="register-after-inquiry">
-              {lang === 'de' ? 'Konto erstellen' : 'Create Account'}
+              {t('form_register_btn')}
             </Link>
           </div>
         )}
@@ -131,14 +131,14 @@ export default function InquiryPage() {
         <div className="sf-form-info">
           <div className="sf-section-tag">{t('avail_tag')}</div>
           <h3 className="sf-section-title" style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>
-            {lang === 'de' ? 'Datum wählen' : 'Choose date'}
+            {t('form_choose_date')}
           </h3>
           <div style={{ background: 'var(--sf-surface)', border: '1px solid var(--sf-border)', borderRadius: '12px', padding: '1rem', display: 'inline-block' }}>
             <Calendar
               mode="single"
               selected={selectedDate}
               onSelect={setSelectedDate}
-              locale={lang === 'de' ? de : undefined}
+              locale={lang === 'de' ? de : lang === 'fr' ? fr : lang === 'it' ? it : undefined}
               modifiers={dayModifiers}
               modifiersStyles={dayModifiersStyles}
               disabled={{ before: new Date() }}
@@ -186,7 +186,7 @@ export default function InquiryPage() {
           <div className="sf-form-row">
             <div className="sf-form-group">
               <label>{t('form_date')} *</label>
-              <input type="text" readOnly value={selectedDate ? format(selectedDate, 'dd.MM.yyyy') : ''} placeholder={lang === 'de' ? 'Im Kalender wählen' : 'Select in calendar'} data-testid="input-date" />
+              <input type="text" readOnly value={selectedDate ? format(selectedDate, 'dd.MM.yyyy') : ''} placeholder={t('form_select_calendar')} data-testid="input-date" />
             </div>
             <div className="sf-form-group">
               <label>{t('form_time')}</label>
@@ -206,7 +206,7 @@ export default function InquiryPage() {
           <div className="sf-form-group">
             <label>{t('form_event_type')} *</label>
             <select required value={form.event_type} onChange={e => setForm({...form, event_type: e.target.value})} data-testid="select-event-type">
-              <option value="">{lang === 'de' ? 'Bitte wählen...' : 'Please select...'}</option>
+              <option value="">{t('form_please_select')}</option>
               {t('form_event_types').map(type => <option key={type} value={type}>{type}</option>)}
             </select>
           </div>
@@ -244,7 +244,7 @@ export default function InquiryPage() {
           </div>
           <div className="sf-form-group">
             <label>{t('form_remarks')}</label>
-            <textarea value={form.remarks} onChange={e => setForm({...form, remarks: e.target.value})} placeholder={lang === 'de' ? 'Weitere Infos zum Event...' : 'More event info...'} data-testid="input-remarks" />
+            <textarea value={form.remarks} onChange={e => setForm({...form, remarks: e.target.value})} placeholder={t('form_more_info')} data-testid="input-remarks" />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <label className="sf-form-check">
@@ -257,7 +257,7 @@ export default function InquiryPage() {
             </label>
           </div>
           <button type="submit" className="sf-btn-primary" style={{ width: '100%', marginTop: '0.5rem' }} disabled={submitting} data-testid="submit-inquiry-btn">
-            {submitting ? (lang === 'de' ? 'Wird gesendet...' : 'Sending...') : t('form_submit')} &rarr;
+            {submitting ? t('form_sending') : t('form_submit')} &rarr;
           </button>
         </form>
       </div>

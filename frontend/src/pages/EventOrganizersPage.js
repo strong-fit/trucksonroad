@@ -5,16 +5,15 @@ import { Zap, Users, Shield, Eye, Clock, Truck } from 'lucide-react';
 const TRUCK_IMG = "https://customer-assets.emergentagent.com/job_c07f57bf-6530-44da-b908-62d9516a565b/artifacts/apahq84l_Bildschirmfoto%202026-03-23%20um%2017.15.39.png";
 
 export default function EventOrganizersPage() {
-  const { lang, t } = useLanguage();
-  const isDE = lang === 'de';
+  const { t } = useLanguage();
 
   const features = [
-    { icon: <Zap size={20} />, title: isDE ? 'Schnelle Ausgabe' : 'Fast Service', text: isDE ? 'Bis zu 300 Gäste pro Stunde – keine Staus, keine langen Wartezeiten.' : 'Up to 300 guests per hour – no queues, no long waiting times.' },
-    { icon: <Users size={20} />, title: isDE ? 'Erfahrenes Team' : 'Experienced Team', text: isDE ? 'Professionelles, eingespieltes Personal für reibungslose Abläufe.' : 'Professional, well-coordinated staff for smooth operations.' },
-    { icon: <Shield size={20} />, title: isDE ? 'Saubere Abläufe' : 'Clean Processes', text: isDE ? 'Klare Strukturen von Aufbau bis Abbau – ihr könnt euch auf uns verlassen.' : 'Clear structures from setup to teardown – you can rely on us.' },
-    { icon: <Eye size={20} />, title: isDE ? 'Auffällige Optik' : 'Eye-catching Look', text: isDE ? 'Unsere Trucks sind ein Hingucker und machen jedes Event besonders.' : 'Our trucks are eye-catchers and make every event special.' },
-    { icon: <Truck size={20} />, title: isDE ? 'Mehrere Konzepte' : 'Multiple Concepts', text: isDE ? '6 spezialisierte Trucks – kombinierbar für maximale Vielfalt.' : '6 specialized trucks – combinable for maximum variety.' },
-    { icon: <Clock size={20} />, title: isDE ? 'Zuverlässig' : 'Reliable', text: isDE ? 'Pünktlicher Aufbau, professionelle Durchführung, sauberer Abbau.' : 'Punctual setup, professional execution, clean teardown.' },
+    { icon: <Zap size={20} />, title: t('org_feat_1_title'), text: t('org_feat_1_text') },
+    { icon: <Users size={20} />, title: t('org_feat_2_title'), text: t('org_feat_2_text') },
+    { icon: <Shield size={20} />, title: t('org_feat_3_title'), text: t('org_feat_3_text') },
+    { icon: <Eye size={20} />, title: t('org_feat_4_title'), text: t('org_feat_4_text') },
+    { icon: <Truck size={20} />, title: t('org_feat_5_title'), text: t('org_feat_5_text') },
+    { icon: <Clock size={20} />, title: t('org_feat_6_title'), text: t('org_feat_6_text') },
   ];
 
   return (
@@ -27,8 +26,8 @@ export default function EventOrganizersPage() {
       </div>
 
       <section className="sf-section">
-        <div className="sf-section-tag">{isDE ? 'Warum Veranstalter uns wählen' : 'Why organizers choose us'}</div>
-        <h2 className="sf-section-title">{isDE ? 'Eventbereit.\nProfessionell.' : 'Event-ready.\nProfessional.'}</h2>
+        <div className="sf-section-tag">{t('org_why_tag')}</div>
+        <h2 className="sf-section-title">{t('org_why_title')}</h2>
         <div className="sf-info-grid">
           {features.map((f, i) => (
             <div key={i} className="sf-info-card" data-testid={`org-feature-${i}`}>
@@ -45,22 +44,22 @@ export default function EventOrganizersPage() {
       <section className="sf-section" style={{ paddingTop: 0 }}>
         <div className="sf-whom" style={{ gap: '3rem' }}>
           <div>
-            <div className="sf-section-tag">{isDE ? 'Technische Daten' : 'Technical Data'}</div>
-            <h2 className="sf-section-title" style={{ fontSize: '1.8rem' }}>{isDE ? 'Was Veranstalter\nwissen müssen' : 'What organizers\nneed to know'}</h2>
+            <div className="sf-section-tag">{t('org_tech_tag')}</div>
+            <h2 className="sf-section-title" style={{ fontSize: '1.8rem' }}>{t('org_tech_title')}</h2>
             <ul className="sf-truck-list" style={{ marginTop: '1.5rem' }}>
-              <li>{isDE ? 'Platzbedarf: 4–6m x 2.5–3m je Truck' : 'Space: 4-6m x 2.5-3m per truck'}</li>
-              <li>{isDE ? 'Strom: 230V / 16A pro Truck' : 'Power: 230V / 16A per truck'}</li>
-              <li>{isDE ? 'Wasser: Je nach Konzept' : 'Water: Depends on concept'}</li>
-              <li>{isDE ? 'Aufbauzeit: 30–60 Minuten' : 'Setup: 30-60 minutes'}</li>
-              <li>{isDE ? 'Ausgabe: bis 400 Gäste/h' : 'Output: up to 400 guests/h'}</li>
-              <li>{isDE ? 'Einsatzgebiet: Ganze Schweiz' : 'Service area: All of Switzerland'}</li>
+              <li>{t('org_tech_1')}</li>
+              <li>{t('org_tech_2')}</li>
+              <li>{t('org_tech_3')}</li>
+              <li>{t('org_tech_4')}</li>
+              <li>{t('org_tech_5')}</li>
+              <li>{t('org_tech_6')}</li>
             </ul>
           </div>
           <div className="sf-whom-visual">
             <img src={TRUCK_IMG} alt="Truck" className="sf-whom-img-main" />
             <div className="sf-whom-badge">
               <a href={`${process.env.REACT_APP_BACKEND_URL}/api/download/veranstalter-pdf`} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }} data-testid="org-pdf-download">
-                {isDE ? 'PDF herunterladen' : 'Download PDF'}
+                {t('org_pdf')}
               </a>
             </div>
           </div>
@@ -68,10 +67,8 @@ export default function EventOrganizersPage() {
       </section>
 
       <section className="sf-cta">
-        <div className="sf-cta-eyebrow">{isDE ? 'Für Veranstalter' : 'For Organizers'}</div>
-        <h2 className="sf-cta-title">
-          {isDE ? 'Interesse? Wir senden euch gerne unsere Unterlagen.' : 'Interested? We\'ll gladly send you our documents.'}
-        </h2>
+        <div className="sf-cta-eyebrow">{t('org_cta_eyebrow')}</div>
+        <h2 className="sf-cta-title">{t('org_cta_title')}</h2>
         <div className="sf-cta-actions">
           <Link to="/anfrage" className="sf-btn-primary">{t('nav_cta')}</Link>
         </div>

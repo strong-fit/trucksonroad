@@ -34,7 +34,7 @@ export default function TruckDetailPage() {
 
       <div className="sf-truck-detail">
         <Link to="/#trucks" style={{ color: 'var(--sf-gray)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', fontSize: '0.85rem' }}>
-          <ArrowLeft size={16} /> {lang === 'de' ? 'Zurück zu allen Trucks' : 'Back to all trucks'}
+          <ArrowLeft size={16} /> {t('truck_back')}
         </Link>
 
         {truck.tag && <div className="sf-truck-tag-badge">{truck.tag}</div>}
