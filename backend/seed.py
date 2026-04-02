@@ -1,0 +1,111 @@
+import uuid
+
+TRUCKS_SEED = [
+    {
+        "slug": "burger-truck", "name_de": "Burger Truck", "name_en": "Burger Truck",
+        "tagline_de": "Classic \u00b7 Chicken \u00b7 Veggie \u2014 bis 300 G\u00e4ste/h",
+        "tagline_en": "Classic \u00b7 Chicken \u00b7 Veggie \u2014 up to 300 guests/h",
+        "description_de": "Unser Burger Truck ist auf schnelle, hochwertige Ausgabe ausgelegt und ideal f\u00fcr Events mit hoher Besucherzahl. Saftige Patties, frische Zutaten und unser Signature-Style machen jeden Burger zu einem Erlebnis.",
+        "description_en": "Our Burger Truck is designed for fast, high-quality service and is ideal for events with large crowds. Juicy patties, fresh ingredients, and our signature style make every burger an experience.",
+        "image": "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=1200&q=80",
+        "tag": "Flagship",
+        "menu_de": ["Classic Burger", "Chicken Burger", "Veggie Burger", "Loaded Fries"],
+        "menu_en": ["Classic Burger", "Chicken Burger", "Veggie Burger", "Loaded Fries"],
+        "suitable_for_de": ["Festivals", "Firmenanl\u00e4sse", "Private Events", "Messen"],
+        "suitable_for_en": ["Festivals", "Corporate Events", "Private Events", "Trade Fairs"],
+        "capacity": "bis 300 G\u00e4ste/h", "space_required": "6m x 3m", "power": "230V / 16A",
+        "water": "Wasseranschluss ben\u00f6tigt", "setup_time": "ca. 60 Min",
+        "is_wide": True, "is_active": True, "order": 1
+    },
+    {
+        "slug": "chicken-burger-truck", "name_de": "Chicken Burger Truck", "name_en": "Chicken Burger Truck",
+        "tagline_de": "Knusprig \u00b7 W\u00fcrzig \u00b7 Einzigartig",
+        "tagline_en": "Crispy \u00b7 Spicy \u00b7 Unique",
+        "description_de": "Unser Chicken Burger Truck bietet ein spezialisiertes Konzept rund um knusprige Chicken Burger mit hauseigenen Marinaden und frischen Saucen.",
+        "description_en": "Our Chicken Burger Truck offers a specialized concept centered around crispy chicken burgers with house-made marinades and fresh sauces.",
+        "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80",
+        "tag": "",
+        "menu_de": ["Classic Chicken Burger", "Spicy Chicken", "BBQ Chicken", "Veggie Alternative"],
+        "menu_en": ["Classic Chicken Burger", "Spicy Chicken", "BBQ Chicken", "Veggie Alternative"],
+        "suitable_for_de": ["Festivals", "Firmenanl\u00e4sse", "Streetfood Events"],
+        "suitable_for_en": ["Festivals", "Corporate Events", "Street Food Events"],
+        "capacity": "bis 250 G\u00e4ste/h", "space_required": "5m x 3m", "power": "230V / 16A",
+        "water": "Wasseranschluss ben\u00f6tigt", "setup_time": "ca. 45 Min",
+        "is_wide": False, "is_active": True, "order": 2
+    },
+    {
+        "slug": "bowl-truck", "name_de": "Bowl Truck", "name_en": "Bowl Truck",
+        "tagline_de": "Signature \u00b7 Protein \u00b7 Veggie",
+        "tagline_en": "Signature \u00b7 Protein \u00b7 Veggie",
+        "description_de": "Unser Bowl Truck liefert frische, gesunde Bowls mit saisonalen Zutaten. Ideal f\u00fcr gesundheitsbewusste G\u00e4ste und moderne Events.",
+        "description_en": "Our Bowl Truck delivers fresh, healthy bowls with seasonal ingredients. Ideal for health-conscious guests and modern events.",
+        "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80",
+        "tag": "",
+        "menu_de": ["Signature Bowl", "Protein Bowl", "Veggie Bowl", "Vegan Bowl"],
+        "menu_en": ["Signature Bowl", "Protein Bowl", "Veggie Bowl", "Vegan Bowl"],
+        "suitable_for_de": ["Firmenanl\u00e4sse", "Messen", "Gesundheits-Events", "Private Events"],
+        "suitable_for_en": ["Corporate Events", "Trade Fairs", "Health Events", "Private Events"],
+        "capacity": "bis 200 G\u00e4ste/h", "space_required": "5m x 3m", "power": "230V / 16A",
+        "water": "Wasseranschluss ben\u00f6tigt", "setup_time": "ca. 45 Min",
+        "is_wide": False, "is_active": True, "order": 3
+    },
+    {
+        "slug": "pocket-bowl-truck", "name_de": "Pocket Bowl Truck", "name_en": "Pocket Bowl Truck",
+        "tagline_de": "Ideal f\u00fcr hohe Frequenz",
+        "tagline_en": "Ideal for high frequency",
+        "description_de": "Der Pocket Bowl Truck ist unser schnellstes Konzept. Kleine, handliche Bowls ideal f\u00fcr Events mit schnellem Durchlauf und hoher G\u00e4stefrequenz.",
+        "description_en": "The Pocket Bowl Truck is our fastest concept. Small, handy bowls ideal for events with fast throughput and high guest frequency.",
+        "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80",
+        "tag": "Speed",
+        "menu_de": ["Pocket Bowl Classic", "Pocket Bowl Spicy", "Pocket Bowl Veggie"],
+        "menu_en": ["Pocket Bowl Classic", "Pocket Bowl Spicy", "Pocket Bowl Veggie"],
+        "suitable_for_de": ["Festivals", "Grossevents", "Messen", "Sportanl\u00e4sse"],
+        "suitable_for_en": ["Festivals", "Large Events", "Trade Fairs", "Sports Events"],
+        "capacity": "bis 400 G\u00e4ste/h", "space_required": "5m x 3m", "power": "230V / 16A",
+        "water": "Wasseranschluss ben\u00f6tigt", "setup_time": "ca. 40 Min",
+        "is_wide": False, "is_active": True, "order": 4
+    },
+    {
+        "slug": "empanadas-truck", "name_de": "Empanadas Truck", "name_en": "Empanadas Truck",
+        "tagline_de": "Herzhaft \u00b7 Vegetarisch \u00b7 Schnell",
+        "tagline_en": "Savory \u00b7 Vegetarian \u00b7 Fast",
+        "description_de": "Unser Empanadas Truck bringt s\u00fcdamerikanisches Flair auf jedes Event. Handgemachte Empanadas in verschiedenen Sorten \u2013 herzhaft und vegetarisch.",
+        "description_en": "Our Empanadas Truck brings South American flair to every event. Handmade empanadas in various flavors \u2013 savory and vegetarian.",
+        "image": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=600&q=80",
+        "tag": "",
+        "menu_de": ["Classic Beef", "Chicken Empanada", "Veggie Empanada", "Cheese Empanada"],
+        "menu_en": ["Classic Beef", "Chicken Empanada", "Veggie Empanada", "Cheese Empanada"],
+        "suitable_for_de": ["Festivals", "Private Events", "Streetfood M\u00e4rkte", "Firmenanl\u00e4sse"],
+        "suitable_for_en": ["Festivals", "Private Events", "Street Food Markets", "Corporate Events"],
+        "capacity": "bis 300 G\u00e4ste/h", "space_required": "5m x 3m", "power": "230V / 16A",
+        "water": "Wasseranschluss ben\u00f6tigt", "setup_time": "ca. 45 Min",
+        "is_wide": False, "is_active": True, "order": 5
+    },
+    {
+        "slug": "retro-trailer", "name_de": "Retro Trailer", "name_en": "Retro Trailer",
+        "tagline_de": "Pferdeanh\u00e4nger \u00b7 Vintage Charme",
+        "tagline_en": "Horse Trailer \u00b7 Vintage Charm",
+        "description_de": "Unser Retro Trailer im Pferdeanh\u00e4nger-Stil ist ein echter Hingucker. Perfekt f\u00fcr Hochzeiten, Privatanl\u00e4sse und \u00fcberall dort, wo Charme und Stil gefragt sind.",
+        "description_en": "Our Retro Trailer in horse trailer style is a real eye-catcher. Perfect for weddings, private events, and wherever charm and style are needed.",
+        "image": "https://images.unsplash.com/photo-1509315811345-672d83ef2fbc?w=600&q=80",
+        "tag": "Retro",
+        "menu_de": ["Individuell nach Absprache", "Kaffee & Desserts", "Alpine Spezialit\u00e4ten"],
+        "menu_en": ["Customized by arrangement", "Coffee & Desserts", "Alpine Specialties"],
+        "suitable_for_de": ["Hochzeiten", "Private Events", "Firmenfeiern", "M\u00e4rkte"],
+        "suitable_for_en": ["Weddings", "Private Events", "Corporate Celebrations", "Markets"],
+        "capacity": "bis 150 G\u00e4ste/h", "space_required": "4m x 2.5m", "power": "230V / 16A",
+        "water": "Optional", "setup_time": "ca. 30 Min",
+        "is_wide": False, "is_active": True, "order": 6
+    }
+]
+
+FAQS_SEED = [
+    {"id": str(uuid.uuid4()), "question_de": "Wie fr\u00fch muss man buchen?", "answer_de": "Wir empfehlen mindestens 4\u20138 Wochen im Voraus, bei grossen Festivals gerne fr\u00fcher. Kurzfristige Anfragen pr\u00fcfen wir ebenfalls gerne.", "question_en": "How far in advance should I book?", "answer_en": "We recommend at least 4-8 weeks in advance, for large festivals preferably earlier. We're also happy to review short-notice inquiries.", "order": 1},
+    {"id": str(uuid.uuid4()), "question_de": "Wie viele G\u00e4ste sind m\u00f6glich?", "answer_de": "Einzelne Trucks sind auf bis zu 300 G\u00e4ste/Stunde ausgelegt. Bei gr\u00f6sseren Events k\u00f6nnen mehrere Trucks gleichzeitig eingesetzt werden.", "question_en": "How many guests are possible?", "answer_en": "Individual trucks can serve up to 300 guests per hour. For larger events, multiple trucks can be deployed simultaneously.", "order": 2},
+    {"id": str(uuid.uuid4()), "question_de": "Kommt ihr in die ganze Schweiz?", "answer_de": "Ja. Unser Heimgebiet ist Z\u00fcrich, Wetzikon und der Z\u00fcrcher Oberland, aber wir fahren f\u00fcr Events in die ganze Schweiz \u2013 je nach Aufwand mit Anfahrtspauschale.", "question_en": "Do you come to all of Switzerland?", "answer_en": "Yes. Our home area is Zurich, Wetzikon and the Zurich Oberland, but we travel across Switzerland for events \u2013 with a travel surcharge depending on distance.", "order": 3},
+    {"id": str(uuid.uuid4()), "question_de": "Braucht ihr Strom und Wasser?", "answer_de": "Je nach Truck unterschiedlich. Die genauen technischen Anforderungen geben wir euch nach der Anfrage mit den Unterlagen weiter.", "question_en": "Do you need power and water?", "answer_en": "It varies by truck. We'll provide detailed technical requirements with the documentation after your inquiry.", "order": 4},
+    {"id": str(uuid.uuid4()), "question_de": "Gibt es vegetarische/vegane Optionen?", "answer_de": "Ja, bei allen Konzepten sind vegetarische Optionen verf\u00fcgbar. Vegane Anpassungen sind je nach Konzept m\u00f6glich \u2013 bitte beim Anfragen angeben.", "question_en": "Are there vegetarian/vegan options?", "answer_en": "Yes, vegetarian options are available with all concepts. Vegan adaptations are possible depending on the concept \u2013 please specify when inquiring.", "order": 5},
+    {"id": str(uuid.uuid4()), "question_de": "Was kostet ein Foodtruck-Einsatz?", "answer_de": "Der Preis h\u00e4ngt von G\u00e4stezahl, Ort, Einsatzdauer und Konzept ab. Wir kalkulieren individuell und senden euch eine transparente Offerte.", "question_en": "What does a food truck deployment cost?", "answer_en": "The price depends on guest count, location, duration, and concept. We calculate individually and send you a transparent offer.", "order": 6},
+    {"id": str(uuid.uuid4()), "question_de": "Kann man mehrere Trucks buchen?", "answer_de": "Ja, genau das ist unsere St\u00e4rke. Ihr k\u00f6nnt mehrere Konzepte kombinieren und so f\u00fcr Abwechslung und k\u00fcrzere Wartezeiten sorgen.", "question_en": "Can I book multiple trucks?", "answer_en": "Yes, that's exactly our strength. You can combine multiple concepts to provide variety and shorter wait times.", "order": 7},
+    {"id": str(uuid.uuid4()), "question_de": "Was passiert bei schlechtem Wetter?", "answer_de": "Unsere Trucks sind grunds\u00e4tzlich wetterfest. Bei extremen Bedingungen besprechen wir gemeinsam Alternativen. Details regeln wir im Vertrag.", "question_en": "What happens in bad weather?", "answer_en": "Our trucks are generally weatherproof. In extreme conditions, we discuss alternatives together. Details are regulated in the contract.", "order": 8}
+]
