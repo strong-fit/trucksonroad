@@ -17,7 +17,16 @@
 - Full SEO: Meta Tags, og:image, og:url, hreflang (de/en), Sitemap.xml, robots.txt (AI-friendly)
 - JSON-LD: FoodEstablishment (aggregateRating) + FAQPage
 - Google Search Console verification (configurable in Admin)
-- DE/EN Navigation, WhatsApp Button, Customer Login/Registration
+- WhatsApp Button, Customer Login/Registration
+
+### Multi-Language Support (DONE - April 2026)
+- Full 4-language support: DE, FR, IT, EN
+- Language switcher dropdown in Navbar (desktop + mobile)
+- localStorage persistence (truckonroad_lang key)
+- All public pages translated via t() function
+- Customer Portal (Login, Register, Dashboard) fully translated
+- Admin area (sidebar, dashboard, inquiries, all page titles) fully translated
+- Translation dictionary: ~500+ keys across 4 languages
 
 ### Customer Portal (DONE)
 - Open registration, personal dashboard, inquiry tracking + status
@@ -43,8 +52,8 @@
 4. Status: Event abgeschlossen
 5. Rechnung gesendet
 6. Zahlung eingegangen
-7. **NEU: Datei-Upload Benachrichtigung** (wenn Admin Datei hochlädt)
-8. **NEU: Event-Erinnerung** (X Tage vor Event, konfigurierbar)
+7. Datei-Upload Benachrichtigung
+8. Event-Erinnerung (X Tage vor Event, konfigurierbar)
 
 ### SEO & KI-Suchmaschinen (DONE)
 - 13+ Meta Tags (og:url, og:image, hreflang, twitter:image, etc.)
@@ -54,4 +63,5 @@
 - Sitemap.xml (13 URLs)
 
 ## Backlog
-- [ ] FR/IT Übersetzungen
+- [ ] Backend email templates/PDFs in selected language (P1)
+- [ ] Google Search Console setup (manual step by user)
