@@ -3,7 +3,7 @@ import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Search, Save, Send, Trash2, ExternalLink, Globe, Mail, Sparkles, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { Search, Save, Send, Trash2, ExternalLink, Globe, Mail, Sparkles, X, Plus, Settings, Clock, Play } from 'lucide-react';
 
 const STATUS_COLORS = {
   new: { bg: '#5ba4b520', color: '#5ba4b5', border: '#5ba4b540' },
@@ -25,73 +25,95 @@ export default function AdminEventScout() {
   const [applyEmail, setApplyEmail] = useState('');
   const [applyMessage, setApplyMessage] = useState('');
   const [sending, setSending] = useState(false);
+  // Sources & auto-scan
+  const [sources, setSources] = useState([]);
+  const [keywords, setKeywords] = useState([]);
+  const [scanEnabled, setScanEnabled] = useState(false);
+  const [lastScan, setLastScan] = useState(null);
+  const [lastScanCount, setLastScanCount] = useState(0);
+  const [newSource, setNewSource] = useState('');
+  const [newKeyword, setNewKeyword] = useState('');
+  const [scanning, setScanning] = useState(false);
 
-  useEffect(() => { loadSaved(); }, []);
+  useEffect(() => { loadSaved(); loadSources(); }, []);
 
   const loadSaved = () => api.get('/admin/event-scout/events').then(r => setSavedEvents(r.data)).catch(() => {});
+  const loadSources = () => api.get('/admin/event-scout/sources').then(r => {
+    setSources(r.data.sources || []);
+    setKeywords(r.data.keywords || []);
+    setScanEnabled(r.data.scan_enabled || false);
+    setLastScan(r.data.last_scan);
+    setLastScanCount(r.data.last_scan_count || 0);
+  }).catch(() => {});
 
   const handleSearch = async () => {
     if (!query.trim()) return;
-    setSearching(true);
-    setResults([]);
-    setCitations([]);
+    setSearching(true); setResults([]); setCitations([]);
     try {
       const r = await api.post('/admin/event-scout/search', { query, region });
-      setResults(r.data.events || []);
-      setCitations(r.data.citations || []);
+      setResults(r.data.events || []); setCitations(r.data.citations || []);
       if ((r.data.events || []).length === 0) toast.info(t('scout_no_results'));
-    } catch (err) {
-      const msg = err?.response?.data?.detail || t('admin_error');
-      toast.error(msg);
-    }
+    } catch (err) { toast.error(err?.response?.data?.detail || t('admin_error')); }
     setSearching(false);
   };
 
   const saveEvent = async (ev) => {
     try {
       await api.post('/admin/event-scout/events', { ...ev, source: 'perplexity' });
-      toast.success(t('scout_saved_msg'));
-      loadSaved();
+      toast.success(t('scout_saved_msg')); loadSaved();
     } catch { toast.error(t('admin_error')); }
   };
 
   const updateStatus = async (id, status) => {
-    try {
-      await api.put(`/admin/event-scout/events/${id}`, { status });
-      loadSaved();
-    } catch { toast.error(t('admin_error')); }
+    try { await api.put(`/admin/event-scout/events/${id}`, { status }); loadSaved(); }
+    catch { toast.error(t('admin_error')); }
   };
 
   const deleteEvent = async (id) => {
     if (!window.confirm(t('admin_delete_confirm'))) return;
-    try {
-      await api.delete(`/admin/event-scout/events/${id}`);
-      toast.success(t('admin_deleted'));
-      loadSaved();
-    } catch { toast.error(t('admin_error')); }
+    try { await api.delete(`/admin/event-scout/events/${id}`); toast.success(t('admin_deleted')); loadSaved(); }
+    catch { toast.error(t('admin_error')); }
   };
 
-  const openApply = (ev) => {
-    setApplyModal(ev);
-    setApplyEmail(ev.organizer_email || '');
-    setApplyMessage('');
-  };
+  const openApply = (ev) => { setApplyModal(ev); setApplyEmail(ev.organizer_email || ''); setApplyMessage(''); };
 
   const sendApplication = async () => {
     if (!applyEmail) { toast.error(t('scout_email_label')); return; }
     setSending(true);
     try {
       await api.post(`/admin/event-scout/events/${applyModal.id}/apply`, { email: applyEmail, message: applyMessage });
-      toast.success(t('scout_apply_msg'));
-      setApplyModal(null);
-      loadSaved();
-    } catch (err) {
-      toast.error(err?.response?.data?.detail || t('admin_error'));
-    }
+      toast.success(t('scout_apply_msg')); setApplyModal(null); loadSaved();
+    } catch (err) { toast.error(err?.response?.data?.detail || t('admin_error')); }
     setSending(false);
   };
 
-  const statusLabel = (s) => t(`scout_status_${s}`) || s;
+  const saveSources = async () => {
+    try {
+      await api.put('/admin/event-scout/sources', { sources, keywords, scan_enabled: scanEnabled });
+      toast.success(t('admin_status_update'));
+    } catch { toast.error(t('admin_error')); }
+  };
+
+  const addSource = () => {
+    if (!newSource.trim()) return;
+    setSources(prev => [...prev, newSource.trim()]); setNewSource('');
+  };
+
+  const addKeyword = () => {
+    if (!newKeyword.trim()) return;
+    setKeywords(prev => [...prev, newKeyword.trim()]); setNewKeyword('');
+  };
+
+  const triggerScan = async () => {
+    setScanning(true);
+    try {
+      await api.post('/admin/event-scout/scan-now');
+      toast.success('Scan gestartet - Events werden im Hintergrund gesucht');
+      setTimeout(() => { loadSaved(); loadSources(); setScanning(false); }, 15000);
+    } catch (err) { toast.error(err?.response?.data?.detail || t('admin_error')); setScanning(false); }
+  };
+
+  const dateFmt = (d) => d ? new Date(d).toLocaleString('de-CH') : '–';
 
   const REGIONS = ['Schweiz', 'Zürich', 'Bern', 'Basel', 'Luzern', 'St. Gallen', 'Aargau', 'Graubünden', 'Tessin', 'Wallis', 'Genf', 'Waadt'];
 
@@ -111,22 +133,19 @@ export default function AdminEventScout() {
         <button className={`adm-filter-btn ${tab === 'saved' ? 'active' : ''}`} onClick={() => setTab('saved')} data-testid="tab-saved">
           <Save size={13} /> {t('scout_saved')} ({savedEvents.length})
         </button>
+        <button className={`adm-filter-btn ${tab === 'config' ? 'active' : ''}`} onClick={() => setTab('config')} data-testid="tab-config">
+          <Settings size={13} /> Auto-Scan
+        </button>
       </div>
 
+      {/* SEARCH TAB */}
       {tab === 'search' && (
         <div>
           <div className="adm-detail" style={{ marginBottom: '1.25rem' }} data-testid="scout-search-form">
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px auto', gap: '0.75rem', alignItems: 'end' }}>
               <div>
                 <div className="adm-form-label">{t('scout_query')}</div>
-                <input
-                  className="adm-input"
-                  value={query}
-                  onChange={e => setQuery(e.target.value)}
-                  placeholder={t('scout_query_placeholder')}
-                  onKeyDown={e => e.key === 'Enter' && handleSearch()}
-                  data-testid="scout-query-input"
-                />
+                <input className="adm-input" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('scout_query_placeholder')} onKeyDown={e => e.key === 'Enter' && handleSearch()} data-testid="scout-query-input" />
               </div>
               <div>
                 <div className="adm-form-label">{t('scout_region')}</div>
@@ -134,13 +153,7 @@ export default function AdminEventScout() {
                   {REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
                 </select>
               </div>
-              <button
-                className="adm-btn adm-btn-primary"
-                onClick={handleSearch}
-                disabled={searching || !query.trim()}
-                style={{ height: '38px' }}
-                data-testid="scout-search-btn"
-              >
+              <button className="adm-btn adm-btn-primary" onClick={handleSearch} disabled={searching || !query.trim()} style={{ height: '38px' }} data-testid="scout-search-btn">
                 {searching ? <><Sparkles size={14} className="spin" /> {t('scout_searching')}</> : <><Search size={14} /> {t('scout_search')}</>}
               </button>
             </div>
@@ -169,29 +182,21 @@ export default function AdminEventScout() {
                           </a>
                         )}
                       </div>
-                      <button
-                        className="adm-btn adm-btn-primary adm-btn-sm"
-                        onClick={() => saveEvent(ev)}
-                        data-testid={`save-result-${i}`}
-                        style={{ whiteSpace: 'nowrap' }}
-                      >
+                      <button className="adm-btn adm-btn-primary adm-btn-sm" onClick={() => saveEvent(ev)} data-testid={`save-result-${i}`} style={{ whiteSpace: 'nowrap' }}>
                         <Save size={13} /> {t('scout_save')}
                       </button>
                     </div>
                   </div>
                 ))}
               </div>
-
               {citations.length > 0 && (
                 <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'var(--adm-bg-card)', border: '1px solid var(--adm-border)', borderRadius: '8px' }}>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--adm-text-muted)', marginBottom: '0.4rem' }}>{t('scout_sources')}</div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                    {citations.map((c, i) => (
-                      <a key={i} href={c} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.72rem', color: 'var(--adm-accent)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                        <ExternalLink size={10} /> {typeof c === 'string' ? c : c.url || c}
-                      </a>
-                    ))}
-                  </div>
+                  {citations.map((c, i) => (
+                    <a key={i} href={c} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.72rem', color: 'var(--adm-accent)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <ExternalLink size={10} /> {typeof c === 'string' ? c : c.url || c}
+                    </a>
+                  ))}
                 </div>
               )}
             </div>
@@ -199,20 +204,17 @@ export default function AdminEventScout() {
 
           {searching && (
             <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--adm-text-muted)' }}>
-              <Sparkles size={24} className="spin" style={{ marginBottom: '0.5rem' }} />
-              <div>{t('scout_searching')}</div>
+              <Sparkles size={24} className="spin" style={{ marginBottom: '0.5rem' }} /><div>{t('scout_searching')}</div>
             </div>
           )}
         </div>
       )}
 
+      {/* SAVED TAB */}
       {tab === 'saved' && (
         <div data-testid="scout-saved-events">
           {savedEvents.length === 0 ? (
-            <div className="adm-empty" data-testid="no-saved-events">
-              <div className="adm-empty-icon"><Search size={22} /></div>
-              {t('scout_no_saved')}
-            </div>
+            <div className="adm-empty" data-testid="no-saved-events"><div className="adm-empty-icon"><Search size={22} /></div>{t('scout_no_saved')}</div>
           ) : (
             <div className="adm-table-wrap">
               <table className="adm-table" data-testid="saved-events-table">
@@ -233,23 +235,16 @@ export default function AdminEventScout() {
                       <tr key={ev.id} data-testid={`saved-event-${ev.id}`}>
                         <td style={{ fontWeight: 500 }}>
                           <div>{ev.name}</div>
-                          {ev.website && (
-                            <a href={ev.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                              <Globe size={10} /> Link
-                            </a>
-                          )}
+                          {ev.description && <div style={{ fontSize: '0.72rem', color: 'var(--adm-text-muted)', marginTop: '0.15rem', maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ev.description}</div>}
+                          {ev.website && <a href={ev.website} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '0.2rem' }}><Globe size={10} /> Link</a>}
                         </td>
                         <td style={{ fontSize: '0.78rem' }}>{ev.date || '–'}</td>
                         <td style={{ fontSize: '0.78rem' }}>{ev.location || '–'}</td>
                         <td><span className="adm-badge adm-badge-new" style={{ fontSize: '0.68rem' }}><span className="adm-badge-dot" />{ev.type}</span></td>
                         <td>
-                          <select
-                            value={ev.status}
-                            onChange={e => updateStatus(ev.id, e.target.value)}
-                            className="adm-input"
+                          <select value={ev.status} onChange={e => updateStatus(ev.id, e.target.value)} className="adm-input"
                             style={{ fontSize: '0.75rem', padding: '0.2rem 0.4rem', background: sc.bg, color: sc.color, border: `1px solid ${sc.border}`, borderRadius: '4px', fontWeight: 600 }}
-                            data-testid={`status-select-${ev.id}`}
-                          >
+                            data-testid={`status-select-${ev.id}`}>
                             <option value="new">{t('scout_status_new')}</option>
                             <option value="contacted">{t('scout_status_contacted')}</option>
                             <option value="confirmed">{t('scout_status_confirmed')}</option>
@@ -258,12 +253,8 @@ export default function AdminEventScout() {
                         </td>
                         <td>
                           <div style={{ display: 'flex', gap: '0.3rem' }}>
-                            <button className="adm-btn adm-btn-primary adm-btn-sm" onClick={() => openApply(ev)} data-testid={`apply-btn-${ev.id}`} title={t('scout_apply')}>
-                              <Mail size={13} />
-                            </button>
-                            <button className="adm-btn adm-btn-danger adm-btn-sm" onClick={() => deleteEvent(ev.id)} data-testid={`delete-btn-${ev.id}`}>
-                              <Trash2 size={13} />
-                            </button>
+                            <button className="adm-btn adm-btn-primary adm-btn-sm" onClick={() => openApply(ev)} data-testid={`apply-btn-${ev.id}`} title={t('scout_apply')}><Mail size={13} /></button>
+                            <button className="adm-btn adm-btn-danger adm-btn-sm" onClick={() => deleteEvent(ev.id)} data-testid={`delete-btn-${ev.id}`}><Trash2 size={13} /></button>
                           </div>
                         </td>
                       </tr>
@@ -276,6 +267,85 @@ export default function AdminEventScout() {
         </div>
       )}
 
+      {/* CONFIG TAB */}
+      {tab === 'config' && (
+        <div data-testid="scout-config">
+          {/* Auto-Scan Status */}
+          <div className="adm-detail" style={{ marginBottom: '1rem', padding: '1rem' }} data-testid="scan-status">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+              <div>
+                <div style={{ fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Clock size={15} /> Automatischer Täglicher Scan
+                </div>
+                {lastScan && (
+                  <div style={{ fontSize: '0.75rem', color: 'var(--adm-text-muted)', marginTop: '0.25rem' }}>
+                    Letzter Scan: {dateFmt(lastScan)} — {lastScanCount} neue Events gefunden
+                  </div>
+                )}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', fontSize: '0.82rem' }}>
+                  <input type="checkbox" checked={scanEnabled} onChange={e => setScanEnabled(e.target.checked)} data-testid="auto-scan-toggle" />
+                  Aktiviert
+                </label>
+                <button className="adm-btn adm-btn-primary adm-btn-sm" onClick={triggerScan} disabled={scanning} data-testid="scan-now-btn">
+                  <Play size={13} /> {scanning ? 'Scannt...' : 'Jetzt scannen'}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Fixed Sources */}
+          <div className="adm-detail" style={{ marginBottom: '1rem', padding: '1rem' }} data-testid="fixed-sources">
+            <div style={{ fontWeight: 600, fontSize: '0.88rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <Globe size={15} /> Fixe Event-Webseiten
+            </div>
+            <p style={{ fontSize: '0.78rem', color: 'var(--adm-text-muted)', marginBottom: '0.75rem' }}>
+              Die KI durchsucht diese Webseiten zusätzlich zur allgemeinen Web-Suche nach Schweizer Events.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '0.5rem' }}>
+              {sources.map((src, i) => (
+                <div key={i} style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                  <input className="adm-input" value={src} onChange={e => { const n = [...sources]; n[i] = e.target.value; setSources(n); }} style={{ flex: 1 }} />
+                  <button className="adm-btn adm-btn-danger adm-btn-sm" onClick={() => setSources(prev => prev.filter((_, j) => j !== i))} style={{ padding: '0.25rem 0.4rem' }}><Trash2 size={13} /></button>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: '0.4rem' }}>
+              <input className="adm-input" value={newSource} onChange={e => setNewSource(e.target.value)} placeholder="https://eventkalender.ch" onKeyDown={e => e.key === 'Enter' && addSource()} style={{ flex: 1 }} data-testid="new-source-input" />
+              <button className="adm-btn adm-btn-secondary adm-btn-sm" onClick={addSource} data-testid="add-source-btn"><Plus size={13} /></button>
+            </div>
+          </div>
+
+          {/* Keywords */}
+          <div className="adm-detail" style={{ marginBottom: '1rem', padding: '1rem' }} data-testid="keywords-config">
+            <div style={{ fontWeight: 600, fontSize: '0.88rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <Search size={15} /> Suchbegriffe für Auto-Scan
+            </div>
+            <p style={{ fontSize: '0.78rem', color: 'var(--adm-text-muted)', marginBottom: '0.75rem' }}>
+              Die KI sucht täglich nach diesen Begriffen in der Schweiz.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '0.5rem' }}>
+              {keywords.map((kw, i) => (
+                <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', background: 'var(--adm-accent-bg, #4db6ac15)', border: '1px solid var(--adm-accent-border, #4db6ac30)', color: 'var(--adm-accent)', padding: '0.3rem 0.7rem', borderRadius: '20px', fontSize: '0.78rem', fontWeight: 500 }}>
+                  {kw}
+                  <button onClick={() => setKeywords(prev => prev.filter((_, j) => j !== i))} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', padding: 0, display: 'flex' }}><X size={12} /></button>
+                </span>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: '0.4rem' }}>
+              <input className="adm-input" value={newKeyword} onChange={e => setNewKeyword(e.target.value)} placeholder="z.B. Weihnachtsmarkt, Street Food..." onKeyDown={e => e.key === 'Enter' && addKeyword()} style={{ flex: 1 }} data-testid="new-keyword-input" />
+              <button className="adm-btn adm-btn-secondary adm-btn-sm" onClick={addKeyword} data-testid="add-keyword-btn"><Plus size={13} /></button>
+            </div>
+          </div>
+
+          <button className="adm-btn adm-btn-primary" onClick={saveSources} data-testid="save-config-btn">
+            <Save size={14} /> Einstellungen speichern
+          </button>
+        </div>
+      )}
+
+      {/* APPLY MODAL */}
       {applyModal && (
         <div className="adm-modal-overlay" onClick={() => setApplyModal(null)} data-testid="apply-modal">
           <div className="adm-modal" onClick={e => e.stopPropagation()}>
@@ -292,12 +362,7 @@ export default function AdminEventScout() {
                 <div className="adm-form-label">{t('scout_message_label')}</div>
                 <textarea className="adm-textarea" rows={4} value={applyMessage} onChange={e => setApplyMessage(e.target.value)} placeholder="Optionale persönliche Nachricht..." data-testid="apply-message-input" />
               </div>
-              <button
-                className="adm-btn adm-btn-primary"
-                onClick={sendApplication}
-                disabled={sending || !applyEmail}
-                data-testid="send-apply-btn"
-              >
+              <button className="adm-btn adm-btn-primary" onClick={sendApplication} disabled={sending || !applyEmail} data-testid="send-apply-btn">
                 <Send size={14} /> {sending ? '...' : t('scout_apply')}
               </button>
             </div>

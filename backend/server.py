@@ -18,6 +18,7 @@ import jwt
 from bson import ObjectId
 import smtplib
 from email.mime.text import MIMEText
+import json as json_mod
 from email.mime.multipart import MIMEMultipart
 from fastapi.responses import Response as FastAPIResponse
 from fpdf import FPDF
@@ -1728,8 +1729,17 @@ async def event_scout_search(request: Request):
     if not api_key:
         raise HTTPException(status_code=400, detail="Perplexity API-Key nicht konfiguriert. Bitte in Einstellungen hinterlegen.")
 
-    system_prompt = f"""Du bist ein Experte fuer Event-Recherche in der Schweiz. 
-Suche nach relevanten Events, Festivals, Weihnachtsmaerkten, Strassenfesten, Firmenfeiern und Maerkten in der Region {region}.
+    # Get fixed sources for extra context
+    settings = await db.settings.find_one({"type": "general"}, {"_id": 0}) or {}
+    sources = settings.get("scout_sources", [])
+    source_context = ""
+    if sources:
+        source_context = "Durchsuche auch diese bekannten Event-Webseiten: " + ", ".join(sources)
+
+    system_prompt = f"""Du bist ein Experte fuer Event-Recherche in der SCHWEIZ. 
+Suche nach relevanten Events, Festivals, Weihnachtsmaerkten, Strassenfesten, Firmenfeiern und Maerkten in der Region {region}, SCHWEIZ.
+{source_context}
+WICHTIG: Nur Events in der SCHWEIZ. Keine Events aus anderen Laendern.
 Antworte IMMER im folgenden JSON-Format (Array von Events):
 [
   {{
@@ -1765,7 +1775,6 @@ Liefere so viele relevante Events wie moeglich (mindestens 5-10). Gib NUR den JS
             content = data.get("choices", [{}])[0].get("message", {}).get("content", "[]")
             citations = data.get("citations", [])
             # Parse JSON from content
-            import json as json_mod
             try:
                 # Extract JSON array from response (may have markdown code blocks)
                 clean = content.strip()
@@ -1881,6 +1890,209 @@ async def send_event_application(event_id: str, request: Request, background_tas
     return {"message": "Bewerbung wird gesendet"}
 
 
+# --- EVENT SCOUT: Fixed Sources ---
+@api_router.get("/admin/event-scout/sources")
+async def get_scout_sources(request: Request):
+    await get_current_user(request)
+    s = await db.settings.find_one({"type": "general"}, {"_id": 0})
+    return {
+        "sources": (s or {}).get("scout_sources", []),
+        "keywords": (s or {}).get("scout_keywords", ["Festival", "Weihnachtsmarkt", "Strassenfest", "Food Festival", "Markt"]),
+        "scan_enabled": (s or {}).get("scout_auto_scan", False),
+        "last_scan": (s or {}).get("scout_last_scan", None),
+        "last_scan_count": (s or {}).get("scout_last_scan_count", 0),
+    }
+
+@api_router.put("/admin/event-scout/sources")
+async def update_scout_sources(request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    update_fields = {}
+    if "sources" in body:
+        update_fields["scout_sources"] = [s.strip() for s in body["sources"] if s.strip()]
+    if "keywords" in body:
+        update_fields["scout_keywords"] = [k.strip() for k in body["keywords"] if k.strip()]
+    if "scan_enabled" in body:
+        update_fields["scout_auto_scan"] = bool(body["scan_enabled"])
+    await db.settings.update_one({"type": "general"}, {"$set": update_fields}, upsert=True)
+    return {"message": "Updated"}
+
+@api_router.post("/admin/event-scout/scan-now")
+async def trigger_manual_scan(request: Request, background_tasks: BackgroundTasks):
+    await get_current_user(request)
+    background_tasks.add_task(run_event_scan)
+    return {"message": "Scan gestartet"}
+
+
+# --- EVENT SCOUT: Auto Scan Logic ---
+
+async def call_perplexity_search(api_key: str, query: str, extra_context: str = "") -> list:
+    """Call Perplexity API and return parsed events list."""
+    system_prompt = f"""Du bist ein Experte fuer Event-Recherche in der SCHWEIZ.
+Suche nach relevanten Events, Festivals, Weihnachtsmaerkten, Strassenfesten, Maerkten und Firmenevents in der Schweiz.
+{extra_context}
+WICHTIG: Nur Events in der SCHWEIZ. Keine Events aus anderen Laendern.
+Antworte IMMER im folgenden JSON-Format (Array von Events):
+[
+  {{
+    "name": "Event-Name",
+    "date": "Datum oder Zeitraum (z.B. 15.-18. Dezember 2026)",
+    "location": "Stadt/Ort in der Schweiz",
+    "type": "festival|weihnachtsmarkt|markt|firmenevent|strassenfest|andere",
+    "description": "Kurzbeschreibung (1-2 Saetze)",
+    "organizer_email": "E-Mail des Veranstalters falls verfuegbar, sonst leer",
+    "website": "URL zur Event-Website falls verfuegbar"
+  }}
+]
+Liefere so viele relevante Schweizer Events wie moeglich (mindestens 5-15). Gib NUR den JSON-Array zurueck."""
+
+    try:
+        async with httpx.AsyncClient(timeout=90) as http_client:
+            resp = await http_client.post(
+                PERPLEXITY_API_URL,
+                headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+                json={
+                    "model": "sonar-pro",
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": query}
+                    ],
+                    "temperature": 0.3
+                }
+            )
+            if resp.status_code != 200:
+                logger.error(f"Perplexity API error: {resp.status_code}")
+                return []
+            data = resp.json()
+            content = data.get("choices", [{}])[0].get("message", {}).get("content", "[]")
+            clean = content.strip()
+            if clean.startswith("```"):
+                clean = clean.split("\n", 1)[-1]
+                if clean.endswith("```"):
+                    clean = clean[:-3]
+                clean = clean.strip()
+            return json_mod.loads(clean)
+    except Exception as e:
+        logger.error(f"Perplexity search error: {e}")
+        return []
+
+
+async def run_event_scan():
+    """Run the daily event scan: search via Perplexity, deduplicate, save new, email admin."""
+    try:
+        settings = await db.settings.find_one({"type": "general"}, {"_id": 0}) or {}
+        api_key = settings.get("perplexity_api_key", "")
+        if not api_key:
+            logger.info("Event scan skipped: no Perplexity API key")
+            return
+
+        sources = settings.get("scout_sources", [])
+        keywords = settings.get("scout_keywords", ["Festival", "Weihnachtsmarkt", "Strassenfest", "Food Festival", "Markt"])
+
+        # Build source context for the AI
+        source_context = ""
+        if sources:
+            source_context = "Durchsuche auch diese bekannten Event-Webseiten: " + ", ".join(sources)
+
+        # Get existing event names for deduplication
+        existing = await db.scouted_events.find({}, {"_id": 0, "name": 1}).to_list(1000)
+        existing_names = set(e.get("name", "").lower().strip() for e in existing)
+
+        all_new_events = []
+
+        # Search for each keyword
+        for keyword in keywords:
+            query = f"Finde aktuelle und kommende Events: {keyword} in der Schweiz 2025/2026/2027"
+            events = await call_perplexity_search(api_key, query, source_context)
+            for ev in events:
+                name = (ev.get("name") or "").strip()
+                if not name:
+                    continue
+                # Deduplicate
+                if name.lower() in existing_names:
+                    continue
+                existing_names.add(name.lower())
+                doc = {
+                    "id": str(uuid.uuid4()),
+                    "name": name,
+                    "date": ev.get("date", ""),
+                    "location": ev.get("location", ""),
+                    "type": ev.get("type", "andere"),
+                    "description": ev.get("description", ""),
+                    "organizer_email": ev.get("organizer_email", ""),
+                    "website": ev.get("website", ""),
+                    "status": "new",
+                    "notes": "",
+                    "source": "auto_scan",
+                    "created_at": datetime.now(timezone.utc).isoformat()
+                }
+                try:
+                    await db.scouted_events.insert_one(doc)
+                    all_new_events.append(doc)
+                except Exception:
+                    pass  # Duplicate key or other error
+
+        # Update last scan info
+        await db.settings.update_one({"type": "general"}, {"$set": {
+            "scout_last_scan": datetime.now(timezone.utc).isoformat(),
+            "scout_last_scan_count": len(all_new_events)
+        }}, upsert=True)
+
+        # Send admin email notification if there are new events
+        if all_new_events:
+            notification_email = settings.get("notification_email", "")
+            if notification_email and settings.get("email_notifications"):
+                event_rows = ""
+                for ev in all_new_events[:20]:
+                    event_rows += f"""<tr>
+                        <td style="padding:8px 12px;border-bottom:1px solid #e8e7e3;font-size:0.85rem;">{ev['name']}</td>
+                        <td style="padding:8px 12px;border-bottom:1px solid #e8e7e3;font-size:0.85rem;">{ev['date']}</td>
+                        <td style="padding:8px 12px;border-bottom:1px solid #e8e7e3;font-size:0.85rem;">{ev['location']}</td>
+                        <td style="padding:8px 12px;border-bottom:1px solid #e8e7e3;font-size:0.85rem;">{ev['type']}</td>
+                    </tr>"""
+
+                html = f"""
+                <div style="font-family:'DM Sans',Arial,sans-serif;max-width:650px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+                  <div style="background:#1a1a18;padding:2rem;text-align:center;">
+                    <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
+                      <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+                    </span>
+                  </div>
+                  <div style="padding:2rem;">
+                    <h2 style="color:#1a1a18;margin:0 0 0.5rem;">Event-Scout: {len(all_new_events)} neue Events gefunden</h2>
+                    <p style="color:#6b6b64;margin:0 0 1.5rem;">Der automatische Event-Scanner hat neue Schweizer Events gefunden:</p>
+                    <table style="width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e7e3;border-radius:8px;overflow:hidden;">
+                      <thead>
+                        <tr style="background:#f5f5f2;">
+                          <th style="padding:10px 12px;text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:#6b6b64;">Event</th>
+                          <th style="padding:10px 12px;text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:#6b6b64;">Datum</th>
+                          <th style="padding:10px 12px;text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:#6b6b64;">Ort</th>
+                          <th style="padding:10px 12px;text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:#6b6b64;">Typ</th>
+                        </tr>
+                      </thead>
+                      <tbody>{event_rows}</tbody>
+                    </table>
+                    {f'<p style="color:#6b6b64;margin-top:1rem;font-size:0.82rem;">... und {len(all_new_events) - 20} weitere Events</p>' if len(all_new_events) > 20 else ''}
+                    <p style="color:#6b6b64;margin-top:1.5rem;">Melden Sie sich im <a href="#" style="color:#4db6ac;font-weight:600;">Admin-Dashboard</a> an, um die Events zu verwalten und Bewerbungen zu versenden.</p>
+                  </div>
+                </div>"""
+                await send_email_background(notification_email, f"Event-Scout: {len(all_new_events)} neue Schweizer Events gefunden", html)
+
+        logger.info(f"Event scan complete: {len(all_new_events)} new events found")
+
+    except Exception as e:
+        logger.error(f"Event scan failed: {e}")
+
+
+async def event_scan_loop():
+    """Background loop that runs the event scan every 24 hours."""
+    while True:
+        await asyncio.sleep(24 * 3600)
+        settings = await db.settings.find_one({"type": "general"}, {"_id": 0}) or {}
+        if settings.get("scout_auto_scan"):
+            await run_event_scan()
+
+
 app.include_router(api_router)
 
 @app.on_event("startup")
@@ -1928,6 +2140,7 @@ async def startup():
     # Start event reminder background task
     import asyncio
     asyncio.create_task(event_reminder_loop())
+    asyncio.create_task(event_scan_loop())
 
 @app.on_event("shutdown")
 async def shutdown():
