@@ -53,7 +53,7 @@ async def create_inquiry(inquiry: InquiryCreate, request: Request, background_ta
     lang = doc.get("lang", "de")
     t = get_email_t(lang)
     if doc.get("email"):
-        background_tasks.add_task(send_email_background, doc["email"], f"{t['subject_inquiry']} – TruckOnRoad", build_confirmation_email(doc, lang))
+        background_tasks.add_task(send_email_background, doc["email"], f"{t['subject_inquiry']} – TrucksOnRoad", build_confirmation_email(doc, lang))
     if settings.get("email_notifications") and settings.get("notification_email"):
         background_tasks.add_task(send_email_background, settings["notification_email"], f"Neue Anfrage: {doc.get('first_name', '')} {doc.get('last_name', '')}", build_admin_notification_email(doc))
     return {"message": "Anfrage erfolgreich gesendet", "id": doc["id"]}
@@ -91,7 +91,7 @@ async def upload_inquiry_file(inquiry_id: str, request: Request, background_task
                 il = inquiry.get("lang", "de")
                 it = get_email_t(il)
                 html = build_file_upload_notification_email(inquiry, file.filename, il)
-                background_tasks.add_task(send_email_background, inquiry["email"], f"{it['new_file']} – TruckOnRoad", html)
+                background_tasks.add_task(send_email_background, inquiry["email"], f"{it['new_file']} – TrucksOnRoad", html)
     except Exception:
         pass
     return file_doc
@@ -154,7 +154,7 @@ async def admin_update_inquiry(inquiry_id: str, update: InquiryStatusUpdate, req
             il = inquiry.get("lang", "de")
             it = get_email_t(il)
             offer_html = build_offer_email(inquiry, il)
-            background_tasks.add_task(send_email_background, inquiry["email"], f"{it['subject_offer']} – TruckOnRoad", offer_html)
+            background_tasks.add_task(send_email_background, inquiry["email"], f"{it['subject_offer']} – TrucksOnRoad", offer_html)
     elif update.status in ("in_review", "confirmed", "completed", "cancelled"):
         inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
         if inquiry and inquiry.get("email"):
@@ -162,7 +162,7 @@ async def admin_update_inquiry(inquiry_id: str, update: InquiryStatusUpdate, req
             it = get_email_t(il)
             status_html = build_status_notification_email(inquiry, update.status, il)
             subject_key = f"subject_{update.status}" if update.status != "in_review" else "subject_status"
-            subject = f"{it.get(subject_key, it['subject_status'])} – TruckOnRoad"
+            subject = f"{it.get(subject_key, it['subject_status'])} – TrucksOnRoad"
             background_tasks.add_task(send_email_background, inquiry["email"], subject, status_html)
     return {"message": "Updated"}
 
@@ -208,7 +208,7 @@ async def admin_update_invoice(inquiry_id: str, request: Request, background_tas
             it = get_email_t(il)
             inv_html = build_invoice_notification_email(inquiry, body["invoice_status"], body.get("invoice_amount", inquiry.get("invoice_amount", 0)), il)
             subject_key = f"subject_inv_{body['invoice_status']}"
-            subject = f"{it.get(subject_key, it['invoice_word'])} – TruckOnRoad"
+            subject = f"{it.get(subject_key, it['invoice_word'])} – TrucksOnRoad"
             background_tasks.add_task(send_email_background, inquiry["email"], subject, inv_html)
     return {"message": "Invoice updated"}
 
@@ -353,7 +353,7 @@ async def admin_get_settings(request: Request):
     await get_current_user(request)
     s = await db.settings.find_one({"type": "general"}, {"_id": 0})
     defaults = {
-        "type": "general", "company_name": "TruckOnRoad",
+        "type": "general", "company_name": "TrucksOnRoad",
         "company_address": "Bahnhofstrasse 75, 8620 Wetzikon",
         "company_phone": "+41 79 696 98 99", "company_email": "info@truckonroad.ch",
         "whatsapp_number": "+41796969899",
@@ -389,7 +389,7 @@ async def admin_test_email(request: Request, background_tasks: BackgroundTasks):
     to = body.get("to", "")
     if not to:
         raise HTTPException(status_code=400, detail="E-Mail-Adresse fehlt")
-    background_tasks.add_task(send_email_background, to, "TruckOnRoad Test-E-Mail", "<h2>Test erfolgreich!</h2><p>Die E-Mail-Konfiguration funktioniert korrekt.</p>")
+    background_tasks.add_task(send_email_background, to, "TrucksOnRoad Test-E-Mail", "<h2>Test erfolgreich!</h2><p>Die E-Mail-Konfiguration funktioniert korrekt.</p>")
     return {"message": "Test-E-Mail wird gesendet"}
 
 
@@ -555,7 +555,7 @@ async def admin_geocode(address: str, request: Request):
         resp = await client.get(
             "https://nominatim.openstreetmap.org/search",
             params={"q": address, "format": "json", "limit": 1, "countrycodes": "ch"},
-            headers={"User-Agent": "TruckOnRoad/1.0"},
+            headers={"User-Agent": "TrucksOnRoad/1.0"},
             timeout=10,
         )
         results = resp.json()
@@ -819,7 +819,7 @@ async def send_event_application(event_id: str, request: Request, background_tas
         raise HTTPException(status_code=400, detail="Keine E-Mail-Adresse angegeben")
     settings = await get_email_settings()
     html = build_event_application_email(event, custom_message, settings)
-    company = settings.get("company_name", "TruckOnRoad")
+    company = settings.get("company_name", "TrucksOnRoad")
     background_tasks.add_task(send_email_background, to_email, f"Bewerbung Foodtruck - {event.get('name', 'Event')} | {company}", html)
     await db.scouted_events.update_one({"id": event_id}, {"$set": {"status": "contacted", "organizer_email": to_email}})
     return {"message": "Bewerbung wird gesendet"}

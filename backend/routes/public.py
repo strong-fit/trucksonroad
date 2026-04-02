@@ -68,7 +68,7 @@ async def create_quick_inquiry(inquiry: QuickInquiryCreate):
 async def get_contact_info():
     s = await db.settings.find_one({"type": "general"}, {"_id": 0})
     return {
-        "company_name": (s or {}).get("company_name", "TruckOnRoad"),
+        "company_name": (s or {}).get("company_name", "TrucksOnRoad"),
         "address": (s or {}).get("company_address", "Bahnhofstrasse 75, 8620 Wetzikon"),
         "phone": (s or {}).get("company_phone", "+41 79 696 98 99"),
         "email": (s or {}).get("company_email", "info@truckonroad.ch"),
@@ -91,8 +91,8 @@ async def get_structured_data():
     result = {
         "@context": "https://schema.org",
         "@type": "FoodEstablishment",
-        "name": s.get("company_name", "TruckOnRoad"),
-        "alternateName": f"{s.get('company_name', 'TruckOnRoad')} - Premium Foodtrucks",
+        "name": s.get("company_name", "TrucksOnRoad"),
+        "alternateName": f"{s.get('company_name', 'TrucksOnRoad')} - Premium Foodtrucks",
         "description": "Premium Foodtrucks für Festivals, Firmenanlässe und Private Events in der ganzen Schweiz. 6 einzigartige Truck-Konzepte: Burger, Chicken Burger, Bowls, Pocket Bowls, Empanadas und Retro Trailer.",
         "url": "https://truckonroad.ch",
         "telephone": s.get("company_phone", "+41 79 696 98 99"),
@@ -210,7 +210,7 @@ async def sitemap():
 @router.get("/download/veranstalter-pdf")
 async def download_veranstalter_pdf():
     pdf_bytes = await generate_veranstalter_pdf()
-    return FastAPIResponse(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=TruckOnRoad_Veranstalter.pdf"})
+    return FastAPIResponse(content=pdf_bytes, media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=TrucksOnRoad_Veranstalter.pdf"})
 
 
 # --- INSTAGRAM GALLERY ---

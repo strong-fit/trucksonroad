@@ -61,7 +61,7 @@ class QuickInquiryCreate(BaseModel):
 
 
 class SettingsUpdate(BaseModel):
-    company_name: Optional[str] = "TruckOnRoad"
+    company_name: Optional[str] = "TrucksOnRoad"
     company_address: Optional[str] = ""
     company_phone: Optional[str] = ""
     company_email: Optional[str] = ""

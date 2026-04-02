@@ -13,7 +13,7 @@ EMAIL_I18N = {
         "inquiry_received": "Wir haben Ihre Anfrage erhalten und melden uns innerhalb von 24 Stunden mit einem individuellen Angebot.",
         "event_date": "Event-Datum", "location": "Ort", "guests": "Gaeste", "event_type": "Eventtyp",
         "trucks": "Trucks", "budget": "Budget", "questions_contact": "Bei Fragen erreichen Sie uns jederzeit unter info@truckonroad.ch oder +41 79 696 98 99.",
-        "greeting": "Herzliche Gruesse", "team": "TruckOnRoad Team",
+        "greeting": "Herzliche Gruesse", "team": "TrucksOnRoad Team",
         "new_inquiry": "NEUE ANFRAGE", "new_inquiry_from": "Neue Anfrage von {name}",
         "name": "Name", "email": "E-Mail", "phone": "Telefon",
         "your_offer": "Ihr Angebot, {name}", "offer_intro": "Vielen Dank fuer Ihr Interesse! Basierend auf Ihrer Anfrage haben wir folgendes Angebot fuer Sie zusammengestellt:",
@@ -36,7 +36,7 @@ EMAIL_I18N = {
         "file_download": "Sie koennen diese Datei in Ihrem Kundenportal herunterladen.",
         "reminder": "ERINNERUNG", "days_until": "Nur noch {days} Tage bis zu Ihrem Event!",
         "ready_for_event": "Wir sind bereit und freuen uns auf Ihren Event! Bei letzten Fragen erreichen Sie uns unter info@truckonroad.ch oder +41 79 696 98 99.",
-        "subject_inquiry": "Anfrage erhalten", "subject_offer": "Ihr Angebot von TruckOnRoad",
+        "subject_inquiry": "Anfrage erhalten", "subject_offer": "Ihr Angebot von TrucksOnRoad",
         "subject_confirmed": "Ihre Buchung ist bestaetigt!", "subject_completed": "Event abgeschlossen",
         "subject_cancelled": "Anfrage storniert", "subject_status": "Status-Update",
         "subject_inv_pending": "Rechnung erstellt", "subject_inv_sent": "Rechnung zugestellt",
@@ -54,7 +54,7 @@ EMAIL_I18N = {
         "inquiry_received": "We have received your inquiry and will get back to you within 24 hours with a personalized offer.",
         "event_date": "Event Date", "location": "Location", "guests": "Guests", "event_type": "Event Type",
         "trucks": "Trucks", "budget": "Budget", "questions_contact": "For questions, reach us at info@truckonroad.ch or +41 79 696 98 99.",
-        "greeting": "Best regards", "team": "TruckOnRoad Team",
+        "greeting": "Best regards", "team": "TrucksOnRoad Team",
         "new_inquiry": "NEW INQUIRY", "new_inquiry_from": "New inquiry from {name}",
         "name": "Name", "email": "Email", "phone": "Phone",
         "your_offer": "Your Offer, {name}", "offer_intro": "Thank you for your interest! Based on your inquiry, we have prepared the following offer:",
@@ -77,7 +77,7 @@ EMAIL_I18N = {
         "file_download": "You can download this file in your customer portal.",
         "reminder": "REMINDER", "days_until": "Only {days} days until your event!",
         "ready_for_event": "We are ready and looking forward to your event! For any last questions, reach us at info@truckonroad.ch or +41 79 696 98 99.",
-        "subject_inquiry": "Inquiry received", "subject_offer": "Your offer from TruckOnRoad",
+        "subject_inquiry": "Inquiry received", "subject_offer": "Your offer from TrucksOnRoad",
         "subject_confirmed": "Your booking is confirmed!", "subject_completed": "Event completed",
         "subject_cancelled": "Inquiry cancelled", "subject_status": "Status Update",
         "subject_inv_pending": "Invoice created", "subject_inv_sent": "Invoice sent",
@@ -95,7 +95,7 @@ EMAIL_I18N = {
         "inquiry_received": "Nous avons recu votre demande et vous recontacterons dans les 24 heures avec une offre personnalisee.",
         "event_date": "Date", "location": "Lieu", "guests": "Invites", "event_type": "Type",
         "trucks": "Trucks", "budget": "Budget", "questions_contact": "Pour toute question, contactez-nous a info@truckonroad.ch ou +41 79 696 98 99.",
-        "greeting": "Cordialement", "team": "L'equipe TruckOnRoad",
+        "greeting": "Cordialement", "team": "L'equipe TrucksOnRoad",
         "new_inquiry": "NOUVELLE DEMANDE", "new_inquiry_from": "Nouvelle demande de {name}",
         "name": "Nom", "email": "E-mail", "phone": "Telephone",
         "your_offer": "Votre offre, {name}", "offer_intro": "Merci pour votre interet ! Voici notre offre basee sur votre demande :",
@@ -118,7 +118,7 @@ EMAIL_I18N = {
         "file_download": "Vous pouvez telecharger ce fichier dans votre portail client.",
         "reminder": "RAPPEL", "days_until": "Plus que {days} jours avant votre evenement !",
         "ready_for_event": "Nous sommes prets ! Pour toute question, contactez-nous a info@truckonroad.ch ou +41 79 696 98 99.",
-        "subject_inquiry": "Demande recue", "subject_offer": "Votre offre de TruckOnRoad",
+        "subject_inquiry": "Demande recue", "subject_offer": "Votre offre de TrucksOnRoad",
         "subject_confirmed": "Reservation confirmee !", "subject_completed": "Evenement termine",
         "subject_cancelled": "Demande annulee", "subject_status": "Mise a jour du statut",
         "subject_inv_pending": "Facture creee", "subject_inv_sent": "Facture envoyee",
@@ -136,7 +136,7 @@ EMAIL_I18N = {
         "inquiry_received": "Abbiamo ricevuto la sua richiesta e le risponderemo entro 24 ore con un'offerta personalizzata.",
         "event_date": "Data", "location": "Luogo", "guests": "Ospiti", "event_type": "Tipo",
         "trucks": "Trucks", "budget": "Budget", "questions_contact": "Per domande contattateci a info@truckonroad.ch o +41 79 696 98 99.",
-        "greeting": "Cordiali saluti", "team": "Il team TruckOnRoad",
+        "greeting": "Cordiali saluti", "team": "Il team TrucksOnRoad",
         "new_inquiry": "NUOVA RICHIESTA", "new_inquiry_from": "Nuova richiesta da {name}",
         "name": "Nome", "email": "E-mail", "phone": "Telefono",
         "your_offer": "La sua offerta, {name}", "offer_intro": "Grazie per il suo interesse! Ecco la nostra offerta basata sulla sua richiesta:",
@@ -159,7 +159,7 @@ EMAIL_I18N = {
         "file_download": "Puo scaricare questo file nel suo portale cliente.",
         "reminder": "PROMEMORIA", "days_until": "Mancano solo {days} giorni al suo evento!",
         "ready_for_event": "Siamo pronti! Per domande contattateci a info@truckonroad.ch o +41 79 696 98 99.",
-        "subject_inquiry": "Richiesta ricevuta", "subject_offer": "La sua offerta da TruckOnRoad",
+        "subject_inquiry": "Richiesta ricevuta", "subject_offer": "La sua offerta da TrucksOnRoad",
         "subject_confirmed": "Prenotazione confermata!", "subject_completed": "Evento completato",
         "subject_cancelled": "Richiesta annullata", "subject_status": "Aggiornamento stato",
         "subject_inv_pending": "Fattura creata", "subject_inv_sent": "Fattura inviata",
@@ -235,7 +235,7 @@ def build_confirmation_email(inquiry: dict, lang: str = "de") -> str:
     <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
       <div style="background:#1a1a18;padding:2rem;text-align:center;">
         <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
-          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
         </span>
       </div>
       <div style="padding:2rem;">
@@ -250,7 +250,7 @@ def build_confirmation_email(inquiry: dict, lang: str = "de") -> str:
         <p style="color:#6b6b64;font-size:0.85rem;">{t['questions_contact']}</p>
       </div>
       <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
-        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+        TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
       </div>
     </div>"""
 
@@ -263,7 +263,7 @@ def build_admin_notification_email(inquiry: dict, lang: str = "de") -> str:
     <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
       <div style="background:#1a1a18;padding:1.5rem 2rem;text-align:center;">
         <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.4rem;letter-spacing:0.08em;">
-          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
         </span>
         <span style="color:#4db6ac;font-size:0.7rem;margin-left:0.5rem;">{t['new_inquiry']}</span>
       </div>
@@ -292,7 +292,7 @@ def build_offer_email(inquiry: dict, lang: str = "de") -> str:
     <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
       <div style="background:#1a1a18;padding:2rem;text-align:center;">
         <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
-          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
         </span>
       </div>
       <div style="padding:2rem;">
@@ -309,7 +309,7 @@ def build_offer_email(inquiry: dict, lang: str = "de") -> str:
         <p style="color:#6b6b64;font-size:0.85rem;margin-top:1.5rem;">{t['greeting']},<br/><strong>{t['team']}</strong></p>
       </div>
       <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
-        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+        TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
       </div>
     </div>"""
 
@@ -325,7 +325,7 @@ def build_status_notification_email(inquiry: dict, new_status: str, lang: str = 
     <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
       <div style="background:#1a1a18;padding:1.5rem 2rem;text-align:center;">
         <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.4rem;letter-spacing:0.08em;">
-          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
         </span>
         <span style="color:#4db6ac;font-size:0.7rem;margin-left:0.5rem;">{t['status_update']}</span>
       </div>
@@ -344,7 +344,7 @@ def build_status_notification_email(inquiry: dict, new_status: str, lang: str = 
         <p style="color:#6b6b64;font-size:0.85rem;margin-top:1rem;">{t['greeting']},<br/><strong>{t['team']}</strong></p>
       </div>
       <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
-        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+        TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
       </div>
     </div>"""
 
@@ -361,7 +361,7 @@ def build_invoice_notification_email(inquiry: dict, invoice_status: str, invoice
     <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
       <div style="background:#1a1a18;padding:1.5rem 2rem;text-align:center;">
         <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.4rem;letter-spacing:0.08em;">
-          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
         </span>
         <span style="color:#4db6ac;font-size:0.7rem;margin-left:0.5rem;">{t['invoice_label']}</span>
       </div>
@@ -380,7 +380,7 @@ def build_invoice_notification_email(inquiry: dict, invoice_status: str, invoice
         <p style="color:#6b6b64;font-size:0.85rem;margin-top:1rem;">{t['greeting']},<br/><strong>{t['team']}</strong></p>
       </div>
       <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
-        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+        TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
       </div>
     </div>"""
 
@@ -392,7 +392,7 @@ def build_file_upload_notification_email(inquiry: dict, filename: str, lang: str
     <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
       <div style="background:#1a1a18;padding:1.5rem 2rem;text-align:center;">
         <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.4rem;letter-spacing:0.08em;">
-          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
         </span>
         <span style="color:#4db6ac;font-size:0.7rem;margin-left:0.5rem;">{t['new_file']}</span>
       </div>
@@ -406,7 +406,7 @@ def build_file_upload_notification_email(inquiry: dict, filename: str, lang: str
         <p style="color:#6b6b64;font-size:0.85rem;margin-top:1rem;">{t['greeting']},<br/><strong>{t['team']}</strong></p>
       </div>
       <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
-        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+        TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
       </div>
     </div>"""
 
@@ -418,7 +418,7 @@ def build_event_reminder_email(inquiry: dict, days_until: int, lang: str = "de")
     <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
       <div style="background:#1a1a18;padding:1.5rem 2rem;text-align:center;">
         <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.4rem;letter-spacing:0.08em;">
-          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
         </span>
         <span style="color:#4db6ac;font-size:0.7rem;margin-left:0.5rem;">{t['reminder']}</span>
       </div>
@@ -435,13 +435,13 @@ def build_event_reminder_email(inquiry: dict, days_until: int, lang: str = "de")
         <p style="color:#6b6b64;font-size:0.85rem;margin-top:1rem;">{t['greeting']},<br/><strong>{t['team']}</strong></p>
       </div>
       <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
-        TruckOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+        TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
       </div>
     </div>"""
 
 
 def build_event_application_email(event: dict, custom_message: str, settings: dict) -> str:
-    company = settings.get("company_name", "TruckOnRoad")
+    company = settings.get("company_name", "TrucksOnRoad")
     phone = settings.get("company_phone", "")
     email = settings.get("company_email", "")
     address = settings.get("company_address", "")
@@ -449,7 +449,7 @@ def build_event_application_email(event: dict, custom_message: str, settings: di
     <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
       <div style="background:#1a1a18;padding:2rem;text-align:center;">
         <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
-          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
         </span>
       </div>
       <div style="padding:2rem;">
@@ -488,7 +488,7 @@ def build_event_scan_notification_email(all_new_events: list) -> str:
     <div style="font-family:'DM Sans',Arial,sans-serif;max-width:650px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
       <div style="background:#1a1a18;padding:2rem;text-align:center;">
         <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
-          <span style="color:#f5f0e8;">TRUCK</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
         </span>
       </div>
       <div style="padding:2rem;">

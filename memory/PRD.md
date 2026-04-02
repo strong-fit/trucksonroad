@@ -1,7 +1,7 @@
-# TruckOnRoad - Premium Foodtruck Website (PRD)
+# TrucksOnRoad - Premium Foodtruck Website (PRD)
 
 ## Problem Statement
-Premium, professionelle Website fuer "TruckOnRoad" – Foodtruck-Unternehmen fuer Festivals, Firmenanlaesse und Private Events in der Schweiz.
+Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fuer Festivals, Firmenanlaesse und Private Events in der Schweiz.
 
 ## Tech Stack
 - **Frontend:** React, Tailwind CSS, Shadcn/UI, React-Leaflet

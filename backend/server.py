@@ -54,7 +54,7 @@ async def startup():
     await db.scouted_events.create_index("id", unique=True)
 
     admin_email = os.environ.get("ADMIN_EMAIL", "admin@truckonroad.ch")
-    admin_password = os.environ.get("ADMIN_PASSWORD", "TruckOnRoad2026!")
+    admin_password = os.environ.get("ADMIN_PASSWORD", "TrucksOnRoad2026!")
     existing = await db.users.find_one({"email": admin_email})
     if not existing:
         await db.users.insert_one({"email": admin_email, "password_hash": hash_password(admin_password), "name": "Admin", "role": "admin", "created_at": datetime.now(timezone.utc).isoformat()})
