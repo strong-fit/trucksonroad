@@ -3,7 +3,7 @@ import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Save, Send, Building2, Server, Eye, Download, Instagram, Plus, Trash2, Globe, Facebook, Linkedin, Zap } from 'lucide-react';
+import { Save, Send, Building2, Server, Eye, Download, Instagram, Plus, Trash2, Globe, Facebook, Linkedin, Zap, Lock } from 'lucide-react';
 
 export default function AdminSettings() {
   const { t } = useLanguage();
@@ -13,6 +13,8 @@ export default function AdminSettings() {
   const [testingSend, setTestingSend] = useState(false);
   const [preview, setPreview] = useState(null);
   const [previewType, setPreviewType] = useState('confirmation');
+  const [pwForm, setPwForm] = useState({ old_password: '', new_password: '', confirm: '' });
+  const [pwLoading, setPwLoading] = useState(false);
 
   useEffect(() => {
     api.get('/admin/settings').then(r => setSettings(r.data)).catch(() => {});
@@ -45,6 +47,21 @@ export default function AdminSettings() {
   };
 
   const update = (key, value) => setSettings(prev => ({ ...prev, [key]: value }));
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    if (pwForm.new_password !== pwForm.confirm) { toast.error(t('change_mismatch')); return; }
+    setPwLoading(true);
+    try {
+      await api.put('/auth/change-password', { old_password: pwForm.old_password, new_password: pwForm.new_password });
+      toast.success(t('change_success'));
+      setPwForm({ old_password: '', new_password: '', confirm: '' });
+    } catch (err) {
+      const detail = err?.response?.data?.detail;
+      toast.error(typeof detail === 'string' ? detail : t('change_wrong_old'));
+    }
+    setPwLoading(false);
+  };
 
   if (!settings) return <AdminLayout title={t('admin_settings')}><div className="adm-empty">{t('loading')}</div></AdminLayout>;
 
@@ -307,6 +324,30 @@ export default function AdminSettings() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Password Change */}
+      <div className="adm-detail" style={{ marginTop: '1.25rem' }} data-testid="admin-change-password">
+        <div className="adm-detail-header" style={{ borderBottom: '1px solid var(--adm-border)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+          <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Lock size={18} /> {t('change_password')}</span>
+        </div>
+        <form onSubmit={handleChangePassword} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: '400px' }}>
+          <div>
+            <div className="adm-form-label">{t('change_old')}</div>
+            <input className="adm-input" type="password" required value={pwForm.old_password} onChange={e => setPwForm({...pwForm, old_password: e.target.value})} data-testid="admin-change-old-pw" />
+          </div>
+          <div>
+            <div className="adm-form-label">{t('change_new')}</div>
+            <input className="adm-input" type="password" required minLength={6} value={pwForm.new_password} onChange={e => setPwForm({...pwForm, new_password: e.target.value})} data-testid="admin-change-new-pw" />
+          </div>
+          <div>
+            <div className="adm-form-label">{t('change_confirm')}</div>
+            <input className="adm-input" type="password" required minLength={6} value={pwForm.confirm} onChange={e => setPwForm({...pwForm, confirm: e.target.value})} data-testid="admin-change-confirm-pw" />
+          </div>
+          <button type="submit" className="adm-btn adm-btn-primary" disabled={pwLoading} data-testid="admin-change-pw-submit">
+            <Lock size={14} /> {pwLoading ? '...' : t('change_submit')}
+          </button>
+        </form>
       </div>
     </AdminLayout>
   );

@@ -42,7 +42,7 @@ function AdminLayout({ children, title }) {
       <aside className={`adm-sidebar ${sidebarOpen ? 'open' : ''}`} data-testid="admin-sidebar">
         <div className="adm-sidebar-logo">
           <span className="adm-sidebar-logo-text">
-            <span className="t">TRUCK</span>
+            <span className="t">TRUCKS</span>
             <span className="on">ON</span>
             <span className="r">ROAD</span>
           </span>

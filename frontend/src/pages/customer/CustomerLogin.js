@@ -35,7 +35,7 @@ export default function CustomerLogin() {
       <div className="sf-auth-card">
         <div className="sf-auth-header">
           <span className="sf-auth-logo">
-            <span className="t">TRUCK</span><span className="on">ON</span><span className="r">ROAD</span>
+            <span className="t">TRUCKS</span><span className="on">ON</span><span className="r">ROAD</span>
           </span>
           <div className="sf-auth-subtitle">{t('auth_customer_portal')}</div>
         </div>
@@ -52,6 +52,9 @@ export default function CustomerLogin() {
             <LogIn size={16} /> {loading ? t('auth_logging_in') : t('auth_login')}
           </button>
         </form>
+        <div className="sf-auth-footer">
+          <Link to="/konto/passwort-vergessen" style={{ fontSize: '0.85rem', color: 'var(--sf-gold)' }} data-testid="forgot-password-link">{t('forgot_password')}</Link>
+        </div>
         <div className="sf-auth-footer">
           {t('auth_no_account')} <Link to="/konto/registrieren" data-testid="register-link">{t('auth_register_now')}</Link>
         </div>

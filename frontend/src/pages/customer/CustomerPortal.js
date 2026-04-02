@@ -3,8 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
-import { LogOut, FileText, Clock, CheckCircle2, Send, XCircle, Receipt, Plus, ChevronDown, ChevronUp, User, Paperclip } from 'lucide-react';
+import { LogOut, FileText, Clock, CheckCircle2, Send, XCircle, Receipt, Plus, ChevronDown, ChevronUp, User, Paperclip, Lock } from 'lucide-react';
 import FileUpload from '@/components/FileUpload';
+import { toast } from 'sonner';
 
 export default function CustomerPortal() {
   const { user, logout } = useAuth();
@@ -14,6 +15,9 @@ export default function CustomerPortal() {
   const [expanded, setExpanded] = useState(null);
   const [loading, setLoading] = useState(true);
   const [inquiryFiles, setInquiryFiles] = useState({});
+  const [showPwChange, setShowPwChange] = useState(false);
+  const [pwForm, setPwForm] = useState({ old_password: '', new_password: '', confirm: '' });
+  const [pwLoading, setPwLoading] = useState(false);
 
   const STATUS_MAP = {
     new: { label: t('status_new'), color: '#5ba4b5', icon: Clock },
@@ -51,12 +55,28 @@ export default function CustomerPortal() {
 
   const dateFmt = (d) => d ? new Date(d).toLocaleDateString(lang === 'de' ? 'de-CH' : lang === 'fr' ? 'fr-CH' : lang === 'it' ? 'it-CH' : 'en-GB') : '–';
 
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    if (pwForm.new_password !== pwForm.confirm) { toast.error(t('change_mismatch')); return; }
+    setPwLoading(true);
+    try {
+      await api.put('/auth/change-password', { old_password: pwForm.old_password, new_password: pwForm.new_password });
+      toast.success(t('change_success'));
+      setPwForm({ old_password: '', new_password: '', confirm: '' });
+      setShowPwChange(false);
+    } catch (err) {
+      const detail = err?.response?.data?.detail;
+      toast.error(typeof detail === 'string' ? detail : t('change_wrong_old'));
+    }
+    setPwLoading(false);
+  };
+
   return (
     <div className="sf-portal" data-testid="customer-portal">
       <header className="sf-portal-header" data-testid="portal-header">
         <div className="sf-portal-header-inner">
           <Link to="/" className="sf-auth-logo" style={{ textDecoration: 'none' }}>
-            <span className="t">TRUCK</span><span className="on">ON</span><span className="r">ROAD</span>
+            <span className="t">TRUCKS</span><span className="on">ON</span><span className="r">ROAD</span>
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <select
@@ -73,6 +93,9 @@ export default function CustomerPortal() {
             <span style={{ color: 'var(--sf-gray)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
               <User size={14} /> {user?.name || user?.email}
             </span>
+            <button onClick={() => setShowPwChange(!showPwChange)} className="sf-portal-logout" style={{ background: 'transparent' }} data-testid="portal-change-pw-btn">
+              <Lock size={14} /> {t('change_password')}
+            </button>
             <button onClick={handleLogout} className="sf-portal-logout" data-testid="portal-logout-btn">
               <LogOut size={14} /> {t('portal_logout')}
             </button>
@@ -85,6 +108,18 @@ export default function CustomerPortal() {
           <h1 data-testid="portal-title">{t('portal_title')}</h1>
           <p>{t('portal_subtitle')}</p>
         </div>
+
+        {showPwChange && (
+          <div className="sf-portal-section" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--sf-border-subtle)', borderRadius: '8px', padding: '1.5rem', marginBottom: '2rem' }} data-testid="change-password-section">
+            <h3 style={{ color: 'var(--sf-cream)', margin: '0 0 1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Lock size={18} /> {t('change_password')}</h3>
+            <form onSubmit={handleChangePassword} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: '400px' }}>
+              <input type="password" required placeholder={t('change_old')} value={pwForm.old_password} onChange={e => setPwForm({...pwForm, old_password: e.target.value})} className="sf-auth-input" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--sf-border-subtle)', color: 'var(--sf-cream)', padding: '0.6rem 0.8rem', borderRadius: '6px' }} data-testid="change-old-pw" />
+              <input type="password" required minLength={6} placeholder={t('change_new')} value={pwForm.new_password} onChange={e => setPwForm({...pwForm, new_password: e.target.value})} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--sf-border-subtle)', color: 'var(--sf-cream)', padding: '0.6rem 0.8rem', borderRadius: '6px' }} data-testid="change-new-pw" />
+              <input type="password" required minLength={6} placeholder={t('change_confirm')} value={pwForm.confirm} onChange={e => setPwForm({...pwForm, confirm: e.target.value})} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--sf-border-subtle)', color: 'var(--sf-cream)', padding: '0.6rem 0.8rem', borderRadius: '6px' }} data-testid="change-confirm-pw" />
+              <button type="submit" className="sf-auth-btn" style={{ maxWidth: '200px' }} disabled={pwLoading} data-testid="change-pw-submit">{pwLoading ? '...' : t('change_submit')}</button>
+            </form>
+          </div>
+        )}
 
         <div className="sf-portal-stats" data-testid="portal-stats">
           <div className="sf-portal-stat">

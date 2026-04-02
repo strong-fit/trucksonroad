@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from 'sonner';
@@ -28,7 +29,7 @@ export default function AdminLogin() {
     <div className="adm-login" data-testid="admin-login-page">
       <div className="adm-login-card">
         <div className="adm-login-logo">
-          <span className="t">TRUCK</span>
+          <span className="t">TRUCKS</span>
           <span className="on">ON</span>
           <span className="r">ROAD</span>
         </div>
@@ -46,6 +47,9 @@ export default function AdminLogin() {
             {loading ? t('auth_logging_in') : t('auth_login')}
           </button>
         </form>
+        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+          <Link to="/admin/passwort-vergessen" style={{ fontSize: '0.85rem', color: 'var(--sf-gold)' }} data-testid="admin-forgot-link">{t('forgot_password')}</Link>
+        </div>
       </div>
     </div>
   );

@@ -41,7 +41,7 @@ export default function CustomerRegister() {
       <div className="sf-auth-card" style={{ maxWidth: '480px' }}>
         <div className="sf-auth-header">
           <span className="sf-auth-logo">
-            <span className="t">TRUCK</span><span className="on">ON</span><span className="r">ROAD</span>
+            <span className="t">TRUCKS</span><span className="on">ON</span><span className="r">ROAD</span>
           </span>
           <div className="sf-auth-subtitle">{t('auth_create_account')}</div>
         </div>

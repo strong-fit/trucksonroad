@@ -29,6 +29,8 @@ import CustomerPortal from "@/pages/customer/CustomerPortal";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import AgendaPage from "@/pages/AgendaPage";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import "@/App.css";
 import SeoJsonLd from "@/components/SeoJsonLd";
 
@@ -61,8 +63,12 @@ function App() {
             <Route path="/agenda" element={<PublicLayout><AgendaPage /></PublicLayout>} />
             <Route path="/konto/login" element={<PublicLayout><CustomerLogin /></PublicLayout>} />
             <Route path="/konto/registrieren" element={<PublicLayout><CustomerRegister /></PublicLayout>} />
+            <Route path="/konto/passwort-vergessen" element={<PublicLayout><ForgotPasswordPage variant="customer" /></PublicLayout>} />
+            <Route path="/konto/passwort-reset" element={<PublicLayout><ResetPasswordPage variant="customer" /></PublicLayout>} />
             <Route path="/konto" element={<CustomerProtectedRoute><CustomerPortal /></CustomerProtectedRoute>} />
             <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/passwort-vergessen" element={<ForgotPasswordPage variant="admin" />} />
+            <Route path="/admin/passwort-reset" element={<ResetPasswordPage variant="admin" />} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
             <Route path="/admin/anfragen" element={<ProtectedRoute><AdminInquiries /></ProtectedRoute>} />
             <Route path="/admin/kalender" element={<ProtectedRoute><AdminCalendar /></ProtectedRoute>} />
