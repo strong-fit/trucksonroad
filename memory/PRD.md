@@ -3,81 +3,69 @@
 ## Architecture
 - **Frontend**: React + Tailwind + Shadcn UI + Leaflet (Maps)
 - **Backend**: FastAPI + MongoDB + fpdf2 + httpx + Emergent Object Storage
-- **Email**: Gmail SMTP (configurable, 8 templates)
+- **Email**: Gmail SMTP (configurable, 8+ templates)
 - **Maps**: OpenStreetMap + OSRM (free, no API key)
 - **Storage**: Emergent Object Storage (file uploads)
-- **AI**: Perplexity API (Event Scout, configurable in Admin)
+- **AI**: Perplexity API sonar-pro (Event Scout, configurable in Admin)
 - **Design**: Public: Dark + Petrol. Admin: Light
 
 ## Implemented Features
 
 ### Public Site (DONE)
-- Homepage (Hero, Ticker, Trucks, CTA, Testimonials, FAQ, Instagram Gallery)
-- 6 Truck Detail Pages, Inquiry Form with File Upload, FAQ, Veranstalter, Private Events
-- Über uns, Kontakt (with real company info)
-- Full SEO: Meta Tags, og:image, og:url, hreflang (de/en), Sitemap.xml, robots.txt (AI-friendly)
-- JSON-LD: FoodEstablishment (aggregateRating) + FAQPage
-- Google Search Console verification (configurable in Admin)
-- WhatsApp Button, Customer Login/Registration
+- Homepage, 6 Truck Detail Pages, Inquiry Form, FAQ, Veranstalter, Private Events
+- Über uns, Kontakt, WhatsApp Button, Customer Login/Registration
+- Full SEO: Meta Tags, og:image, hreflang, Sitemap.xml, robots.txt (AI-friendly)
+- JSON-LD: FoodEstablishment + FAQPage + aggregateRating
 
 ### Public Agenda (DONE - April 2026)
-- `/agenda` page showing upcoming confirmed events
-- Displays: Date (localized), Location, Event Name, Trucks
-- Data from confirmed inquiries with future dates
-- Link in Navbar, responsive layout
+- `/agenda` page showing upcoming confirmed events (Date, Location, Event Name, Trucks)
+- Navbar link, responsive layout, localized date formatting
 
 ### Multi-Language Support (DONE - April 2026)
-- Full 4-language support: DE, FR, IT, EN
-- Language switcher dropdown in Navbar (desktop + mobile)
-- localStorage persistence (truckonroad_lang key)
-- All public, customer, and admin pages translated
+- Full 4-language: DE, FR, IT, EN with Navbar dropdown + localStorage persistence
 
 ### Customer Portal (DONE)
-- Open registration, personal dashboard, inquiry tracking + status
-- Invoice visibility, file downloads, two-way sync with Admin
+- Registration, dashboard, inquiry tracking, invoice visibility, file uploads
 
 ### Admin Area - 12 Sections (DONE)
-1. Dashboard (stats + recent inquiries)
-2. Anfragen (filters, detail, status, notes, employees, offer PDF, invoice, file upload/download)
-3. Kalender (truck selector, date blocking)
-4. Trucks (edit name, desc, image, menu, capacity)
-5. Personal (employee CRUD + assignment)
-6. Finanzen (revenue, costs, profit)
-7. Routen (Leaflet map, geocoding, OSRM)
-8. Bewertungen (CRUD, auto-sync to homepage + JSON-LD)
-9. **Event-Scout** (NEW - Perplexity AI web search for events, status tracking, email application)
-10. FAQ (CRUD DE/EN)
-11. Export (CSV/PDF)
-12. Einstellungen (company, SMTP, Instagram, Social Media/SEO, Google Verification, Perplexity API Key, auto-confirmation, event reminder days, 8 email templates)
+1. Dashboard  2. Anfragen  3. Kalender  4. Trucks  5. Personal
+6. Finanzen  7. Routen  8. Bewertungen
+9. **Event-Scout** (Perplexity AI - search, auto-scan, fixed sources, application emails)
+10. FAQ  11. Export  12. Einstellungen
 
 ### KI Event-Scout (DONE - April 2026)
-- Perplexity API integration (sonar-pro model)
-- Search for festivals, Christmas markets, street fests, corporate events in Switzerland
-- Region filter (whole Switzerland or specific cantons/cities)
-- Save found events with status tracking (Neu → Angefragt → Bestätigt → Abgelehnt)
-- Send professional application emails to organizers with company branding
-- API key configurable in Admin Settings
+- **Manuelle Suche**: Perplexity sonar-pro durchsucht Web nach Schweizer Events
+- **Automatischer Täglicher Scan**: Cronjob (24h) mit konfigurierbaren Suchbegriffen
+- **Fixe Event-Webseiten**: Admin kann bekannte URLs hinterlegen (z.B. eventkalender.ch)
+- **Suchbegriffe als Tags**: Festival, Weihnachtsmarkt, Strassenfest etc.
+- **Status-Tracking**: Neu → Angefragt → Bestätigt → Abgelehnt
+- **Bewerbungs-E-Mail**: Professionelle E-Mail mit Firmenkonzept direkt an Veranstalter
+- **Admin E-Mail-Benachrichtigung**: Bei neuen Event-Funden
+- **Duplikaterkennung**: Gleiche Events werden nicht doppelt gespeichert
+- **NUR Schweizer Events** (systemweit erzwungen)
+- API-Key konfigurierbar in Admin → Einstellungen
 
-### Email Automation - 8 Templates (DONE)
-1-8: Confirmation, Admin notification, Booking confirmed, Completed, Invoice sent, Payment received, File upload, Event reminder
-
-### SEO & KI-Suchmaschinen (DONE)
-- 13+ Meta Tags, 2 JSON-LD Schemas, robots.txt (AI-friendly), GSC verification, Sitemap.xml
+### Email Automation - 9 Templates (DONE)
+1-8: Standard (Bestätigung, Admin, Buchung, Abschluss, Rechnung, Zahlung, Upload, Erinnerung)
+9. Event-Scout Benachrichtigung (neue Events gefunden)
 
 ## Key API Endpoints
 - `GET /api/agenda` - Public upcoming events
-- `POST /api/admin/event-scout/search` - AI event search (Perplexity)
+- `POST /api/admin/event-scout/search` - AI event search
+- `GET/PUT /api/admin/event-scout/sources` - Config (URLs, keywords, auto-scan)
+- `POST /api/admin/event-scout/scan-now` - Manual scan trigger
 - `GET/POST/PUT/DELETE /api/admin/event-scout/events` - Scouted event CRUD
 - `POST /api/admin/event-scout/events/{id}/apply` - Send application email
 
-## DB Schema (scouted_events)
-`{id, name, date, location, type, description, organizer_email, website, status, notes, source, created_at}`
-
-## Backlog
-- [ ] Backend email templates/PDFs in selected language (P1)
-- [ ] Google Search Console setup (manual step by user)
+## DB Schema
+- `scouted_events`: {id, name, date, location, type, description, organizer_email, website, status, notes, source, created_at}
+- `settings.scout_sources`: [URLs], `settings.scout_keywords`: [strings], `settings.scout_auto_scan`: bool
 
 ## 3rd Party Integrations
 - Emergent Object Storage (file uploads)
 - Gmail SMTP (admin configurable)
-- Perplexity API (event scout, admin configurable)
+- **Perplexity API** sonar-pro (event scout, admin configurable - user needs own key from perplexity.ai/settings/api)
+
+## Backlog
+- [ ] Backend email templates/PDFs in selected language (P1)
+- [ ] Google Search Console setup (manual step by user)
