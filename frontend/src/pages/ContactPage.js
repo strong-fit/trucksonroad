@@ -6,7 +6,7 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 
 export default function ContactPage() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const [info, setInfo] = useState({
     company_name: 'TruckOnRoad',
     address: 'Bahnhofstrasse 75, 8620 Wetzikon',
@@ -27,7 +27,7 @@ export default function ContactPage() {
       await api.post('/inquiries', {
         first_name: form.name, last_name: '', email: form.email, phone: form.phone,
         event_date: '-', location: '-', guest_count: 0, event_type: 'Kontaktanfrage',
-        remarks: form.message, selected_trucks: [], extras: [], privacy_accepted: true,
+        remarks: form.message, selected_trucks: [], extras: [], privacy_accepted: true, lang,
       });
       toast.success(t('contact_success'));
       setForm({ name: '', email: '', phone: '', message: '' });

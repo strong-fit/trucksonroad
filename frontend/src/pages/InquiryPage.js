@@ -55,6 +55,7 @@ export default function InquiryPage() {
         event_date: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '',
         selected_trucks: selectedTrucks,
         extras,
+        lang,
       });
       toast.success(t('form_success'));
       setInquiryId(res.data.id);
