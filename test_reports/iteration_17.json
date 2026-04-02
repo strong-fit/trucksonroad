@@ -1,0 +1,88 @@
+{
+  "summary": "Completed testing of language change features for both customers and admins. All 14 backend tests passed. Frontend UI tests verified both language selectors are present and functional.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_lang_change.py",
+    "/app/test_reports/pytest/pytest_lang_change.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_lang_change.py"
+  ],
+  "success_rate": {
+    "backend": "100% (14/14 tests passed)",
+    "frontend": "100% (all UI elements verified)"
+  },
+  "test_credentials": {
+    "admin": "admin@truckonroad.ch / TruckOnRoad2026!",
+    "customer": "test2@kunde.ch / Kunde2026!"
+  },
+  "seed_data_creation": "Test inquiries created and cleaned up during testing",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Language change features fully working. Customer can change language via portal-lang-select in header (also updates all their inquiries via PUT /api/customer/profile). Admin can change inquiry language via inquiry-lang-select dropdown in inquiry detail panel (PUT /api/admin/inquiries/{id}/lang). Supported languages: de, en, fr, it.",
+  "features_verified": {
+    "customer_profile_language": {
+      "PUT /api/customer/profile with lang=en": "✓ Updates user language to English",
+      "PUT /api/customer/profile with lang=fr": "✓ Updates user language to French",
+      "PUT /api/customer/profile with lang=it": "✓ Updates user language to Italian",
+      "PUT /api/customer/profile with lang=de": "✓ Updates user language to German",
+      "GET /api/customer/profile": "✓ Returns lang field correctly",
+      "inquiry_update": "✓ Customer profile lang update also updates all their inquiries"
+    },
+    "admin_inquiry_language": {
+      "PUT /api/admin/inquiries/{id}/lang with lang=en": "✓ Updates inquiry language to English",
+      "PUT /api/admin/inquiries/{id}/lang with lang=fr": "✓ Updates inquiry language to French",
+      "PUT /api/admin/inquiries/{id}/lang with lang=it": "✓ Updates inquiry language to Italian",
+      "GET /api/admin/inquiries/{id}": "✓ Returns lang field correctly",
+      "invalid_lang": "✓ Returns 400 for invalid language",
+      "not_found": "✓ Returns 404 for non-existent inquiry"
+    },
+    "frontend_ui": {
+      "portal-lang-select": "✓ Language selector visible in Customer Portal header, changes UI language and calls PUT /api/customer/profile",
+      "inquiry-lang-select": "✓ E-Mail-Sprache dropdown visible in Admin inquiry detail panel, changes inquiry language via PUT /api/admin/inquiries/{id}/lang"
+    }
+  },
+  "backend_tests_summary": {
+    "TestCustomerLanguageChange": {
+      "test_customer_profile_get_returns_lang": "PASSED",
+      "test_customer_profile_update_lang_to_en": "PASSED",
+      "test_customer_profile_update_lang_to_fr": "PASSED",
+      "test_customer_profile_update_lang_to_it": "PASSED",
+      "test_customer_profile_update_lang_back_to_de": "PASSED"
+    },
+    "TestAdminInquiryLanguageChange": {
+      "test_create_inquiry_for_lang_test": "PASSED",
+      "test_admin_get_inquiry_shows_lang": "PASSED",
+      "test_admin_update_inquiry_lang_to_fr": "PASSED",
+      "test_admin_update_inquiry_lang_to_en": "PASSED",
+      "test_admin_update_inquiry_lang_to_it": "PASSED",
+      "test_admin_update_inquiry_lang_invalid": "PASSED",
+      "test_admin_update_inquiry_lang_not_found": "PASSED"
+    },
+    "TestCustomerInquiriesLangUpdate": {
+      "test_customer_create_inquiry_then_update_profile_lang": "PASSED"
+    },
+    "TestCleanup": {
+      "test_cleanup_test_inquiries": "PASSED"
+    }
+  },
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  },
+  "ui_screenshots": {
+    "admin_inquiry_lang_select": "Shows E-MAIL-SPRACHE dropdown with FR selected in inquiry detail panel",
+    "customer_portal_lang_de": "Shows German UI with 'Mein Kundenportal', 'ANFRAGEN', 'BESTÄTIGT', 'BEZAHLT'",
+    "customer_portal_lang_en": "Shows English UI with 'My Customer Portal', 'INQUIRIES', 'CONFIRMED', 'PAID'"
+  }
+}

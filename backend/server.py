@@ -780,7 +780,27 @@ async def customer_get_inquiry(inquiry_id: str, request: Request):
 @api_router.get("/customer/profile")
 async def customer_get_profile(request: Request):
     user = await get_current_user(request)
-    return {"email": user["email"], "name": user.get("name", ""), "first_name": user.get("first_name", ""), "last_name": user.get("last_name", ""), "company": user.get("company", ""), "phone": user.get("phone", ""), "role": user.get("role", "customer")}
+    return {"email": user["email"], "name": user.get("name", ""), "first_name": user.get("first_name", ""), "last_name": user.get("last_name", ""), "company": user.get("company", ""), "phone": user.get("phone", ""), "role": user.get("role", "customer"), "lang": user.get("lang", "de")}
+
+@api_router.put("/customer/profile")
+async def customer_update_profile(request: Request):
+    user = await get_current_user(request)
+    body = await request.json()
+    update_fields = {}
+    if "lang" in body and body["lang"] in ("de", "en", "fr", "it"):
+        update_fields["lang"] = body["lang"]
+        await db.inquiries.update_many({"customer_id": user["_id"]}, {"$set": {"lang": body["lang"]}})
+    if "first_name" in body:
+        update_fields["first_name"] = body["first_name"]
+    if "last_name" in body:
+        update_fields["last_name"] = body["last_name"]
+    if "phone" in body:
+        update_fields["phone"] = body["phone"]
+    if "company" in body:
+        update_fields["company"] = body["company"]
+    if update_fields:
+        await db.users.update_one({"_id": ObjectId(user["_id"])}, {"$set": update_fields})
+    return {"message": "Updated"}
 
 # --- PUBLIC TRUCKS ---
 @api_router.get("/trucks")
@@ -963,6 +983,18 @@ async def admin_update_inquiry(inquiry_id: str, update: InquiryStatusUpdate, req
             subject = f"{it.get(subject_key, it['subject_status'])} – TruckOnRoad"
             background_tasks.add_task(send_email_background, inquiry["email"], subject, status_html)
     return {"message": "Updated"}
+
+@api_router.put("/admin/inquiries/{inquiry_id}/lang")
+async def admin_update_inquiry_lang(inquiry_id: str, request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    new_lang = body.get("lang", "de")
+    if new_lang not in ("de", "en", "fr", "it"):
+        raise HTTPException(status_code=400, detail="Invalid language")
+    result = await db.inquiries.update_one({"id": inquiry_id}, {"$set": {"lang": new_lang}})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"message": "Language updated"}
 
 @api_router.delete("/admin/inquiries/{inquiry_id}")
 async def admin_delete_inquiry(inquiry_id: str, request: Request):

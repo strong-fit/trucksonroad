@@ -8,7 +8,7 @@ import FileUpload from '@/components/FileUpload';
 
 export default function CustomerPortal() {
   const { user, logout } = useAuth();
-  const { t, lang } = useLanguage();
+  const { t, lang, setLang, SUPPORTED_LANGS } = useLanguage();
   const navigate = useNavigate();
   const [inquiries, setInquiries] = useState([]);
   const [expanded, setExpanded] = useState(null);
@@ -59,6 +59,17 @@ export default function CustomerPortal() {
             <span className="t">TRUCK</span><span className="on">ON</span><span className="r">ROAD</span>
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <select
+              value={lang}
+              onChange={async (e) => {
+                setLang(e.target.value);
+                try { await api.put('/customer/profile', { lang: e.target.value }); } catch {}
+              }}
+              style={{ background: 'transparent', border: '1px solid var(--sf-border-subtle)', color: 'var(--sf-cream)', padding: '0.25rem 0.5rem', borderRadius: '3px', fontSize: '0.75rem', cursor: 'pointer' }}
+              data-testid="portal-lang-select"
+            >
+              {SUPPORTED_LANGS.map(l => <option key={l} value={l} style={{ background: '#1a1a18' }}>{l.toUpperCase()}</option>)}
+            </select>
             <span style={{ color: 'var(--sf-gray)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
               <User size={14} /> {user?.name || user?.email}
             </span>

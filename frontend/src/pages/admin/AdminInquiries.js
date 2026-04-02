@@ -173,7 +173,30 @@ export default function AdminInquiries() {
               <div><div className="label">{t('admin_created_at')}</div><div className="value" style={{ color: 'var(--adm-text-muted)' }}>{dateFmt(selected.created_at)}</div></div>
             </div>
 
-            <div style={{ marginTop: '1.25rem', borderTop: '1px solid var(--adm-border)', paddingTop: '1rem' }}>
+            <div style={{ marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div className="adm-form-label" style={{ margin: 0 }}>E-Mail-Sprache:</div>
+              <select
+                className="adm-input"
+                value={selected.lang || 'de'}
+                onChange={async (e) => {
+                  try {
+                    await api.put(`/admin/inquiries/${selected.id}/lang`, { lang: e.target.value });
+                    setSelected(prev => ({ ...prev, lang: e.target.value }));
+                    load();
+                    toast.success(t('admin_status_update'));
+                  } catch { toast.error(t('admin_error')); }
+                }}
+                style={{ width: 'auto', fontSize: '0.78rem', padding: '0.25rem 0.5rem' }}
+                data-testid="inquiry-lang-select"
+              >
+                <option value="de">DE</option>
+                <option value="en">EN</option>
+                <option value="fr">FR</option>
+                <option value="it">IT</option>
+              </select>
+            </div>
+
+            <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '1rem' }}>
               <div className="adm-form-label">{t('status')}</div>
               <div className="adm-filters" style={{ marginBottom: '0.75rem' }}>
                 {STATUS_OPTIONS.map(s => (
