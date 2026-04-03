@@ -294,8 +294,8 @@
 }
 .sf-hero-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(5rem, 11vw, 10rem);
-  line-height: 0.92; letter-spacing: 0.02em;
+  font-size: clamp(2.8rem, 5.5vw, 5.5rem);
+  line-height: 0.95; letter-spacing: 0.02em;
   color: var(--sf-cream); max-width: 700px; margin-bottom: 0.5rem;
 }
 .sf-hero-title .italic {
