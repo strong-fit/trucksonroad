@@ -164,6 +164,15 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Graceful Fallback: Nur Hauptbild wenn keine Galerie vorhanden
 - [x] 100% Tests bestanden (iteration_28)
 
+### CRO Sharpening & Conversion-Optimierung (03.04.2026)
+- [x] Hero geschärft: "EINZIGARTIGE FOODTRUCKS FÜR EVENTS, DIE IN ERINNERUNG BLEIBEN." (Ergebnis verkaufen, nicht Trucks)
+- [x] Positionierung: "Auffällig & Einzigartig – Das Highlight auf jedem Event"
+- [x] Pricing-Sektion (NEU): 3 Event-Grössen (Klein/Mittel/Gross), "PREIS AUF ANFRAGE", BELIEBT Badge
+- [x] Kundenlogos-Sektion (NEU): "VERTRAUEN VON" mit Platzhalter-Logos (Google, UBS, SBB, Migros, Swiss, Zurich)
+- [x] Truck-Taglines ergebnis-fokussiert: z.B. "Für Events mit 200+ Gästen – schnell, heiss, unvergesslich"
+- [x] Alle Texte in 4 Sprachen (DE/FR/IT/EN)
+- [x] 100% Tests bestanden (iteration_29)
+
 ## Remaining Tasks
 - [ ] Event-Funnel (Anfrage-Formular) an CRO-Stil anpassen (P1)
 - [ ] Google Search Console setup (manueller Schritt durch den Nutzer)
