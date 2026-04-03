@@ -2,12 +2,17 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
-import { ArrowRight, Instagram, Star, Quote, ChevronRight, Calendar, Tag } from 'lucide-react';
+import { ArrowRight, Instagram, Star, Quote, ChevronRight, Calendar, Tag, Send, FileText, PartyPopper, Building2, Heart, Music, Cake } from 'lucide-react';
 
 const HERO_IMG_MAIN = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=900&q=80";
 const HERO_IMG_ACCENT = "https://images.unsplash.com/photo-1509315811345-672d83ef2fbc?w=600&q=80";
-const EVENT_IMG = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=700&q=80";
-const ACCENT_IMG = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=400&q=80";
+
+const UC_IMAGES = {
+  corporate: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80",
+  wedding: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80",
+  festival: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=600&q=80",
+  birthday: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&q=80",
+};
 
 function useInView() {
   const ref = useRef();
@@ -29,7 +34,7 @@ function FadeUp({ children, delay = 0, className = '' }) {
   );
 }
 
-const tickerItems = ["Burger Truck", "Bowl Truck", "Empanadas Truck", "Pocket Bowl Truck", "Retro Trailer", "Festivals", "Firmenanlässe", "Privatevents"];
+const tickerItems = ["Burger Truck", "Bowl Truck", "Empanadas Truck", "Pocket Bowl Truck", "Retro Trailer", "Festivals", "Hochzeiten", "Firmenanlässe", "Privatevents"];
 
 export default function HomePage() {
   const { lang, t } = useLanguage();
@@ -48,22 +53,27 @@ export default function HomePage() {
     api.get('/blog?limit=3').then(r => setBlogPosts(r.data.posts || [])).catch(() => {});
   }, []);
 
-  const whomItems = [t('whom_1'), t('whom_2'), t('whom_3'), t('whom_4'), t('whom_5')];
-  const whyItems = [
-    { title: t('why_1_title'), text: t('why_1_text') },
-    { title: t('why_2_title'), text: t('why_2_text') },
-    { title: t('why_3_title'), text: t('why_3_text') },
-    { title: t('why_4_title'), text: t('why_4_text') },
+  const useCases = [
+    { key: 'corporate', icon: Building2, img: UC_IMAGES.corporate },
+    { key: 'wedding', icon: Heart, img: UC_IMAGES.wedding },
+    { key: 'festival', icon: Music, img: UC_IMAGES.festival },
+    { key: 'birthday', icon: Cake, img: UC_IMAGES.birthday },
+  ];
+
+  const howSteps = [
+    { num: '01', icon: Send, key: '1' },
+    { num: '02', icon: FileText, key: '2' },
+    { num: '03', icon: PartyPopper, key: '3' },
   ];
 
   return (
     <div data-testid="home-page">
-      {/* HERO */}
+      {/* ===== HERO – Emotional, experience-focused ===== */}
       <section className="sf-hero" data-testid="hero-section">
         <div className="sf-hero-bg" />
         <div className="sf-hero-grid" />
         <div className="sf-hero-trucks">
-          <img src={HERO_IMG_MAIN} alt="Foodtruck" className="sf-hero-truck-main" />
+          <img src={HERO_IMG_MAIN} alt="Foodtruck Event" className="sf-hero-truck-main" />
           <img src={HERO_IMG_ACCENT} alt="Foodtruck" className="sf-hero-truck-accent" />
         </div>
         <div className="sf-hero-content">
@@ -72,9 +82,9 @@ export default function HomePage() {
           </FadeUp>
           <FadeUp delay={0.2}>
             <h1 className="sf-hero-title">
-              <span className="italic">{t('hero_title_1')}</span>{' '}
-              {t('hero_title_2')}<span className="gold">{t('hero_title_3')}</span>
-              <br />{t('hero_title_4')}<br />{t('hero_title_5')}
+              {t('hero_title_1')}<br />
+              <span className="gold">{t('hero_title_2')}</span><br />
+              {t('hero_title_4')}{t('hero_title_5')}
             </h1>
           </FadeUp>
           <FadeUp delay={0.3}>
@@ -83,7 +93,7 @@ export default function HomePage() {
           <FadeUp delay={0.4}>
             <div className="sf-hero-actions">
               <Link to="/anfrage" className="sf-btn-primary" data-testid="hero-inquiry-btn">{t('hero_btn_inquiry')}</Link>
-              <a href="#trucks" className="sf-btn-outline" data-testid="hero-trucks-btn">{t('hero_btn_trucks')}</a>
+              <a href="#how-it-works" className="sf-btn-outline" data-testid="hero-how-btn">{t('hero_btn_trucks')}</a>
             </div>
           </FadeUp>
         </div>
@@ -94,7 +104,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TICKER */}
+      {/* ===== TICKER ===== */}
       <div className="sf-ticker" data-testid="ticker">
         <div className="sf-ticker-inner">
           {[...tickerItems, ...tickerItems].map((item, i) => (
@@ -103,93 +113,75 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* TRUCKS */}
-      <section className="sf-trucks-wrap" id="trucks" data-testid="trucks-section">
-        <div className="sf-trucks-header">
-          <div>
-            <div className="sf-section-tag">{t('trucks_tag')}</div>
-            <h2 className="sf-section-title">{t('trucks_title_1')}<br />{t('trucks_title_2')}</h2>
+      {/* ===== USE CASES – "Für jeden Anlass" ===== */}
+      <section className="sf-section" data-testid="use-cases-section">
+        <FadeUp>
+          <div className="sf-section-tag">{t('uc_tag')}</div>
+          <h2 className="sf-section-title" style={{ maxWidth: 700 }}>{t('uc_title')}</h2>
+        </FadeUp>
+        <div className="sf-uc-grid" data-testid="use-cases-grid">
+          {useCases.map((uc, i) => {
+            const Icon = uc.icon;
+            return (
+              <FadeUp key={uc.key} delay={i * 0.1}>
+                <Link to="/anfrage" className="sf-uc-card" data-testid={`uc-card-${uc.key}`}>
+                  <img src={uc.img} alt={t(`uc_${uc.key}_title`)} className="sf-uc-card-img" />
+                  <div className="sf-uc-card-overlay" />
+                  <div className="sf-uc-card-content">
+                    <div className="sf-uc-card-icon"><Icon size={22} /></div>
+                    <h3 className="sf-uc-card-title">{t(`uc_${uc.key}_title`)}</h3>
+                    <p className="sf-uc-card-desc">{t(`uc_${uc.key}_desc`)}</p>
+                    <span className="sf-uc-card-cta">{t('uc_cta')} <ArrowRight size={14} /></span>
+                  </div>
+                </Link>
+              </FadeUp>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ===== HOW IT WORKS – "So funktioniert's" ===== */}
+      <section className="sf-how-section" id="how-it-works" data-testid="how-it-works-section">
+        <FadeUp>
+          <div className="sf-section-tag">{t('how_tag')}</div>
+          <h2 className="sf-section-title">{t('how_title')}</h2>
+        </FadeUp>
+        <div className="sf-how-grid">
+          {howSteps.map((step, i) => {
+            const Icon = step.icon;
+            return (
+              <FadeUp key={step.key} delay={i * 0.15}>
+                <div className="sf-how-step" data-testid={`how-step-${step.key}`}>
+                  <div className="sf-how-num-wrap">
+                    <span className="sf-how-num">{step.num}</span>
+                    <Icon size={24} className="sf-how-icon" />
+                  </div>
+                  <h3 className="sf-how-step-title">{t(`how_step${step.key}_title`)}</h3>
+                  <p className="sf-how-step-desc">{t(`how_step${step.key}_desc`)}</p>
+                  {i < howSteps.length - 1 && <div className="sf-how-connector" />}
+                </div>
+              </FadeUp>
+            );
+          })}
+        </div>
+        <FadeUp delay={0.5}>
+          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+            <Link to="/anfrage" className="sf-btn-primary" data-testid="how-cta-btn">{t('hero_btn_inquiry')}</Link>
           </div>
-          <p style={{ maxWidth: 300, color: 'var(--sf-gray)', fontSize: '0.9rem', lineHeight: 1.7 }}>
-            {t('trucks_desc')}
-          </p>
-        </div>
-        <div className="sf-trucks-grid">
-          {trucks.map((truck) => (
-            <Link
-              key={truck.slug}
-              to={`/trucks/${truck.slug}`}
-              className={`sf-truck-card ${truck.is_wide ? 'sf-truck-card-wide' : ''}`}
-              data-testid={`truck-card-${truck.slug}`}
-            >
-              <img src={truck.image} alt={truck[`name_${lang}`]} />
-              {truck.tag && <div className="sf-truck-card-tag">{truck.tag}</div>}
-              <div className="sf-truck-card-info">
-                <div className="sf-truck-card-name">{truck[`name_${lang}`]}</div>
-                <div className="sf-truck-card-sub">{truck[`tagline_${lang}`]}</div>
-              </div>
-            </Link>
-          ))}
+        </FadeUp>
+      </section>
+
+      {/* ===== TRUST NUMBERS ===== */}
+      <section className="sf-trust-bar" data-testid="trust-numbers-section">
+        <div className="sf-trust-inner">
+          <FadeUp><div className="sf-trust-item"><span className="sf-trust-num">{t('trust_events_num')}</span><span className="sf-trust-label">{t('trust_events_label')}</span></div></FadeUp>
+          <FadeUp delay={0.1}><div className="sf-trust-item"><span className="sf-trust-num">{t('trust_satisfaction_num')}</span><span className="sf-trust-label">{t('trust_satisfaction_label')}</span></div></FadeUp>
+          <FadeUp delay={0.2}><div className="sf-trust-item"><span className="sf-trust-num">{t('trust_response_num')}</span><span className="sf-trust-label">{t('trust_response_label')}</span></div></FadeUp>
+          <FadeUp delay={0.3}><div className="sf-trust-item"><span className="sf-trust-num">{t('trust_concepts_num')}</span><span className="sf-trust-label">{t('trust_concepts_label')}</span></div></FadeUp>
         </div>
       </section>
 
-      {/* FOR WHOM */}
-      <section className="sf-section" data-testid="whom-section">
-        <div className="sf-whom">
-          <div>
-            <div className="sf-section-tag">{t('whom_tag')}</div>
-            <h2 className="sf-section-title">{t('whom_title_1')}<br />{t('whom_title_2')}<br />{t('whom_title_3')}</h2>
-            <ul className="sf-whom-list">
-              {whomItems.map((item, i) => (
-                <FadeUp key={i} delay={i * 0.1}>
-                  <li className="sf-whom-item">
-                    <span className="sf-whom-num">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="sf-whom-name">{item}</span>
-                    <span className="sf-whom-arrow"><ArrowRight size={18} /></span>
-                  </li>
-                </FadeUp>
-              ))}
-            </ul>
-          </div>
-          <div className="sf-whom-visual">
-            <img src={EVENT_IMG} alt="Event" className="sf-whom-img-main" />
-            <img src={ACCENT_IMG} alt="Truck" className="sf-whom-img-accent" />
-            <div className="sf-whom-badge">{t('whom_badge')}</div>
-          </div>
-        </div>
-      </section>
-
-      {/* WHY US */}
-      <section className="sf-why-section" data-testid="why-section">
-        <div className="sf-section-tag">{t('why_tag')}</div>
-        <h2 className="sf-section-title">{t('why_title_1')}<br />{t('why_title_2')}</h2>
-        <div className="sf-why-grid">
-          {whyItems.map((item, i) => (
-            <FadeUp key={i} delay={i * 0.1}>
-              <div>
-                <div className="sf-why-num">{String(i + 1).padStart(2, '0')}</div>
-                <div className="sf-why-title">{item.title}</div>
-                <p className="sf-why-text">{item.text}</p>
-              </div>
-            </FadeUp>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="sf-cta" data-testid="cta-section">
-        <div className="sf-cta-eyebrow">{t('cta_eyebrow')}</div>
-        <h2 className="sf-cta-title">
-          {t('cta_title_1')} <em>{t('cta_title_em')}</em><br />{t('cta_title_2')}
-        </h2>
-        <p className="sf-cta-sub">{t('cta_sub')}</p>
-        <div className="sf-cta-actions">
-          <Link to="/anfrage" className="sf-btn-primary" data-testid="cta-inquiry-btn">{t('cta_btn')}</Link>
-          <Link to="/faq" className="sf-btn-outline">{t('cta_btn_faq')}</Link>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS / BEWERTUNGEN */}
+      {/* ===== REVIEWS / TESTIMONIALS (moved up for trust) ===== */}
       {reviews.length > 0 && (
         <section className="sf-section" data-testid="reviews-section">
           <div className="sf-section-inner">
@@ -242,34 +234,50 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* --- INSTAGRAM --- */}
-      {instaData.images.length > 0 && (
-        <section className="sf-section" data-testid="instagram-section">
-          <div className="sf-section-inner">
-            <div className="sf-tag">{t('instagram_tag')}</div>
-            <h2 className="sf-section-title">
-              <Instagram size={28} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '0.5rem', color: 'var(--sf-gold)' }} />
-              {instaData.username ? `@${instaData.username}` : 'Instagram'}
-            </h2>
-            <div className="sf-insta-grid" data-testid="instagram-grid">
-              {instaData.images.map((img, i) => (
-                <a key={i} href={instaData.username ? `https://instagram.com/${instaData.username}` : '#'} target="_blank" rel="noopener noreferrer" className="sf-insta-item">
-                  <img src={img} alt={`Instagram ${i + 1}`} loading="lazy" />
-                </a>
-              ))}
-            </div>
-            {instaData.username && (
-              <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-                <a href={`https://instagram.com/${instaData.username}`} target="_blank" rel="noopener noreferrer" className="sf-btn-outline" style={{ textDecoration: 'none' }}>
-                  <Instagram size={16} style={{ marginRight: '0.4rem' }} /> {t('instagram_follow')}
-                </a>
-              </div>
-            )}
+      {/* ===== TRUCKS ===== */}
+      <section className="sf-trucks-wrap" id="trucks" data-testid="trucks-section">
+        <div className="sf-trucks-header">
+          <div>
+            <div className="sf-section-tag">{t('trucks_tag')}</div>
+            <h2 className="sf-section-title">{t('trucks_title_1')}<br />{t('trucks_title_2')}</h2>
           </div>
-        </section>
-      )}
+          <p style={{ maxWidth: 300, color: 'var(--sf-gray)', fontSize: '0.9rem', lineHeight: 1.7 }}>
+            {t('trucks_desc')}
+          </p>
+        </div>
+        <div className="sf-trucks-grid">
+          {trucks.map((truck) => (
+            <Link
+              key={truck.slug}
+              to={`/trucks/${truck.slug}`}
+              className={`sf-truck-card ${truck.is_wide ? 'sf-truck-card-wide' : ''}`}
+              data-testid={`truck-card-${truck.slug}`}
+            >
+              <img src={truck.image} alt={truck[`name_${lang}`]} />
+              {truck.tag && <div className="sf-truck-card-tag">{truck.tag}</div>}
+              <div className="sf-truck-card-info">
+                <div className="sf-truck-card-name">{truck[`name_${lang}`]}</div>
+                <div className="sf-truck-card-sub">{truck[`tagline_${lang}`]}</div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
 
-      {/* FAQ PREVIEW */}
+      {/* ===== CTA ===== */}
+      <section className="sf-cta" data-testid="cta-section">
+        <div className="sf-cta-eyebrow">{t('cta_eyebrow')}</div>
+        <h2 className="sf-cta-title">
+          {t('cta_title_1')} <em>{t('cta_title_em')}</em><br />{t('cta_title_2')}
+        </h2>
+        <p className="sf-cta-sub">{t('cta_sub')}</p>
+        <div className="sf-cta-actions">
+          <Link to="/anfrage" className="sf-btn-primary" data-testid="cta-inquiry-btn">{t('cta_btn')}</Link>
+          <Link to="/faq" className="sf-btn-outline">{t('cta_btn_faq')}</Link>
+        </div>
+      </section>
+
+      {/* ===== FAQ PREVIEW ===== */}
       <section className="sf-section" data-testid="faq-preview">
         <div className="sf-section-tag">{t('faq_tag')}</div>
         <h2 className="sf-section-title">{t('faq_title')}</h2>
@@ -293,7 +301,7 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* BLOG PREVIEW */}
+      {/* ===== BLOG PREVIEW ===== */}
       {blogPosts.length > 0 && (
         <section className="sf-section" data-testid="blog-preview-section">
           <div className="sf-section-tag">{t('blog_tag')}</div>
@@ -339,6 +347,33 @@ export default function HomePage() {
           </div>
           <div style={{ textAlign: 'center', marginTop: '2rem' }}>
             <Link to="/blog" className="sf-btn-outline" data-testid="blog-view-all">{t('blog_all')}</Link>
+          </div>
+        </section>
+      )}
+
+      {/* ===== INSTAGRAM ===== */}
+      {instaData.images.length > 0 && (
+        <section className="sf-section" data-testid="instagram-section">
+          <div className="sf-section-inner">
+            <div className="sf-tag">{t('instagram_tag')}</div>
+            <h2 className="sf-section-title">
+              <Instagram size={28} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '0.5rem', color: 'var(--sf-gold)' }} />
+              {instaData.username ? `@${instaData.username}` : 'Instagram'}
+            </h2>
+            <div className="sf-insta-grid" data-testid="instagram-grid">
+              {instaData.images.map((img, i) => (
+                <a key={i} href={instaData.username ? `https://instagram.com/${instaData.username}` : '#'} target="_blank" rel="noopener noreferrer" className="sf-insta-item">
+                  <img src={img} alt={`Instagram ${i + 1}`} loading="lazy" />
+                </a>
+              ))}
+            </div>
+            {instaData.username && (
+              <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+                <a href={`https://instagram.com/${instaData.username}`} target="_blank" rel="noopener noreferrer" className="sf-btn-outline" style={{ textDecoration: 'none' }}>
+                  <Instagram size={16} style={{ marginRight: '0.4rem' }} /> {t('instagram_follow')}
+                </a>
+              </div>
+            )}
           </div>
         </section>
       )}
