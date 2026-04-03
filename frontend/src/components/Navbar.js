@@ -29,6 +29,7 @@ export default function Navbar() {
     { to: '/kontakt', label: t('nav_contact') },
     { to: '/faq', label: t('nav_faq') },
     { to: '/agenda', label: t('nav_agenda') },
+    { to: '/blog', label: t('nav_blog') },
   ];
 
   const handleHashLink = (hash) => {

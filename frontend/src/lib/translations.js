@@ -215,6 +215,12 @@ export const translations = {
     priv_know_3: "Mindestens 4–8 Wochen im Voraus buchen", priv_know_4: "Menü individuell anpassbar",
     priv_know_5: "Einsatzgebiet: Ganze Schweiz", priv_know_6: "Vegetarische und vegane Optionen verfügbar",
     priv_cta_eyebrow: "Bereit für euren Anlass?", priv_cta_title: "Jetzt unverbindlich anfragen.",
+    // Blog
+    nav_blog: "Blog", admin_blog: "Blog",
+    blog_tag: "Blog", blog_title: "Wissen & Inspiration", blog_subtitle: "Tipps, Rezepte und Insights rund um Foodtrucks, Events und Street Food in der Schweiz.",
+    blog_all: "Alle", blog_read_more: "Weiterlesen", blog_no_posts: "Noch keine Beiträge vorhanden.",
+    blog_back: "Zurück zum Blog", blog_not_found: "Beitrag nicht gefunden",
+    blog_cta_text: "Lust auf Foodtruck-Catering bei eurem nächsten Event?",
   },
 
   en: {
@@ -406,6 +412,12 @@ export const translations = {
     priv_know_3: "Book at least 4-8 weeks in advance", priv_know_4: "Menu individually customizable",
     priv_know_5: "Service area: All of Switzerland", priv_know_6: "Vegetarian and vegan options available",
     priv_cta_eyebrow: "Ready for your event?", priv_cta_title: "Inquire without obligation.",
+    // Blog
+    nav_blog: "Blog", admin_blog: "Blog",
+    blog_tag: "Blog", blog_title: "Knowledge & Inspiration", blog_subtitle: "Tips, recipes and insights about food trucks, events and street food in Switzerland.",
+    blog_all: "All", blog_read_more: "Read more", blog_no_posts: "No posts yet.",
+    blog_back: "Back to blog", blog_not_found: "Post not found",
+    blog_cta_text: "Want food truck catering at your next event?",
   },
 
   fr: {
@@ -597,6 +609,12 @@ export const translations = {
     priv_know_3: "Réserver au moins 4-8 semaines à l'avance", priv_know_4: "Menu personnalisable individuellement",
     priv_know_5: "Zone de service : toute la Suisse", priv_know_6: "Options végétariennes et véganes disponibles",
     priv_cta_eyebrow: "Prêt pour votre événement ?", priv_cta_title: "Demandez sans engagement.",
+    // Blog
+    nav_blog: "Blog", admin_blog: "Blog",
+    blog_tag: "Blog", blog_title: "Savoir & Inspiration", blog_subtitle: "Conseils, recettes et informations sur les food trucks, événements et street food en Suisse.",
+    blog_all: "Tous", blog_read_more: "Lire la suite", blog_no_posts: "Aucun article pour le moment.",
+    blog_back: "Retour au blog", blog_not_found: "Article non trouvé",
+    blog_cta_text: "Envie de catering food truck pour votre prochain événement ?",
   },
 
   it: {
@@ -788,5 +806,11 @@ export const translations = {
     priv_know_3: "Prenotare almeno 4-8 settimane in anticipo", priv_know_4: "Menu personalizzabile individualmente",
     priv_know_5: "Zona di servizio: tutta la Svizzera", priv_know_6: "Opzioni vegetariane e vegane disponibili",
     priv_cta_eyebrow: "Pronti per il vostro evento?", priv_cta_title: "Richiedete senza impegno.",
+    // Blog
+    nav_blog: "Blog", admin_blog: "Blog",
+    blog_tag: "Blog", blog_title: "Sapere & Ispirazione", blog_subtitle: "Consigli, ricette e informazioni su food truck, eventi e street food in Svizzera.",
+    blog_all: "Tutti", blog_read_more: "Leggi di più", blog_no_posts: "Nessun articolo ancora.",
+    blog_back: "Torna al blog", blog_not_found: "Articolo non trovato",
+    blog_cta_text: "Volete un catering food truck per il vostro prossimo evento?",
   },
 };

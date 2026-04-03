@@ -14,12 +14,14 @@ from datetime import datetime, timezone
 from database import db, client
 from auth import hash_password, verify_password
 from seed import TRUCKS_SEED, FAQS_SEED
+from blog_seed import BLOG_SEED
 from services.storage import init_storage
 from services.event_scout import event_reminder_loop, event_scan_loop
 from routes.auth_routes import router as auth_router
 from routes.public import router as public_router
 from routes.customer import router as customer_router
 from routes.admin import router as admin_router
+from routes.blog import router as blog_router
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -32,6 +34,7 @@ api_router.include_router(auth_router)
 api_router.include_router(public_router)
 api_router.include_router(customer_router)
 api_router.include_router(admin_router)
+api_router.include_router(blog_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -75,6 +78,12 @@ async def startup():
         for f in FAQS_SEED:
             await db.faqs.insert_one(f.copy())
         logger.info("FAQs seeded")
+
+    if await db.blog_posts.count_documents({}) == 0:
+        for bp in BLOG_SEED:
+            await db.blog_posts.insert_one(bp.copy())
+        logger.info(f"Blog posts seeded: {len(BLOG_SEED)}")
+    await db.blog_posts.create_index("slug", unique=True)
 
     Path("/app/memory").mkdir(exist_ok=True)
     with open("/app/memory/test_credentials.md", "w") as f:

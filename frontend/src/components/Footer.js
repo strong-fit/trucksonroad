@@ -33,6 +33,7 @@ export default function Footer() {
           <Link to="/private-events" className="sf-footer-link">{t('nav_private')}</Link>
           <Link to="/anfrage" className="sf-footer-link">{t('nav_inquiry')}</Link>
           <Link to="/faq" className="sf-footer-link">{t('nav_faq')}</Link>
+          <Link to="/blog" className="sf-footer-link">{t('nav_blog')}</Link>
         </div>
 
         <div>

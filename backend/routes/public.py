@@ -192,6 +192,7 @@ Allow: /
 async def sitemap():
     base = "https://trucksonroad.ch"
     trucks_list = await db.trucks.find({"is_active": True}, {"slug": 1, "_id": 0}).to_list(100)
+    blog_list = await db.blog_posts.find({"is_published": True}, {"slug": 1, "_id": 0}).to_list(200)
     urls = [
         (base + "/", "1.0", "weekly"),
         (base + "/fuer-veranstalter", "0.8", "monthly"),
@@ -200,9 +201,12 @@ async def sitemap():
         (base + "/kontakt", "0.7", "monthly"),
         (base + "/anfrage", "0.9", "weekly"),
         (base + "/faq", "0.6", "monthly"),
+        (base + "/blog", "0.8", "weekly"),
     ]
     for t in trucks_list:
         urls.append((f"{base}/trucks/{t['slug']}", "0.7", "monthly"))
+    for bp in blog_list:
+        urls.append((f"{base}/blog/{bp['slug']}", "0.7", "weekly"))
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     for loc, pri, freq in urls:
         xml += f"  <url><loc>{loc}</loc><priority>{pri}</priority><changefreq>{freq}</changefreq></url>\n"
