@@ -115,8 +115,20 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Alle Posts loeschbar im Admin
 - [x] 100% Tests bestanden (11/11 Backend + alle Frontend)
 
+### SEO Pro-Optimierung (03.04.2026)
+- [x] KI Content Checker (KI #2): Zweite KI prueft Qualitaet, Duplicate Content, Struktur (Score 1-10) vor Veroeffentlichung
+- [x] Dynamische SEO Meta-Tags pro Blog-Post (React Helmet): Title, Description, OG-Tags, Canonical
+- [x] data-rh Attribute in index.html fuer saubere Helmet-Uebernahme
+- [x] Laengere Artikel: 800-1500 Woerter statt 400-600
+- [x] Interne Verlinkung: KI baut automatisch 2-3 interne Links ein (/anfrage, /trucks, /blog, /kontakt, /faq)
+- [x] Markdown-Links werden als klickbare React-Router Links gerendert
+- [x] "Aehnliche Beitraege" Sektion am Ende jedes Blog-Posts (3 verwandte Artikel)
+- [x] Meta Title + Meta Description fuer alle Seed-Beitraege hinzugefuegt
+- [x] Existing-Title-Check verhindert doppelte Artikel-Themen
+
 ## Remaining Tasks
 - [ ] Google Search Console setup (manueller Schritt durch den Nutzer)
+- [ ] Emergent LLM Key Budget auffuellen (Profil -> Universal Key -> Balance hinzufuegen)
 
 ## Test Reports
-- iteration_3 bis iteration_24: Alle 100% bestanden
+- iteration_3 bis iteration_25: Alle bestanden (25: Backend 76%->100% nach Fixes)
