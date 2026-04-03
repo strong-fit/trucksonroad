@@ -153,6 +153,17 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Alle neuen Texte in 4 Sprachen (DE/FR/IT/EN)
 - [x] 100% Tests bestanden (iteration_27)
 
+### Truck Galerie & Video Infrastruktur (03.04.2026)
+- [x] Backend: Gallery Upload Endpoint (POST /api/admin/trucks/{slug}/gallery) mit Object Storage
+- [x] Backend: Gallery Delete Endpoint (DELETE /api/admin/trucks/{slug}/gallery)
+- [x] Backend: video_url Feld pro Truck
+- [x] Admin UI: GalleryManager Komponente (Bild hochladen + URL einfügen + Vorschau + Löschen)
+- [x] Admin UI: Video-URL Feld mit Embed-Hinweis
+- [x] Frontend: HeroGallery Slider mit Pfeilen, Dots, Thumbnails, Auto-Advance (5s)
+- [x] Frontend: Video Play-Button → YouTube/Vimeo Embed im Hero
+- [x] Graceful Fallback: Nur Hauptbild wenn keine Galerie vorhanden
+- [x] 100% Tests bestanden (iteration_28)
+
 ## Remaining Tasks
 - [ ] Event-Funnel (Anfrage-Formular) an CRO-Stil anpassen (P1)
 - [ ] Google Search Console setup (manueller Schritt durch den Nutzer)
