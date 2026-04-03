@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { ArrowLeft, Calendar, Tag, User, Share2 } from 'lucide-react';
@@ -8,11 +9,29 @@ export default function BlogPostPage() {
   const { slug } = useParams();
   const { lang, t } = useLanguage();
   const [post, setPost] = useState(null);
+  const [relatedPosts, setRelatedPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     api.get(`/blog/${slug}`)
-      .then(r => setPost(r.data))
+      .then(r => {
+        setPost(r.data);
+        // Fetch related posts from same category, fallback to latest
+        api.get(`/blog?category=${r.data.category}&limit=4`)
+          .then(rel => {
+            const filtered = (rel.data.posts || []).filter(p => p.slug !== slug).slice(0, 3);
+            if (filtered.length > 0) {
+              setRelatedPosts(filtered);
+            } else {
+              // Fallback: latest posts from any category
+              api.get('/blog?limit=4')
+                .then(all => setRelatedPosts((all.data.posts || []).filter(p => p.slug !== slug).slice(0, 3)))
+                .catch(() => {});
+            }
+          })
+          .catch(() => {});
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [slug]);
@@ -28,6 +47,20 @@ export default function BlogPostPage() {
   const title = post[`title_${lang}`] || post.title_de;
   const content = post[`content_${lang}`] || post.content_de;
   const excerpt = post[`excerpt_${lang}`] || post.excerpt_de;
+  const metaTitle = post.meta_title_de || title;
+  const metaDesc = post.meta_description_de || excerpt;
+
+  const renderInlineLinks = (text) => {
+    // Parse [text](/path) markdown links
+    const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
+    return parts.map((part, j) => {
+      const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (match) {
+        return <Link key={j} to={match[2]} style={{ color: 'var(--sf-gold)', textDecoration: 'underline', fontWeight: 600 }}>{match[1]}</Link>;
+      }
+      return part;
+    });
+  };
 
   const renderMarkdown = (text) => {
     return text
@@ -38,22 +71,31 @@ export default function BlogPostPage() {
         if (line.startsWith('## ')) return <h2 key={i} style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--sf-text)', marginTop: '2.5rem', marginBottom: '0.8rem' }}>{line.slice(3)}</h2>;
         if (line.startsWith('- **')) {
           const parts = line.slice(2).split('**');
-          return <li key={i} style={{ marginBottom: '0.4rem', lineHeight: 1.7, color: 'var(--sf-gray)' }}><strong style={{ color: 'var(--sf-text)' }}>{parts[1]}</strong>{parts[2]}</li>;
+          return <li key={i} style={{ marginBottom: '0.4rem', lineHeight: 1.7, color: 'var(--sf-gray)' }}><strong style={{ color: 'var(--sf-text)' }}>{parts[1]}</strong>{renderInlineLinks(parts[2] || '')}</li>;
         }
-        if (line.startsWith('- ')) return <li key={i} style={{ marginBottom: '0.4rem', lineHeight: 1.7, color: 'var(--sf-gray)' }}>{line.slice(2)}</li>;
+        if (line.startsWith('- ')) return <li key={i} style={{ marginBottom: '0.4rem', lineHeight: 1.7, color: 'var(--sf-gray)' }}>{renderInlineLinks(line.slice(2))}</li>;
         if (line.match(/^\d+\. \*\*/)) {
           const parts = line.split('**');
-          return <li key={i} style={{ marginBottom: '0.4rem', lineHeight: 1.7, color: 'var(--sf-gray)', listStyleType: 'decimal' }}><strong style={{ color: 'var(--sf-text)' }}>{parts[1]}</strong>{parts[2]}</li>;
+          return <li key={i} style={{ marginBottom: '0.4rem', lineHeight: 1.7, color: 'var(--sf-gray)', listStyleType: 'decimal' }}><strong style={{ color: 'var(--sf-text)' }}>{parts[1]}</strong>{renderInlineLinks(parts[2] || '')}</li>;
         }
-        if (line.match(/^\d+\. /)) return <li key={i} style={{ marginBottom: '0.4rem', lineHeight: 1.7, color: 'var(--sf-gray)', listStyleType: 'decimal' }}>{line.replace(/^\d+\. /, '')}</li>;
+        if (line.match(/^\d+\. /)) return <li key={i} style={{ marginBottom: '0.4rem', lineHeight: 1.7, color: 'var(--sf-gray)', listStyleType: 'decimal' }}>{renderInlineLinks(line.replace(/^\d+\. /, ''))}</li>;
         if (line.startsWith('**') && line.endsWith('**')) return <p key={i} style={{ fontWeight: 700, color: 'var(--sf-text)', marginTop: '1rem' }}>{line.slice(2, -2)}</p>;
         if (line.trim() === '') return <br key={i} />;
-        return <p key={i} style={{ marginBottom: '0.6rem', lineHeight: 1.8, color: 'var(--sf-gray)' }}>{line}</p>;
+        return <p key={i} style={{ marginBottom: '0.6rem', lineHeight: 1.8, color: 'var(--sf-gray)' }}>{renderInlineLinks(line)}</p>;
       });
   };
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--sf-bg)' }}>
+      <Helmet>
+        <title>{`${metaTitle || 'Blog'} | TrucksOnRoad Blog`}</title>
+        <meta name="description" content={metaDesc || ''} />
+        <meta property="og:title" content={metaTitle || 'TrucksOnRoad Blog'} />
+        <meta property="og:description" content={metaDesc || ''} />
+        {post.image && <meta property="og:image" content={post.image} />}
+        <meta property="og:type" content="article" />
+        <link rel="canonical" href={`https://trucksonroad.ch/blog/${slug}`} />
+      </Helmet>
       {/* Hero image */}
       <div style={{ position: 'relative', height: '400px', overflow: 'hidden' }}>
         <img src={post.image} alt={title} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.5)' }} />
@@ -113,6 +155,27 @@ export default function BlogPostPage() {
           </Link>
         </div>
       </article>
+
+      {/* Related Posts */}
+      {relatedPosts.length > 0 && (
+        <section style={{ maxWidth: '780px', margin: '2rem auto', padding: '0 1rem' }} data-testid="related-posts">
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--sf-text)', marginBottom: '1rem' }}>{t('blog_related')}</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+            {relatedPosts.map(rp => (
+              <Link key={rp.id} to={`/blog/${rp.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} data-testid={`related-${rp.slug}`}>
+                <div className="sf-blog-card" style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' }}>
+                  {rp.image && <img src={rp.image} alt={rp[`title_${lang}`] || rp.title_de} style={{ width: '100%', height: '120px', objectFit: 'cover' }} loading="lazy" />}
+                  <div style={{ padding: '0.8rem' }}>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--sf-text)', lineHeight: 1.3 }}>
+                      {(rp[`title_${lang}`] || rp.title_de || '').slice(0, 60)}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div style={{ height: '4rem' }} />
     </div>

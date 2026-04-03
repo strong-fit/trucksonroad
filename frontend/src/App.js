@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider, ProtectedRoute, CustomerProtectedRoute } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Toaster } from "sonner";
@@ -50,6 +51,7 @@ function PublicLayout({ children }) {
 
 function App() {
   return (
+    <HelmetProvider>
     <AuthProvider>
       <LanguageProvider>
         <BrowserRouter>
@@ -91,6 +93,7 @@ function App() {
         </BrowserRouter>
       </LanguageProvider>
     </AuthProvider>
+    </HelmetProvider>
   );
 }
 

@@ -1,5 +1,6 @@
 import os
 import uuid
+import json
 import random
 import logging
 from datetime import datetime, timezone
@@ -102,14 +103,31 @@ async def generate_blog_post():
     chat = LlmChat(
         api_key=api_key,
         session_id=session_id,
-        system_message="""Du bist ein erfahrener SEO-Texter fuer TrucksOnRoad, ein Premium-Foodtruck-Catering-Unternehmen in der Schweiz.
-Du schreibst professionelle Blog-Artikel die fuer Google SEO optimiert sind.
+        system_message="""Du bist ein erfahrener SEO-Texter fuer TrucksOnRoad, ein Premium-Foodtruck-Catering-Unternehmen in der Schweiz (Sitz: Wetzikon, Einsatzgebiet: ganze Schweiz).
+Du schreibst professionelle, ausfuehrliche Blog-Artikel die fuer Google SEO optimiert sind.
 Deine Artikel sind informativ, praxisnah und enthalten konkrete Tipps.
 Du verwendest Markdown-Formatierung (##, ###, -, **bold**).
-Jeder Artikel sollte 400-600 Woerter lang sein."""
+Jeder Artikel MUSS 800-1500 Woerter lang sein (nicht kuerzer!).
+Du baust in jeden Artikel 2-3 interne Links ein, z.B.:
+  - [Jetzt Foodtruck anfragen](/anfrage)
+  - [Unsere Trucks entdecken](/trucks)
+  - [Mehr Tipps im Blog](/blog)
+  - [Kontaktiere uns](/kontakt)
+  - [FAQ lesen](/faq)
+Du erwaehnt konkrete Schweizer Staedte und Regionen.
+Du nutzt Zwischen-Ueberschriften (H2/H3) fuer gute Struktur."""
     ).with_model("openai", "gpt-5.2")
 
-    prompt = f"""Erstelle einen Blog-Artikel zum Thema: "{topic}"
+    # Get existing post titles to avoid duplicates
+    existing_titles = set()
+    existing_posts = await db.blog_posts.find({}, {"title_de": 1, "_id": 0}).to_list(500)
+    for ep in existing_posts:
+        existing_titles.add(ep.get("title_de", "").lower().strip())
+
+    prompt = f"""Erstelle einen ausfuehrlichen Blog-Artikel zum Thema: "{topic}"
+
+BEREITS EXISTIERENDE ARTIKEL-TITEL (NICHT wiederholen, erstelle etwas ANDERES):
+{chr(10).join(f'- {t}' for t in list(existing_titles)[:20])}
 
 Antworte NUR im folgenden JSON-Format (kein anderer Text):
 {{
@@ -118,29 +136,42 @@ Antworte NUR im folgenden JSON-Format (kein anderer Text):
   "title_en": "English Title",
   "title_fr": "Titre francais",
   "title_it": "Titolo italiano",
-  "excerpt_de": "Kurzbeschreibung deutsch (max 160 Zeichen fuer SEO)",
-  "excerpt_en": "Short description english",
+  "excerpt_de": "Kurzbeschreibung deutsch (max 160 Zeichen fuer Google Snippet)",
+  "excerpt_en": "Short description english (max 160 chars)",
   "excerpt_fr": "Description courte francais",
   "excerpt_it": "Descrizione breve italiano",
-  "content_de": "Vollstaendiger Artikel auf Deutsch mit Markdown (## Titel, ### Untertitel, - Listen, **fett**). 400-600 Woerter.",
-  "content_en": "Full article in English with Markdown",
-  "content_fr": "Article complet en francais avec Markdown",
-  "content_it": "Articolo completo in italiano con Markdown",
+  "content_de": "Ausfuehrlicher Artikel auf Deutsch mit Markdown. MINDESTENS 800 Woerter. Mit ## und ### Ueberschriften, Listen, **fett**. Baue 2-3 interne Links ein: [Jetzt anfragen](/anfrage), [Unsere Trucks](/trucks), [Mehr im Blog](/blog). Erwaehne TrucksOnRoad und Schweizer Staedte.",
+  "content_en": "Full article in English (min 800 words) with internal links",
+  "content_fr": "Article complet en francais (min 800 mots) avec liens internes",
+  "content_it": "Articolo completo in italiano (min 800 parole) con link interni",
   "category": "Eine Kategorie: guide, locations, tipps, events, regionen, rezepte oder news",
-  "tags": ["Tag1", "Tag2", "Tag3", "Tag4", "Tag5"]
+  "tags": ["Tag1", "Tag2", "Tag3", "Tag4", "Tag5"],
+  "meta_title_de": "SEO Title fuer Google (max 60 Zeichen)",
+  "meta_description_de": "SEO Meta Description (max 155 Zeichen, mit Call-to-Action)"
 }}
 
 Wichtig:
 - Der slug muss URL-freundlich sein (nur Kleinbuchstaben, Bindestrich, keine Umlaute)
+- MINDESTENS 800 Woerter pro Sprache im Content
+- 2-3 interne Links pro Artikel einbauen
 - Erwaehne TrucksOnRoad als Experten im Text
-- Beziehe dich auf die Schweiz (Staedte, Regionen, Kultur)
-- Alle 4 Sprachen muessen vollstaendige, qualitativ hochwertige Inhalte haben"""
+- Beziehe dich auf die Schweiz (Zuerich, Bern, Basel, Luzern, Genf etc.)
+- Alle 4 Sprachen muessen vollstaendige, qualitativ hochwertige Inhalte haben
+- Der Titel muss sich von existierenden Artikeln unterscheiden"""
 
     msg = UserMessage(text=prompt)
-    response = await chat.send_message(msg)
+    response = None
+    for attempt in range(3):
+        try:
+            response = await chat.send_message(msg)
+            break
+        except Exception as e:
+            logger.warning(f"LLM attempt {attempt + 1} failed: {e}")
+            if attempt == 2:
+                logger.error("All LLM attempts failed")
+                return None
 
     try:
-        import json
         text = response.strip()
         if text.startswith("```"):
             text = text.split("\n", 1)[1]
@@ -154,6 +185,81 @@ Wichtig:
     slug = data.get("slug", "").strip()
     if not slug or slug in used_slugs:
         slug = f"{slug or 'post'}-{uuid.uuid4().hex[:6]}"
+
+    # --- KI CONTENT CHECKER (KI #2) ---
+    content_de = data.get("content_de", "")
+    word_count = len(content_de.split())
+    check_passed = True
+    check_notes = []
+
+    # Check 1: Minimum word count
+    if word_count < 300:
+        check_notes.append(f"Zu kurz: {word_count} Woerter (min 300)")
+        check_passed = False
+
+    # Check 2: Has internal links
+    has_links = any(link in content_de for link in ["/anfrage", "/trucks", "/blog", "/kontakt", "/faq"])
+    if not has_links:
+        check_notes.append("Keine internen Links gefunden")
+
+    # Check 3: Has proper structure (H2/H3)
+    has_structure = "##" in content_de
+    if not has_structure:
+        check_notes.append("Keine Ueberschriften-Struktur (## / ###)")
+
+    # Check 4: Duplicate title check
+    title_lower = data.get("title_de", "").lower().strip()
+    existing_titles_set = set()
+    for ep in existing_posts:
+        existing_titles_set.add(ep.get("title_de", "").lower().strip())
+    if title_lower in existing_titles_set:
+        check_notes.append("Duplicate Title erkannt!")
+        check_passed = False
+
+    # Check 5: AI quality check via second LLM call
+    if check_passed:
+        try:
+            checker = LlmChat(
+                api_key=api_key,
+                session_id=f"blog-check-{uuid.uuid4().hex[:8]}",
+                system_message="Du bist ein strenger SEO-Content-Pruefer. Bewerte Blog-Artikel auf Qualitaet, Relevanz und SEO-Tauglichkeit."
+            ).with_model("openai", "gpt-5.2")
+
+            check_prompt = f"""Pruefe diesen Blog-Artikel fuer ein Foodtruck-Catering-Unternehmen (TrucksOnRoad, Schweiz):
+
+Titel: {data.get('title_de', '')}
+Auszug: {data.get('excerpt_de', '')}
+Woerteranzahl: {word_count}
+Interne Links vorhanden: {has_links}
+
+Antworte NUR mit JSON:
+{{"pass": true/false, "score": 1-10, "reason": "kurze Begruendung"}}
+
+Pruefkriterien:
+- Ist der Inhalt relevant fuer Foodtruck/Catering/Events?
+- Ist die Qualitaet professionell (kein generischer Fuellttext)?
+- Gibt es einen klaren Mehrwert fuer den Leser?
+Sei streng aber fair. Score unter 5 = fail."""
+
+            check_response = await checker.send_message(UserMessage(text=check_prompt))
+            check_text = check_response.strip()
+            if check_text.startswith("```"):
+                check_text = check_text.split("\n", 1)[1].rsplit("```", 1)[0]
+            check_result = json.loads(check_text)
+            if not check_result.get("pass", True) or check_result.get("score", 10) < 5:
+                check_notes.append(f"KI-Check failed: Score {check_result.get('score')}/10 - {check_result.get('reason', '')}")
+                check_passed = False
+            else:
+                check_notes.append(f"KI-Check passed: Score {check_result.get('score')}/10")
+        except Exception as e:
+            logger.warning(f"Content check failed (publishing anyway): {e}")
+            check_notes.append("KI-Check fehlgeschlagen (trotzdem veroeffentlicht)")
+
+    if not check_passed:
+        logger.warning(f"Blog post rejected by content checker: {check_notes}")
+        return None
+
+    logger.info(f"Content check: {check_notes}")
 
     post = {
         "id": str(uuid.uuid4()),
@@ -173,9 +279,13 @@ Wichtig:
         "category": data.get("category", "tipps"),
         "image": await get_blog_image(data.get("category", "tipps"), data.get("tags", [])),
         "tags": data.get("tags", []),
+        "meta_title_de": data.get("meta_title_de", data.get("title_de", "")),
+        "meta_description_de": data.get("meta_description_de", data.get("excerpt_de", "")),
         "author": "TrucksOnRoad KI",
         "is_published": True,
         "ai_generated": True,
+        "word_count": word_count,
+        "quality_score": next((int(n.split("Score ")[1].split("/")[0]) for n in check_notes if "Score" in n), 0),
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat()
     }

@@ -221,6 +221,7 @@ export const translations = {
     blog_all: "Alle", blog_read_more: "Weiterlesen", blog_no_posts: "Noch keine Beiträge vorhanden.",
     blog_back: "Zurück zum Blog", blog_not_found: "Beitrag nicht gefunden",
     blog_cta_text: "Lust auf Foodtruck-Catering bei eurem nächsten Event?",
+    blog_related: "Ähnliche Beiträge",
   },
 
   en: {
@@ -418,6 +419,7 @@ export const translations = {
     blog_all: "All", blog_read_more: "Read more", blog_no_posts: "No posts yet.",
     blog_back: "Back to blog", blog_not_found: "Post not found",
     blog_cta_text: "Want food truck catering at your next event?",
+    blog_related: "Related Posts",
   },
 
   fr: {
@@ -615,6 +617,7 @@ export const translations = {
     blog_all: "Tous", blog_read_more: "Lire la suite", blog_no_posts: "Aucun article pour le moment.",
     blog_back: "Retour au blog", blog_not_found: "Article non trouvé",
     blog_cta_text: "Envie de catering food truck pour votre prochain événement ?",
+    blog_related: "Articles similaires",
   },
 
   it: {
@@ -812,5 +815,6 @@ export const translations = {
     blog_all: "Tutti", blog_read_more: "Leggi di più", blog_no_posts: "Nessun articolo ancora.",
     blog_back: "Torna al blog", blog_not_found: "Articolo non trovato",
     blog_cta_text: "Volete un catering food truck per il vostro prossimo evento?",
+    blog_related: "Articoli correlati",
   },
 };

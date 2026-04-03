@@ -1,0 +1,63 @@
+{
+  "summary": "SEO improvements testing completed. Backend: 13/17 tests passed. Frontend: All UI features working. Main issues: 1) Seeded blog posts missing meta_title_de/meta_description_de fields, 2) React Helmet adds tags but doesn't replace existing index.html tags (duplicate canonical/meta tags), 3) Seeded posts have no internal markdown links.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "GET /api/blog/{slug}", "issue": "Seeded posts missing meta_title_de and meta_description_de fields - frontend falls back to title/excerpt correctly"},
+      {"endpoint": "GET /api/admin/blog", "issue": "Older AI posts (vegane-foodtrucks-*) missing word_count and quality_score fields - only affects posts created before these fields were added"}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "React Helmet SEO tags", "issue": "React Helmet adds new meta tags but doesn't replace existing ones from index.html - results in duplicate canonical links and meta descriptions. Browser/crawlers use first tag found (hardcoded one)", "affected_selectors": ["link[rel='canonical']", "meta[name='description']", "meta[property='og:title']"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_seo_improvements.py",
+    "/app/test_reports/pytest/pytest_seo_improvements.xml"
+  ],
+  "action_items": [
+    "CRITICAL: Fix React Helmet to properly replace index.html meta tags - either remove hardcoded tags from index.html or ensure Helmet uses data-rh attribute to manage tags",
+    "Add meta_title_de and meta_description_de fields to seeded blog posts in seed data",
+    "Consider adding internal markdown links to seeded blog content for better SEO"
+  ],
+  "critical_code_review_comments": [
+    "React Helmet implementation adds tags but doesn't replace existing ones - index.html has hardcoded canonical, og:title, meta description that take precedence",
+    "BlogPostPage.js correctly falls back to title/excerpt when meta fields are missing",
+    "Related posts section (Ähnliche Beiträge) working correctly with up to 3 posts",
+    "Internal link rendering (renderInlineLinks) implemented but seeded posts don't have markdown links"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_seo_improvements.py"
+  ],
+  "success_rate": {
+    "backend": "76% (13/17 tests passed)",
+    "frontend": "90% (all UI features work, React Helmet duplicate tags issue)"
+  },
+  "test_credentials": {
+    "admin": "admin@truckonroad.ch / TrucksOnRoad2026!"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "SEO improvements partially working. React Helmet is adding correct tags but not replacing index.html hardcoded tags. Blog detail page title works correctly. Related posts section works. Admin blog page has KI generator. 9 blog posts exist. Seeded posts missing meta_title_de/meta_description_de fields but frontend handles gracefully with fallbacks.",
+  "features_verified": {
+    "blog_detail_page_title": "✓ Dynamic title working via React Helmet",
+    "blog_detail_canonical": "⚠ Canonical added but duplicate with index.html hardcoded one",
+    "blog_listing_title": "✓ Working",
+    "related_posts_section": "✓ 'Ähnliche Beiträge' showing up to 3 related posts",
+    "internal_link_rendering": "✓ Code implemented, but seeded posts have no markdown links",
+    "meta_title_de_field": "⚠ Missing from seeded posts, present in AI posts",
+    "word_count_quality_score": "⚠ Missing from some older AI posts",
+    "homepage_blog_preview": "✓ 3 latest posts showing",
+    "admin_blog_ki_generator": "✓ Section visible with generate button",
+    "navbar_blog_link": "✓ Working"
+  },
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": [],
+    "note": "LLM generation endpoint not tested due to budget limit as instructed"
+  }
+}

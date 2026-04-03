@@ -117,11 +117,14 @@ async def admin_delete_blog(post_id: str, request: Request):
 
 # --- AI BLOG GENERATION ---
 @router.post("/admin/blog/generate")
-async def admin_generate_blog(request: Request, background_tasks: BackgroundTasks):
+async def admin_generate_blog(request: Request):
     await get_current_user(request)
-    post = await generate_blog_post()
+    try:
+        post = await generate_blog_post()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"KI-Generierung fehlgeschlagen: {str(e)}")
     if not post:
-        raise HTTPException(status_code=500, detail="KI-Generierung fehlgeschlagen. Bitte erneut versuchen.")
+        raise HTTPException(status_code=500, detail="KI-Generierung fehlgeschlagen oder Content-Check nicht bestanden. Bitte erneut versuchen.")
     return post
 
 
