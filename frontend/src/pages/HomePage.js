@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
-import { ArrowRight, Instagram, Star, Quote, ChevronRight, Calendar, Tag, Send, FileText, PartyPopper, Building2, Heart, Music, Cake } from 'lucide-react';
+import { ArrowRight, Instagram, Star, Quote, ChevronRight, Calendar, Tag, Send, FileText, PartyPopper, Building2, Heart, Music, Cake, Users, Sparkles, Award } from 'lucide-react';
 
 const HERO_IMG_MAIN = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=900&q=80";
 const HERO_IMG_ACCENT = "https://images.unsplash.com/photo-1509315811345-672d83ef2fbc?w=600&q=80";
@@ -171,6 +171,45 @@ export default function HomePage() {
         </FadeUp>
       </section>
 
+      {/* ===== PRICING – "Preis auf Anfrage" ===== */}
+      <section className="sf-section" data-testid="pricing-section">
+        <FadeUp>
+          <div className="sf-section-tag">{t('pricing_tag')}</div>
+          <h2 className="sf-section-title">{t('pricing_title')}</h2>
+          <p style={{ color: 'var(--sf-gray)', fontSize: '0.92rem', maxWidth: 550, margin: '0 auto 2.5rem', textAlign: 'center', lineHeight: 1.7 }}>
+            {t('pricing_subtitle')}
+          </p>
+        </FadeUp>
+        <div className="sf-pricing-grid" data-testid="pricing-grid">
+          {[
+            { size: 'small', icon: Users },
+            { size: 'medium', icon: Sparkles },
+            { size: 'large', icon: Award },
+          ].map((pkg, i) => {
+            const Icon = pkg.icon;
+            return (
+              <FadeUp key={pkg.size} delay={i * 0.12}>
+                <div className={`sf-pricing-card ${pkg.size === 'medium' ? 'sf-pricing-featured' : ''}`} data-testid={`pricing-card-${pkg.size}`}>
+                  <div className="sf-pricing-card-icon"><Icon size={22} /></div>
+                  <h3 className="sf-pricing-card-title">{t(`pricing_${pkg.size}_title`)}</h3>
+                  <div className="sf-pricing-card-guests">{t(`pricing_${pkg.size}_guests`)}</div>
+                  <p className="sf-pricing-card-desc">{t(`pricing_${pkg.size}_desc`)}</p>
+                  <div className="sf-pricing-card-price">{t('pricing_price')}</div>
+                  <div className="sf-pricing-card-includes">{t('pricing_includes')}</div>
+                  <Link to="/anfrage" className="sf-btn-primary sf-pricing-card-btn">{t('hero_btn_inquiry')}</Link>
+                </div>
+              </FadeUp>
+            );
+          })}
+        </div>
+        <FadeUp delay={0.4}>
+          <div className="sf-pricing-bottom" data-testid="pricing-cta">
+            <div className="sf-pricing-cta-text">{t('pricing_cta')}</div>
+            <div className="sf-pricing-note">{t('pricing_note')}</div>
+          </div>
+        </FadeUp>
+      </section>
+
       {/* ===== TRUST NUMBERS ===== */}
       <section className="sf-trust-bar" data-testid="trust-numbers-section">
         <div className="sf-trust-inner">
@@ -233,6 +272,20 @@ export default function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ===== CUSTOMER LOGOS ===== */}
+      <section className="sf-logos-section" data-testid="logos-section">
+        <FadeUp>
+          <div className="sf-section-tag" style={{ textAlign: 'center' }}>{t('logos_tag')}</div>
+          <div className="sf-logos-grid">
+            {['Google', 'UBS', 'SBB', 'Migros', 'Swiss', 'Zurich'].map((name, i) => (
+              <div key={name} className="sf-logo-item" data-testid={`logo-${name.toLowerCase()}`}>
+                <span className="sf-logo-text">{name}</span>
+              </div>
+            ))}
+          </div>
+        </FadeUp>
+      </section>
 
       {/* ===== TRUCKS ===== */}
       <section className="sf-trucks-wrap" id="trucks" data-testid="trucks-section">

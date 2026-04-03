@@ -1391,6 +1391,92 @@
   .sf-uc-card-cta { opacity: 1; transform: translateY(0); }
 }
 
+/* ===== PRICING SECTION ===== */
+.sf-pricing-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem; max-width: 1000px; margin: 0 auto;
+}
+.sf-pricing-card {
+  text-align: center; padding: 2.5rem 1.5rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--sf-border-subtle);
+  border-radius: 2px; position: relative;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.sf-pricing-card:hover { border-color: rgba(77,182,172,0.3); transform: translateY(-4px); }
+.sf-pricing-featured {
+  border-color: var(--sf-gold);
+  background: rgba(77,182,172,0.04);
+}
+.sf-pricing-featured::before {
+  content: 'BELIEBT'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--sf-gold); color: var(--sf-bg); font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.15em; padding: 3px 14px; border-radius: 2px;
+}
+.sf-pricing-card-icon {
+  width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 1rem;
+  background: rgba(77,182,172,0.1); border: 1px solid rgba(77,182,172,0.2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--sf-gold);
+}
+.sf-pricing-card-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem;
+  letter-spacing: 0.04em; color: var(--sf-cream); margin-bottom: 0.2rem;
+}
+.sf-pricing-card-guests {
+  font-size: 0.78rem; color: var(--sf-gold); font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.8rem;
+}
+.sf-pricing-card-desc {
+  font-size: 0.82rem; color: var(--sf-gray); line-height: 1.55;
+  margin-bottom: 1.5rem; min-height: 40px;
+}
+.sf-pricing-card-price {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem;
+  color: var(--sf-cream); letter-spacing: 0.04em; margin-bottom: 0.3rem;
+}
+.sf-pricing-card-includes {
+  font-size: 0.72rem; color: var(--sf-gray); margin-bottom: 1.5rem;
+}
+.sf-pricing-card-btn { width: 100%; text-decoration: none; }
+.sf-pricing-bottom {
+  text-align: center; margin-top: 2.5rem;
+  padding: 2rem; background: rgba(77,182,172,0.05);
+  border: 1px solid rgba(77,182,172,0.15); border-radius: 2px;
+  max-width: 600px; margin-left: auto; margin-right: auto;
+}
+.sf-pricing-cta-text {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+  color: var(--sf-gold); letter-spacing: 0.04em; margin-bottom: 0.3rem;
+}
+.sf-pricing-note { font-size: 0.82rem; color: var(--sf-gray); }
+@media (max-width: 768px) {
+  .sf-pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+}
+
+/* ===== LOGOS SECTION ===== */
+.sf-logos-section {
+  padding: 3rem 4rem; border-top: 1px solid var(--sf-border-subtle);
+  border-bottom: 1px solid var(--sf-border-subtle);
+}
+.sf-logos-grid {
+  display: flex; justify-content: center; align-items: center;
+  flex-wrap: wrap; gap: 2.5rem; margin-top: 1.5rem;
+}
+.sf-logo-item {
+  opacity: 0.25; transition: opacity 0.3s;
+}
+.sf-logo-item:hover { opacity: 0.5; }
+.sf-logo-text {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+  letter-spacing: 0.1em; color: var(--sf-cream);
+}
+@media (max-width: 768px) {
+  .sf-logos-section { padding: 2rem 1.5rem; }
+  .sf-logos-grid { gap: 1.5rem; }
+  .sf-logo-text { font-size: 1.2rem; }
+}
+
 /* ===== HOW IT WORKS SECTION ===== */
 .sf-how-section {
   padding: 8rem 4rem; background: var(--sf-anthrazit);
