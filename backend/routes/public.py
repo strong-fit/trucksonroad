@@ -71,7 +71,7 @@ async def get_contact_info():
         "company_name": (s or {}).get("company_name", "TrucksOnRoad"),
         "address": (s or {}).get("company_address", "Bahnhofstrasse 75, 8620 Wetzikon"),
         "phone": (s or {}).get("company_phone", "+41 79 696 98 99"),
-        "email": (s or {}).get("company_email", "info@truckonroad.ch"),
+        "email": (s or {}).get("company_email", "info@trucksonroad.ch"),
         "whatsapp": (s or {}).get("whatsapp_number", "+41796969899"),
     }
 
@@ -94,9 +94,9 @@ async def get_structured_data():
         "name": s.get("company_name", "TrucksOnRoad"),
         "alternateName": f"{s.get('company_name', 'TrucksOnRoad')} - Premium Foodtrucks",
         "description": "Premium Foodtrucks für Festivals, Firmenanlässe und Private Events in der ganzen Schweiz. 6 einzigartige Truck-Konzepte: Burger, Chicken Burger, Bowls, Pocket Bowls, Empanadas und Retro Trailer.",
-        "url": "https://truckonroad.ch",
+        "url": "https://trucksonroad.ch",
         "telephone": s.get("company_phone", "+41 79 696 98 99"),
-        "email": s.get("company_email", "info@truckonroad.ch"),
+        "email": s.get("company_email", "info@trucksonroad.ch"),
         "servesCuisine": ["Burger", "Bowls", "Empanadas", "Street Food"],
         "priceRange": "$$",
         "address": {
@@ -157,7 +157,7 @@ async def google_verification():
 async def robots_txt():
     content = """User-agent: *
 Allow: /
-Sitemap: https://truckonroad.ch/api/sitemap.xml
+Sitemap: https://trucksonroad.ch/api/sitemap.xml
 
 User-agent: Googlebot
 Allow: /
@@ -186,7 +186,7 @@ Allow: /
 # --- SITEMAP ---
 @router.get("/sitemap.xml")
 async def sitemap():
-    base = "https://truckonroad.ch"
+    base = "https://trucksonroad.ch"
     trucks_list = await db.trucks.find({"is_active": True}, {"slug": 1, "_id": 0}).to_list(100)
     urls = [
         (base + "/", "1.0", "weekly"),
@@ -232,3 +232,37 @@ async def get_public_agenda():
         {"_id": 0, "id": 1, "event_date": 1, "location": 1, "event_type": 1, "event_name": 1, "selected_trucks": 1}
     ).sort("event_date", 1).to_list(100)
     return inquiries
+
+
+# --- SEO: EVENT JSON-LD SCHEMA ---
+@router.get("/seo/events-schema")
+async def get_events_schema():
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    events = await db.inquiries.find(
+        {"status": {"$in": ["confirmed", "completed"]}, "event_date": {"$gte": today}},
+        {"_id": 0, "event_date": 1, "location": 1, "event_type": 1, "event_name": 1}
+    ).sort("event_date", 1).to_list(50)
+    if not events:
+        return []
+    schema_events = []
+    for e in events:
+        schema_events.append({
+            "@context": "https://schema.org",
+            "@type": "FoodEvent",
+            "name": e.get("event_name") or f"TrucksOnRoad @ {e.get('event_type', 'Event')}",
+            "startDate": e.get("event_date", ""),
+            "location": {
+                "@type": "Place",
+                "name": e.get("location", "Schweiz"),
+                "address": {"@type": "PostalAddress", "addressLocality": e.get("location", ""), "addressCountry": "CH"}
+            },
+            "organizer": {
+                "@type": "Organization",
+                "name": "TrucksOnRoad",
+                "url": "https://trucksonroad.ch"
+            },
+            "description": f"TrucksOnRoad Premium Foodtruck-Catering bei {e.get('event_type', 'Event')} in {e.get('location', 'der Schweiz')}",
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "eventStatus": "https://schema.org/EventScheduled"
+        })
+    return schema_events

@@ -355,7 +355,7 @@ async def admin_get_settings(request: Request):
     defaults = {
         "type": "general", "company_name": "TrucksOnRoad",
         "company_address": "Bahnhofstrasse 75, 8620 Wetzikon",
-        "company_phone": "+41 79 696 98 99", "company_email": "info@truckonroad.ch",
+        "company_phone": "+41 79 696 98 99", "company_email": "info@trucksonroad.ch",
         "whatsapp_number": "+41796969899",
         "social_google_business": "", "social_instagram": "", "social_facebook": "",
         "social_tiktok": "", "social_linkedin": "",

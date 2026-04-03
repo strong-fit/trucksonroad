@@ -107,7 +107,7 @@ export default function AdminSettings() {
             </label>
             <div>
               <div className="adm-form-label">Benachrichtigung an (Admin E-Mail)</div>
-              <input className="adm-input" type="email" value={settings.notification_email || ''} onChange={e => update('notification_email', e.target.value)} placeholder="admin@truckonroad.ch" data-testid="settings-notification-email" />
+              <input className="adm-input" type="email" value={settings.notification_email || ''} onChange={e => update('notification_email', e.target.value)} placeholder="admin@trucksonroad.ch" data-testid="settings-notification-email" />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 100px', gap: '0.5rem' }}>
               <div>
@@ -121,7 +121,7 @@ export default function AdminSettings() {
             </div>
             <div>
               <div className="adm-form-label">SMTP E-Mail (Absender)</div>
-              <input className="adm-input" type="email" value={settings.smtp_email || ''} onChange={e => update('smtp_email', e.target.value)} placeholder="truckonroad@gmail.com" data-testid="settings-smtp-email" />
+              <input className="adm-input" type="email" value={settings.smtp_email || ''} onChange={e => update('smtp_email', e.target.value)} placeholder="trucksonroad@gmail.com" data-testid="settings-smtp-email" />
             </div>
             <div>
               <div className="adm-form-label">SMTP Passwort (App-Passwort)</div>
@@ -182,23 +182,23 @@ export default function AdminSettings() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <div>
               <div className="adm-form-label">Google Business Profil</div>
-              <input className="adm-input" value={settings.social_google_business || ''} onChange={e => update('social_google_business', e.target.value)} placeholder="https://g.page/truckonroad" data-testid="settings-google-business" />
+              <input className="adm-input" value={settings.social_google_business || ''} onChange={e => update('social_google_business', e.target.value)} placeholder="https://g.page/trucksonroad" data-testid="settings-google-business" />
             </div>
             <div>
               <div className="adm-form-label">Instagram</div>
-              <input className="adm-input" value={settings.social_instagram || ''} onChange={e => update('social_instagram', e.target.value)} placeholder="https://instagram.com/truckonroad" data-testid="settings-social-instagram" />
+              <input className="adm-input" value={settings.social_instagram || ''} onChange={e => update('social_instagram', e.target.value)} placeholder="https://instagram.com/trucksonroad" data-testid="settings-social-instagram" />
             </div>
             <div>
               <div className="adm-form-label">Facebook</div>
-              <input className="adm-input" value={settings.social_facebook || ''} onChange={e => update('social_facebook', e.target.value)} placeholder="https://facebook.com/truckonroad" data-testid="settings-social-facebook" />
+              <input className="adm-input" value={settings.social_facebook || ''} onChange={e => update('social_facebook', e.target.value)} placeholder="https://facebook.com/trucksonroad" data-testid="settings-social-facebook" />
             </div>
             <div>
               <div className="adm-form-label">TikTok</div>
-              <input className="adm-input" value={settings.social_tiktok || ''} onChange={e => update('social_tiktok', e.target.value)} placeholder="https://tiktok.com/@truckonroad" data-testid="settings-social-tiktok" />
+              <input className="adm-input" value={settings.social_tiktok || ''} onChange={e => update('social_tiktok', e.target.value)} placeholder="https://tiktok.com/@trucksonroad" data-testid="settings-social-tiktok" />
             </div>
             <div>
               <div className="adm-form-label">LinkedIn</div>
-              <input className="adm-input" value={settings.social_linkedin || ''} onChange={e => update('social_linkedin', e.target.value)} placeholder="https://linkedin.com/company/truckonroad" data-testid="settings-social-linkedin" />
+              <input className="adm-input" value={settings.social_linkedin || ''} onChange={e => update('social_linkedin', e.target.value)} placeholder="https://linkedin.com/company/trucksonroad" data-testid="settings-social-linkedin" />
             </div>
             <div style={{ marginTop: '0.5rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem' }}>
               <div className="adm-form-label">Google Search Console Verification</div>
@@ -285,7 +285,7 @@ export default function AdminSettings() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <div>
             <div className="adm-form-label">Instagram Benutzername</div>
-            <input className="adm-input" value={settings.instagram_username || ''} onChange={e => update('instagram_username', e.target.value)} placeholder="truckonroad" data-testid="settings-instagram-username" />
+            <input className="adm-input" value={settings.instagram_username || ''} onChange={e => update('instagram_username', e.target.value)} placeholder="trucksonroad" data-testid="settings-instagram-username" />
           </div>
           <div>
             <div className="adm-form-label">Bilder (URLs) - werden auf der Homepage als Galerie angezeigt</div>

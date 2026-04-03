@@ -38,7 +38,7 @@ export default function Footer() {
         <div>
           <div className="sf-footer-heading">{t('footer_contact')}</div>
           <div className="sf-footer-contact">
-            <Mail size={14} /> <span>info@truckonroad.ch</span>
+            <Mail size={14} /> <span>info@trucksonroad.ch</span>
           </div>
           <div className="sf-footer-contact">
             <Phone size={14} /> <span>+41 79 696 98 99</span>

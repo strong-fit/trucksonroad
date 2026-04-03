@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
 EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY")
-APP_NAME = "truckonroad"
+APP_NAME = "trucksonroad"
 _storage_key = None
 
 

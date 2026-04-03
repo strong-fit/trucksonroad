@@ -37,7 +37,7 @@ export default function AdminLogin() {
         <form onSubmit={handleSubmit} className="adm-login-form">
           <div className="adm-login-group">
             <label>{t('auth_email')}</label>
-            <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="admin@truckonroad.ch" data-testid="admin-email-input" />
+            <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="admin@trucksonroad.ch" data-testid="admin-email-input" />
           </div>
           <div className="adm-login-group">
             <label>{t('auth_password')}</label>

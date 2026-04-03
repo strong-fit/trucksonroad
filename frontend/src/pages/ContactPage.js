@@ -11,7 +11,7 @@ export default function ContactPage() {
     company_name: 'TrucksOnRoad',
     address: 'Bahnhofstrasse 75, 8620 Wetzikon',
     phone: '+41 79 696 98 99',
-    email: 'info@truckonroad.ch',
+    email: 'info@trucksonroad.ch',
   });
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [sending, setSending] = useState(false);

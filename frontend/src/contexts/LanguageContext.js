@@ -5,7 +5,7 @@ const LanguageContext = createContext();
 const SUPPORTED_LANGS = ['de', 'en', 'fr', 'it'];
 
 function getInitialLang() {
-  const stored = localStorage.getItem('truckonroad_lang');
+  const stored = localStorage.getItem('trucksonroad_lang');
   if (stored && SUPPORTED_LANGS.includes(stored)) return stored;
   return 'de';
 }
@@ -15,7 +15,7 @@ export function LanguageProvider({ children }) {
   const setLang = useCallback((l) => {
     if (SUPPORTED_LANGS.includes(l)) {
       setLangState(l);
-      localStorage.setItem('truckonroad_lang', l);
+      localStorage.setItem('trucksonroad_lang', l);
       document.documentElement.lang = l;
     }
   }, []);

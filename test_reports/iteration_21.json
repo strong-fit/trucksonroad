@@ -1,0 +1,76 @@
+{
+  "summary": "SEO and domain rename testing complete. All 19 backend tests passed. Fixed database settings issue where company_email was still set to old domain 'truckonroad.ch'. All SEO endpoints, meta tags, and UI elements now correctly use 'trucksonroad.ch'.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_seo_domain.py",
+    "/app/test_reports/pytest/pytest_seo_domain.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Database settings had old email 'info@truckonroad.ch' - fixed by updating MongoDB settings collection",
+    "All backend code defaults are correct with 'trucksonroad.ch'",
+    "index.html meta tags (canonical, og:url, hreflang) all use correct domain",
+    "Footer.js hardcoded email is correct: info@trucksonroad.ch",
+    "ContactPage.js default email is correct: info@trucksonroad.ch"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_seo_domain.py (new test file for SEO endpoints)"
+  ],
+  "success_rate": {
+    "backend": "100% (19/19 tests passed)",
+    "frontend": "100% (homepage, footer, contact page all show correct domain)"
+  },
+  "test_credentials": {
+    "admin": "admin@truckonroad.ch / TrucksOnRoad2026!"
+  },
+  "seed_data_creation": "None - fixed existing MongoDB settings document",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Domain rename from truckonroad.ch to trucksonroad.ch is complete. All SEO endpoints verified: sitemap.xml, robots.txt, /api/seo/structured-data, /api/seo/events-schema, /api/contact-info. The admin login email (admin@truckonroad.ch) was intentionally NOT changed as it's an auth credential. The company contact email is now info@trucksonroad.ch everywhere.",
+  "features_verified": {
+    "backend_api": {
+      "GET /api/sitemap.xml": "✓ Returns XML with trucksonroad.ch URLs",
+      "GET /api/robots.txt": "✓ Sitemap URL uses trucksonroad.ch, allows AI bots",
+      "GET /api/seo/structured-data": "✓ url=https://trucksonroad.ch, email=info@trucksonroad.ch",
+      "GET /api/seo/events-schema": "✓ Returns FoodEvent JSON-LD array with organizer url=trucksonroad.ch",
+      "GET /api/contact-info": "✓ email=info@trucksonroad.ch",
+      "GET /api/trucks": "✓ Returns truck list",
+      "Homepage /": "✓ Returns 200"
+    },
+    "frontend_pages": {
+      "Homepage": "✓ Loads correctly with TrucksOnRoad branding",
+      "Footer": "✓ Shows info@trucksonroad.ch",
+      "Contact page /kontakt": "✓ Shows info@trucksonroad.ch"
+    },
+    "index.html_meta_tags": {
+      "canonical": "✓ https://trucksonroad.ch",
+      "og:url": "✓ https://trucksonroad.ch",
+      "hreflang de": "✓ https://trucksonroad.ch",
+      "hreflang en": "✓ https://trucksonroad.ch?lang=en",
+      "hreflang fr": "✓ https://trucksonroad.ch?lang=fr",
+      "hreflang it": "✓ https://trucksonroad.ch?lang=it",
+      "hreflang x-default": "✓ https://trucksonroad.ch",
+      "JSON-LD url": "✓ https://trucksonroad.ch",
+      "JSON-LD email": "✓ info@trucksonroad.ch"
+    }
+  },
+  "database_fix_applied": {
+    "collection": "settings",
+    "field": "company_email",
+    "old_value": "info@truckonroad.ch",
+    "new_value": "info@trucksonroad.ch",
+    "note": "The database had the old email stored. Code defaults were already correct."
+  },
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}

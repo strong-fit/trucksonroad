@@ -152,7 +152,7 @@ export default function InquiryPage() {
           </div>
 
           <div style={{ marginTop: '3rem' }}>
-            <div className="sf-form-contact"><Mail size={16} className="sf-form-contact-icon" /> <span>info@truckonroad.ch</span></div>
+            <div className="sf-form-contact"><Mail size={16} className="sf-form-contact-icon" /> <span>info@trucksonroad.ch</span></div>
             <div className="sf-form-contact"><Phone size={16} className="sf-form-contact-icon" /> <span>+41 xx xxx xx xx</span></div>
             <div className="sf-form-contact"><MapPin size={16} className="sf-form-contact-icon" /> <span>Zürich & ganze Schweiz</span></div>
           </div>
