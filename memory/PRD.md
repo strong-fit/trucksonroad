@@ -104,8 +104,18 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Navigation: Blog-Link in Navbar, Footer und Admin-Sidebar
 - [x] 100% Tests bestanden (17/17 Backend + alle Frontend)
 
+### KI Auto-Blog Generator (03.04.2026)
+- [x] GPT-5.2 generiert automatisch 4-sprachige Foodtruck-Artikel (DE/FR/IT/EN)
+- [x] 30 vordefinierte Themen (Foodtruck Catering, Events, Regionen, Trends, Rezepte)
+- [x] Admin: "Jetzt generieren" Button fuer sofortige Erstellung
+- [x] Auto-Post Modus: Konfigurierbar (6h, 12h, 24h, 48h, 72h Intervall)
+- [x] KI-Badge bei KI-generierten Beitraegen im Admin
+- [x] "Beliebte Beitraege" Sektion auf der Startseite (3 neueste Posts)
+- [x] Alle Posts loeschbar im Admin
+- [x] 100% Tests bestanden (11/11 Backend + alle Frontend)
+
 ## Remaining Tasks
 - [ ] Google Search Console setup (manueller Schritt durch den Nutzer)
 
 ## Test Reports
-- iteration_3 bis iteration_23: Alle 100% bestanden
+- iteration_3 bis iteration_24: Alle 100% bestanden
