@@ -17,6 +17,9 @@ export default function InquiryPage() {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const preselectedTruck = searchParams.get('truck') || '';
+  const preselectedTypeIndex = searchParams.get('type');
+  const eventTypes = t('form_event_types');
+  const preselectedType = preselectedTypeIndex !== null && eventTypes[parseInt(preselectedTypeIndex)] ? eventTypes[parseInt(preselectedTypeIndex)] : '';
   const [calendarBlocks, setCalendarBlocks] = useState([]);
   const [selectedDate, setSelectedDate] = useState(undefined);
   const [selectedTrucks, setSelectedTrucks] = useState(preselectedTruck ? [preselectedTruck.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())] : []);
@@ -27,7 +30,7 @@ export default function InquiryPage() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [form, setForm] = useState({
     first_name: '', last_name: '', company: '', email: '', phone: '',
-    event_time: '', location: '', guest_count: '', event_type: '',
+    event_time: '', location: '', guest_count: '', event_type: preselectedType,
     indoor_outdoor: 'Outdoor', budget: '', remarks: '',
     privacy_accepted: false, is_organizer: false
   });

@@ -54,10 +54,10 @@ export default function HomePage() {
   }, []);
 
   const useCases = [
-    { key: 'corporate', icon: Building2, img: UC_IMAGES.corporate },
-    { key: 'wedding', icon: Heart, img: UC_IMAGES.wedding },
-    { key: 'festival', icon: Music, img: UC_IMAGES.festival },
-    { key: 'birthday', icon: Cake, img: UC_IMAGES.birthday },
+    { key: 'corporate', icon: Building2, img: UC_IMAGES.corporate, typeIndex: 1 },
+    { key: 'wedding', icon: Heart, img: UC_IMAGES.wedding, typeIndex: 3 },
+    { key: 'festival', icon: Music, img: UC_IMAGES.festival, typeIndex: 0 },
+    { key: 'birthday', icon: Cake, img: UC_IMAGES.birthday, typeIndex: 2 },
   ];
 
   const howSteps = [
@@ -124,7 +124,7 @@ export default function HomePage() {
             const Icon = uc.icon;
             return (
               <FadeUp key={uc.key} delay={i * 0.1}>
-                <Link to="/anfrage" className="sf-uc-card" data-testid={`uc-card-${uc.key}`}>
+                <Link to={`/anfrage?type=${uc.typeIndex}`} className="sf-uc-card" data-testid={`uc-card-${uc.key}`}>
                   <img src={uc.img} alt={t(`uc_${uc.key}_title`)} className="sf-uc-card-img" />
                   <div className="sf-uc-card-overlay" />
                   <div className="sf-uc-card-content">

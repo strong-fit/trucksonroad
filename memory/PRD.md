@@ -133,6 +133,7 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 ### Homepage CRO-Redesign (03.04.2026)
 - [x] Hero-Sektion: Emotionale Headline statt Feature-Listing, "MACH DEIN EVENT UNVERGESSLICH."
 - [x] Use-Cases Grid (NEU): 4 Event-Typen mit Bildern, Icons, Beschreibung (Firmenanlass, Hochzeit, Festival, Geburtstag)
+- [x] Use-Cases → Anfrage mit vorausgefülltem Event-Typ (Query-Parameter ?type=0-3)
 - [x] "So funktioniert's" (NEU): 3-Schritte-Prozess (Anfrage → Angebot → Event geniessen)
 - [x] Trust-Zahlen Bar (NEU): Gold-Hintergrund mit 500+ Events, 98% Zufriedenheit, 24h, 6 Konzepte
 - [x] Reviews nach oben verschoben (direkt nach Trust-Bar)
