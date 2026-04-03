@@ -111,6 +111,7 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Auto-Post Modus: Konfigurierbar (6h, 12h, 24h, 48h, 72h Intervall)
 - [x] KI-Badge bei KI-generierten Beitraegen im Admin
 - [x] "Beliebte Beitraege" Sektion auf der Startseite (3 neueste Posts)
+- [x] Automatische Bild-Zuweisung: Kuratierte Unsplash-Bilder nach Kategorie
 - [x] Alle Posts loeschbar im Admin
 - [x] 100% Tests bestanden (11/11 Backend + alle Frontend)
 

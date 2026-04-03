@@ -42,6 +42,49 @@ FOOD_TRUCK_TOPICS = [
 ]
 
 
+async def get_blog_image(category: str, tags: list) -> str:
+    """Get a relevant curated image for the blog post based on category."""
+    CATEGORY_IMAGES = {
+        "guide": [
+            "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=800&q=80",
+            "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80",
+            "https://images.unsplash.com/photo-1460306855393-0410f61241c7?w=800&q=80",
+        ],
+        "locations": [
+            "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800&q=80",
+            "https://images.unsplash.com/photo-1527668752968-14dc70a27c95?w=800&q=80",
+            "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=800&q=80",
+        ],
+        "tipps": [
+            "https://images.unsplash.com/photo-1540914124281-342587941389?w=800&q=80",
+            "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80",
+            "https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=800&q=80",
+        ],
+        "events": [
+            "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80",
+            "https://images.unsplash.com/photo-1529543544282-ea6407407db9?w=800&q=80",
+            "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=800&q=80",
+        ],
+        "regionen": [
+            "https://images.unsplash.com/photo-1527668752968-14dc70a27c95?w=800&q=80",
+            "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?w=800&q=80",
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+        ],
+        "rezepte": [
+            "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80",
+            "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=800&q=80",
+            "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80",
+        ],
+        "news": [
+            "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=800&q=80",
+            "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80",
+            "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=800&q=80",
+        ],
+    }
+    images = CATEGORY_IMAGES.get(category, CATEGORY_IMAGES["news"])
+    return random.choice(images)
+
+
 async def generate_blog_post():
     api_key = os.environ.get("EMERGENT_LLM_KEY")
     if not api_key:
@@ -128,7 +171,7 @@ Wichtig:
         "content_fr": data.get("content_fr", ""),
         "content_it": data.get("content_it", ""),
         "category": data.get("category", "tipps"),
-        "image": "",
+        "image": await get_blog_image(data.get("category", "tipps"), data.get("tags", [])),
         "tags": data.get("tags", []),
         "author": "TrucksOnRoad KI",
         "is_published": True,
