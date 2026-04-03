@@ -86,8 +86,15 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] "Passwort zuruecksetzen" Seite
 - [x] "Passwort aendern" im Kundenportal und Admin
 
+### Google Review Import (03.04.2026)
+- [x] `source`-Feld fuer Bewertungen: "google" oder "placeholder"
+- [x] Oeffentliche API blendet Platzhalter automatisch aus, sobald Google-Bewertungen vorhanden
+- [x] Admin-UI: Quelle-Dropdown, Platzhalter/Google Badges, Info-Banner
+- [x] Homepage zeigt "Google Review" Badge bei echten Bewertungen
+- [x] 100% Tests bestanden (10/10 Backend + alle Frontend)
+
 ## Remaining Tasks
 - [ ] Google Search Console setup (manueller Schritt durch den Nutzer)
 
 ## Test Reports
-- iteration_3 bis iteration_21: Alle 100% bestanden
+- iteration_3 bis iteration_22: Alle 100% bestanden
