@@ -215,6 +215,11 @@ export default function HomePage() {
                 <FadeUp key={r.id} delay={i * 0.1}>
                   <div className="sf-review-card" data-testid={`review-card-${r.id}`}>
                     <Quote size={24} className="sf-review-quote" />
+                    {r.source === 'google' && (
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(46,125,50,0.12)', color: '#2e7d32', fontSize: '0.68rem', fontWeight: 600, padding: '2px 8px', borderRadius: '10px', marginBottom: '0.5rem' }} data-testid="review-google-badge">
+                        Google Review
+                      </div>
+                    )}
                     <p className="sf-review-text">{r.text}</p>
                     <div className="sf-review-footer">
                       <div>

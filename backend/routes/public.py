@@ -79,7 +79,11 @@ async def get_contact_info():
 # --- REVIEWS ---
 @router.get("/reviews")
 async def get_public_reviews():
-    reviews = await db.reviews.find({"is_active": True}, {"_id": 0}).sort("date", -1).to_list(50)
+    google_count = await db.reviews.count_documents({"is_active": True, "source": "google"})
+    if google_count > 0:
+        reviews = await db.reviews.find({"is_active": True, "source": "google"}, {"_id": 0}).sort("date", -1).to_list(50)
+    else:
+        reviews = await db.reviews.find({"is_active": True}, {"_id": 0}).sort("date", -1).to_list(50)
     return reviews
 
 

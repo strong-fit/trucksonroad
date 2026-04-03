@@ -450,6 +450,7 @@ async def admin_create_review(request: Request):
         "text": body.get("text", ""),
         "date": body.get("date", datetime.now(timezone.utc).strftime("%Y-%m-%d")),
         "event_type": body.get("event_type", ""),
+        "source": body.get("source", "placeholder"),
         "is_active": body.get("is_active", True),
         "created_at": datetime.now(timezone.utc).isoformat()
     }
