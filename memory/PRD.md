@@ -23,8 +23,8 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
     storage.py        (Emergent Object Storage)
     event_scout.py    (Perplexity AI + Auto-Scan + Background Tasks)
   routes/
-    auth_routes.py    (Login, Register, Logout, Refresh, Me)
-    public.py         (Trucks, FAQs, Reviews, SEO, Sitemap, Agenda)
+    auth_routes.py    (Login, Register, Logout, Refresh, Me, Passwort-Reset)
+    public.py         (Trucks, FAQs, Reviews, SEO, Sitemap, Agenda, Events-Schema)
     customer.py       (Kundenportal: Anfragen, Profil)
     admin.py          (Admin: Anfragen, Kalender, Trucks, Personal, Finanzen, Export, Event-Scout)
 ```
@@ -66,43 +66,28 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Profil mit Sprach-Wahl
 - [x] Dynamische Sprach-Aenderung
 
-### SEO & AI
-- [x] JSON-LD Structured Data (FoodEstablishment)
-- [x] Sitemap.xml
-- [x] Robots.txt (AI-Crawler erlaubt)
-- [x] Meta-Tags, OpenGraph
+### SEO & AI Suchmaschinen-Optimierung
+- [x] JSON-LD Structured Data (FoodEstablishment + FAQ + FoodEvent Schema)
+- [x] Sitemap.xml (alle Seiten + Truck-Detailseiten, Domain: trucksonroad.ch)
+- [x] Robots.txt (AI-Crawler erlaubt: GPTBot, ChatGPT-User, PerplexityBot, ClaudeBot, Google-Extended)
+- [x] Meta-Tags, OpenGraph, Twitter Cards
+- [x] Hreflang-Tags (DE, EN, FR, IT + x-default)
 - [x] Google Search Console Verifikation (manuell)
+- [x] Event JSON-LD Schema fuer oeffentliche Agenda (/api/seo/events-schema)
+- [x] Domain-Update: trucksonroad.ch ueberall konsistent
 
 ### E-Mail-System
 - [x] 7+ Templates (Bestaetigung, Angebot, Status, Rechnung, Erinnerung, Datei, Event-Bewerbung)
 - [x] Alle Templates in 4 Sprachen (DE/FR/IT/EN)
 - [x] SMTP konfigurierbar via Admin
 
-### Backend-Refactoring (02.04.2026)
-- [x] server.py von 2353 auf 96 Zeilen reduziert
-- [x] 12 Module erstellt (routes/, services/, etc.)
-- [x] 100% Regression bestanden (37/37 Backend + 3/3 Frontend)
-
-### Multi-Language Content (02.04.2026)
-- [x] FR/IT Felder fuer alle 6 Trucks (name, tagline, description, menu, suitable_for)
-- [x] FR/IT Felder fuer alle 8 FAQs (question, answer)
-- [x] ~60 neue Translation-Keys fuer EventOrganizers, PrivateEvents, InquiryPage, Homepage
-- [x] Alle hardcoded lang==='de' Ternaries durch t() ersetzt
-- [x] 100% Regression bestanden (15/15 Backend + alle Frontend)
-
-### Passwort-Reset (02.04.2026)
+### Passwort-Management
 - [x] "Passwort vergessen" per E-Mail (Token-basiert, 1h Ablauf, Single-Use)
-- [x] "Passwort zuruecksetzen" Seite (Token aus E-Mail-Link)
-- [x] "Passwort aendern" im Kundenportal (altes PW verifiziert)
-- [x] "Passwort aendern" in Admin-Einstellungen (altes PW verifiziert)
-- [x] Alle 4 Sprachen (DE/FR/IT/EN) unterstuetzt
-- [x] 100% Regression bestanden (17/17 Backend + alle Frontend)
-
-### Brand Rename (02.04.2026)
-- [x] TruckOnRoad -> TrucksOnRoad ueberall (Logo, E-Mails, PDFs, SEO, Meta-Tags)
+- [x] "Passwort zuruecksetzen" Seite
+- [x] "Passwort aendern" im Kundenportal und Admin
 
 ## Remaining Tasks
-- [ ] Google Search Console setup (manueller Schritt)
+- [ ] Google Search Console setup (manueller Schritt durch den Nutzer)
 
 ## Test Reports
-- iteration_13.json bis iteration_18.json: Alle 100% bestanden
+- iteration_3 bis iteration_21: Alle 100% bestanden
