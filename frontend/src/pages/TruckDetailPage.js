@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
-import { ArrowLeft, ArrowRight, Users, Clock, Zap, Quote, ChevronDown, ChevronUp, Utensils, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Users, Clock, Zap, Quote, ChevronDown, ChevronUp, ChevronLeft, ChevronRight as ChevRight, Utensils, CheckCircle2, Play } from 'lucide-react';
 
 function useInView() {
   const ref = useRef();
@@ -21,6 +21,102 @@ function FadeUp({ children, delay = 0, className = '' }) {
     <div ref={ref} className={`sf-fade-up ${visible ? 'visible' : ''} ${className}`} style={{ transitionDelay: `${delay}s` }}>
       {children}
     </div>
+  );
+}
+
+function HeroGallery({ mainImage, gallery, videoUrl, name }) {
+  const allImages = [mainImage, ...(gallery || [])].filter(Boolean);
+  const [current, setCurrent] = useState(0);
+  const [showVideo, setShowVideo] = useState(false);
+
+  const prev = useCallback(() => setCurrent(c => (c - 1 + allImages.length) % allImages.length), [allImages.length]);
+  const next = useCallback(() => setCurrent(c => (c + 1) % allImages.length), [allImages.length]);
+
+  useEffect(() => {
+    if (showVideo || allImages.length <= 1) return;
+    const timer = setInterval(next, 5000);
+    return () => clearInterval(timer);
+  }, [showVideo, allImages.length, next]);
+
+  if (showVideo && videoUrl) {
+    return (
+      <section className="td-hero" data-testid="truck-hero">
+        <div style={{ position: 'absolute', inset: 0, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <iframe
+            src={videoUrl}
+            style={{ width: '100%', height: '100%', border: 'none' }}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title={name}
+          />
+        </div>
+        <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
+          <button className="td-gallery-nav" onClick={() => setShowVideo(false)} data-testid="close-video-btn">
+            <ArrowLeft size={18} />
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="td-hero" data-testid="truck-hero">
+      {allImages.map((img, i) => (
+        <img
+          key={i}
+          src={img}
+          alt={`${name} ${i + 1}`}
+          className="td-hero-img"
+          style={{ opacity: i === current ? 1 : 0, transition: 'opacity 0.6s ease' }}
+        />
+      ))}
+      <div className="td-hero-overlay" />
+
+      {/* Gallery navigation */}
+      {allImages.length > 1 && (
+        <>
+          <button className="td-gallery-nav td-gallery-prev" onClick={prev} data-testid="gallery-prev-btn">
+            <ChevronLeft size={20} />
+          </button>
+          <button className="td-gallery-nav td-gallery-next" onClick={next} data-testid="gallery-next-btn">
+            <ChevRight size={20} />
+          </button>
+          <div className="td-gallery-dots" data-testid="gallery-dots">
+            {allImages.map((_, i) => (
+              <button
+                key={i}
+                className={`td-gallery-dot ${i === current ? 'active' : ''}`}
+                onClick={() => setCurrent(i)}
+                data-testid={`gallery-dot-${i}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Video play button */}
+      {videoUrl && !showVideo && (
+        <button className="td-video-play" onClick={() => setShowVideo(true)} data-testid="play-video-btn">
+          <Play size={24} fill="currentColor" />
+        </button>
+      )}
+
+      {/* Thumbnail strip */}
+      {allImages.length > 1 && (
+        <div className="td-gallery-thumbs" data-testid="gallery-thumbnails">
+          {allImages.map((img, i) => (
+            <button
+              key={i}
+              className={`td-gallery-thumb ${i === current ? 'active' : ''}`}
+              onClick={() => setCurrent(i)}
+              data-testid={`gallery-thumb-${i}`}
+            >
+              <img src={img} alt="" />
+            </button>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -48,10 +144,14 @@ export default function TruckDetailPage() {
 
   return (
     <div data-testid="truck-detail-page">
-      {/* ===== IMMERSIVE HERO ===== */}
-      <section className="td-hero" data-testid="truck-hero">
-        <img src={truck.image} alt={name} className="td-hero-img" />
-        <div className="td-hero-overlay" />
+      {/* ===== HERO WITH GALLERY ===== */}
+      <div style={{ position: 'relative' }}>
+        <HeroGallery
+          mainImage={truck.image}
+          gallery={truck.gallery}
+          videoUrl={truck.video_url}
+          name={name}
+        />
         <div className="td-hero-content">
           <Link to="/#trucks" className="td-back-link" data-testid="truck-back-link">
             <ArrowLeft size={16} /> {t('truck_back')}
@@ -60,7 +160,7 @@ export default function TruckDetailPage() {
           <h1 className="td-hero-name" data-testid="truck-name">{name}</h1>
           <p className="td-hero-tagline">{tagline}</p>
         </div>
-      </section>
+      </div>
 
       {/* ===== QUICK STATS BAR ===== */}
       <div className="td-stats-bar" data-testid="truck-stats-bar">

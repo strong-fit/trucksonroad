@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Save, Truck, ChevronDown, ChevronUp } from 'lucide-react';
+import { Save, Truck, ChevronDown, ChevronUp, Upload, X, Image, Film, Loader2, Plus, GripVertical } from 'lucide-react';
 
 export default function AdminTrucks() {
   const { t } = useLanguage();
@@ -64,6 +64,11 @@ export default function AdminTrucks() {
                 <Truck size={18} style={{ color: 'var(--adm-gold)' }} />
                 <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{truck.name_de}</span>
                 {truck.tag && <span className="adm-badge adm-badge-confirmed"><span className="adm-badge-dot" />{truck.tag}</span>}
+                {(truck.gallery || []).length > 0 && (
+                  <span style={{ fontSize: '0.7rem', color: 'var(--adm-muted)', display: 'flex', alignItems: 'center', gap: 3 }}>
+                    <Image size={12} /> {truck.gallery.length}
+                  </span>
+                )}
               </div>
               {expanded === truck.slug ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </div>
@@ -85,10 +90,31 @@ export default function AdminTrucks() {
                   <textarea className="adm-textarea" value={truck.desc_de || ''} onChange={e => updateField(truck.slug, 'desc_de', e.target.value)} data-testid={`truck-desc-${truck.slug}`} />
                 </div>
                 <div style={{ marginTop: '0.75rem' }}>
-                  <div className="adm-form-label">Bild-URL</div>
+                  <div className="adm-form-label">Hauptbild-URL</div>
                   <input className="adm-input" value={truck.image || ''} onChange={e => updateField(truck.slug, 'image', e.target.value)} data-testid={`truck-image-${truck.slug}`} />
                   {truck.image && <img src={truck.image} alt="" style={{ marginTop: '0.5rem', maxHeight: '120px', borderRadius: '8px', border: '1px solid var(--adm-border)' }} />}
                 </div>
+
+                {/* Gallery Section */}
+                <GalleryManager truck={truck} onUpdate={(gallery) => updateField(truck.slug, 'gallery', gallery)} />
+
+                {/* Video URL */}
+                <div style={{ marginTop: '0.75rem' }}>
+                  <div className="adm-form-label" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Film size={14} /> Video-URL (YouTube/Vimeo)
+                  </div>
+                  <input
+                    className="adm-input"
+                    value={truck.video_url || ''}
+                    onChange={e => updateField(truck.slug, 'video_url', e.target.value)}
+                    placeholder="https://www.youtube.com/embed/..."
+                    data-testid={`truck-video-${truck.slug}`}
+                  />
+                  <div style={{ fontSize: '0.7rem', color: 'var(--adm-muted)', marginTop: 4 }}>
+                    Verwende die Embed-URL, z.B. https://www.youtube.com/embed/VIDEO_ID
+                  </div>
+                </div>
+
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem', marginTop: '0.75rem' }}>
                   <div>
                     <div className="adm-form-label">Kapazitaet</div>
@@ -124,5 +150,113 @@ export default function AdminTrucks() {
         ))}
       </div>
     </AdminLayout>
+  );
+}
+
+function GalleryManager({ truck, onUpdate }) {
+  const [uploading, setUploading] = useState(false);
+  const [urlInput, setUrlInput] = useState('');
+  const inputRef = useRef(null);
+  const gallery = truck.gallery || [];
+
+  const handleUpload = async (fileList) => {
+    if (!fileList?.length) return;
+    setUploading(true);
+    const newGallery = [...gallery];
+    for (const file of Array.from(fileList)) {
+      if (file.size > 10 * 1024 * 1024) { toast.error('Max. 10 MB pro Bild'); continue; }
+      const formData = new FormData();
+      formData.append('file', file);
+      try {
+        const res = await api.post(`/admin/trucks/${truck.slug}/gallery`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        newGallery.push(res.data.url);
+      } catch { toast.error('Upload fehlgeschlagen'); }
+    }
+    onUpdate(newGallery);
+    setUploading(false);
+  };
+
+  const addUrl = () => {
+    if (!urlInput.trim()) return;
+    onUpdate([...gallery, urlInput.trim()]);
+    setUrlInput('');
+  };
+
+  const removeImage = async (idx) => {
+    const url = gallery[idx];
+    try {
+      await api.delete(`/admin/trucks/${truck.slug}/gallery`, { data: { url } });
+    } catch {}
+    const newGallery = gallery.filter((_, i) => i !== idx);
+    onUpdate(newGallery);
+  };
+
+  return (
+    <div style={{ marginTop: '0.75rem' }} data-testid={`gallery-section-${truck.slug}`}>
+      <div className="adm-form-label" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <Image size={14} /> Bildergalerie ({gallery.length} Bilder)
+      </div>
+
+      {/* Gallery Grid */}
+      {gallery.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '0.5rem', marginBottom: '0.75rem' }}>
+          {gallery.map((url, idx) => (
+            <div key={idx} style={{ position: 'relative', aspectRatio: '4/3', borderRadius: 8, overflow: 'hidden', border: '1px solid var(--adm-border)' }} data-testid={`gallery-img-${idx}`}>
+              <img src={url} alt={`Gallery ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <button
+                onClick={() => removeImage(idx)}
+                style={{
+                  position: 'absolute', top: 4, right: 4, width: 22, height: 22,
+                  borderRadius: '50%', background: 'rgba(0,0,0,0.7)', border: 'none',
+                  color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  padding: 0
+                }}
+                data-testid={`gallery-remove-${idx}`}
+              >
+                <X size={12} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Upload + URL Input */}
+      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+        <button
+          className="adm-btn adm-btn-secondary adm-btn-sm"
+          onClick={() => inputRef.current?.click()}
+          disabled={uploading}
+          data-testid={`gallery-upload-btn-${truck.slug}`}
+          style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+        >
+          {uploading ? <Loader2 size={14} className="sf-spin" /> : <Upload size={14} />}
+          {uploading ? 'Lädt...' : 'Bild hochladen'}
+        </button>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          style={{ display: 'none' }}
+          onChange={e => handleUpload(e.target.files)}
+        />
+        <div style={{ flex: 1, display: 'flex', gap: '0.3rem' }}>
+          <input
+            className="adm-input"
+            value={urlInput}
+            onChange={e => setUrlInput(e.target.value)}
+            placeholder="Oder Bild-URL einfügen..."
+            style={{ flex: 1, fontSize: '0.8rem' }}
+            onKeyDown={e => e.key === 'Enter' && addUrl()}
+            data-testid={`gallery-url-input-${truck.slug}`}
+          />
+          <button className="adm-btn adm-btn-secondary adm-btn-sm" onClick={addUrl} data-testid={`gallery-url-add-${truck.slug}`}>
+            <Plus size={14} />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -336,6 +336,30 @@ async def admin_update_truck(slug: str, request: Request):
     return {"message": "Updated"}
 
 
+@router.post("/admin/trucks/{slug}/gallery")
+async def upload_truck_gallery_image(slug: str, request: Request, file: UploadFile = File(...)):
+    await get_current_user(request)
+    truck = await db.trucks.find_one({"slug": slug}, {"_id": 0})
+    if not truck:
+        raise HTTPException(status_code=404, detail="Truck not found")
+    data = await file.read()
+    ext = file.filename.rsplit(".", 1)[-1] if "." in file.filename else "jpg"
+    storage_path = f"{APP_NAME}/trucks/{slug}/{uuid.uuid4()}.{ext}"
+    result = put_object(storage_path, data, file.content_type or "image/jpeg")
+    url = result.get("url", "")
+    await db.trucks.update_one({"slug": slug}, {"$push": {"gallery": url}})
+    return {"url": url}
+
+
+@router.delete("/admin/trucks/{slug}/gallery")
+async def delete_truck_gallery_image(slug: str, request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    url = body.get("url", "")
+    await db.trucks.update_one({"slug": slug}, {"$pull": {"gallery": url}})
+    return {"message": "Removed"}
+
+
 # --- ADMIN STATS ---
 @router.get("/admin/stats")
 async def admin_stats(request: Request):
