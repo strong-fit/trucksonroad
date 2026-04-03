@@ -32,7 +32,11 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 ## Completed Features
 
 ### Public Website
-- [x] Homepage mit Hero, Truck-Karten, Reviews, FAQ, Instagram
+- [x] Homepage mit CRO-optimiertem Layout: Hero → Use Cases → So funktioniert's → Trust → Reviews → Trucks → CTA → FAQ → Blog
+- [x] Emotionaler Hero: "MACH DEIN EVENT UNVERGESSLICH." mit 500+ Events, 24h Antwortzeit, 6 Konzepte
+- [x] Use-Cases Sektion: Firmenanlass, Hochzeit, Festival, Geburtstag (alle verlinken auf /anfrage)
+- [x] "So funktioniert's" Sektion: 3 Schritte (Anfrage → Angebot → Event geniessen)
+- [x] Trust-Zahlen Bar: 500+ Events, 98% Zufriedenheit, 24h Antwort, 6 Konzepte
 - [x] Dedicated Truck-Seiten mit Details
 - [x] Anfrage-Formular (vollstaendig)
 - [x] Quick-Inquiry fuer schnelle Anfragen
@@ -126,7 +130,19 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Meta Title + Meta Description fuer alle Seed-Beitraege hinzugefuegt
 - [x] Existing-Title-Check verhindert doppelte Artikel-Themen
 
+### Homepage CRO-Redesign (03.04.2026)
+- [x] Hero-Sektion: Emotionale Headline statt Feature-Listing, "MACH DEIN EVENT UNVERGESSLICH."
+- [x] Use-Cases Grid (NEU): 4 Event-Typen mit Bildern, Icons, Beschreibung (Firmenanlass, Hochzeit, Festival, Geburtstag)
+- [x] "So funktioniert's" (NEU): 3-Schritte-Prozess (Anfrage → Angebot → Event geniessen)
+- [x] Trust-Zahlen Bar (NEU): Gold-Hintergrund mit 500+ Events, 98% Zufriedenheit, 24h, 6 Konzepte
+- [x] Reviews nach oben verschoben (direkt nach Trust-Bar)
+- [x] Alle neuen Texte in 4 Sprachen (DE/FR/IT/EN)
+- [x] Mobile-responsive (Use Cases 1-Spalte, Trust 2x2, How-it-works 1-Spalte)
+- [x] 100% Tests bestanden (iteration_26)
+
 ## Remaining Tasks
+- [ ] Event-Funnel (Anfrage-Formular) an CRO-Stil anpassen (P1)
+- [ ] Truck-Detailseiten: "Erlebnis" statt Feature-Liste (P2)
 - [ ] Google Search Console setup (manueller Schritt durch den Nutzer)
 - [ ] Emergent LLM Key Budget auffuellen (Profil -> Universal Key -> Balance hinzufuegen)
 
