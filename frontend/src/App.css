@@ -1464,6 +1464,190 @@
   .sf-trust-inner { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
 }
 
+/* ===== TRUCK DETAIL PAGE (Emotional Redesign) ===== */
+.td-hero {
+  position: relative; height: 70vh; min-height: 450px;
+  overflow: hidden;
+}
+.td-hero-img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; filter: brightness(0.4) saturate(0.85);
+}
+.td-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, var(--sf-bg) 0%, rgba(10,10,8,0.4) 40%, transparent 100%);
+}
+.td-hero-content {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 4rem 6rem; z-index: 2;
+}
+.td-back-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  color: var(--sf-cream); opacity: 0.6; text-decoration: none;
+  font-size: 0.82rem; margin-bottom: 1.5rem;
+  transition: opacity 0.3s;
+}
+.td-back-link:hover { opacity: 1; }
+.td-tag-badge {
+  display: inline-block; background: var(--sf-gold); color: var(--sf-bg);
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 2px; margin-bottom: 1rem;
+}
+.td-hero-name {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 6vw, 5rem);
+  letter-spacing: 0.04em; color: var(--sf-cream); line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.td-hero-tagline {
+  font-size: 1.1rem; color: var(--sf-cream); opacity: 0.6;
+  font-style: italic; letter-spacing: 0.03em;
+}
+
+/* Stats Bar */
+.td-stats-bar {
+  display: flex; justify-content: center; gap: 3rem;
+  padding: 1.5rem 2rem;
+  background: var(--sf-surface); border-bottom: 1px solid var(--sf-border-subtle);
+}
+.td-stat {
+  display: flex; align-items: center; gap: 0.5rem;
+  color: var(--sf-cream); font-size: 0.85rem; font-weight: 500;
+}
+.td-stat svg { color: var(--sf-gold); flex-shrink: 0; }
+
+/* Content wrapper */
+.td-content {
+  max-width: 800px; margin: 0 auto; padding: 4rem 2rem 6rem;
+}
+
+/* Story */
+.td-story { margin-bottom: 4rem; }
+.td-story-text {
+  font-size: 1.1rem; line-height: 1.85; color: var(--sf-gray);
+  max-width: 680px;
+}
+
+/* Perfect for */
+.td-perfect { margin-bottom: 4rem; }
+.td-perfect-subtitle {
+  color: var(--sf-gray); font-size: 0.9rem; margin-bottom: 1.5rem;
+}
+.td-perfect-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.8rem;
+}
+.td-perfect-card {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.2rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--sf-border-subtle);
+  border-radius: 2px; text-decoration: none;
+  transition: border-color 0.3s, transform 0.3s, background 0.3s;
+}
+.td-perfect-card:hover {
+  border-color: var(--sf-gold); transform: translateY(-2px);
+  background: rgba(77,182,172,0.05);
+}
+.td-perfect-card-name {
+  color: var(--sf-cream); font-size: 0.9rem; font-weight: 500;
+}
+.td-perfect-card-arrow {
+  color: var(--sf-gold); opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.td-perfect-card:hover .td-perfect-card-arrow {
+  opacity: 1; transform: translateX(4px);
+}
+
+/* Menu */
+.td-menu { margin-bottom: 4rem; }
+.td-menu-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.6rem; margin-top: 1rem;
+}
+.td-menu-item {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem; color: var(--sf-cream);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--sf-border-subtle);
+  border-radius: 2px;
+}
+.td-menu-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--sf-gold); flex-shrink: 0;
+}
+
+/* Customer Quote */
+.td-quote {
+  text-align: center; padding: 3rem 2rem;
+  margin-bottom: 4rem;
+  background: rgba(255,255,255,0.015);
+  border: 1px solid var(--sf-border-subtle);
+  border-radius: 2px; position: relative;
+}
+.td-quote-icon { color: var(--sf-gold); opacity: 0.3; margin-bottom: 1rem; }
+.td-quote-text {
+  font-size: 1.15rem; font-style: italic; color: var(--sf-cream);
+  line-height: 1.7; max-width: 550px; margin: 0 auto 1.2rem;
+}
+.td-quote-author { display: flex; flex-direction: column; gap: 0.2rem; }
+.td-quote-name { color: var(--sf-cream); font-weight: 600; font-size: 0.9rem; }
+.td-quote-event { color: var(--sf-gray); font-size: 0.78rem; }
+
+/* Specs */
+.td-specs { margin-bottom: 3rem; }
+.td-specs-toggle {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.2rem; background: rgba(255,255,255,0.02);
+  border: 1px solid var(--sf-border-subtle); border-radius: 2px;
+  color: var(--sf-cream); cursor: pointer; transition: border-color 0.3s;
+}
+.td-specs-toggle:hover { border-color: rgba(77,182,172,0.3); }
+.td-specs-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1px; margin-top: 1px;
+}
+.td-specs-item {
+  padding: 1rem 1.2rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--sf-border-subtle);
+}
+.td-specs-label {
+  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--sf-gold); margin-bottom: 0.3rem;
+}
+.td-specs-value { color: var(--sf-cream); font-size: 0.9rem; }
+
+/* CTA */
+.td-cta {
+  text-align: center; padding: 3.5rem 2rem;
+  background: var(--sf-anthrazit);
+  border: 1px solid var(--sf-border-subtle);
+  border-radius: 2px;
+}
+.td-cta-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
+  letter-spacing: 0.04em; color: var(--sf-cream); margin-bottom: 0.5rem;
+}
+.td-cta-sub {
+  color: var(--sf-gray); font-size: 0.88rem; margin-bottom: 2rem;
+}
+.td-cta-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 1rem 3rem; font-size: 1rem; text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .td-hero { height: 50vh; min-height: 350px; }
+  .td-hero-content { padding: 2rem 1.5rem; }
+  .td-stats-bar { flex-wrap: wrap; gap: 1rem 2rem; padding: 1.2rem 1.5rem; }
+  .td-content { padding: 2.5rem 1.5rem 4rem; }
+  .td-perfect-grid { grid-template-columns: 1fr; }
+  .td-menu-grid { grid-template-columns: 1fr; }
+  .td-quote { padding: 2rem 1.2rem; }
+}
+
 .sf-review-quote {
   color: var(--sf-gold); opacity: 0.35; margin-bottom: 0.75rem;
 }
