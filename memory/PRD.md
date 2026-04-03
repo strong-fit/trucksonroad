@@ -93,8 +93,19 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Homepage zeigt "Google Review" Badge bei echten Bewertungen
 - [x] 100% Tests bestanden (10/10 Backend + alle Frontend)
 
+### Blog-System (03.04.2026)
+- [x] Oeffentliche Blog-Seite (/blog) mit Kategorie-Filter (Ratgeber, Standorte, Tipps, Events, Regionen, Rezepte, News)
+- [x] Blog-Detailseite (/blog/{slug}) mit Markdown-Rendering und CTA
+- [x] Alle 4 Sprachen (DE/FR/IT/EN) fuer Titel, Auszug und Inhalt
+- [x] Admin Blog-Verwaltung (/admin/blog) mit CRUD, Sprach-Tabs, Publish/Draft
+- [x] 6 SEO-optimierte Platzhalter-Beitraege (Foodtruck Schweiz, Zuerich, Firmenanlass, Hochzeit, Bern/Basel/Luzern, Smash Burger)
+- [x] Sitemap.xml automatisch mit Blog-URLs erweitert
+- [x] Article JSON-LD Schema (/api/seo/blog-schema/{slug})
+- [x] Navigation: Blog-Link in Navbar, Footer und Admin-Sidebar
+- [x] 100% Tests bestanden (17/17 Backend + alle Frontend)
+
 ## Remaining Tasks
 - [ ] Google Search Console setup (manueller Schritt durch den Nutzer)
 
 ## Test Reports
-- iteration_3 bis iteration_22: Alle 100% bestanden
+- iteration_3 bis iteration_23: Alle 100% bestanden
