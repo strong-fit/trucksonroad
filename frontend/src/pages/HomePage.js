@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
-import { ArrowRight, Instagram, Star, Quote } from 'lucide-react';
+import { ArrowRight, Instagram, Star, Quote, ChevronRight, Calendar, Tag } from 'lucide-react';
 
 const HERO_IMG_MAIN = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=900&q=80";
 const HERO_IMG_ACCENT = "https://images.unsplash.com/photo-1509315811345-672d83ef2fbc?w=600&q=80";
@@ -38,12 +38,14 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
   const [instaData, setInstaData] = useState({ username: '', images: [] });
   const [reviews, setReviews] = useState([]);
+  const [blogPosts, setBlogPosts] = useState([]);
 
   useEffect(() => {
     api.get('/trucks').then(r => setTrucks(r.data)).catch(() => {});
     api.get('/faqs').then(r => setFaqs(r.data)).catch(() => {});
     api.get('/instagram-gallery').then(r => setInstaData(r.data)).catch(() => {});
     api.get('/reviews').then(r => setReviews(r.data)).catch(() => {});
+    api.get('/blog?limit=3').then(r => setBlogPosts(r.data.posts || [])).catch(() => {});
   }, []);
 
   const whomItems = [t('whom_1'), t('whom_2'), t('whom_3'), t('whom_4'), t('whom_5')];
@@ -290,6 +292,56 @@ export default function HomePage() {
           </div>
         )}
       </section>
+
+      {/* BLOG PREVIEW */}
+      {blogPosts.length > 0 && (
+        <section className="sf-section" data-testid="blog-preview-section">
+          <div className="sf-section-tag">{t('blog_tag')}</div>
+          <h2 className="sf-section-title">{t('blog_title')}</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem', maxWidth: '1100px', margin: '0 auto' }}>
+            {blogPosts.slice(0, 3).map((post, i) => (
+              <FadeUp key={post.id} delay={i * 0.1}>
+                <Link to={`/blog/${post.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} data-testid={`blog-preview-${post.slug}`}>
+                  <div className="sf-blog-card" style={{
+                    borderRadius: '12px', overflow: 'hidden',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(255,255,255,0.03)'
+                  }}>
+                    {post.image && (
+                      <div style={{ height: '180px', overflow: 'hidden' }}>
+                        <img src={post.image} alt={post[`title_${lang}`] || post.title_de} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }} loading="lazy" />
+                      </div>
+                    )}
+                    <div style={{ padding: '1.1rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--sf-gold)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                          <Tag size={10} style={{ marginRight: '3px', display: 'inline' }} />{post.category}
+                        </span>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--sf-gray)' }}>
+                          <Calendar size={10} style={{ marginRight: '3px', display: 'inline' }} />
+                          {new Date(post.created_at).toLocaleDateString('de-CH')}
+                        </span>
+                      </div>
+                      <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--sf-text)', lineHeight: 1.3, marginBottom: '0.4rem' }}>
+                        {post[`title_${lang}`] || post.title_de}
+                      </h3>
+                      <p style={{ fontSize: '0.82rem', color: 'var(--sf-gray)', lineHeight: 1.6 }}>
+                        {(post[`excerpt_${lang}`] || post.excerpt_de || '').slice(0, 120)}...
+                      </p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--sf-gold)', fontSize: '0.82rem', fontWeight: 600, marginTop: '0.6rem' }}>
+                        {t('blog_read_more')} <ChevronRight size={14} />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </FadeUp>
+            ))}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            <Link to="/blog" className="sf-btn-outline" data-testid="blog-view-all">{t('blog_all')}</Link>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

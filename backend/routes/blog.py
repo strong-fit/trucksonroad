@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, BackgroundTasks
 from datetime import datetime, timezone
 from database import db
 from auth import get_current_user
+from services.blog_generator import generate_blog_post
 import uuid
 
 router = APIRouter()
@@ -112,3 +113,34 @@ async def admin_delete_blog(post_id: str, request: Request):
     await get_current_user(request)
     await db.blog_posts.delete_one({"id": post_id})
     return {"message": "Deleted"}
+
+
+# --- AI BLOG GENERATION ---
+@router.post("/admin/blog/generate")
+async def admin_generate_blog(request: Request, background_tasks: BackgroundTasks):
+    await get_current_user(request)
+    post = await generate_blog_post()
+    if not post:
+        raise HTTPException(status_code=500, detail="KI-Generierung fehlgeschlagen. Bitte erneut versuchen.")
+    return post
+
+
+@router.get("/admin/blog/auto-status")
+async def admin_blog_auto_status(request: Request):
+    await get_current_user(request)
+    settings = await db.settings.find_one({}, {"_id": 0, "blog_auto_enabled": 1, "blog_auto_interval_hours": 1})
+    return {
+        "enabled": (settings or {}).get("blog_auto_enabled", False),
+        "interval_hours": (settings or {}).get("blog_auto_interval_hours", 24)
+    }
+
+
+@router.post("/admin/blog/auto-toggle")
+async def admin_blog_auto_toggle(request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    enabled = body.get("enabled", False)
+    interval = body.get("interval_hours", 24)
+    await db.settings.update_one({}, {"$set": {"blog_auto_enabled": enabled, "blog_auto_interval_hours": interval}}, upsert=True)
+    return {"enabled": enabled, "interval_hours": interval}
+

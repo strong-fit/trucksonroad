@@ -3,7 +3,7 @@ import { AdminLayout } from '@/pages/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Save, Trash2, Eye, EyeOff, Plus, FileText, Globe, ExternalLink } from 'lucide-react';
+import { Save, Trash2, Eye, EyeOff, Plus, FileText, Globe, ExternalLink, Sparkles, Loader2, Power } from 'lucide-react';
 
 const CATEGORY_OPTIONS = [
   { value: 'guide', label: 'Ratgeber' },
@@ -27,9 +27,13 @@ export default function AdminBlog() {
     category: 'news', image: '', tags: '', author: 'TrucksOnRoad Team', is_published: false
   });
   const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [autoEnabled, setAutoEnabled] = useState(false);
+  const [autoInterval, setAutoInterval] = useState(24);
 
   const load = () => api.get('/admin/blog').then(r => setPosts(r.data)).catch(() => {});
-  useEffect(() => { load(); }, []);
+  const loadAutoStatus = () => api.get('/admin/blog/auto-status').then(r => { setAutoEnabled(r.data.enabled); setAutoInterval(r.data.interval_hours); }).catch(() => {});
+  useEffect(() => { load(); loadAutoStatus(); }, []);
 
   const publishedCount = posts.filter(p => p.is_published).length;
 
@@ -94,10 +98,82 @@ export default function AdminBlog() {
       .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   };
 
+  const handleGenerate = async () => {
+    setGenerating(true);
+    try {
+      const r = await api.post('/admin/blog/generate');
+      toast.success(`KI-Beitrag erstellt: "${r.data.title_de}"`);
+      load();
+    } catch { toast.error('KI-Generierung fehlgeschlagen. Bitte erneut versuchen.'); }
+    setGenerating(false);
+  };
+
+  const handleAutoToggle = async () => {
+    try {
+      const newState = !autoEnabled;
+      await api.post('/admin/blog/auto-toggle', { enabled: newState, interval_hours: autoInterval });
+      setAutoEnabled(newState);
+      toast.success(newState ? `Auto-Blog aktiviert (alle ${autoInterval}h)` : 'Auto-Blog deaktiviert');
+    } catch { toast.error('Fehler'); }
+  };
+
+  const handleAutoIntervalChange = async (val) => {
+    setAutoInterval(val);
+    if (autoEnabled) {
+      try { await api.post('/admin/blog/auto-toggle', { enabled: true, interval_hours: val }); } catch {}
+    }
+  };
+
   const LANGS = ['de', 'en', 'fr', 'it'];
+  const aiCount = posts.filter(p => p.ai_generated).length;
 
   return (
     <AdminLayout title="Blog-Beitraege">
+      {/* AI Generator */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem',
+        padding: '1rem 1.25rem', borderRadius: '10px', marginBottom: '1rem',
+        background: 'linear-gradient(135deg, rgba(76,175,80,0.08), rgba(33,150,243,0.08))',
+        border: '1px solid rgba(76,175,80,0.2)'
+      }} data-testid="ai-blog-section">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <Sparkles size={20} style={{ color: '#4caf50' }} />
+          <div>
+            <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>KI Blog-Generator</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--adm-text-secondary)' }}>
+              {aiCount} KI-Beitraege erstellt &middot; Auto-Post: {autoEnabled ? 'Aktiv' : 'Inaktiv'}
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <select className="adm-input" value={autoInterval} onChange={e => handleAutoIntervalChange(Number(e.target.value))} style={{ width: 'auto', fontSize: '0.78rem' }} data-testid="auto-interval">
+            <option value={6}>Alle 6h</option>
+            <option value={12}>Alle 12h</option>
+            <option value={24}>Alle 24h</option>
+            <option value={48}>Alle 48h</option>
+            <option value={72}>Alle 72h</option>
+          </select>
+          <button
+            className={`adm-btn adm-btn-sm ${autoEnabled ? 'adm-btn-danger' : 'adm-btn-secondary'}`}
+            onClick={handleAutoToggle}
+            data-testid="auto-toggle-btn"
+            style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+          >
+            <Power size={13} /> {autoEnabled ? 'Auto aus' : 'Auto an'}
+          </button>
+          <button
+            className="adm-btn adm-btn-primary adm-btn-sm"
+            onClick={handleGenerate}
+            disabled={generating}
+            data-testid="ai-generate-btn"
+            style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+          >
+            {generating ? <Loader2 size={14} className="spin" /> : <Sparkles size={14} />}
+            {generating ? 'Generiert...' : 'Jetzt generieren'}
+          </button>
+        </div>
+      </div>
+
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '1.25rem' }}>
         <div className="adm-detail" style={{ padding: '1rem', textAlign: 'center' }} data-testid="blog-stats-total">
@@ -238,6 +314,11 @@ export default function AdminBlog() {
                     }}>
                       {p.is_published ? 'Live' : 'Entwurf'}
                     </span>
+                    {p.ai_generated && (
+                      <span style={{ fontSize: '0.68rem', fontWeight: 600, padding: '2px 8px', borderRadius: '10px', background: 'rgba(33,150,243,0.1)', color: '#1976d2', marginLeft: '4px' }}>
+                        KI
+                      </span>
+                    )}
                   </div>
                   <div style={{ display: 'flex', gap: '0.3rem', marginTop: '0.4rem' }}>
                     <button className="adm-btn adm-btn-secondary adm-btn-sm" onClick={() => togglePublished(p)} style={{ padding: '0.2rem 0.4rem' }}>

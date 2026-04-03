@@ -17,6 +17,7 @@ from seed import TRUCKS_SEED, FAQS_SEED
 from blog_seed import BLOG_SEED
 from services.storage import init_storage
 from services.event_scout import event_reminder_loop, event_scan_loop
+from services.blog_generator import generate_blog_post
 from routes.auth_routes import router as auth_router
 from routes.public import router as public_router
 from routes.customer import router as customer_router
@@ -98,8 +99,28 @@ async def startup():
 
     asyncio.create_task(event_reminder_loop())
     asyncio.create_task(event_scan_loop())
+    asyncio.create_task(blog_auto_loop())
 
 
 @app.on_event("shutdown")
 async def shutdown():
     client.close()
+
+
+async def blog_auto_loop():
+    while True:
+        try:
+            settings = await db.settings.find_one({}, {"_id": 0, "blog_auto_enabled": 1, "blog_auto_interval_hours": 1})
+            enabled = (settings or {}).get("blog_auto_enabled", False)
+            interval_hours = (settings or {}).get("blog_auto_interval_hours", 24)
+            if enabled:
+                logger.info("Auto-Blog: Generating new post...")
+                post = await generate_blog_post()
+                if post:
+                    logger.info(f"Auto-Blog: Published '{post['slug']}'")
+                else:
+                    logger.warning("Auto-Blog: Generation failed")
+            await asyncio.sleep(interval_hours * 3600)
+        except Exception as e:
+            logger.error(f"Auto-Blog loop error: {e}")
+            await asyncio.sleep(3600)
