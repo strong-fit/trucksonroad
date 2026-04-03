@@ -141,9 +141,20 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Mobile-responsive (Use Cases 1-Spalte, Trust 2x2, How-it-works 1-Spalte)
 - [x] 100% Tests bestanden (iteration_26)
 
+### Truck-Detailseiten Emotional Redesign (03.04.2026)
+- [x] Immersiver Hero: Vollbild-Truck-Bild mit Name, Tagline & Badge-Overlay
+- [x] Quick Stats Bar: Kapazität, Aufbauzeit, Strom, Event-Typen (mit Icons)
+- [x] "Das Erlebnis" Story-Sektion statt technischer Beschreibung
+- [x] "Perfekt für dein Event" Karten: Jeder geeignete Event-Typ als klickbare Karte → Anfrage
+- [x] Menü-Sektion mit eleganten Karten-Layout
+- [x] Kunden-Zitat/Testimonial Sektion
+- [x] Technische Details: Klappbar (standardmässig geschlossen)
+- [x] Emotionaler CTA: "DIESEN TRUCK FÜR DEIN EVENT BUCHEN" mit Subtext
+- [x] Alle neuen Texte in 4 Sprachen (DE/FR/IT/EN)
+- [x] 100% Tests bestanden (iteration_27)
+
 ## Remaining Tasks
 - [ ] Event-Funnel (Anfrage-Formular) an CRO-Stil anpassen (P1)
-- [ ] Truck-Detailseiten: "Erlebnis" statt Feature-Liste (P2)
 - [ ] Google Search Console setup (manueller Schritt durch den Nutzer)
 - [ ] Emergent LLM Key Budget auffuellen (Profil -> Universal Key -> Balance hinzufuegen)
 
