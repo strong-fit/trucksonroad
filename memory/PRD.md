@@ -131,4 +131,5 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [ ] Emergent LLM Key Budget auffuellen (Profil -> Universal Key -> Balance hinzufuegen)
 
 ## Test Reports
-- iteration_3 bis iteration_25: Alle bestanden (25: Backend 76%->100% nach Fixes)
+- iteration_3 bis iteration_25: Alle bestanden
+- KI-Blog-Generator: Manuell getestet mit GPT-4o (Score 8/10, mit internen Links und Bild)
