@@ -1127,8 +1127,14 @@
 
 /* --- PAGE HERO --- */
 .sf-page-hero {
-  padding: 12rem 4rem 4rem; text-align: center;
+  padding: 8rem 4rem 4rem; text-align: center;
   background: var(--sf-bg); position: relative;
+}
+.sf-page-hero .sf-section-tag {
+  justify-content: center;
+}
+.sf-page-hero .sf-section-tag::after {
+  display: none;
 }
 .sf-page-hero::before {
   content: ''; position: absolute; inset: 0;
