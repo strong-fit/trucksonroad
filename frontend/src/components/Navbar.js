@@ -1,5 +1,7 @@
+"use client";
 import { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Menu, X, User, ChevronDown } from 'lucide-react';
@@ -12,7 +14,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef(null);
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handler = (e) => { if (langRef.current && !langRef.current.contains(e.target)) setLangOpen(false); };
@@ -34,7 +36,7 @@ export default function Navbar() {
 
   const handleHashLink = (hash) => {
     setMobileOpen(false);
-    if (location.pathname === '/') {
+    if (pathname === '/') {
       const el = document.getElementById(hash);
       if (el) el.scrollIntoView({ behavior: 'smooth' });
     } else {
@@ -45,7 +47,7 @@ export default function Navbar() {
   return (
     <nav className="sf-nav" data-testid="main-navbar">
       <div className="sf-nav-inner">
-        <Link to="/" className="sf-nav-logo" data-testid="nav-logo">
+        <Link href="/" className="sf-nav-logo" data-testid="nav-logo">
           <span className="sf-logo-accent">TRUCKS</span>
           <span className="sf-logo-text">on</span>
           <span className="sf-logo-accent">ROAD</span>
@@ -58,7 +60,7 @@ export default function Navbar() {
                 {link.label}
               </button>
             ) : (
-              <Link key={link.to} to={link.to} className={`sf-nav-link ${location.pathname === link.to ? 'active' : ''}`} data-testid={`nav-link-${link.to.replace('/', '') || 'home'}`}>
+              <Link key={link.to} href={link.to} className={`sf-nav-link ${pathname === link.to ? 'active' : ''}`} data-testid={`nav-link-${link.to.replace('/', '') || 'home'}`}>
                 {link.label}
               </Link>
             )
@@ -90,15 +92,15 @@ export default function Navbar() {
             )}
           </div>
           {user && user.role !== 'admin' ? (
-            <Link to="/konto" className="sf-nav-account" data-testid="nav-account-btn">
+            <Link href="/konto" className="sf-nav-account" data-testid="nav-account-btn">
               <User size={15} /> {t('nav_account')}
             </Link>
           ) : !user ? (
-            <Link to="/konto/login" className="sf-nav-account" data-testid="nav-login-btn">
+            <Link href="/konto/login" className="sf-nav-account" data-testid="nav-login-btn">
               <User size={15} /> {t('nav_login')}
             </Link>
           ) : null}
-          <Link to="/anfrage" className="sf-nav-cta" data-testid="nav-cta-button">
+          <Link href="/anfrage" className="sf-nav-cta" data-testid="nav-cta-button">
             {t('nav_cta')}
           </Link>
           <button
@@ -119,7 +121,7 @@ export default function Navbar() {
                 {link.label}
               </button>
             ) : (
-              <Link key={link.to} to={link.to} className="sf-mobile-link" onClick={() => setMobileOpen(false)}>
+              <Link key={link.to} href={link.to} className="sf-mobile-link" onClick={() => setMobileOpen(false)}>
                 {link.label}
               </Link>
             )
@@ -136,7 +138,7 @@ export default function Navbar() {
               </button>
             ))}
           </div>
-          <Link to="/anfrage" className="sf-btn-primary" style={{ width: '100%', textAlign: 'center', marginTop: '1rem' }} onClick={() => setMobileOpen(false)}>
+          <Link href="/anfrage" className="sf-btn-primary" style={{ width: '100%', textAlign: 'center', marginTop: '1rem' }} onClick={() => setMobileOpen(false)}>
             {t('nav_cta')}
           </Link>
         </div>

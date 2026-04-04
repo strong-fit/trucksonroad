@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+"use client";
+import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
@@ -19,21 +20,21 @@ export default function Footer() {
 
         <div>
           <div className="sf-footer-heading">Trucks</div>
-          <Link to="/trucks/burger-truck" className="sf-footer-link">Burger Truck</Link>
-          <Link to="/trucks/chicken-burger" className="sf-footer-link">Chicken Burger</Link>
-          <Link to="/trucks/bowl-truck" className="sf-footer-link">Bowl Truck</Link>
-          <Link to="/trucks/pocket-bowl" className="sf-footer-link">Pocket Bowl</Link>
-          <Link to="/trucks/empanadas" className="sf-footer-link">Empanadas</Link>
-          <Link to="/trucks/retro-trailer" className="sf-footer-link">Retro Trailer</Link>
+          <Link href="/trucks/burger-truck" className="sf-footer-link">Burger Truck</Link>
+          <Link href="/trucks/chicken-burger" className="sf-footer-link">Chicken Burger</Link>
+          <Link href="/trucks/bowl-truck" className="sf-footer-link">Bowl Truck</Link>
+          <Link href="/trucks/pocket-bowl" className="sf-footer-link">Pocket Bowl</Link>
+          <Link href="/trucks/empanadas" className="sf-footer-link">Empanadas</Link>
+          <Link href="/trucks/retro-trailer" className="sf-footer-link">Retro Trailer</Link>
         </div>
 
         <div>
           <div className="sf-footer-heading">Events</div>
-          <Link to="/fuer-veranstalter" className="sf-footer-link">{t('nav_organizers')}</Link>
-          <Link to="/private-events" className="sf-footer-link">{t('nav_private')}</Link>
-          <Link to="/anfrage" className="sf-footer-link">{t('nav_inquiry')}</Link>
-          <Link to="/faq" className="sf-footer-link">{t('nav_faq')}</Link>
-          <Link to="/blog" className="sf-footer-link">{t('nav_blog')}</Link>
+          <Link href="/fuer-veranstalter" className="sf-footer-link">{t('nav_organizers')}</Link>
+          <Link href="/private-events" className="sf-footer-link">{t('nav_private')}</Link>
+          <Link href="/anfrage" className="sf-footer-link">{t('nav_inquiry')}</Link>
+          <Link href="/faq" className="sf-footer-link">{t('nav_faq')}</Link>
+          <Link href="/blog" className="sf-footer-link">{t('nav_blog')}</Link>
         </div>
 
         <div>
@@ -56,7 +57,7 @@ export default function Footer() {
           <a href="#">{t('footer_privacy')}</a>
           <a href="#">{t('footer_imprint')}</a>
           <a href="#">{t('footer_terms')}</a>
-          <Link to="/admin/login" style={{ opacity: 0.4 }}>Admin</Link>
+          <Link href="/admin/login" style={{ opacity: 0.4 }}>Admin</Link>
         </div>
       </div>
 

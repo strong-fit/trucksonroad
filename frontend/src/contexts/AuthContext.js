@@ -1,5 +1,6 @@
+"use client";
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 
 const AuthContext = createContext(null);
@@ -45,22 +46,24 @@ export function useAuth() {
 
 export function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return (
+  const router = useRouter();
+  useEffect(() => { if (!loading && !user) router.push('/admin/login'); }, [user, loading, router]);
+  if (loading || !user) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--sf-bg)' }}>
       <div className="sf-spinner" />
     </div>
   );
-  if (!user) return <Navigate to="/admin/login" />;
   return children;
 }
 
 export function CustomerProtectedRoute({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return (
+  const router = useRouter();
+  useEffect(() => { if (!loading && !user) router.push('/konto/login'); }, [user, loading, router]);
+  if (loading || !user) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--sf-bg)' }}>
       <div className="sf-spinner" />
     </div>
   );
-  if (!user) return <Navigate to="/konto/login" />;
   return children;
 }
