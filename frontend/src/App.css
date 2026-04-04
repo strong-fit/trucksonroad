@@ -321,10 +321,12 @@
 .sf-stat-num {
   font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem;
   color: var(--sf-gold); line-height: 1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.7);
 }
 .sf-stat-label {
   font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--sf-gray);
+  color: var(--sf-cream);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.6);
 }
 
 @media (max-width: 900px) {
