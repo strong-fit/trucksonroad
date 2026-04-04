@@ -1,0 +1,98 @@
+{
+  "summary": "Next.js Migration Regression Testing - PASSED. All critical functionality working after production build. Fixed admin login redirect issue (was redirecting to /admin which didn't exist, now redirects to /admin/dashboard). Created /admin/page.js as redirect page. All 44 backend tests passed. Frontend hydration working correctly - trucks grid (6), FAQ items (6), dynamic content loading properly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/admin/personal", "issue": "Returns 404 - endpoint may not exist or route name mismatch (admin sidebar shows 'Personal' but route might be different)"}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_nextjs_migration.py",
+    "/app/test_reports/pytest/pytest_regression.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/frontend/src/views/admin/AdminLogin.js (fixed redirect from /admin to /admin/dashboard)",
+    "/app/frontend/src/app/admin/page.js (created redirect page for /admin -> /admin/dashboard)"
+  ],
+  "success_rate": {
+    "backend": "100% (44/44 tests passed)",
+    "frontend": "100% - All pages loading, hydration working, navigation working"
+  },
+  "test_credentials": {
+    "admin": "admin@truckonroad.ch / TrucksOnRoad2026!"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Next.js migration complete and working in production mode. All routes tested and working. Admin login fixed to redirect to /admin/dashboard. The 401 errors on /api/auth/me are expected for unauthenticated users. The 404 on /api/admin/personal is a minor issue - the endpoint may need to be created or the route name corrected.",
+  "features_tested": {
+    "homepage": {
+      "status": "PASS",
+      "details": "Hero visible, 6 truck cards, 6 FAQ items, WhatsApp button, navbar all working"
+    },
+    "client_side_navigation": {
+      "status": "PASS",
+      "details": "Clicking navbar links navigates between pages correctly"
+    },
+    "truck_detail_page": {
+      "status": "PASS",
+      "details": "Truck detail page loads with truck data when clicking a truck card"
+    },
+    "inquiry_form": {
+      "status": "PASS",
+      "details": "Form loads at /anfrage with calendar picker, all fields present"
+    },
+    "admin_login": {
+      "status": "PASS",
+      "details": "Login works with credentials, redirects to dashboard, sidebar/topbar/stats visible"
+    },
+    "admin_dashboard_pages": {
+      "status": "PASS",
+      "details": "Navigation to anfragen, trucks, faqs all working"
+    },
+    "customer_portal": {
+      "status": "PASS",
+      "details": "/konto/login page loads with form, registration link present"
+    },
+    "seo": {
+      "status": "PASS",
+      "details": "Meta tags, JSON-LD, OpenGraph tags all present in HTML response"
+    },
+    "api_endpoints": {
+      "status": "PASS",
+      "details": "GET /api/trucks (6 trucks), GET /api/faqs, GET /api/reviews, GET /api/blog, POST /api/auth/login all working"
+    },
+    "contact_page": {
+      "status": "PASS",
+      "details": "/kontakt loads with form"
+    },
+    "about_page": {
+      "status": "PASS",
+      "details": "/ueber-uns loads"
+    },
+    "faq_page": {
+      "status": "PASS",
+      "details": "/faq loads with 8 accordion items"
+    },
+    "blog_page": {
+      "status": "PASS",
+      "details": "/blog loads with 12 blog cards"
+    }
+  },
+  "routes_tested": {
+    "public_routes": ["/ (200)", "/trucks/burger-truck (200)", "/anfrage (200)", "/faq (200)", "/kontakt (200)", "/ueber-uns (200)", "/blog (200)", "/agenda (200)", "/private-events (200)", "/fuer-veranstalter (200)", "/veranstalter (200)"],
+    "admin_routes": ["/admin (200 - redirect)", "/admin/login (200)", "/admin/dashboard (200)", "/admin/anfragen (200)", "/admin/trucks (200)", "/admin/faqs (200)", "/admin/mitarbeiter (200)", "/admin/finanzen (200)", "/admin/routen (200)", "/admin/kalender (200)", "/admin/reviews (200)", "/admin/einstellungen (200)", "/admin/export (200)", "/admin/event-scout (200)", "/admin/blog (200)"],
+    "customer_routes": ["/konto/login (200)", "/konto/dashboard (200)", "/konto/anfragen (200)", "/konto/passwort-vergessen (200)", "/konto/passwort-reset (200)"]
+  },
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}

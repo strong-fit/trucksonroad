@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../../frontend/src/app/admin/dashboard/page.js"],"sourcesContent":["\"use client\";\nimport AdminDashboard from \"@/views/admin/AdminDashboard\";\nexport default function Page() { return <AdminDashboard />; }\n"],"names":["Page"],"mappings":"wDACA,EAAA,EAAA,CAAA,CAAA,wBACe,SAASA,EAAS,MAAO,CAAA,EAAA,EAAA,GAAA,EAAC,EAAA,OAAc,CAAA,CAAA,EAAK"}

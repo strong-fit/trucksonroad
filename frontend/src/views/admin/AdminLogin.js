@@ -17,7 +17,7 @@ export default function AdminLogin() {
     setLoading(true);
     try {
       await login(email, password);
-      window.location.href = '/admin';
+      window.location.href = '/admin/dashboard';
     } catch (err) {
       const detail = err.response?.data?.detail;
       const msg = typeof detail === 'string' ? detail : Array.isArray(detail) ? detail.map(e => e.msg || '').join(' ') : t('login_failed');

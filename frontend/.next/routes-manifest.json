@@ -1,0 +1,266 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "onMatchHeaders": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [
+      {
+        "source": "/api/:path*",
+        "destination": "http://localhost:8001/api/:path*",
+        "regex": "^/api(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+      }
+    ],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/blog/[slug]",
+      "regex": "^/blog/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/blog/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/trucks/[slug]",
+      "regex": "^/trucks/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/trucks/(?<nxtPslug>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/admin/anfragen",
+      "regex": "^/admin/anfragen(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/anfragen(?:/)?$"
+    },
+    {
+      "page": "/admin/blog",
+      "regex": "^/admin/blog(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/blog(?:/)?$"
+    },
+    {
+      "page": "/admin/dashboard",
+      "regex": "^/admin/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard(?:/)?$"
+    },
+    {
+      "page": "/admin/einstellungen",
+      "regex": "^/admin/einstellungen(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/einstellungen(?:/)?$"
+    },
+    {
+      "page": "/admin/event-scout",
+      "regex": "^/admin/event\\-scout(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/event\\-scout(?:/)?$"
+    },
+    {
+      "page": "/admin/export",
+      "regex": "^/admin/export(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/export(?:/)?$"
+    },
+    {
+      "page": "/admin/faqs",
+      "regex": "^/admin/faqs(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/faqs(?:/)?$"
+    },
+    {
+      "page": "/admin/finanzen",
+      "regex": "^/admin/finanzen(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/finanzen(?:/)?$"
+    },
+    {
+      "page": "/admin/kalender",
+      "regex": "^/admin/kalender(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/kalender(?:/)?$"
+    },
+    {
+      "page": "/admin/login",
+      "regex": "^/admin/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/login(?:/)?$"
+    },
+    {
+      "page": "/admin/mitarbeiter",
+      "regex": "^/admin/mitarbeiter(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/mitarbeiter(?:/)?$"
+    },
+    {
+      "page": "/admin/passwort-vergessen",
+      "regex": "^/admin/passwort\\-vergessen(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/passwort\\-vergessen(?:/)?$"
+    },
+    {
+      "page": "/admin/reviews",
+      "regex": "^/admin/reviews(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/reviews(?:/)?$"
+    },
+    {
+      "page": "/admin/routen",
+      "regex": "^/admin/routen(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/routen(?:/)?$"
+    },
+    {
+      "page": "/admin/trucks",
+      "regex": "^/admin/trucks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/trucks(?:/)?$"
+    },
+    {
+      "page": "/agenda",
+      "regex": "^/agenda(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/agenda(?:/)?$"
+    },
+    {
+      "page": "/anfrage",
+      "regex": "^/anfrage(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/anfrage(?:/)?$"
+    },
+    {
+      "page": "/blog",
+      "regex": "^/blog(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog(?:/)?$"
+    },
+    {
+      "page": "/faq",
+      "regex": "^/faq(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/faq(?:/)?$"
+    },
+    {
+      "page": "/fuer-veranstalter",
+      "regex": "^/fuer\\-veranstalter(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/fuer\\-veranstalter(?:/)?$"
+    },
+    {
+      "page": "/kontakt",
+      "regex": "^/kontakt(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/kontakt(?:/)?$"
+    },
+    {
+      "page": "/konto/anfragen",
+      "regex": "^/konto/anfragen(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/konto/anfragen(?:/)?$"
+    },
+    {
+      "page": "/konto/dashboard",
+      "regex": "^/konto/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/konto/dashboard(?:/)?$"
+    },
+    {
+      "page": "/konto/login",
+      "regex": "^/konto/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/konto/login(?:/)?$"
+    },
+    {
+      "page": "/konto/passwort-reset",
+      "regex": "^/konto/passwort\\-reset(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/konto/passwort\\-reset(?:/)?$"
+    },
+    {
+      "page": "/konto/passwort-vergessen",
+      "regex": "^/konto/passwort\\-vergessen(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/konto/passwort\\-vergessen(?:/)?$"
+    },
+    {
+      "page": "/private-events",
+      "regex": "^/private\\-events(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/private\\-events(?:/)?$"
+    },
+    {
+      "page": "/ueber-uns",
+      "regex": "^/ueber\\-uns(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/ueber\\-uns(?:/)?$"
+    },
+    {
+      "page": "/veranstalter",
+      "regex": "^/veranstalter(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/veranstalter(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

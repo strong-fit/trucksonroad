@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/konto/layout,_N_T_/konto/dashboard/layout,_N_T_/konto/dashboard/page,_N_T_/konto/dashboard"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/konto/dashboard/__PAGE__",
+    "/konto/dashboard",
+    "/konto",
+    "/_index",
+    "/_head"
+  ]
+}
