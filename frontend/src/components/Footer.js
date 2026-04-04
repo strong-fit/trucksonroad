@@ -56,6 +56,7 @@ export default function Footer() {
           <a href="#">{t('footer_privacy')}</a>
           <a href="#">{t('footer_imprint')}</a>
           <a href="#">{t('footer_terms')}</a>
+          <Link to="/admin/login" style={{ opacity: 0.4 }}>Admin</Link>
         </div>
       </div>
 
