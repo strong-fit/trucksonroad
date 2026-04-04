@@ -61,7 +61,7 @@ export default function Footer() {
       </div>
 
       <a
-        href="https://wa.me/41796969899"
+        href="https://api.whatsapp.com/send/?phone=41796969899&text&type=phone_number&app_absent=0"
         className="sf-whatsapp-btn"
         target="_blank"
         rel="noopener noreferrer"
