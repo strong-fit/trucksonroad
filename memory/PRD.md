@@ -173,6 +173,13 @@ Premium, professionelle Website fuer "TrucksOnRoad" – Foodtruck-Unternehmen fu
 - [x] Alle Texte in 4 Sprachen (DE/FR/IT/EN)
 - [x] 100% Tests bestanden (iteration_29)
 
+### SEO Pre-Rendering (04.04.2026)
+- [x] react-snap installiert und konfiguriert (24 Seiten vorgerendert)
+- [x] index.js auf Hydration umgestellt (hydrateRoot wenn pre-rendered, createRoot sonst)
+- [x] Reiche noscript-Inhalte in index.html (Crawler-Fallback mit vollem Content)
+- [x] Build generiert 52KB echtes HTML statt leerer App-Shell
+- [x] Jede wichtige Seite hat eigene /index.html mit echtem Content
+
 ## Remaining Tasks
 - [ ] Event-Funnel (Anfrage-Formular) an CRO-Stil anpassen (P1)
 - [ ] Google Search Console setup (manueller Schritt durch den Nutzer)
