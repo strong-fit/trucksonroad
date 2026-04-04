@@ -16,7 +16,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$
 ;
 ;
 var api = __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].create({
-    baseURL: "".concat(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.REACT_APP_BACKEND_URL, "/api"),
+    baseURL: "".concat(("TURBOPACK compile-time value", "https://hellpetrol-staging.preview.emergentagent.com") || ("TURBOPACK compile-time value", "https://hellpetrol-staging.preview.emergentagent.com") || '', "/api"),
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ api.interceptors.response.use(function(res) {
     return res;
 }, function(error) {
     return (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f40$swc$2f$helpers$2f$esm$2f$_async_to_generator$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["_"])(function() {
-        var _error_response, unused;
+        var _error_response, baseUrl, unused;
         return (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$tslib$2f$tslib$2e$es6$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$5f$_generator__as__$5f3e$__["_"])(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -43,9 +43,10 @@ api.interceptors.response.use(function(res) {
                         ,
                         4
                     ]);
+                    baseUrl = ("TURBOPACK compile-time value", "https://hellpetrol-staging.preview.emergentagent.com") || ("TURBOPACK compile-time value", "https://hellpetrol-staging.preview.emergentagent.com") || '';
                     return [
                         4,
-                        __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post("".concat(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.REACT_APP_BACKEND_URL, "/api/auth/refresh"), {}, {
+                        __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post("".concat(baseUrl, "/api/auth/refresh"), {}, {
                             withCredentials: true
                         })
                     ];
@@ -2394,6 +2395,8 @@ var SUPPORTED_LANGS = [
     'it'
 ];
 function getInitialLang() {
+    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+    ;
     var stored = localStorage.getItem('trucksonroad_lang');
     if (stored && SUPPORTED_LANGS.includes(stored)) return stored;
     return 'de';
@@ -2429,7 +2432,7 @@ function LanguageProvider(param) {
         children: children
     }, void 0, false, {
         fileName: "[project]/frontend/src/contexts/LanguageContext.js",
-        lineNumber: 25,
+        lineNumber: 26,
         columnNumber: 5
     }, this);
 }

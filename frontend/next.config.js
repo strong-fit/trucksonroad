@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    REACT_APP_BACKEND_URL: process.env.REACT_APP_BACKEND_URL || '',
+  },
+  allowedDevOrigins: ['*.preview.emergentagent.com', '*.preview.emergentcf.cloud'],
   async rewrites() {
     return [
       {
@@ -15,7 +19,6 @@ const nextConfig = {
     ],
     unoptimized: true,
   },
-  eslint: { ignoreDuringBuilds: true },
 };
 
 module.exports = nextConfig;

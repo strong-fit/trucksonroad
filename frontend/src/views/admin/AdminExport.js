@@ -1,5 +1,5 @@
 "use client";
-import { AdminLayout } from '@/pages/admin/AdminDashboard';
+import { AdminLayout } from '@/views/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Download, FileText, CalendarDays, Users, HelpCircle, Truck } from 'lucide-react';
 

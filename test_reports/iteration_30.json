@@ -1,0 +1,106 @@
+{
+  "summary": "Next.js Migration Regression Testing - CRITICAL ISSUE: Client-side hydration not working. SSR renders correctly (all routes return 200, meta tags, JSON-LD present), but React is not loading on client side. useEffect hooks not running, API calls not being made. Backend API working correctly (44/44 pytest tests passed). Admin login API works. This appears to be a Next.js 16 Turbopack hydration issue in the preview environment.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "critical": [
+      {
+        "component": "Client-side Hydration",
+        "issue": "React is not loading on client side. typeof React === 'undefined'. No Next.js globals found (window.__NEXT_DATA__, window.__next). useEffect hooks not executing. API calls not being made from client.",
+        "priority": "CRITICAL",
+        "affected_pages": "All pages - Homepage, Truck Detail, Inquiry, etc.",
+        "evidence": "Manual fetch('/api/trucks') works and returns 6 trucks, but React components don't make API calls"
+      },
+      {
+        "component": "TruckDetailPage",
+        "issue": "Truck detail page shows infinite loading spinner because API call is not made (useEffect not running due to hydration failure)",
+        "selector": "[data-testid='truck-detail-page']",
+        "priority": "HIGH"
+      }
+    ],
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Dynamic data loading",
+        "issue": "All dynamic content (trucks, FAQs, reviews, blog posts) not loading because client-side JavaScript not executing",
+        "affected_selectors": ["[data-testid^='truck-card-']", "[data-testid^='faq-item-']", "[data-testid^='review-card-']"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_nextjs_migration.py",
+    "/app/test_reports/pytest/pytest_nextjs_migration.xml"
+  ],
+  "action_items": [
+    "CRITICAL: Investigate and fix client-side hydration issue - React not loading on client",
+    "Check if this is a Next.js 16 Turbopack issue or preview environment specific",
+    "Consider building for production (next build && next start) instead of dev mode",
+    "Check if there's a JavaScript error preventing React from initializing",
+    "Verify that all 'use client' directives are correctly placed",
+    "Check for any SSR/client mismatch that could cause hydration to fail silently"
+  ],
+  "critical_code_review_comments": [
+    "SSR is working correctly - all meta tags, JSON-LD, OpenGraph tags present in HTML",
+    "All 30+ routes return 200 status code",
+    "Backend API fully functional - 44/44 tests passed",
+    "Admin login works via API",
+    "The issue is specifically with client-side JavaScript execution/hydration",
+    "Leaflet SSR error in AdminRoutes.js (window is not defined) - may need dynamic import with ssr:false"
+  ],
+  "updated_files": [
+    "/app/frontend/src/views/TruckDetailPage.js (added slug prop support)",
+    "/app/frontend/src/app/trucks/[slug]/page.js (pass slug from params)",
+    "/app/frontend/src/lib/api.js (added NEXT_PUBLIC_BACKEND_URL support)",
+    "/app/frontend/.env (added NEXT_PUBLIC_BACKEND_URL)",
+    "/app/frontend/src/views/HomePage.js (added console logging for debugging)"
+  ],
+  "success_rate": {
+    "backend": "100% (44/44 tests passed)",
+    "frontend": "SSR: 100%, Client-side: 0% (hydration not working)"
+  },
+  "test_credentials": {
+    "admin": "admin@truckonroad.ch / TrucksOnRoad2026!"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "CRITICAL: Client-side hydration is broken. SSR works perfectly (all routes 200, meta tags present, HTML content rendered). But React is not loading on client side - typeof React === 'undefined', no Next.js globals found. This means useEffect hooks don't run and no API calls are made. The issue appears to be specific to Next.js 16 Turbopack in dev mode. Consider: 1) Building for production, 2) Checking for silent JavaScript errors, 3) Verifying 'use client' directives, 4) Checking for hydration mismatches.",
+  "routes_tested": {
+    "public_routes": {
+      "status": "All 200",
+      "routes": ["/", "/trucks/burger-truck", "/anfrage", "/faq", "/kontakt", "/ueber-uns", "/blog", "/agenda", "/private-events", "/fuer-veranstalter", "/veranstalter"]
+    },
+    "admin_routes": {
+      "status": "All 200",
+      "routes": ["/admin/login", "/admin/dashboard", "/admin/anfragen", "/admin/trucks", "/admin/faqs", "/admin/mitarbeiter", "/admin/finanzen", "/admin/routen", "/admin/kalender", "/admin/reviews", "/admin/einstellungen", "/admin/export", "/admin/event-scout", "/admin/blog"]
+    },
+    "customer_routes": {
+      "status": "All 200",
+      "routes": ["/konto/login", "/konto/dashboard", "/konto/anfragen", "/konto/passwort-vergessen", "/konto/passwort-reset"]
+    }
+  },
+  "ssr_verification": {
+    "meta_description": "✓ Present",
+    "og_tags": "✓ Present",
+    "twitter_card": "✓ Present",
+    "json_ld": "✓ Present (FoodEstablishment schema)",
+    "title": "✓ Present (TRUCKSonROAD)",
+    "navbar_in_html": "✓ Present",
+    "hero_section_in_html": "✓ Present",
+    "footer_in_html": "✓ Present"
+  },
+  "api_verification": {
+    "GET /api/trucks": "✓ 200 - Returns 6 trucks",
+    "GET /api/faqs": "✓ 200",
+    "GET /api/reviews": "✓ 200",
+    "GET /api/blog": "✓ 200",
+    "POST /api/auth/login": "✓ 200 - Admin login works"
+  },
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}

@@ -9,7 +9,7 @@ import { Lock, CheckCircle2 } from 'lucide-react';
 
 export default function ResetPasswordPage({ variant = 'customer' }) {
   const { t } = useLanguage();
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');

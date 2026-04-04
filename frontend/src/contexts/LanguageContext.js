@@ -6,6 +6,7 @@ const LanguageContext = createContext();
 const SUPPORTED_LANGS = ['de', 'en', 'fr', 'it'];
 
 function getInitialLang() {
+  if (typeof window === 'undefined') return 'de';
   const stored = localStorage.getItem('trucksonroad_lang');
   if (stored && SUPPORTED_LANGS.includes(stored)) return stored;
   return 'de';

@@ -117,7 +117,7 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/node_modules/axios/lib/axios.js [app-ssr] (ecmascript)");
 ;
 const api = __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].create({
-    baseURL: `${process.env.REACT_APP_BACKEND_URL}/api`,
+    baseURL: `${("TURBOPACK compile-time value", "https://hellpetrol-staging.preview.emergentagent.com") || ("TURBOPACK compile-time value", "https://hellpetrol-staging.preview.emergentagent.com") || ''}/api`,
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json'
@@ -127,7 +127,8 @@ api.interceptors.response.use((res)=>res, async (error)=>{
     if (error.response?.status === 401 && !error.config._retry) {
         error.config._retry = true;
         try {
-            await __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/refresh`, {}, {
+            const baseUrl = ("TURBOPACK compile-time value", "https://hellpetrol-staging.preview.emergentagent.com") || ("TURBOPACK compile-time value", "https://hellpetrol-staging.preview.emergentagent.com") || '';
+            await __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post(`${baseUrl}/api/auth/refresh`, {}, {
                 withCredentials: true
             });
             return api(error.config);
@@ -2316,9 +2317,10 @@ const SUPPORTED_LANGS = [
     'it'
 ];
 function getInitialLang() {
-    const stored = localStorage.getItem('trucksonroad_lang');
-    if (stored && SUPPORTED_LANGS.includes(stored)) return stored;
-    return 'de';
+    if ("TURBOPACK compile-time truthy", 1) return 'de';
+    //TURBOPACK unreachable
+    ;
+    const stored = undefined;
 }
 function LanguageProvider({ children }) {
     const [lang, setLangState] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(getInitialLang);
@@ -2342,7 +2344,7 @@ function LanguageProvider({ children }) {
         children: children
     }, void 0, false, {
         fileName: "[project]/frontend/src/contexts/LanguageContext.js",
-        lineNumber: 25,
+        lineNumber: 26,
         columnNumber: 5
     }, this);
 }

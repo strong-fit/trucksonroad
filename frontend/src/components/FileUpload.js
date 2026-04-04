@@ -1,3 +1,4 @@
+"use client";
 import { useState, useRef } from 'react';
 import api from '@/lib/api';
 import { Upload, X, FileText, Image, File as FileIcon, Loader2 } from 'lucide-react';

@@ -122,14 +122,22 @@ function HeroGallery({ mainImage, gallery, videoUrl, name }) {
   );
 }
 
-export default function TruckDetailPage() {
-  const { slug } = useParams();
+export default function TruckDetailPage({ slug: propSlug }) {
+  const params = useParams();
+  const slug = propSlug || params?.slug;
   const { lang, t } = useLanguage();
   const [truck, setTruck] = useState(null);
   const [showSpecs, setShowSpecs] = useState(false);
 
   useEffect(() => {
-    api.get(`/trucks/${slug}`).then(r => setTruck(r.data)).catch(() => {});
+    console.log('TruckDetailPage: propSlug=', propSlug, 'params=', params, 'slug=', slug);
+    if (!slug) return;
+    api.get(`/trucks/${slug}`).then(r => {
+      console.log('Truck data received:', r.data);
+      setTruck(r.data);
+    }).catch((err) => {
+      console.error('Error fetching truck:', err);
+    });
   }, [slug]);
 
   if (!truck) return (

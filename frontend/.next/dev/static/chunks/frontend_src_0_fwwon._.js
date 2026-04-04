@@ -1015,12 +1015,16 @@ function HomePage() {
     var _useState5 = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f40$swc$2f$helpers$2f$esm$2f$_sliced_to_array$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["_"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]), 2), blogPosts = _useState5[0], setBlogPosts = _useState5[1];
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "HomePage.useEffect": function() {
+            console.log('HomePage useEffect running');
             __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$src$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get('/trucks').then({
                 "HomePage.useEffect": function(r) {
-                    return setTrucks(r.data);
+                    console.log('Trucks loaded:', r.data.length);
+                    setTrucks(r.data);
                 }
             }["HomePage.useEffect"]).catch({
-                "HomePage.useEffect": function() {}
+                "HomePage.useEffect": function(err) {
+                    console.error('Error loading trucks:', err);
+                }
             }["HomePage.useEffect"]);
             __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$src$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get('/faqs').then({
                 "HomePage.useEffect": function(r) {
@@ -1106,14 +1110,14 @@ function HomePage() {
                         className: "sf-hero-bg"
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 74,
+                        lineNumber: 80,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "sf-hero-grid"
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 75,
+                        lineNumber: 81,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1125,7 +1129,7 @@ function HomePage() {
                                 className: "sf-hero-truck-main"
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 77,
+                                lineNumber: 83,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
@@ -1134,13 +1138,13 @@ function HomePage() {
                                 className: "sf-hero-truck-accent"
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 78,
+                                lineNumber: 84,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 76,
+                        lineNumber: 82,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1153,12 +1157,12 @@ function HomePage() {
                                     children: t('hero_eyebrow')
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 82,
+                                    lineNumber: 88,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 81,
+                                lineNumber: 87,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FadeUp, {
@@ -1169,7 +1173,7 @@ function HomePage() {
                                         t('hero_title_1'),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 86,
+                                            lineNumber: 92,
                                             columnNumber: 34
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1177,12 +1181,12 @@ function HomePage() {
                                             children: t('hero_title_2')
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 87,
+                                            lineNumber: 93,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 87,
+                                            lineNumber: 93,
                                             columnNumber: 64
                                         }, this),
                                         t('hero_title_4'),
@@ -1190,12 +1194,12 @@ function HomePage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 85,
+                                    lineNumber: 91,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 84,
+                                lineNumber: 90,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FadeUp, {
@@ -1205,12 +1209,12 @@ function HomePage() {
                                     children: t('hero_subtitle')
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 92,
+                                    lineNumber: 98,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 91,
+                                lineNumber: 97,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FadeUp, {
@@ -1225,7 +1229,7 @@ function HomePage() {
                                             children: t('hero_btn_inquiry')
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 96,
+                                            lineNumber: 102,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -1235,24 +1239,24 @@ function HomePage() {
                                             children: t('hero_btn_trucks')
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 97,
+                                            lineNumber: 103,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 95,
+                                    lineNumber: 101,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 94,
+                                lineNumber: 100,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 80,
+                        lineNumber: 86,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1266,7 +1270,7 @@ function HomePage() {
                                         children: t('hero_stat_1_num')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 102,
+                                        lineNumber: 108,
                                         columnNumber: 36
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1274,13 +1278,13 @@ function HomePage() {
                                         children: t('hero_stat_1_label')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 102,
+                                        lineNumber: 108,
                                         columnNumber: 93
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 102,
+                                lineNumber: 108,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1291,7 +1295,7 @@ function HomePage() {
                                         children: t('hero_stat_2_num')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 103,
+                                        lineNumber: 109,
                                         columnNumber: 36
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1299,13 +1303,13 @@ function HomePage() {
                                         children: t('hero_stat_2_label')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 103,
+                                        lineNumber: 109,
                                         columnNumber: 93
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 103,
+                                lineNumber: 109,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1316,7 +1320,7 @@ function HomePage() {
                                         children: t('hero_stat_3_num')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 104,
+                                        lineNumber: 110,
                                         columnNumber: 36
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1324,25 +1328,25 @@ function HomePage() {
                                         children: t('hero_stat_3_label')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 104,
+                                        lineNumber: 110,
                                         columnNumber: 93
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 104,
+                                lineNumber: 110,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 101,
+                        lineNumber: 107,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 73,
+                lineNumber: 79,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1356,18 +1360,18 @@ function HomePage() {
                             children: item
                         }, i, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 112,
+                            lineNumber: 118,
                             columnNumber: 13
                         }, _this);
                     })
                 }, void 0, false, {
                     fileName: "[project]/frontend/src/views/HomePage.js",
-                    lineNumber: 110,
+                    lineNumber: 116,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 109,
+                lineNumber: 115,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1381,7 +1385,7 @@ function HomePage() {
                                 children: t('uc_tag')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 120,
+                                lineNumber: 126,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1392,13 +1396,13 @@ function HomePage() {
                                 children: t('uc_title')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 121,
+                                lineNumber: 127,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 119,
+                        lineNumber: 125,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1419,14 +1423,14 @@ function HomePage() {
                                             className: "sf-uc-card-img"
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 129,
+                                            lineNumber: 135,
                                             columnNumber: 19
                                         }, _this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "sf-uc-card-overlay"
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 130,
+                                            lineNumber: 136,
                                             columnNumber: 19
                                         }, _this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1438,12 +1442,12 @@ function HomePage() {
                                                         size: 22
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                                        lineNumber: 132,
+                                                        lineNumber: 138,
                                                         columnNumber: 54
                                                     }, _this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                                    lineNumber: 132,
+                                                    lineNumber: 138,
                                                     columnNumber: 21
                                                 }, _this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1451,7 +1455,7 @@ function HomePage() {
                                                     children: t("uc_".concat(uc.key, "_title"))
                                                 }, void 0, false, {
                                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                                    lineNumber: 133,
+                                                    lineNumber: 139,
                                                     columnNumber: 21
                                                 }, _this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1459,7 +1463,7 @@ function HomePage() {
                                                     children: t("uc_".concat(uc.key, "_desc"))
                                                 }, void 0, false, {
                                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                                    lineNumber: 134,
+                                                    lineNumber: 140,
                                                     columnNumber: 21
                                                 }, _this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1471,42 +1475,42 @@ function HomePage() {
                                                             size: 14
                                                         }, void 0, false, {
                                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                                            lineNumber: 135,
+                                                            lineNumber: 141,
                                                             columnNumber: 68
                                                         }, _this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                                    lineNumber: 135,
+                                                    lineNumber: 141,
                                                     columnNumber: 21
                                                 }, _this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 131,
+                                            lineNumber: 137,
                                             columnNumber: 19
                                         }, _this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 128,
+                                    lineNumber: 134,
                                     columnNumber: 17
                                 }, _this)
                             }, uc.key, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 127,
+                                lineNumber: 133,
                                 columnNumber: 15
                             }, _this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 123,
+                        lineNumber: 129,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 118,
+                lineNumber: 124,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1521,7 +1525,7 @@ function HomePage() {
                                 children: t('how_tag')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 147,
+                                lineNumber: 153,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1529,13 +1533,13 @@ function HomePage() {
                                 children: t('how_title')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 148,
+                                lineNumber: 154,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 146,
+                        lineNumber: 152,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1556,7 +1560,7 @@ function HomePage() {
                                                     children: step.num
                                                 }, void 0, false, {
                                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                                    lineNumber: 157,
+                                                    lineNumber: 163,
                                                     columnNumber: 21
                                                 }, _this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icon, {
@@ -1564,13 +1568,13 @@ function HomePage() {
                                                     className: "sf-how-icon"
                                                 }, void 0, false, {
                                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                                    lineNumber: 158,
+                                                    lineNumber: 164,
                                                     columnNumber: 21
                                                 }, _this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 156,
+                                            lineNumber: 162,
                                             columnNumber: 19
                                         }, _this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1578,7 +1582,7 @@ function HomePage() {
                                             children: t("how_step".concat(step.key, "_title"))
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 160,
+                                            lineNumber: 166,
                                             columnNumber: 19
                                         }, _this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1586,31 +1590,31 @@ function HomePage() {
                                             children: t("how_step".concat(step.key, "_desc"))
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 161,
+                                            lineNumber: 167,
                                             columnNumber: 19
                                         }, _this),
                                         i < howSteps.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "sf-how-connector"
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 162,
+                                            lineNumber: 168,
                                             columnNumber: 47
                                         }, _this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 155,
+                                    lineNumber: 161,
                                     columnNumber: 17
                                 }, _this)
                             }, step.key, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 154,
+                                lineNumber: 160,
                                 columnNumber: 15
                             }, _this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 150,
+                        lineNumber: 156,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FadeUp, {
@@ -1627,23 +1631,23 @@ function HomePage() {
                                 children: t('hero_btn_inquiry')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 170,
+                                lineNumber: 176,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 169,
+                            lineNumber: 175,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 168,
+                        lineNumber: 174,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 145,
+                lineNumber: 151,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1657,7 +1661,7 @@ function HomePage() {
                                 children: t('pricing_tag')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 178,
+                                lineNumber: 184,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1665,7 +1669,7 @@ function HomePage() {
                                 children: t('pricing_title')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 179,
+                                lineNumber: 185,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1680,13 +1684,13 @@ function HomePage() {
                                 children: t('pricing_subtitle')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 180,
+                                lineNumber: 186,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 177,
+                        lineNumber: 183,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1719,12 +1723,12 @@ function HomePage() {
                                                 size: 22
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 194,
+                                                lineNumber: 200,
                                                 columnNumber: 57
                                             }, _this)
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 194,
+                                            lineNumber: 200,
                                             columnNumber: 19
                                         }, _this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1732,7 +1736,7 @@ function HomePage() {
                                             children: t("pricing_".concat(pkg.size, "_title"))
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 195,
+                                            lineNumber: 201,
                                             columnNumber: 19
                                         }, _this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1740,7 +1744,7 @@ function HomePage() {
                                             children: t("pricing_".concat(pkg.size, "_guests"))
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 196,
+                                            lineNumber: 202,
                                             columnNumber: 19
                                         }, _this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1748,7 +1752,7 @@ function HomePage() {
                                             children: t("pricing_".concat(pkg.size, "_desc"))
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 197,
+                                            lineNumber: 203,
                                             columnNumber: 19
                                         }, _this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1756,7 +1760,7 @@ function HomePage() {
                                             children: t('pricing_price')
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 198,
+                                            lineNumber: 204,
                                             columnNumber: 19
                                         }, _this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1764,7 +1768,7 @@ function HomePage() {
                                             children: t('pricing_includes')
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 199,
+                                            lineNumber: 205,
                                             columnNumber: 19
                                         }, _this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1773,24 +1777,24 @@ function HomePage() {
                                             children: t('hero_btn_inquiry')
                                         }, void 0, false, {
                                             fileName: "[project]/frontend/src/views/HomePage.js",
-                                            lineNumber: 200,
+                                            lineNumber: 206,
                                             columnNumber: 19
                                         }, _this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 193,
+                                    lineNumber: 199,
                                     columnNumber: 17
                                 }, _this)
                             }, pkg.size, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 192,
+                                lineNumber: 198,
                                 columnNumber: 15
                             }, _this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 184,
+                        lineNumber: 190,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FadeUp, {
@@ -1804,7 +1808,7 @@ function HomePage() {
                                     children: t('pricing_cta')
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 208,
+                                    lineNumber: 214,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1812,24 +1816,24 @@ function HomePage() {
                                     children: t('pricing_note')
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 209,
+                                    lineNumber: 215,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 207,
+                            lineNumber: 213,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 206,
+                        lineNumber: 212,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 176,
+                lineNumber: 182,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1847,7 +1851,7 @@ function HomePage() {
                                         children: t('trust_events_num')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 217,
+                                        lineNumber: 223,
                                         columnNumber: 50
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1855,18 +1859,18 @@ function HomePage() {
                                         children: t('trust_events_label')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 217,
+                                        lineNumber: 223,
                                         columnNumber: 111
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 217,
+                                lineNumber: 223,
                                 columnNumber: 19
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 217,
+                            lineNumber: 223,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FadeUp, {
@@ -1879,7 +1883,7 @@ function HomePage() {
                                         children: t('trust_satisfaction_num')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 218,
+                                        lineNumber: 224,
                                         columnNumber: 62
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1887,18 +1891,18 @@ function HomePage() {
                                         children: t('trust_satisfaction_label')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 218,
+                                        lineNumber: 224,
                                         columnNumber: 129
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 218,
+                                lineNumber: 224,
                                 columnNumber: 31
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 218,
+                            lineNumber: 224,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FadeUp, {
@@ -1911,7 +1915,7 @@ function HomePage() {
                                         children: t('trust_response_num')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 219,
+                                        lineNumber: 225,
                                         columnNumber: 62
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1919,18 +1923,18 @@ function HomePage() {
                                         children: t('trust_response_label')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 219,
+                                        lineNumber: 225,
                                         columnNumber: 125
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 219,
+                                lineNumber: 225,
                                 columnNumber: 31
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 219,
+                            lineNumber: 225,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FadeUp, {
@@ -1943,7 +1947,7 @@ function HomePage() {
                                         children: t('trust_concepts_num')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 220,
+                                        lineNumber: 226,
                                         columnNumber: 62
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1951,29 +1955,29 @@ function HomePage() {
                                         children: t('trust_concepts_label')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 220,
+                                        lineNumber: 226,
                                         columnNumber: 125
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 220,
+                                lineNumber: 226,
                                 columnNumber: 31
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 220,
+                            lineNumber: 226,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/frontend/src/views/HomePage.js",
-                    lineNumber: 216,
+                    lineNumber: 222,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 215,
+                lineNumber: 221,
                 columnNumber: 7
             }, this),
             reviews.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1989,7 +1993,7 @@ function HomePage() {
                                     children: t('reviews_tag')
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 229,
+                                    lineNumber: 235,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -2000,7 +2004,7 @@ function HomePage() {
                                     children: t('reviews_title')
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 230,
+                                    lineNumber: 236,
                                     columnNumber: 15
                                 }, this),
                                 function() {
@@ -2037,13 +2041,13 @@ function HomePage() {
                                                         }
                                                     }, s, false, {
                                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                                        lineNumber: 239,
+                                                        lineNumber: 245,
                                                         columnNumber: 25
                                                     }, _this);
                                                 })
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 237,
+                                                lineNumber: 243,
                                                 columnNumber: 21
                                             }, _this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2060,20 +2064,20 @@ function HomePage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 242,
+                                                lineNumber: 248,
                                                 columnNumber: 21
                                             }, _this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 236,
+                                        lineNumber: 242,
                                         columnNumber: 19
                                     }, _this);
                                 }()
                             ]
                         }, void 0, true, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 228,
+                            lineNumber: 234,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2091,7 +2095,7 @@ function HomePage() {
                                                 className: "sf-review-quote"
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 251,
+                                                lineNumber: 257,
                                                 columnNumber: 21
                                             }, _this),
                                             r.source === 'google' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2111,7 +2115,7 @@ function HomePage() {
                                                 children: "Google Review"
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 253,
+                                                lineNumber: 259,
                                                 columnNumber: 23
                                             }, _this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2119,7 +2123,7 @@ function HomePage() {
                                                 children: r.text
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 257,
+                                                lineNumber: 263,
                                                 columnNumber: 21
                                             }, _this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2132,7 +2136,7 @@ function HomePage() {
                                                                 children: r.author
                                                             }, void 0, false, {
                                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                                lineNumber: 260,
+                                                                lineNumber: 266,
                                                                 columnNumber: 25
                                                             }, _this),
                                                             r.event_type && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2140,13 +2144,13 @@ function HomePage() {
                                                                 children: r.event_type
                                                             }, void 0, false, {
                                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                                lineNumber: 261,
+                                                                lineNumber: 267,
                                                                 columnNumber: 42
                                                             }, _this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                                        lineNumber: 259,
+                                                        lineNumber: 265,
                                                         columnNumber: 23
                                                     }, _this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2169,47 +2173,47 @@ function HomePage() {
                                                                 }
                                                             }, s, false, {
                                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                                lineNumber: 265,
+                                                                lineNumber: 271,
                                                                 columnNumber: 27
                                                             }, _this);
                                                         })
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                                        lineNumber: 263,
+                                                        lineNumber: 269,
                                                         columnNumber: 23
                                                     }, _this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 258,
+                                                lineNumber: 264,
                                                 columnNumber: 21
                                             }, _this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 250,
+                                        lineNumber: 256,
                                         columnNumber: 19
                                     }, _this)
                                 }, r.id, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 249,
+                                    lineNumber: 255,
                                     columnNumber: 17
                                 }, _this);
                             })
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 247,
+                            lineNumber: 253,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/frontend/src/views/HomePage.js",
-                    lineNumber: 227,
+                    lineNumber: 233,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 226,
+                lineNumber: 232,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -2225,7 +2229,7 @@ function HomePage() {
                             children: t('logos_tag')
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 280,
+                            lineNumber: 286,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2246,29 +2250,29 @@ function HomePage() {
                                         children: name
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 284,
+                                        lineNumber: 290,
                                         columnNumber: 17
                                     }, _this)
                                 }, name, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 283,
+                                    lineNumber: 289,
                                     columnNumber: 15
                                 }, _this);
                             })
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 281,
+                            lineNumber: 287,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/frontend/src/views/HomePage.js",
-                    lineNumber: 279,
+                    lineNumber: 285,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 278,
+                lineNumber: 284,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -2286,7 +2290,7 @@ function HomePage() {
                                         children: t('trucks_tag')
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 295,
+                                        lineNumber: 301,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -2295,20 +2299,20 @@ function HomePage() {
                                             t('trucks_title_1'),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 296,
+                                                lineNumber: 302,
                                                 columnNumber: 67
                                             }, this),
                                             t('trucks_title_2')
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 296,
+                                        lineNumber: 302,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 294,
+                                lineNumber: 300,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2321,13 +2325,13 @@ function HomePage() {
                                 children: t('trucks_desc')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 298,
+                                lineNumber: 304,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 293,
+                        lineNumber: 299,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2343,7 +2347,7 @@ function HomePage() {
                                         alt: truck["name_".concat(lang)]
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 310,
+                                        lineNumber: 316,
                                         columnNumber: 15
                                     }, _this),
                                     truck.tag && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2351,7 +2355,7 @@ function HomePage() {
                                         children: truck.tag
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 311,
+                                        lineNumber: 317,
                                         columnNumber: 29
                                     }, _this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2362,7 +2366,7 @@ function HomePage() {
                                                 children: truck["name_".concat(lang)]
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 313,
+                                                lineNumber: 319,
                                                 columnNumber: 17
                                             }, _this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2370,31 +2374,31 @@ function HomePage() {
                                                 children: truck["tagline_".concat(lang)]
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 314,
+                                                lineNumber: 320,
                                                 columnNumber: 17
                                             }, _this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 312,
+                                        lineNumber: 318,
                                         columnNumber: 15
                                     }, _this)
                                 ]
                             }, truck.slug, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 304,
+                                lineNumber: 310,
                                 columnNumber: 13
                             }, _this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 302,
+                        lineNumber: 308,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 292,
+                lineNumber: 298,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -2406,7 +2410,7 @@ function HomePage() {
                         children: t('cta_eyebrow')
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 323,
+                        lineNumber: 329,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -2418,19 +2422,19 @@ function HomePage() {
                                 children: t('cta_title_em')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 325,
+                                lineNumber: 331,
                                 columnNumber: 30
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 325,
+                                lineNumber: 331,
                                 columnNumber: 58
                             }, this),
                             t('cta_title_2')
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 324,
+                        lineNumber: 330,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2438,7 +2442,7 @@ function HomePage() {
                         children: t('cta_sub')
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 327,
+                        lineNumber: 333,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2451,7 +2455,7 @@ function HomePage() {
                                 children: t('cta_btn')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 329,
+                                lineNumber: 335,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2460,19 +2464,19 @@ function HomePage() {
                                 children: t('cta_btn_faq')
                             }, void 0, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 330,
+                                lineNumber: 336,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 328,
+                        lineNumber: 334,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 322,
+                lineNumber: 328,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -2484,7 +2488,7 @@ function HomePage() {
                         children: t('faq_tag')
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 336,
+                        lineNumber: 342,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -2492,7 +2496,7 @@ function HomePage() {
                         children: t('faq_title')
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 337,
+                        lineNumber: 343,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2514,13 +2518,13 @@ function HomePage() {
                                                 children: "+"
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 343,
+                                                lineNumber: 349,
                                                 columnNumber: 17
                                             }, _this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 341,
+                                        lineNumber: 347,
                                         columnNumber: 15
                                     }, _this),
                                     openFaq === faq.id && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2528,19 +2532,19 @@ function HomePage() {
                                         children: faq["answer_".concat(lang)]
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 346,
+                                        lineNumber: 352,
                                         columnNumber: 17
                                     }, _this)
                                 ]
                             }, faq.id, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 340,
+                                lineNumber: 346,
                                 columnNumber: 13
                             }, _this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 338,
+                        lineNumber: 344,
                         columnNumber: 9
                     }, this),
                     faqs.length > 6 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2554,18 +2558,18 @@ function HomePage() {
                             children: t('faq_all')
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 353,
+                            lineNumber: 359,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 352,
+                        lineNumber: 358,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 335,
+                lineNumber: 341,
                 columnNumber: 7
             }, this),
             blogPosts.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -2577,7 +2581,7 @@ function HomePage() {
                         children: t('blog_tag')
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 361,
+                        lineNumber: 367,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -2585,7 +2589,7 @@ function HomePage() {
                         children: t('blog_title')
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 362,
+                        lineNumber: 368,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2632,12 +2636,12 @@ function HomePage() {
                                                     loading: "lazy"
                                                 }, void 0, false, {
                                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                                    lineNumber: 374,
+                                                    lineNumber: 380,
                                                     columnNumber: 25
                                                 }, _this)
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 373,
+                                                lineNumber: 379,
                                                 columnNumber: 23
                                             }, _this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2670,14 +2674,14 @@ function HomePage() {
                                                                         }
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                                                        lineNumber: 380,
+                                                                        lineNumber: 386,
                                                                         columnNumber: 27
                                                                     }, _this),
                                                                     post.category
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                                lineNumber: 379,
+                                                                lineNumber: 385,
                                                                 columnNumber: 25
                                                             }, _this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2694,20 +2698,20 @@ function HomePage() {
                                                                         }
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                                                        lineNumber: 383,
+                                                                        lineNumber: 389,
                                                                         columnNumber: 27
                                                                     }, _this),
                                                                     new Date(post.created_at).toLocaleDateString('de-CH')
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                                lineNumber: 382,
+                                                                lineNumber: 388,
                                                                 columnNumber: 25
                                                             }, _this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                                        lineNumber: 378,
+                                                        lineNumber: 384,
                                                         columnNumber: 23
                                                     }, _this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -2721,7 +2725,7 @@ function HomePage() {
                                                         children: post["title_".concat(lang)] || post.title_de
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                                        lineNumber: 387,
+                                                        lineNumber: 393,
                                                         columnNumber: 23
                                                     }, _this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2736,7 +2740,7 @@ function HomePage() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                                        lineNumber: 390,
+                                                        lineNumber: 396,
                                                         columnNumber: 23
                                                     }, _this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2756,41 +2760,41 @@ function HomePage() {
                                                                 size: 14
                                                             }, void 0, false, {
                                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                                lineNumber: 394,
+                                                                lineNumber: 400,
                                                                 columnNumber: 47
                                                             }, _this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                                        lineNumber: 393,
+                                                        lineNumber: 399,
                                                         columnNumber: 23
                                                     }, _this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                                lineNumber: 377,
+                                                lineNumber: 383,
                                                 columnNumber: 21
                                             }, _this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 367,
+                                        lineNumber: 373,
                                         columnNumber: 19
                                     }, _this)
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 366,
+                                    lineNumber: 372,
                                     columnNumber: 17
                                 }, _this)
                             }, post.id, false, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 365,
+                                lineNumber: 371,
                                 columnNumber: 15
                             }, _this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 363,
+                        lineNumber: 369,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2805,18 +2809,18 @@ function HomePage() {
                             children: t('blog_all')
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 403,
+                            lineNumber: 409,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/frontend/src/views/HomePage.js",
-                        lineNumber: 402,
+                        lineNumber: 408,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 360,
+                lineNumber: 366,
                 columnNumber: 9
             }, this),
             instaData.images.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -2830,7 +2834,7 @@ function HomePage() {
                             children: t('instagram_tag')
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 412,
+                            lineNumber: 418,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -2846,14 +2850,14 @@ function HomePage() {
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 414,
+                                    lineNumber: 420,
                                     columnNumber: 15
                                 }, this),
                                 instaData.username ? "@".concat(instaData.username) : 'Instagram'
                             ]
                         }, void 0, true, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 413,
+                            lineNumber: 419,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2871,18 +2875,18 @@ function HomePage() {
                                         loading: "lazy"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 420,
+                                        lineNumber: 426,
                                         columnNumber: 19
                                     }, _this)
                                 }, i, false, {
                                     fileName: "[project]/frontend/src/views/HomePage.js",
-                                    lineNumber: 419,
+                                    lineNumber: 425,
                                     columnNumber: 17
                                 }, _this);
                             })
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 417,
+                            lineNumber: 423,
                             columnNumber: 13
                         }, this),
                         instaData.username && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2906,7 +2910,7 @@ function HomePage() {
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/src/views/HomePage.js",
-                                        lineNumber: 427,
+                                        lineNumber: 433,
                                         columnNumber: 19
                                     }, this),
                                     " ",
@@ -2914,29 +2918,29 @@ function HomePage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/src/views/HomePage.js",
-                                lineNumber: 426,
+                                lineNumber: 432,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/frontend/src/views/HomePage.js",
-                            lineNumber: 425,
+                            lineNumber: 431,
                             columnNumber: 15
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/frontend/src/views/HomePage.js",
-                    lineNumber: 411,
+                    lineNumber: 417,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/frontend/src/views/HomePage.js",
-                lineNumber: 410,
+                lineNumber: 416,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/frontend/src/views/HomePage.js",
-        lineNumber: 71,
+        lineNumber: 77,
         columnNumber: 5
     }, this);
 }

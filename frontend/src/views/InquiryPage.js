@@ -17,7 +17,7 @@ const TRUCK_OPTIONS = ["Burger Truck", "Chicken Burger", "Bowl Truck", "Pocket B
 export default function InquiryPage() {
   const { lang, t } = useLanguage();
   const { user } = useAuth();
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const preselectedTruck = searchParams.get('truck') || '';
   const preselectedTypeIndex = searchParams.get('type');
   const eventTypes = t('form_event_types');

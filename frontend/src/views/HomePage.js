@@ -47,7 +47,13 @@ export default function HomePage() {
   const [blogPosts, setBlogPosts] = useState([]);
 
   useEffect(() => {
-    api.get('/trucks').then(r => setTrucks(r.data)).catch(() => {});
+    console.log('HomePage useEffect running');
+    api.get('/trucks').then(r => {
+      console.log('Trucks loaded:', r.data.length);
+      setTrucks(r.data);
+    }).catch((err) => {
+      console.error('Error loading trucks:', err);
+    });
     api.get('/faqs').then(r => setFaqs(r.data)).catch(() => {});
     api.get('/instagram-gallery').then(r => setInstaData(r.data)).catch(() => {});
     api.get('/reviews').then(r => setReviews(r.data)).catch(() => {});
