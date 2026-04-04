@@ -110,7 +110,7 @@ export default function AdminRoutes() {
             <FitBounds bounds={bounds} />
             {/* Base marker */}
             <Marker position={[mapData.base.lat, mapData.base.lon]} icon={baseIcon}>
-              <Popup><strong>TrucksOnRoad</strong><br/>Wetzikon (Basis)</Popup>
+              <Popup><strong>TRUCKonROAD</strong><br/>Wetzikon (Basis)</Popup>
             </Marker>
             {/* Event markers */}
             {eventsWithCoords.map(e => (

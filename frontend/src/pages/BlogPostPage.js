@@ -88,13 +88,13 @@ export default function BlogPostPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--sf-bg)' }}>
       <Helmet>
-        <title>{`${metaTitle || 'Blog'} | TrucksOnRoad Blog`}</title>
+        <title>{`${metaTitle || 'Blog'} | TRUCKonROAD Blog`}</title>
         <meta name="description" content={metaDesc || ''} />
-        <meta property="og:title" content={metaTitle || 'TrucksOnRoad Blog'} />
+        <meta property="og:title" content={metaTitle || 'TRUCKonROAD Blog'} />
         <meta property="og:description" content={metaDesc || ''} />
         {post.image && <meta property="og:image" content={post.image} />}
         <meta property="og:type" content="article" />
-        <link rel="canonical" href={`https://trucksonroad.ch/blog/${slug}`} />
+        <link rel="canonical" href={`https://truckonroad.ch/blog/${slug}`} />
       </Helmet>
       {/* Hero image */}
       <div style={{ position: 'relative', height: '400px', overflow: 'hidden' }}>

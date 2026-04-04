@@ -27,11 +27,11 @@ export default function BlogPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--sf-bg)' }}>
       <Helmet>
-        <title>{`${t('blog_title') || 'Blog'} | TrucksOnRoad Blog`}</title>
+        <title>{`${t('blog_title') || 'Blog'} | TRUCKonROAD Blog`}</title>
         <meta name="description" content={t('blog_subtitle') || ''} />
-        <meta property="og:title" content={`${t('blog_title') || 'Blog'} | TrucksOnRoad`} />
+        <meta property="og:title" content={`${t('blog_title') || 'Blog'} | TRUCKonROAD`} />
         <meta property="og:description" content={t('blog_subtitle') || ''} />
-        <link rel="canonical" href="https://trucksonroad.ch/blog" />
+        <link rel="canonical" href="https://truckonroad.ch/blog" />
       </Helmet>
       {/* Hero */}
       <section style={{ padding: '8rem 1.5rem 3rem', textAlign: 'center' }}>

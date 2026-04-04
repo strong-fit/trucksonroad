@@ -24,7 +24,7 @@ export default function AdminBlog() {
     slug: '', title_de: '', title_en: '', title_fr: '', title_it: '',
     excerpt_de: '', excerpt_en: '', excerpt_fr: '', excerpt_it: '',
     content_de: '', content_en: '', content_fr: '', content_it: '',
-    category: 'news', image: '', tags: '', author: 'TrucksOnRoad Team', is_published: false
+    category: 'news', image: '', tags: '', author: 'TRUCKonROAD Team', is_published: false
   });
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
@@ -42,7 +42,7 @@ export default function AdminBlog() {
       slug: '', title_de: '', title_en: '', title_fr: '', title_it: '',
       excerpt_de: '', excerpt_en: '', excerpt_fr: '', excerpt_it: '',
       content_de: '', content_en: '', content_fr: '', content_it: '',
-      category: 'news', image: '', tags: '', author: 'TrucksOnRoad Team', is_published: false
+      category: 'news', image: '', tags: '', author: 'TRUCKonROAD Team', is_published: false
     });
     setEditing(null);
     setActiveLang('de');
@@ -53,7 +53,7 @@ export default function AdminBlog() {
       slug: p.slug, title_de: p.title_de || '', title_en: p.title_en || '', title_fr: p.title_fr || '', title_it: p.title_it || '',
       excerpt_de: p.excerpt_de || '', excerpt_en: p.excerpt_en || '', excerpt_fr: p.excerpt_fr || '', excerpt_it: p.excerpt_it || '',
       content_de: p.content_de || '', content_en: p.content_en || '', content_fr: p.content_fr || '', content_it: p.content_it || '',
-      category: p.category || 'news', image: p.image || '', tags: (p.tags || []).join(', '), author: p.author || 'TrucksOnRoad Team', is_published: p.is_published
+      category: p.category || 'news', image: p.image || '', tags: (p.tags || []).join(', '), author: p.author || 'TRUCKonROAD Team', is_published: p.is_published
     });
     setEditing(p.id);
     setActiveLang('de');

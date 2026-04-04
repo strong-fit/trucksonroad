@@ -157,7 +157,7 @@ async def send_event_reminders():
                 it = get_email_t(il)
                 html = build_event_reminder_email(inq, reminder_days, il)
                 try:
-                    send_email_sync(inq["email"], f"{it['subject_reminder'].format(days=reminder_days)} – TrucksOnRoad", html, settings)
+                    send_email_sync(inq["email"], f"{it['subject_reminder'].format(days=reminder_days)} – TRUCKonROAD", html, settings)
                 except Exception:
                     pass
                 await db.reminders.insert_one({"inquiry_id": inq["id"], "type": "event_reminder", "sent_at": datetime.now(timezone.utc).isoformat()})

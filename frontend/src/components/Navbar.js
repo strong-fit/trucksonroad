@@ -46,8 +46,8 @@ export default function Navbar() {
     <nav className="sf-nav" data-testid="main-navbar">
       <div className="sf-nav-inner">
         <Link to="/" className="sf-nav-logo" data-testid="nav-logo">
-          <span className="sf-logo-accent">TRUCKS</span>
-          <span className="sf-logo-text">ON</span>
+          <span className="sf-logo-accent">TRUCK</span>
+          <span className="sf-logo-text">on</span>
           <span className="sf-logo-accent">ROAD</span>
         </Link>
 

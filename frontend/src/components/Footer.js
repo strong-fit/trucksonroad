@@ -10,8 +10,8 @@ export default function Footer() {
       <footer className="sf-footer" data-testid="main-footer">
         <div>
           <div className="sf-nav-logo" style={{ marginBottom: '0.8rem' }}>
-            <span className="sf-logo-accent">TRUCKS</span>
-            <span className="sf-logo-text">ON</span>
+            <span className="sf-logo-accent">TRUCK</span>
+            <span className="sf-logo-text">on</span>
             <span className="sf-logo-accent">ROAD</span>
           </div>
           <p className="sf-footer-desc">{t('footer_desc')}</p>
@@ -51,7 +51,7 @@ export default function Footer() {
       </footer>
 
       <div className="sf-footer-bottom" data-testid="footer-bottom">
-        <span>&copy; 2026 TrucksOnRoad &ndash; {t('footer_rights')}</span>
+        <span>&copy; 2026 TRUCKonROAD GmbH &ndash; {t('footer_rights')}</span>
         <div style={{ display: 'flex', gap: '2rem' }}>
           <a href="#">{t('footer_privacy')}</a>
           <a href="#">{t('footer_imprint')}</a>

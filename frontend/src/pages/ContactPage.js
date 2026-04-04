@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 export default function ContactPage() {
   const { lang, t } = useLanguage();
   const [info, setInfo] = useState({
-    company_name: 'TrucksOnRoad',
+    company_name: 'TRUCKonROAD GmbH',
     address: 'Bahnhofstrasse 75, 8620 Wetzikon',
     phone: '+41 79 696 98 99',
     email: 'info@trucksonroad.ch',
@@ -55,7 +55,10 @@ export default function ContactPage() {
                 <div className="sf-contact-item-icon"><MapPin size={18} /></div>
                 <div>
                   <div className="sf-contact-item-label">{t('contact_address')}</div>
-                  <div className="sf-contact-item-value">{info.company_name}<br/>{info.address}</div>
+                  <div className="sf-contact-item-value">
+                    {info.company_name}<br/>{info.address}<br/>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--sf-gray)' }}>Geschäftsführer: Alexander Araujo</span>
+                  </div>
                 </div>
               </div>
 
