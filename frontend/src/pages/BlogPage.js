@@ -27,9 +27,9 @@ export default function BlogPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--sf-bg)' }}>
       <Helmet>
-        <title>{`${t('blog_title') || 'Blog'} | TRUCKonROAD Blog`}</title>
+        <title>{`${t('blog_title') || 'Blog'} | TRUCKSonROAD Blog`}</title>
         <meta name="description" content={t('blog_subtitle') || ''} />
-        <meta property="og:title" content={`${t('blog_title') || 'Blog'} | TRUCKonROAD`} />
+        <meta property="og:title" content={`${t('blog_title') || 'Blog'} | TRUCKSonROAD`} />
         <meta property="og:description" content={t('blog_subtitle') || ''} />
         <link rel="canonical" href="https://truckonroad.ch/blog" />
       </Helmet>

@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 export default function ContactPage() {
   const { lang, t } = useLanguage();
   const [info, setInfo] = useState({
-    company_name: 'TRUCKonROAD GmbH',
+    company_name: 'TRUCKSonROAD GmbH',
     address: 'Bahnhofstrasse 75, 8620 Wetzikon',
     phone: '+41 79 696 98 99',
     email: 'info@trucksonroad.ch',

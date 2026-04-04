@@ -88,9 +88,9 @@ export default function BlogPostPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--sf-bg)' }}>
       <Helmet>
-        <title>{`${metaTitle || 'Blog'} | TRUCKonROAD Blog`}</title>
+        <title>{`${metaTitle || 'Blog'} | TRUCKSonROAD Blog`}</title>
         <meta name="description" content={metaDesc || ''} />
-        <meta property="og:title" content={metaTitle || 'TRUCKonROAD Blog'} />
+        <meta property="og:title" content={metaTitle || 'TRUCKSonROAD Blog'} />
         <meta property="og:description" content={metaDesc || ''} />
         {post.image && <meta property="og:image" content={post.image} />}
         <meta property="og:type" content="article" />

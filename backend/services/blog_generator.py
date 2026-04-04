@@ -100,7 +100,7 @@ async def generate_blog_post():
     topic = random.choice(FOOD_TRUCK_TOPICS)
     session_id = f"blog-gen-{uuid.uuid4().hex[:8]}"
 
-    system_msg = """Du bist ein erfahrener SEO-Texter fuer TRUCKonROAD, ein einzigartiges Foodtruck-Catering-Unternehmen in der Schweiz (Sitz: Wetzikon, Einsatzgebiet: ganze Schweiz).
+    system_msg = """Du bist ein erfahrener SEO-Texter fuer TRUCKSonROAD, ein einzigartiges Foodtruck-Catering-Unternehmen in der Schweiz (Sitz: Wetzikon, Einsatzgebiet: ganze Schweiz).
 Du schreibst professionelle, ausfuehrliche Blog-Artikel die fuer Google SEO optimiert sind.
 Deine Artikel sind informativ, praxisnah und enthalten konkrete Tipps.
 Du verwendest Markdown-Formatierung (##, ###, -, **bold**).
@@ -139,7 +139,7 @@ Antworte NUR im folgenden JSON-Format (kein anderer Text):
   "excerpt_en": "Short description english (max 160 chars)",
   "excerpt_fr": "Description courte francais",
   "excerpt_it": "Descrizione breve italiano",
-  "content_de": "Ausfuehrlicher Artikel auf Deutsch mit Markdown. MINDESTENS 800 Woerter. Mit ## und ### Ueberschriften, Listen, **fett**. Baue 2-3 interne Links ein: [Jetzt anfragen](/anfrage), [Unsere Trucks](/trucks), [Mehr im Blog](/blog). Erwaehne TRUCKonROAD und Schweizer Staedte.",
+  "content_de": "Ausfuehrlicher Artikel auf Deutsch mit Markdown. MINDESTENS 800 Woerter. Mit ## und ### Ueberschriften, Listen, **fett**. Baue 2-3 interne Links ein: [Jetzt anfragen](/anfrage), [Unsere Trucks](/trucks), [Mehr im Blog](/blog). Erwaehne TRUCKSonROAD und Schweizer Staedte.",
   "content_en": "Full article in English (min 800 words) with internal links",
   "content_fr": "Article complet en francais (min 800 mots) avec liens internes",
   "content_it": "Articolo completo in italiano (min 800 parole) con link interni",
@@ -153,7 +153,7 @@ Wichtig:
 - Der slug muss URL-freundlich sein (nur Kleinbuchstaben, Bindestrich, keine Umlaute)
 - MINDESTENS 800 Woerter pro Sprache im Content
 - 2-3 interne Links pro Artikel einbauen
-- Erwaehne TRUCKonROAD als Experten im Text
+- Erwaehne TRUCKSonROAD als Experten im Text
 - Beziehe dich auf die Schweiz (Zuerich, Bern, Basel, Luzern, Genf etc.)
 - Alle 4 Sprachen muessen vollstaendige, qualitativ hochwertige Inhalte haben
 - Der Titel muss sich von existierenden Artikeln unterscheiden"""
@@ -239,7 +239,7 @@ Wichtig:
                 except Exception:
                     continue
 
-            check_prompt = f"""Pruefe diesen Blog-Artikel fuer ein Foodtruck-Catering-Unternehmen (TRUCKonROAD, Schweiz):
+            check_prompt = f"""Pruefe diesen Blog-Artikel fuer ein Foodtruck-Catering-Unternehmen (TRUCKSonROAD, Schweiz):
 
 Titel: {data.get('title_de', '')}
 Auszug: {data.get('excerpt_de', '')}
@@ -295,7 +295,7 @@ Score ab 4 = pass. Nur offensichtlich schlechte Artikel ablehnen."""
         "tags": data.get("tags", []),
         "meta_title_de": data.get("meta_title_de", data.get("title_de", "")),
         "meta_description_de": data.get("meta_description_de", data.get("excerpt_de", "")),
-        "author": "TRUCKonROAD KI",
+        "author": "TRUCKSonROAD KI",
         "is_published": True,
         "ai_generated": True,
         "word_count": word_count,
