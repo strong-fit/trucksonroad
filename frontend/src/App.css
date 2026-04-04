@@ -544,13 +544,16 @@
 .sf-form-group { display: flex; flex-direction: column; gap: 0.4rem; }
 .sf-form-group label {
   font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--sf-gray);
+  color: var(--sf-cream);
 }
 .sf-form-group input, .sf-form-group select, .sf-form-group textarea {
-  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
   color: var(--sf-cream); padding: 0.8rem 1rem; font-family: 'DM Sans', sans-serif;
   font-size: 0.9rem; outline: none; transition: border-color 0.2s; width: 100%;
   border-radius: 0;
+}
+.sf-form-group input::placeholder, .sf-form-group textarea::placeholder {
+  color: rgba(245,240,232,0.45);
 }
 .sf-form-group input:focus, .sf-form-group select:focus, .sf-form-group textarea:focus {
   border-color: var(--sf-gold);
