@@ -1,3 +1,3 @@
-:HL["/_next/static/chunks/18a7x5kkx7jbj.css","style"]
-:HL["https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"konto","param":null,"prefetchHints":0,"slots":{"children":{"name":"passwort-vergessen","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"qnUoP6ee_nx6VzCNBrecW"}
+:HL["/_next/static/chunks/0zipszt8pb3lr.css","style"]
+:HL["https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"konto","param":null,"prefetchHints":0,"slots":{"children":{"name":"passwort-vergessen","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"bdZ_P-XUtF560CoO_83Vh"}

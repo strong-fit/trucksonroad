@@ -83,9 +83,10 @@ export default function HomePage() {
           </FadeUp>
           <FadeUp delay={0.2}>
             <h1 className="sf-hero-title">
-              {t('hero_title_1')}<br />
-              <span className="gold">{t('hero_title_2')}</span><br />
-              {t('hero_title_4')}{t('hero_title_5')}
+              <span className="sf-hero-premium">{t('hero_title_1')}</span>
+              <span>{t('hero_title_2')}</span><span className="gold">{t('hero_title_3')}</span><br />
+              <span>{t('hero_title_4')}</span>
+              <span>{t('hero_title_5')}</span>
             </h1>
           </FadeUp>
           <FadeUp delay={0.3}>
@@ -94,7 +95,7 @@ export default function HomePage() {
           <FadeUp delay={0.4}>
             <div className="sf-hero-actions">
               <Link href="/anfrage" className="sf-btn-primary" data-testid="hero-inquiry-btn">{t('hero_btn_inquiry')}</Link>
-              <a href="#how-it-works" className="sf-btn-outline" data-testid="hero-how-btn">{t('hero_btn_trucks')}</a>
+              <Link href="/trucks" className="sf-btn-outline" data-testid="hero-how-btn">{t('hero_btn_trucks')}</Link>
             </div>
           </FadeUp>
         </div>
