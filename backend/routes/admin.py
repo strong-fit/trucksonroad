@@ -884,3 +884,23 @@ async def trigger_manual_scan(request: Request, background_tasks: BackgroundTask
     await get_current_user(request)
     background_tasks.add_task(run_event_scan)
     return {"message": "Scan gestartet"}
+
+
+
+@router.delete("/admin/reset/inquiries")
+async def reset_all_inquiries(request: Request):
+    user = await get_current_user(request)
+    if user.get("role") != "admin":
+        raise HTTPException(403, "Nur Admins")
+    result = await db.inquiries.delete_many({})
+    await db.finance.delete_many({})
+    return {"deleted_inquiries": result.deleted_count}
+
+
+@router.delete("/admin/reset/customers")
+async def reset_all_customers(request: Request):
+    user = await get_current_user(request)
+    if user.get("role") != "admin":
+        raise HTTPException(403, "Nur Admins")
+    result = await db.users.delete_many({"role": {"$ne": "admin"}})
+    return {"deleted_customers": result.deleted_count}

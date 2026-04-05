@@ -64,6 +64,30 @@ export default function AdminSettings() {
     setPwLoading(false);
   };
 
+  const [resetInqLoading, setResetInqLoading] = useState(false);
+  const [resetCustLoading, setResetCustLoading] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(null);
+
+  const resetInquiries = async () => {
+    setResetInqLoading(true);
+    try {
+      const r = await api.delete('/admin/reset/inquiries');
+      toast.success(`${r.data.deleted_inquiries} Anfragen gelöscht`);
+      setConfirmReset(null);
+    } catch { toast.error('Fehler beim Löschen'); }
+    setResetInqLoading(false);
+  };
+
+  const resetCustomers = async () => {
+    setResetCustLoading(true);
+    try {
+      const r = await api.delete('/admin/reset/customers');
+      toast.success(`${r.data.deleted_customers} Kunden gelöscht`);
+      setConfirmReset(null);
+    } catch { toast.error('Fehler beim Löschen'); }
+    setResetCustLoading(false);
+  };
+
   if (!settings) return <AdminLayout title={t('admin_settings')}><div className="adm-empty">{t('loading')}</div></AdminLayout>;
 
   return (
@@ -349,6 +373,42 @@ export default function AdminSettings() {
             <Lock size={14} /> {pwLoading ? '...' : t('change_submit')}
           </button>
         </form>
+      </div>
+
+      {/* Data Reset for Live Launch */}
+      <div className="adm-detail" style={{ marginTop: '1.25rem', border: '1px solid #dc2626' }} data-testid="admin-reset-data">
+        <div className="adm-detail-header" style={{ borderBottom: '1px solid #dc2626', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+          <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#dc2626' }}><Trash2 size={18} /> Daten zurücksetzen (Live-Start)</span>
+        </div>
+        <p style={{ fontSize: '0.85rem', color: '#888', marginBottom: '1rem' }}>Alle Test-Daten löschen, um mit einem sauberen System live zu gehen. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          {confirmReset === 'inquiries' ? (
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.85rem', color: '#dc2626' }}>Wirklich ALLE Anfragen & Offerten löschen?</span>
+              <button className="adm-btn" style={{ background: '#dc2626', color: '#fff', border: 'none' }} onClick={resetInquiries} disabled={resetInqLoading} data-testid="confirm-reset-inquiries">
+                {resetInqLoading ? '...' : 'Ja, löschen'}
+              </button>
+              <button className="adm-btn" onClick={() => setConfirmReset(null)} data-testid="cancel-reset-inquiries">Abbrechen</button>
+            </div>
+          ) : (
+            <button className="adm-btn" style={{ border: '1px solid #dc2626', color: '#dc2626' }} onClick={() => setConfirmReset('inquiries')} data-testid="reset-inquiries-btn">
+              <Trash2 size={14} /> Alle Anfragen & Offerten löschen
+            </button>
+          )}
+          {confirmReset === 'customers' ? (
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.85rem', color: '#dc2626' }}>Wirklich ALLE Kunden löschen?</span>
+              <button className="adm-btn" style={{ background: '#dc2626', color: '#fff', border: 'none' }} onClick={resetCustomers} disabled={resetCustLoading} data-testid="confirm-reset-customers">
+                {resetCustLoading ? '...' : 'Ja, löschen'}
+              </button>
+              <button className="adm-btn" onClick={() => setConfirmReset(null)} data-testid="cancel-reset-customers">Abbrechen</button>
+            </div>
+          ) : (
+            <button className="adm-btn" style={{ border: '1px solid #dc2626', color: '#dc2626' }} onClick={() => setConfirmReset('customers')} data-testid="reset-customers-btn">
+              <Trash2 size={14} /> Alle Kunden löschen
+            </button>
+          )}
+        </div>
       </div>
     </AdminLayout>
   );
