@@ -295,14 +295,14 @@
 }
 .sf-hero-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2.8rem, 5.5vw, 5.5rem);
-  line-height: 0.95; letter-spacing: 0.02em;
-  color: var(--sf-cream); max-width: 700px; margin-bottom: 0.5rem;
+  font-size: clamp(4rem, 8vw, 8rem);
+  line-height: 0.92; letter-spacing: 0.02em;
+  color: var(--sf-cream); max-width: 750px; margin-bottom: 0.5rem;
 }
 .sf-hero-premium {
   font-family: 'Playfair Display', serif; font-style: italic;
-  font-size: 0.5em; color: var(--sf-gray); display: block;
-  letter-spacing: 0.02em; margin-bottom: 0.15em; font-weight: 400;
+  font-size: 0.45em; color: var(--sf-gray); display: block;
+  letter-spacing: 0.02em; margin-bottom: 0.1em; font-weight: 400;
 }
 .sf-hero-title .gold { color: var(--sf-gold); }
 .sf-hero-subtitle {
