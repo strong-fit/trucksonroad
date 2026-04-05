@@ -154,17 +154,17 @@
   padding: 1.2rem 4rem;
 }
 .sf-nav-logo {
-  font-family: 'Bebas Neue', sans-serif; font-size: 2rem; font-weight: 400;
-  text-decoration: none; letter-spacing: 0.12em;
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; font-weight: 400;
+  text-decoration: none; letter-spacing: 0.12em; margin-right: 2rem; flex-shrink: 0;
 }
 .sf-logo-text { color: var(--sf-gold); }
 .sf-logo-accent { color: var(--sf-gold); }
-.sf-nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.sf-nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
 .sf-nav-link {
-  color: var(--sf-cream); font-size: 0.8rem; text-decoration: none;
-  letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.75;
+  color: var(--sf-cream); font-size: 0.72rem; text-decoration: none;
+  letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75;
   transition: opacity 0.2s, color 0.2s; background: none; border: none;
-  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap;
 }
 .sf-nav-link:hover, .sf-nav-link.active { opacity: 1; color: var(--sf-gold); }
 .sf-nav-actions { display: flex; align-items: center; gap: 1rem; }

@@ -78,26 +78,18 @@ export default function HomePage() {
           <img src={HERO_IMG_ACCENT} alt="Foodtruck" className="sf-hero-truck-accent" />
         </div>
         <div className="sf-hero-content">
-          <FadeUp delay={0.1}>
-            <div className="sf-hero-eyebrow">{t('hero_eyebrow')}</div>
-          </FadeUp>
-          <FadeUp delay={0.2}>
-            <h1 className="sf-hero-title">
-              <span className="sf-hero-premium">{t('hero_title_1')}</span>
-              <span>{t('hero_title_2')}</span><span className="gold">{t('hero_title_3')}</span><br />
-              <span>{t('hero_title_4')}</span>
-              <span>{t('hero_title_5')}</span>
-            </h1>
-          </FadeUp>
-          <FadeUp delay={0.3}>
-            <p className="sf-hero-subtitle">{t('hero_subtitle')}</p>
-          </FadeUp>
-          <FadeUp delay={0.4}>
-            <div className="sf-hero-actions">
-              <Link href="/anfrage" className="sf-btn-primary" data-testid="hero-inquiry-btn">{t('hero_btn_inquiry')}</Link>
-              <Link href="/trucks" className="sf-btn-outline" data-testid="hero-how-btn">{t('hero_btn_trucks')}</Link>
-            </div>
-          </FadeUp>
+          <div className="sf-hero-eyebrow">{t('hero_eyebrow')}</div>
+          <h1 className="sf-hero-title">
+            <span className="sf-hero-premium">{t('hero_title_1')}</span>
+            <span>{t('hero_title_2')}</span><span className="gold">{t('hero_title_3')}</span><br />
+            <span>{t('hero_title_4')}</span>
+            <span>{t('hero_title_5')}</span>
+          </h1>
+          <p className="sf-hero-subtitle">{t('hero_subtitle')}</p>
+          <div className="sf-hero-actions">
+            <Link href="/anfrage" className="sf-btn-primary" data-testid="hero-inquiry-btn">{t('hero_btn_inquiry')}</Link>
+            <Link href="/trucks" className="sf-btn-outline" data-testid="hero-how-btn">{t('hero_btn_trucks')}</Link>
+          </div>
         </div>
         <div className="sf-hero-stats">
           <div className="sf-stat"><div className="sf-stat-num">{t('hero_stat_1_num')}</div><div className="sf-stat-label">{t('hero_stat_1_label')}</div></div>

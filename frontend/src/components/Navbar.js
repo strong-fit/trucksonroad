@@ -23,7 +23,6 @@ export default function Navbar() {
   }, []);
 
   const links = [
-    { to: '/', label: t('nav_home') },
     { to: '/#trucks', label: t('nav_trucks'), isHash: true },
     { to: '/fuer-veranstalter', label: t('nav_organizers') },
     { to: '/private-events', label: t('nav_private') },
