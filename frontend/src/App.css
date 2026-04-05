@@ -154,11 +154,12 @@
   padding: 1.2rem 4rem;
 }
 .sf-nav-logo {
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; font-weight: 400;
-  text-decoration: none; letter-spacing: 0.12em; margin-right: 2rem; flex-shrink: 0;
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; font-weight: 400;
+  text-decoration: none; letter-spacing: 0.1em; margin-right: 2rem; flex-shrink: 0;
+  display: flex; align-items: baseline;
 }
-.sf-logo-text { color: var(--sf-gold); }
-.sf-logo-accent { color: var(--sf-cream); }
+.sf-logo-text { color: var(--sf-gold); font-size: 0.65em; padding: 0 1px; }
+.sf-logo-accent { color: var(--sf-cream); font-size: 1em; }
 .sf-nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
 .sf-nav-link {
   color: var(--sf-cream); font-size: 0.72rem; text-decoration: none;
