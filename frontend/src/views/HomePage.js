@@ -274,7 +274,7 @@ export default function HomePage() {
           <div className="sf-logos-grid">
             {['Google', 'UBS', 'SBB', 'Migros', 'Swiss', 'Zurich'].map((name, i) => (
               <div key={name} className="sf-logo-item" data-testid={`logo-${name.toLowerCase()}`}>
-                <span className="sf-logo-text">{name}</span>
+                <span className="sf-logos-text">{name}</span>
               </div>
             ))}
           </div>

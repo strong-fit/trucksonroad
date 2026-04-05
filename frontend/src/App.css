@@ -1481,14 +1481,14 @@
   opacity: 0.25; transition: opacity 0.3s;
 }
 .sf-logo-item:hover { opacity: 0.5; }
-.sf-logo-text {
+.sf-logos-text {
   font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
   letter-spacing: 0.1em; color: var(--sf-cream);
 }
 @media (max-width: 768px) {
   .sf-logos-section { padding: 2rem 1.5rem; }
   .sf-logos-grid { gap: 1.5rem; }
-  .sf-logo-text { font-size: 1.2rem; }
+  .sf-logos-text { font-size: 1.2rem; }
 }
 
 /* ===== HOW IT WORKS SECTION ===== */
