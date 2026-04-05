@@ -301,7 +301,7 @@
 }
 .sf-hero-premium {
   font-family: 'Playfair Display', serif; font-style: italic;
-  font-size: 0.5em; color: var(--sf-cream); display: block;
+  font-size: 0.5em; color: var(--sf-gray); display: block;
   letter-spacing: 0.02em; margin-bottom: 0.15em; font-weight: 400;
 }
 .sf-hero-title .gold { color: var(--sf-gold); }
