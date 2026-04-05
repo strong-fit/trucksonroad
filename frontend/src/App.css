@@ -158,7 +158,7 @@
   text-decoration: none; letter-spacing: 0.12em; margin-right: 2rem; flex-shrink: 0;
 }
 .sf-logo-text { color: var(--sf-gold); }
-.sf-logo-accent { color: var(--sf-gold); }
+.sf-logo-accent { color: var(--sf-cream); }
 .sf-nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
 .sf-nav-link {
   color: var(--sf-cream); font-size: 0.72rem; text-decoration: none;
