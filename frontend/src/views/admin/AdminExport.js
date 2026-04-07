@@ -3,7 +3,7 @@ import { AdminLayout } from '@/views/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Download, FileText, CalendarDays, Users, HelpCircle, Truck } from 'lucide-react';
 
-const API = process.env.REACT_APP_BACKEND_URL;
+const API = '';
 
 export default function AdminExport() {
   const { t } = useLanguage();

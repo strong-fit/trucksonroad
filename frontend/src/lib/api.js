@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL || process.env.REACT_APP_BACKEND_URL || ''}/api`,
+  baseURL: '/api',
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' }
 });
@@ -12,8 +12,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !error.config._retry) {
       error.config._retry = true;
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.REACT_APP_BACKEND_URL || '';
-        await axios.post(`${baseUrl}/api/auth/refresh`, {}, { withCredentials: true });
+        await axios.post('/api/auth/refresh', {}, { withCredentials: true });
         return api(error.config);
       } catch {
         return Promise.reject(error);

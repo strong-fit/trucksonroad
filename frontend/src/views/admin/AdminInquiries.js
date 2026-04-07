@@ -299,7 +299,7 @@ export default function AdminInquiries() {
 
             <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem', display: 'flex', gap: '0.5rem' }}>
               <a
-                href={`${process.env.REACT_APP_BACKEND_URL}/api/admin/inquiries/${selected.id}/offer-pdf`}
+                href={`/api/admin/inquiries/${selected.id}/offer-pdf`}
                 target="_blank" rel="noopener noreferrer"
                 className="adm-btn adm-btn-secondary adm-btn-sm"
                 style={{ textDecoration: 'none' }}

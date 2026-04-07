@@ -59,7 +59,7 @@ export default function EventOrganizersPage() {
           <div className="sf-whom-visual">
             <img src={TRUCK_IMG} alt="Truck" className="sf-whom-img-main" />
             <div className="sf-whom-badge">
-              <a href={`${process.env.REACT_APP_BACKEND_URL}/api/download/veranstalter-pdf`} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }} data-testid="org-pdf-download">
+              <a href="/api/download/veranstalter-pdf" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }} data-testid="org-pdf-download">
                 {t('org_pdf')}
               </a>
             </div>

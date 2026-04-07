@@ -296,7 +296,7 @@ export default function AdminSettings() {
       <div className="adm-detail" style={{ marginTop: '1.25rem' }} data-testid="pdf-download-section">
         <div className="adm-detail-header" style={{ borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
           <span className="adm-detail-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Download size={18} /> Veranstalter-PDF</span>
-          <a href={`${process.env.REACT_APP_BACKEND_URL}/api/download/veranstalter-pdf`} target="_blank" rel="noopener noreferrer" className="adm-btn adm-btn-primary adm-btn-sm" data-testid="download-pdf-btn">
+          <a href="/api/download/veranstalter-pdf" target="_blank" rel="noopener noreferrer" className="adm-btn adm-btn-primary adm-btn-sm" data-testid="download-pdf-btn">
             <Download size={13} /> PDF herunterladen
           </a>
         </div>

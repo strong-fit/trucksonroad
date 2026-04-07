@@ -53,7 +53,7 @@ export default function FileUpload({ inquiryId, files = [], onFilesChange, maxFi
   };
 
   const handleDownload = (file) => {
-    const url = `${process.env.REACT_APP_BACKEND_URL}/api/files/${file.id}/download`;
+    const url = `/api/files/${file.id}/download`;
     window.open(url, '_blank');
   };
 
