@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import Response as FastAPIResponse
 from datetime import datetime, timezone
 from database import db
@@ -279,30 +279,48 @@ async def get_events_schema():
 
 
 @router.get("/confirm-offer/{inquiry_id}/{token}")
-async def public_confirm_offer(inquiry_id: str, token: str):
-    """Public endpoint for email confirmation link"""
+async def public_get_offer_details(inquiry_id: str, token: str):
+    """Return offer details for the confirmation page (no auto-confirm)"""
+    inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
+    if not inquiry:
+        raise HTTPException(404, "Anfrage nicht gefunden")
+    if inquiry.get("confirm_token") != token:
+        raise HTTPException(400, "Ungültiger Link")
+    already_confirmed = inquiry.get("status") not in ("offer_sent",)
+    return {
+        "inquiry_id": inquiry_id,
+        "status": inquiry.get("status"),
+        "already_confirmed": already_confirmed,
+        "confirmed_at": inquiry.get("confirmed_at"),
+        "payment_method": inquiry.get("payment_method"),
+        "first_name": inquiry.get("first_name", ""),
+        "last_name": inquiry.get("last_name", ""),
+        "event_date": inquiry.get("event_date", ""),
+        "event_time": inquiry.get("event_time", ""),
+        "location": inquiry.get("location", ""),
+        "guest_count": inquiry.get("guest_count", 0),
+        "event_type": inquiry.get("event_type", ""),
+        "selected_trucks": inquiry.get("selected_trucks", []),
+        "invoice_amount": inquiry.get("invoice_amount", 0),
+    }
+
+
+@router.post("/confirm-offer/{inquiry_id}/{token}")
+async def public_confirm_offer(inquiry_id: str, token: str, request: Request):
+    """Confirm offer with payment method selection"""
     inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
     if not inquiry:
         raise HTTPException(404, "Anfrage nicht gefunden")
     if inquiry.get("confirm_token") != token:
         raise HTTPException(400, "Ungültiger Link")
     if inquiry.get("status") != "offer_sent":
-        return {"message": "Offerte bereits bestätigt", "status": inquiry.get("status")}
+        return {"message": "Offerte bereits bestätigt", "status": inquiry.get("status"), "already_confirmed": True}
+    body = await request.json()
+    payment_method = body.get("payment_method", "invoice")
     await db.inquiries.update_one({"id": inquiry_id}, {"$set": {
         "status": "confirmed",
+        "payment_method": payment_method,
         "confirmed_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat()
     }})
-    return {"message": "Offerte erfolgreich bestätigt! Wir melden uns bei Ihnen."}
-
-
-@router.put("/confirm-offer/{inquiry_id}/{token}")
-async def public_confirm_with_payment(inquiry_id: str, token: str):
-    """Public endpoint with payment method selection"""
-    from starlette.requests import Request as StarletteRequest
-    inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
-    if not inquiry:
-        raise HTTPException(404, "Anfrage nicht gefunden")
-    if inquiry.get("confirm_token") != token:
-        raise HTTPException(400, "Ungültiger Link")
-    return {"inquiry_id": inquiry_id, "status": inquiry.get("status"), "amount": inquiry.get("invoice_amount", 0)}
+    return {"message": "Offerte erfolgreich bestätigt! Wir melden uns bei Ihnen.", "status": "confirmed"}

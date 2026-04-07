@@ -36,6 +36,17 @@ export default function InquiryPage() {
     indoor_outdoor: 'Outdoor', budget: '', remarks: '',
     privacy_accepted: false, is_organizer: false
   });
+  const [touched, setTouched] = useState({});
+
+  const markTouched = (field) => setTouched(prev => ({ ...prev, [field]: true }));
+
+  // Calculate form progress
+  const requiredFields = [
+    form.first_name, form.last_name, form.email, form.phone,
+    selectedDate, form.location, form.guest_count, form.event_type
+  ];
+  const filledRequired = requiredFields.filter(Boolean).length;
+  const progress = Math.round((filledRequired / requiredFields.length) * 100);
 
   useEffect(() => {
     api.get('/availability').then(r => setCalendarBlocks(r.data)).catch(() => {});
@@ -158,30 +169,45 @@ export default function InquiryPage() {
 
           <div style={{ marginTop: '3rem' }}>
             <div className="sf-form-contact"><Mail size={16} className="sf-form-contact-icon" /> <span>info@trucksonroad.ch</span></div>
-            <div className="sf-form-contact"><Phone size={16} className="sf-form-contact-icon" /> <span>+41 xx xxx xx xx</span></div>
+            <div className="sf-form-contact"><Phone size={16} className="sf-form-contact-icon" /> <span>+41 79 696 98 99</span></div>
             <div className="sf-form-contact"><MapPin size={16} className="sf-form-contact-icon" /> <span>Zürich & ganze Schweiz</span></div>
           </div>
         </div>
 
         <form className="sf-form" onSubmit={handleSubmit} data-testid="inquiry-form">
+          {/* Progress Bar */}
+          <div style={{ marginBottom: '1.5rem' }} data-testid="form-progress">
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+              <span style={{ color: 'var(--sf-gray)', fontSize: '0.78rem' }}>Fortschritt</span>
+              <span style={{ color: progress === 100 ? 'var(--sf-gold)' : 'var(--sf-gray)', fontSize: '0.78rem', fontWeight: 600 }}>{progress}%</span>
+            </div>
+            <div style={{ height: 4, background: 'var(--sf-border)', borderRadius: 4, overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${progress}%`, background: progress === 100 ? 'var(--sf-gold)' : 'var(--sf-accent, #4db6ac)', borderRadius: 4, transition: 'width 0.4s ease' }} />
+            </div>
+          </div>
+
           <div className="sf-form-row">
             <div className="sf-form-group">
               <label>{t('form_first_name')} *</label>
-              <input required value={form.first_name} onChange={e => setForm({...form, first_name: e.target.value})} placeholder="Max" data-testid="input-first-name" />
+              <input required value={form.first_name} onChange={e => setForm({...form, first_name: e.target.value})} onBlur={() => markTouched('first_name')} placeholder="Max" data-testid="input-first-name" style={touched.first_name && !form.first_name ? { borderColor: '#ef4444' } : {}} />
+              {touched.first_name && !form.first_name && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>Pflichtfeld</span>}
             </div>
             <div className="sf-form-group">
               <label>{t('form_last_name')} *</label>
-              <input required value={form.last_name} onChange={e => setForm({...form, last_name: e.target.value})} placeholder="Mustermann" data-testid="input-last-name" />
+              <input required value={form.last_name} onChange={e => setForm({...form, last_name: e.target.value})} onBlur={() => markTouched('last_name')} placeholder="Mustermann" data-testid="input-last-name" style={touched.last_name && !form.last_name ? { borderColor: '#ef4444' } : {}} />
+              {touched.last_name && !form.last_name && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>Pflichtfeld</span>}
             </div>
           </div>
           <div className="sf-form-row">
             <div className="sf-form-group">
               <label>{t('form_email')} *</label>
-              <input type="email" required value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="max@firma.ch" data-testid="input-email" />
+              <input type="email" required value={form.email} onChange={e => setForm({...form, email: e.target.value})} onBlur={() => markTouched('email')} placeholder="max@firma.ch" data-testid="input-email" style={touched.email && !form.email ? { borderColor: '#ef4444' } : {}} />
+              {touched.email && !form.email && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>Pflichtfeld</span>}
             </div>
             <div className="sf-form-group">
               <label>{t('form_phone')} *</label>
-              <input type="tel" required value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} placeholder="+41 79 xxx xx xx" data-testid="input-phone" />
+              <input type="tel" required value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} onBlur={() => markTouched('phone')} placeholder="+41 79 xxx xx xx" data-testid="input-phone" style={touched.phone && !form.phone ? { borderColor: '#ef4444' } : {}} />
+              {touched.phone && !form.phone && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>Pflichtfeld</span>}
             </div>
           </div>
           <div className="sf-form-group">
@@ -191,7 +217,8 @@ export default function InquiryPage() {
           <div className="sf-form-row">
             <div className="sf-form-group">
               <label>{t('form_date')} *</label>
-              <input type="text" readOnly value={selectedDate ? format(selectedDate, 'dd.MM.yyyy') : ''} placeholder={t('form_select_calendar')} data-testid="input-date" />
+              <input type="text" readOnly value={selectedDate ? format(selectedDate, 'dd.MM.yyyy') : ''} placeholder={t('form_select_calendar')} data-testid="input-date" style={touched.date && !selectedDate ? { borderColor: '#ef4444' } : {}} onFocus={() => markTouched('date')} />
+              {touched.date && !selectedDate && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>Bitte Datum im Kalender wählen</span>}
             </div>
             <div className="sf-form-group">
               <label>{t('form_time')}</label>
@@ -201,16 +228,18 @@ export default function InquiryPage() {
           <div className="sf-form-row">
             <div className="sf-form-group">
               <label>{t('form_location')} *</label>
-              <input required value={form.location} onChange={e => setForm({...form, location: e.target.value})} placeholder="Zürich, Halle 7..." data-testid="input-location" />
+              <input required value={form.location} onChange={e => setForm({...form, location: e.target.value})} onBlur={() => markTouched('location')} placeholder="Zürich, Halle 7..." data-testid="input-location" style={touched.location && !form.location ? { borderColor: '#ef4444' } : {}} />
+              {touched.location && !form.location && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>Pflichtfeld</span>}
             </div>
             <div className="sf-form-group">
               <label>{t('form_guests')} *</label>
-              <input type="number" required value={form.guest_count} onChange={e => setForm({...form, guest_count: e.target.value})} placeholder="z.B. 200" data-testid="input-guests" />
+              <input type="number" required value={form.guest_count} onChange={e => setForm({...form, guest_count: e.target.value})} onBlur={() => markTouched('guest_count')} placeholder="z.B. 200" data-testid="input-guests" style={touched.guest_count && !form.guest_count ? { borderColor: '#ef4444' } : {}} />
+              {touched.guest_count && !form.guest_count && <span style={{ color: '#ef4444', fontSize: '0.72rem' }}>Pflichtfeld</span>}
             </div>
           </div>
           <div className="sf-form-group">
             <label>{t('form_event_type')} *</label>
-            <select required value={form.event_type} onChange={e => setForm({...form, event_type: e.target.value})} data-testid="select-event-type">
+            <select required value={form.event_type} onChange={e => setForm({...form, event_type: e.target.value})} onBlur={() => markTouched('event_type')} data-testid="select-event-type" style={touched.event_type && !form.event_type ? { borderColor: '#ef4444' } : {}}>
               <option value="">{t('form_please_select')}</option>
               {t('form_event_types').map(type => <option key={type} value={type}>{type}</option>)}
             </select>

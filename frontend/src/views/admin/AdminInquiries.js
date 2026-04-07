@@ -4,7 +4,7 @@ import { AdminLayout } from '@/views/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Trash2, Inbox, FileDown, Users, Receipt, Paperclip } from 'lucide-react';
+import { Trash2, Inbox, FileDown, Users, Receipt, Paperclip, Send, X } from 'lucide-react';
 import FileUpload from '@/components/FileUpload';
 
 export default function AdminInquiries() {
@@ -16,6 +16,7 @@ export default function AdminInquiries() {
   const [employees, setEmployees] = useState([]);
   const [assignedEmps, setAssignedEmps] = useState([]);
   const [inquiryFiles, setInquiryFiles] = useState([]);
+  const [offerDialog, setOfferDialog] = useState(null);
 
   const STATUS_OPTIONS = [
     { value: 'new', label: t('status_new') },
@@ -43,11 +44,29 @@ export default function AdminInquiries() {
   const filtered = filter === 'all' ? inquiries : inquiries.filter(i => i.status === filter);
 
   const updateStatus = async (id, status) => {
+    if (status === 'offer_sent' && selected) {
+      setOfferDialog({ id, amount: selected.invoice_amount || 0 });
+      return;
+    }
     try {
       await api.put(`/admin/inquiries/${id}`, { status, internal_notes: notes, assigned_employees: assignedEmps });
       toast.success(status === 'offer_sent' ? t('admin_offer_sent_msg') : t('admin_status_update'));
       load();
       if (selected?.id === id) setSelected(prev => ({ ...prev, status, assigned_employees: assignedEmps }));
+    } catch { toast.error(t('admin_update_error')); }
+  };
+
+  const sendOffer = async () => {
+    if (!offerDialog) return;
+    try {
+      if (offerDialog.amount > 0) {
+        await api.put(`/admin/inquiries/${offerDialog.id}/invoice`, { invoice_amount: offerDialog.amount });
+      }
+      await api.put(`/admin/inquiries/${offerDialog.id}`, { status: 'offer_sent', internal_notes: notes, assigned_employees: assignedEmps });
+      toast.success(t('admin_offer_sent_msg'));
+      load();
+      if (selected?.id === offerDialog.id) setSelected(prev => ({ ...prev, status: 'offer_sent', invoice_amount: offerDialog.amount }));
+      setOfferDialog(null);
     } catch { toast.error(t('admin_update_error')); }
   };
 
@@ -335,6 +354,53 @@ export default function AdminInquiries() {
           </div>
         )}
       </div>
+
+      {/* Offer Send Dialog */}
+      {offerDialog && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }} data-testid="offer-dialog-overlay">
+          <div style={{ background: 'var(--adm-card)', border: '1px solid var(--adm-border)', borderRadius: 12, padding: '1.75rem', maxWidth: 420, width: '90%' }} data-testid="offer-dialog">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+              <h3 style={{ color: 'var(--adm-text)', margin: 0, fontSize: '1.05rem' }}>Offerte senden</h3>
+              <button onClick={() => setOfferDialog(null)} style={{ background: 'none', border: 'none', color: 'var(--adm-text-muted)', cursor: 'pointer' }} data-testid="close-offer-dialog"><X size={18} /></button>
+            </div>
+
+            {selected && (
+              <div style={{ background: 'var(--adm-bg)', border: '1px solid var(--adm-border)', borderRadius: 8, padding: '0.85rem', marginBottom: '1rem', fontSize: '0.82rem' }}>
+                <div style={{ color: 'var(--adm-text)', fontWeight: 600, marginBottom: '0.4rem' }}>{selected.first_name} {selected.last_name}</div>
+                <div style={{ color: 'var(--adm-text-muted)' }}>{selected.event_type} · {selected.event_date} · {selected.guest_count} Gäste</div>
+                <div style={{ color: 'var(--adm-text-muted)' }}>{selected.location}</div>
+                {selected.selected_trucks?.length > 0 && (
+                  <div style={{ color: 'var(--adm-text-muted)', marginTop: '0.2rem' }}>Trucks: {selected.selected_trucks.join(', ')}</div>
+                )}
+              </div>
+            )}
+
+            <div className="adm-form-label">Offerte-Betrag (CHF)</div>
+            <input
+              className="adm-input"
+              type="number"
+              step="0.01"
+              min="0"
+              placeholder="z.B. 3500.00"
+              value={offerDialog.amount || ''}
+              onChange={e => setOfferDialog(prev => ({ ...prev, amount: parseFloat(e.target.value) || 0 }))}
+              style={{ marginBottom: '0.5rem', fontSize: '1.1rem', fontWeight: 600 }}
+              data-testid="offer-amount-input"
+              autoFocus
+            />
+            <p style={{ color: 'var(--adm-text-muted)', fontSize: '0.72rem', marginBottom: '1rem' }}>
+              Der Kunde erhält eine E-Mail mit den Event-Details, dem Betrag und einem Bestätigungslink.
+            </p>
+
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button onClick={() => setOfferDialog(null)} className="adm-btn adm-btn-secondary" style={{ flex: 1 }} data-testid="cancel-offer-btn">Abbrechen</button>
+              <button onClick={sendOffer} className="adm-btn adm-btn-primary" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }} data-testid="send-offer-btn">
+                <Send size={14} /> Offerte senden
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }
