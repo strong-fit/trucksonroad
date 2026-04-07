@@ -200,6 +200,7 @@ async def sitemap():
         (base + "/ueber-uns", "0.7", "monthly"),
         (base + "/kontakt", "0.7", "monthly"),
         (base + "/anfrage", "0.9", "weekly"),
+        (base + "/trucks", "0.8", "weekly"),
         (base + "/faq", "0.6", "monthly"),
         (base + "/blog", "0.8", "weekly"),
     ]

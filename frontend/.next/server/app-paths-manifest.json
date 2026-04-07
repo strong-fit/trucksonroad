@@ -33,6 +33,7 @@
   "/page": "app/page.js",
   "/private-events/page": "app/private-events/page.js",
   "/trucks/[slug]/page": "app/trucks/[slug]/page.js",
+  "/trucks/page": "app/trucks/page.js",
   "/ueber-uns/page": "app/ueber-uns/page.js",
   "/veranstalter/page": "app/veranstalter/page.js"
 }

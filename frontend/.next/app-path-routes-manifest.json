@@ -33,6 +33,7 @@
   "/page": "/",
   "/private-events/page": "/private-events",
   "/trucks/[slug]/page": "/trucks/[slug]",
+  "/trucks/page": "/trucks",
   "/ueber-uns/page": "/ueber-uns",
   "/veranstalter/page": "/veranstalter"
 }

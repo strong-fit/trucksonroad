@@ -239,6 +239,12 @@
       "namedRegex": "^/private\\-events(?:/)?$"
     },
     {
+      "page": "/trucks",
+      "regex": "^/trucks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/trucks(?:/)?$"
+    },
+    {
       "page": "/ueber-uns",
       "regex": "^/ueber\\-uns(?:/)?$",
       "routeKeys": {},

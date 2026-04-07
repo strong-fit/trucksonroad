@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/trucks/layout,_N_T_/trucks/page,_N_T_/trucks"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/trucks/__PAGE__",
+    "/trucks",
+    "/_index",
+    "/_head"
+  ]
+}

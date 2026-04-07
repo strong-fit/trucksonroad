@@ -51,13 +51,13 @@
   },
   {
     "route": "/",
-    "firstLoadUncompressedJsBytes": 731089,
+    "firstLoadUncompressedJsBytes": 731108,
     "firstLoadChunkPaths": [
       ".next/static/chunks/0qjl~-elh72d1.js",
       ".next/static/chunks/07~~_oeopqc_j.js",
       ".next/static/chunks/0o-4-16x3i5s1.js",
       ".next/static/chunks/011u~krs2eagk.js",
-      ".next/static/chunks/0e46wm-gcaeom.js",
+      ".next/static/chunks/0sdudan08clhv.js",
       ".next/static/chunks/177b739xw9ggc.js",
       ".next/static/chunks/0t80zuao1l2o5.js",
       ".next/static/chunks/0uqcitglesvgt.js",
@@ -163,13 +163,13 @@
   },
   {
     "route": "/trucks/[slug]",
-    "firstLoadUncompressedJsBytes": 718436,
+    "firstLoadUncompressedJsBytes": 718455,
     "firstLoadChunkPaths": [
       ".next/static/chunks/0qjl~-elh72d1.js",
       ".next/static/chunks/07~~_oeopqc_j.js",
       ".next/static/chunks/0o-4-16x3i5s1.js",
       ".next/static/chunks/011u~krs2eagk.js",
-      ".next/static/chunks/0w6vz9.waq4q-.js",
+      ".next/static/chunks/0vj7hamficao..js",
       ".next/static/chunks/177b739xw9ggc.js",
       ".next/static/chunks/0t80zuao1l2o5.js",
       ".next/static/chunks/0uqcitglesvgt.js",
@@ -394,6 +394,22 @@
       ".next/static/chunks/0o-4-16x3i5s1.js",
       ".next/static/chunks/011u~krs2eagk.js",
       ".next/static/chunks/0sfsn~a8hs_je.js",
+      ".next/static/chunks/177b739xw9ggc.js",
+      ".next/static/chunks/0t80zuao1l2o5.js",
+      ".next/static/chunks/0uqcitglesvgt.js",
+      ".next/static/chunks/0hefez8cdtp9p.js",
+      ".next/static/chunks/turbopack-1323a-2hsjthm.js"
+    ]
+  },
+  {
+    "route": "/trucks",
+    "firstLoadUncompressedJsBytes": 709855,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/0qjl~-elh72d1.js",
+      ".next/static/chunks/07~~_oeopqc_j.js",
+      ".next/static/chunks/0o-4-16x3i5s1.js",
+      ".next/static/chunks/011u~krs2eagk.js",
+      ".next/static/chunks/0pnlz3a3v249c.js",
       ".next/static/chunks/177b739xw9ggc.js",
       ".next/static/chunks/0t80zuao1l2o5.js",
       ".next/static/chunks/0uqcitglesvgt.js",
