@@ -10,8 +10,17 @@ from models import LoginRequest, CustomerRegister
 from services.email import get_email_t, send_email_background
 import jwt
 import uuid
+import os
 
 router = APIRouter()
+
+IS_HTTPS = os.environ.get("REACT_APP_BACKEND_URL", "").startswith("https") or os.environ.get("BACKEND_URL", "").startswith("https")
+
+
+def set_auth_cookies(response: Response, access_token: str, refresh_token: str = None):
+    response.set_cookie(key="access_token", value=access_token, httponly=True, secure=IS_HTTPS, samesite="lax", max_age=7200, path="/")
+    if refresh_token:
+        response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, secure=IS_HTTPS, samesite="lax", max_age=604800, path="/")
 
 
 @router.post("/auth/login")
@@ -37,8 +46,7 @@ async def login(request: Request, response: Response, body: LoginRequest):
     uid = str(user["_id"])
     at = create_access_token(uid, email)
     rt = create_refresh_token(uid)
-    response.set_cookie(key="access_token", value=at, httponly=True, secure=False, samesite="lax", max_age=7200, path="/")
-    response.set_cookie(key="refresh_token", value=rt, httponly=True, secure=False, samesite="lax", max_age=604800, path="/")
+    set_auth_cookies(response, at, rt)
     return {"id": uid, "email": user["email"], "name": user.get("name", ""), "role": user.get("role", "user")}
 
 
@@ -67,7 +75,7 @@ async def refresh(request: Request, response: Response):
         if not user:
             raise HTTPException(status_code=401, detail="User not found")
         at = create_access_token(str(user["_id"]), user["email"])
-        response.set_cookie(key="access_token", value=at, httponly=True, secure=False, samesite="lax", max_age=7200, path="/")
+        set_auth_cookies(response, at)
         return {"message": "Refreshed"}
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         raise HTTPException(status_code=401, detail="Invalid refresh token")
@@ -94,8 +102,7 @@ async def register_customer(body: CustomerRegister, response: Response):
     uid = str(result.inserted_id)
     at = create_access_token(uid, email)
     rt = create_refresh_token(uid)
-    response.set_cookie(key="access_token", value=at, httponly=True, secure=False, samesite="lax", max_age=7200, path="/")
-    response.set_cookie(key="refresh_token", value=rt, httponly=True, secure=False, samesite="lax", max_age=604800, path="/")
+    set_auth_cookies(response, at, rt)
     return {"id": uid, "email": email, "name": user_doc["name"], "role": "customer"}
 
 

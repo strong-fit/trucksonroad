@@ -51,8 +51,36 @@ export default function AdminTrucks() {
     } catch { toast.error('Fehler beim Speichern'); }
   };
 
+  const [newTruck, setNewTruck] = useState(false);
+  const [newName, setNewName] = useState('');
+
+  const createTruck = async () => {
+    if (!newName.trim()) return;
+    const slug = newName.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+    try {
+      await api.post('/admin/trucks', { name_de: newName.trim(), slug });
+      toast.success(`${newName} erstellt`);
+      setNewTruck(false);
+      setNewName('');
+      api.get('/admin/trucks').then(r => setTrucks(r.data)).catch(() => {});
+    } catch (err) {
+      toast.error(err?.response?.data?.detail || 'Fehler beim Erstellen');
+    }
+  };
+
   return (
     <AdminLayout title={t('admin_trucks')}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+        {newTruck ? (
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <input className="adm-input" placeholder="Truck-Name" value={newName} onChange={e => setNewName(e.target.value)} onKeyDown={e => e.key === 'Enter' && createTruck()} autoFocus data-testid="new-truck-name" style={{ width: '250px' }} />
+            <button className="adm-btn adm-btn-primary" onClick={createTruck} data-testid="new-truck-save"><Plus size={14} /> Erstellen</button>
+            <button className="adm-btn" onClick={() => { setNewTruck(false); setNewName(''); }} data-testid="new-truck-cancel">Abbrechen</button>
+          </div>
+        ) : (
+          <button className="adm-btn adm-btn-primary" onClick={() => setNewTruck(true)} data-testid="new-truck-btn"><Plus size={14} /> Neuer Truck</button>
+        )}
+      </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {trucks.map(truck => (
           <div key={truck.slug} className="adm-detail" data-testid={`truck-card-${truck.slug}`} style={{ padding: 0, overflow: 'hidden' }}>

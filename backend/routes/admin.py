@@ -324,6 +324,38 @@ async def admin_get_trucks(request: Request):
     return await db.trucks.find({}, {"_id": 0}).sort("order", 1).to_list(100)
 
 
+@router.post("/admin/trucks")
+async def admin_create_truck(request: Request):
+    user = await get_current_user(request)
+    if user.get("role") != "admin":
+        raise HTTPException(403, "Nur Admins")
+    body = await request.json()
+    name = body.get("name_de", "").strip()
+    slug = body.get("slug", "").strip()
+    if not name or not slug:
+        raise HTTPException(400, "Name und Slug erforderlich")
+    existing = await db.trucks.find_one({"slug": slug})
+    if existing:
+        raise HTTPException(400, "Truck mit diesem Slug existiert bereits")
+    count = await db.trucks.count_documents({})
+    truck = {
+        "slug": slug, "name_de": name, "name_en": name, "name_fr": name, "name_it": name,
+        "tagline_de": "", "tagline_en": "", "tagline_fr": "", "tagline_it": "",
+        "desc_de": "", "desc_en": "", "desc_fr": "", "desc_it": "",
+        "image": "", "gallery": [], "video_url": "",
+        "menu_de": [], "menu_en": [], "menu_fr": [], "menu_it": [],
+        "tag": "", "order": count + 1,
+        "story_de": "", "story_en": "", "story_fr": "", "story_it": "",
+        "stat_events": "", "stat_specialty": "", "stat_rating": "",
+        "quote_text_de": "", "quote_author": "",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.trucks.insert_one(truck)
+    truck.pop("_id", None)
+    return truck
+
+
+
 @router.put("/admin/trucks/{slug}")
 async def admin_update_truck(slug: str, request: Request):
     await get_current_user(request)
