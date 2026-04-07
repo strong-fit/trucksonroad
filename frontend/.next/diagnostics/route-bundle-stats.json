@@ -83,13 +83,13 @@
   },
   {
     "route": "/admin/anfragen",
-    "firstLoadUncompressedJsBytes": 729052,
+    "firstLoadUncompressedJsBytes": 729915,
     "firstLoadChunkPaths": [
       ".next/static/chunks/0qjl~-elh72d1.js",
       ".next/static/chunks/07~~_oeopqc_j.js",
       ".next/static/chunks/0o-4-16x3i5s1.js",
       ".next/static/chunks/011u~krs2eagk.js",
-      ".next/static/chunks/0san2pzc3dhi_.js",
+      ".next/static/chunks/0qui1t~yynxtx.js",
       ".next/static/chunks/177b739xw9ggc.js",
       ".next/static/chunks/0t80zuao1l2o5.js",
       ".next/static/chunks/0uqcitglesvgt.js",
@@ -458,6 +458,22 @@
       ".next/static/chunks/0o-4-16x3i5s1.js",
       ".next/static/chunks/011u~krs2eagk.js",
       ".next/static/chunks/05_9_7qwwemom.js",
+      ".next/static/chunks/177b739xw9ggc.js",
+      ".next/static/chunks/0t80zuao1l2o5.js",
+      ".next/static/chunks/0uqcitglesvgt.js",
+      ".next/static/chunks/0hefez8cdtp9p.js",
+      ".next/static/chunks/turbopack-1323a-2hsjthm.js"
+    ]
+  },
+  {
+    "route": "/offerte-bestaetigen",
+    "firstLoadUncompressedJsBytes": 698688,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/0qjl~-elh72d1.js",
+      ".next/static/chunks/07~~_oeopqc_j.js",
+      ".next/static/chunks/0o-4-16x3i5s1.js",
+      ".next/static/chunks/011u~krs2eagk.js",
+      ".next/static/chunks/09tzwc_5yaevj.js",
       ".next/static/chunks/177b739xw9ggc.js",
       ".next/static/chunks/0t80zuao1l2o5.js",
       ".next/static/chunks/0uqcitglesvgt.js",

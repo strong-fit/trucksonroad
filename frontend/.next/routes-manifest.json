@@ -227,6 +227,12 @@
       "namedRegex": "^/konto/passwort\\-vergessen(?:/)?$"
     },
     {
+      "page": "/offerte-bestaetigen",
+      "regex": "^/offerte\\-bestaetigen(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/offerte\\-bestaetigen(?:/)?$"
+    },
+    {
       "page": "/private-events",
       "regex": "^/private\\-events(?:/)?$",
       "routeKeys": {},

@@ -16,6 +16,7 @@ from services.storage import put_object, get_object, APP_NAME
 from services.event_scout import get_perplexity_key, call_perplexity_search, run_event_scan, PERPLEXITY_API_URL
 import uuid
 import io
+import os
 import csv as csv_module
 import json as json_mod
 import httpx
@@ -149,11 +150,15 @@ async def admin_update_inquiry(inquiry_id: str, update: InquiryStatusUpdate, req
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Not found")
     if update.status == "offer_sent":
+        confirm_token = str(uuid.uuid4())
+        await db.inquiries.update_one({"id": inquiry_id}, {"$set": {"confirm_token": confirm_token}})
         inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
         if inquiry and inquiry.get("email"):
             il = inquiry.get("lang", "de")
             it = get_email_t(il)
-            offer_html = build_offer_email(inquiry, il)
+            base_url = os.environ.get("FRONTEND_URL", "https://trucksonroad.ch")
+            confirm_url = f"{base_url}/offerte-bestaetigen?id={inquiry_id}&token={confirm_token}"
+            offer_html = build_offer_email(inquiry, il, confirm_url=confirm_url)
             background_tasks.add_task(send_email_background, inquiry["email"], f"{it['subject_offer']} – TrucksOnRoad", offer_html)
     elif update.status in ("in_review", "confirmed", "completed", "cancelled"):
         inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
@@ -211,6 +216,21 @@ async def admin_update_invoice(inquiry_id: str, request: Request, background_tas
             subject = f"{it.get(subject_key, it['invoice_word'])} – TrucksOnRoad"
             background_tasks.add_task(send_email_background, inquiry["email"], subject, inv_html)
     return {"message": "Invoice updated"}
+
+
+@router.delete("/admin/inquiries/{inquiry_id}/invoice")
+async def admin_delete_invoice(inquiry_id: str, request: Request):
+    user = await get_current_user(request)
+    if user.get("role") != "admin":
+        raise HTTPException(403, "Nur Admins")
+    result = await db.inquiries.update_one({"id": inquiry_id}, {"$set": {
+        "invoice_status": "none", "invoice_amount": 0, "updated_at": datetime.now(timezone.utc).isoformat()
+    }})
+    if result.matched_count == 0:
+        raise HTTPException(404, "Not found")
+    return {"message": "Rechnung gelöscht"}
+
+
 
 
 @router.put("/admin/inquiries/{inquiry_id}/finance")

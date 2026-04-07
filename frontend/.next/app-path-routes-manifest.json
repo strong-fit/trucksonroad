@@ -29,6 +29,7 @@
   "/konto/login/page": "/konto/login",
   "/konto/passwort-reset/page": "/konto/passwort-reset",
   "/konto/passwort-vergessen/page": "/konto/passwort-vergessen",
+  "/offerte-bestaetigen/page": "/offerte-bestaetigen",
   "/page": "/",
   "/private-events/page": "/private-events",
   "/trucks/[slug]/page": "/trucks/[slug]",

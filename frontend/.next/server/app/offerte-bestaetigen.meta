@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/offerte-bestaetigen/layout,_N_T_/offerte-bestaetigen/page,_N_T_/offerte-bestaetigen"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/offerte-bestaetigen/__PAGE__",
+    "/offerte-bestaetigen",
+    "/_index",
+    "/_head"
+  ]
+}

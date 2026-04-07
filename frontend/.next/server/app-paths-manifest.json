@@ -29,6 +29,7 @@
   "/konto/login/page": "app/konto/login/page.js",
   "/konto/passwort-reset/page": "app/konto/passwort-reset/page.js",
   "/konto/passwort-vergessen/page": "app/konto/passwort-vergessen/page.js",
+  "/offerte-bestaetigen/page": "app/offerte-bestaetigen/page.js",
   "/page": "app/page.js",
   "/private-events/page": "app/private-events/page.js",
   "/trucks/[slug]/page": "app/trucks/[slug]/page.js",

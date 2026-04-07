@@ -284,15 +284,22 @@ def build_admin_notification_email(inquiry: dict, lang: str = "de") -> str:
     </div>"""
 
 
-def build_offer_email(inquiry: dict, lang: str = "de") -> str:
+def build_offer_email(inquiry: dict, lang: str = "de", confirm_url: str = "") -> str:
     t = get_email_t(lang)
     name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or inquiry.get('name', '')
     trucks = ', '.join(inquiry.get('selected_trucks', [])) or '-'
+    amount = inquiry.get('invoice_amount', 0)
+    amount_html = f'<p style="margin:0.3rem 0;font-size:1.1rem;"><strong>Betrag: CHF {amount:,.2f}</strong></p>' if amount else ''
+    confirm_btn = f'''
+        <div style="text-align:center;margin:1.5rem 0;">
+          <a href="{confirm_url}" style="display:inline-block;background:#4db6ac;color:#fff;padding:0.8rem 2rem;border-radius:6px;text-decoration:none;font-weight:600;font-size:1rem;">Offerte bestätigen</a>
+          <p style="color:#9c9c94;font-size:0.8rem;margin-top:0.5rem;">Oder antworten Sie direkt auf diese Email</p>
+        </div>''' if confirm_url else ''
     return f"""
     <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
       <div style="background:#1a1a18;padding:2rem;text-align:center;">
         <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
-          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">on</span><span style="color:#f5f0e8;">ROAD</span>
         </span>
       </div>
       <div style="padding:2rem;">
@@ -304,7 +311,9 @@ def build_offer_email(inquiry: dict, lang: str = "de") -> str:
           <p style="margin:0.3rem 0;"><strong>{t['guests']}:</strong> {inquiry.get('guest_count', '-')}</p>
           <p style="margin:0.3rem 0;"><strong>{t['trucks']}:</strong> {trucks}</p>
           <p style="margin:0.3rem 0;"><strong>{t['event_type']}:</strong> {inquiry.get('event_type', inquiry.get('concept', '-'))}</p>
+          {amount_html}
         </div>
+        {confirm_btn}
         <p style="color:#6b6b64;line-height:1.6;">{t['offer_follow_up']}</p>
         <p style="color:#6b6b64;font-size:0.85rem;margin-top:1.5rem;">{t['greeting']},<br/><strong>{t['team']}</strong></p>
       </div>

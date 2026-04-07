@@ -255,7 +255,7 @@ export default function AdminInquiries() {
 
             <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem' }}>
               <div className="adm-form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Receipt size={12} /> {t('invoice')}</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: '0.5rem', marginTop: '0.3rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px auto', gap: '0.5rem', marginTop: '0.3rem', alignItems: 'center' }}>
                 <select
                   className="adm-input"
                   value={selected.invoice_status || 'none'}
@@ -285,7 +285,31 @@ export default function AdminInquiries() {
                   }}
                   data-testid="invoice-amount-input"
                 />
+                {selected.invoice_status && selected.invoice_status !== 'none' && (
+                  <button
+                    className="adm-btn adm-btn-sm"
+                    style={{ color: '#dc2626', border: '1px solid #dc2626', background: 'transparent' }}
+                    onClick={async () => {
+                      if (!confirm('Rechnung wirklich löschen?')) return;
+                      try {
+                        await api.delete(`/admin/inquiries/${selected.id}/invoice`);
+                        toast.success('Rechnung gelöscht');
+                        load();
+                        setSelected(prev => ({ ...prev, invoice_status: 'none', invoice_amount: 0 }));
+                      } catch { toast.error('Fehler'); }
+                    }}
+                    data-testid="delete-invoice-btn"
+                  >
+                    <Trash2 size={12} />
+                  </button>
+                )}
               </div>
+              {selected.payment_method && (
+                <div style={{ marginTop: '0.4rem', fontSize: '0.75rem', color: 'var(--adm-text-muted)' }}>
+                  Zahlungsart: <strong>{selected.payment_method === 'cash' ? 'Bar' : 'Rechnung'}</strong>
+                  {selected.confirmed_at && <span> (bestätigt am {new Date(selected.confirmed_at).toLocaleDateString('de-CH')})</span>}
+                </div>
+              )}
             </div>
 
             <div style={{ marginTop: '1rem', borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem' }}>
