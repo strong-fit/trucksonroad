@@ -13,7 +13,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/",
       "dataRoute": "/index.rsc",
       "allowHeader": [
@@ -62,7 +63,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/_not-found",
       "dataRoute": "/_not-found.rsc",
       "allowHeader": [
@@ -86,7 +88,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin",
       "dataRoute": "/admin.rsc",
       "allowHeader": [
@@ -110,7 +113,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/anfragen",
       "dataRoute": "/admin/anfragen.rsc",
       "allowHeader": [
@@ -134,7 +138,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/blog",
       "dataRoute": "/admin/blog.rsc",
       "allowHeader": [
@@ -158,7 +163,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/dashboard",
       "dataRoute": "/admin/dashboard.rsc",
       "allowHeader": [
@@ -182,7 +188,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/einstellungen",
       "dataRoute": "/admin/einstellungen.rsc",
       "allowHeader": [
@@ -206,7 +213,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/event-scout",
       "dataRoute": "/admin/event-scout.rsc",
       "allowHeader": [
@@ -230,7 +238,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/export",
       "dataRoute": "/admin/export.rsc",
       "allowHeader": [
@@ -254,7 +263,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/faqs",
       "dataRoute": "/admin/faqs.rsc",
       "allowHeader": [
@@ -278,7 +288,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/finanzen",
       "dataRoute": "/admin/finanzen.rsc",
       "allowHeader": [
@@ -302,7 +313,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/kalender",
       "dataRoute": "/admin/kalender.rsc",
       "allowHeader": [
@@ -326,7 +338,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/login",
       "dataRoute": "/admin/login.rsc",
       "allowHeader": [
@@ -350,7 +363,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/mitarbeiter",
       "dataRoute": "/admin/mitarbeiter.rsc",
       "allowHeader": [
@@ -374,7 +388,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/passwort-vergessen",
       "dataRoute": "/admin/passwort-vergessen.rsc",
       "allowHeader": [
@@ -398,7 +413,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/reviews",
       "dataRoute": "/admin/reviews.rsc",
       "allowHeader": [
@@ -422,7 +438,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/routen",
       "dataRoute": "/admin/routen.rsc",
       "allowHeader": [
@@ -446,7 +463,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/admin/trucks",
       "dataRoute": "/admin/trucks.rsc",
       "allowHeader": [
@@ -470,7 +488,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/agenda",
       "dataRoute": "/agenda.rsc",
       "allowHeader": [
@@ -494,7 +513,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/anfrage",
       "dataRoute": "/anfrage.rsc",
       "allowHeader": [
@@ -518,7 +538,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/blog",
       "dataRoute": "/blog.rsc",
       "allowHeader": [
@@ -542,7 +563,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/faq",
       "dataRoute": "/faq.rsc",
       "allowHeader": [
@@ -566,7 +588,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/fuer-veranstalter",
       "dataRoute": "/fuer-veranstalter.rsc",
       "allowHeader": [
@@ -590,7 +613,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/kontakt",
       "dataRoute": "/kontakt.rsc",
       "allowHeader": [
@@ -614,7 +638,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/konto/anfragen",
       "dataRoute": "/konto/anfragen.rsc",
       "allowHeader": [
@@ -638,7 +663,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/konto/dashboard",
       "dataRoute": "/konto/dashboard.rsc",
       "allowHeader": [
@@ -662,7 +688,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/konto/login",
       "dataRoute": "/konto/login.rsc",
       "allowHeader": [
@@ -686,7 +713,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/konto/passwort-reset",
       "dataRoute": "/konto/passwort-reset.rsc",
       "allowHeader": [
@@ -710,7 +738,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/konto/passwort-vergessen",
       "dataRoute": "/konto/passwort-vergessen.rsc",
       "allowHeader": [
@@ -734,7 +763,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/offerte-bestaetigen",
       "dataRoute": "/offerte-bestaetigen.rsc",
       "allowHeader": [
@@ -758,7 +788,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/private-events",
       "dataRoute": "/private-events.rsc",
       "allowHeader": [
@@ -782,7 +813,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/trucks",
       "dataRoute": "/trucks.rsc",
       "allowHeader": [
@@ -806,7 +838,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/ueber-uns",
       "dataRoute": "/ueber-uns.rsc",
       "allowHeader": [
@@ -830,7 +863,8 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "initialRevalidateSeconds": false,
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
       "srcRoute": "/veranstalter",
       "dataRoute": "/veranstalter.rsc",
       "allowHeader": [

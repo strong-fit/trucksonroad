@@ -173,7 +173,7 @@
 .sf-lang-toggle {
   background: transparent; border: 1px solid rgba(77,182,172,0.3); color: var(--sf-cream);
   padding: 0.3rem 0.8rem; border-radius: 2px; font-size: 0.7rem; cursor: pointer;
-  font-family: 'DM Sans', sans-serif; transition: all 0.2s; letter-spacing: 0.15em;
+  font-family: 'DM Sans', sans-serif; transition: border-color 0.2s, color 0.2s, opacity 0.2s; letter-spacing: 0.15em;
   opacity: 0.75; display: flex; align-items: center; gap: 2px;
 }
 .sf-lang-toggle:hover { border-color: var(--sf-gold); color: var(--sf-gold); opacity: 1; }
@@ -193,7 +193,7 @@
 .sf-mobile-lang-btn {
   background: transparent; border: 1px solid var(--sf-border); color: var(--sf-cream);
   padding: 0.35rem 0.75rem; border-radius: 2px; font-size: 0.75rem; cursor: pointer;
-  font-family: 'DM Sans', sans-serif; letter-spacing: 0.12em; transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif; letter-spacing: 0.12em; transition: border-color 0.2s, color 0.2s, background-color 0.2s;
 }
 .sf-mobile-lang-btn.active { border-color: var(--sf-gold); color: var(--sf-gold); font-weight: 600; }
 .sf-mobile-lang-btn:hover { border-color: var(--sf-gold); }
@@ -567,7 +567,7 @@
   padding: 0.4rem 0.9rem; border: 1px solid rgba(255,255,255,0.12);
   background: transparent; color: var(--sf-cream); font-size: 0.72rem;
   letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
-  transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s; font-family: 'DM Sans', sans-serif;
 }
 .sf-truck-btn.active, .sf-truck-btn:hover {
   background: var(--sf-gold); border-color: var(--sf-gold);
@@ -594,7 +594,8 @@
 .sf-faq-q {
   font-weight: 500; font-size: 0.95rem; color: var(--sf-cream);
   display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-  transition: color 0.2s; user-select: none;
+  transition: color 0.2s; user-select: none; width: 100%; text-align: left;
+  background: none; border: none; padding: 0;
 }
 .sf-faq-icon {
   color: var(--sf-gold); font-size: 1.2rem; flex-shrink: 0;
@@ -758,7 +759,7 @@
   padding: 0.65rem 0.75rem; margin: 1px 0;
   color: var(--adm-text-secondary); text-decoration: none;
   font-size: 0.82rem; border-radius: 8px;
-  transition: all 0.15s ease; border: none; background: none;
+  transition: background-color 0.15s ease, color 0.15s ease; border: none; background: none;
   cursor: pointer; width: 100%; text-align: left;
   font-family: 'DM Sans', sans-serif; font-weight: 500;
 }
@@ -927,7 +928,7 @@
   padding: 0.4rem 0.9rem; font-size: 0.75rem; font-weight: 500;
   border: 1px solid var(--adm-border); border-radius: 8px;
   background: var(--adm-card); color: var(--adm-text-secondary);
-  cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+  cursor: pointer; transition: border-color 0.15s, color 0.15s, background-color 0.15s; font-family: 'DM Sans', sans-serif;
 }
 .adm-filter-btn:hover { border-color: var(--adm-gold); color: var(--adm-gold); }
 .adm-filter-btn.active {
@@ -951,7 +952,7 @@
   background: none; border: 1px solid var(--adm-border); border-radius: 6px;
   width: 28px; height: 28px; cursor: pointer; color: var(--adm-text-muted);
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s; font-size: 1.1rem; line-height: 1;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s; font-size: 1.1rem; line-height: 1;
 }
 .adm-detail-close:hover { background: var(--adm-bg); color: var(--adm-text); }
 .adm-detail-grid {
@@ -967,7 +968,7 @@
 .adm-btn {
   display: inline-flex; align-items: center; gap: 0.4rem;
   padding: 0.5rem 1rem; font-size: 0.78rem; font-weight: 600;
-  border-radius: 8px; cursor: pointer; transition: all 0.15s;
+  border-radius: 8px; cursor: pointer; transition: background-color 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
   font-family: 'DM Sans', sans-serif; border: none;
 }
 .adm-btn-primary {

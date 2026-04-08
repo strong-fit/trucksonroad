@@ -101,3 +101,131 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Test the preview app at https://trucks-on-road.preview.emergentagent.com with focus on newly implemented SEO/UI changes. Verify /trucks, /faq, and /trucks/burger-truck pages load correctly with proper canonical tags, JSON-LD scripts, and no layout breaks."
+
+frontend:
+  - task: "SEO Meta Tags - Canonical URLs"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/app/trucks/page.js, /app/frontend/src/app/faq/page.js, /app/frontend/src/app/trucks/[slug]/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Tested all three pages (/trucks, /faq, /trucks/burger-truck). All canonical tags are present and correct: https://trucksonroad.ch/trucks, https://trucksonroad.ch/faq, https://trucksonroad.ch/trucks/burger-truck"
+
+  - task: "JSON-LD Structured Data - Layout Scripts"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/app/layout.js, /app/frontend/src/components/JsonLdScript.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Found 5 layout JSON-LD scripts (layout-jsonld-0 through layout-jsonld-4) on all pages. Scripts include FoodEstablishment, Organization, WebSite schemas. All have correct type='application/ld+json'"
+
+  - task: "JSON-LD Structured Data - Trucks List Page"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/app/trucks/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Verified trucks-list-jsonld (ItemList schema) and trucks-breadcrumb-jsonld (BreadcrumbList schema) are present on /trucks page with correct IDs and type"
+
+  - task: "JSON-LD Structured Data - FAQ Page"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/app/faq/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Verified faq-jsonld (FAQPage schema) and faq-breadcrumb-jsonld (BreadcrumbList schema) are present on /faq page with correct IDs and type"
+
+  - task: "JSON-LD Structured Data - Truck Detail Page"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/app/trucks/[slug]/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Verified truck-detail-jsonld-burger-truck and truck-breadcrumb-jsonld-burger-truck are present on /trucks/burger-truck page with correct dynamic IDs and type"
+
+  - task: "Trucks List Page UI"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/views/TrucksListPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Page loads correctly without empty/broken UI. Found 6 truck cards displayed in grid: burger-truck, chicken-burger-truck, bowl-truck, pocket-bowl-truck, empanadas-truck, and one more. All cards have proper images, names, and taglines. No layout breaks detected."
+
+  - task: "FAQ Page UI and Functionality"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/views/FAQPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Page loads correctly with 8 FAQ items visible. Tested FAQ toggle functionality - clicking faq-toggle button correctly changes aria-expanded from 'false' to 'true' and displays answer. Interactive buttons have data-testid with faq-toggle- prefix as expected."
+
+  - task: "Truck Detail Page UI and CTA"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/views/TruckDetailPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Page loads correctly for /trucks/burger-truck. Truck name 'Burger Truck' is visible, hero image displays properly, stats bar shows capacity/time/power info. CTA section and button 'DIESEN TRUCK ANFRAGEN' are visible and properly styled. No layout issues detected."
+
+  - task: "CSS Cleanup - No Layout Breaks"
+    implemented: true
+    working: true
+    file: "Multiple CSS files"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Verified no obvious layout breaks from CSS cleanup. All pages render correctly with proper spacing, typography, and responsive design. Main content is visible on all tested pages. Screenshots confirm clean, professional UI."
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: true
+
+test_plan:
+  current_focus:
+    - "All SEO and UI tasks completed and verified"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+
+agent_communication:
+    - agent: "testing"
+      message: "Completed comprehensive testing of SEO/UI changes on preview app. All requirements verified successfully: (1) /trucks page loads with 6 truck cards, canonical tag, and all JSON-LD scripts (layout-jsonld-*, trucks-list-jsonld, trucks-breadcrumb-jsonld). (2) /faq page loads with 8 FAQ items, working toggle functionality, canonical tag, and JSON-LD scripts (faq-jsonld, faq-breadcrumb-jsonld). (3) /trucks/burger-truck page loads correctly with visible CTA, canonical tag, and JSON-LD scripts (truck-detail-jsonld-burger-truck, truck-breadcrumb-jsonld-burger-truck). (4) No layout breaks detected from CSS cleanup. Minor note: Console shows expected 401 responses from /api/auth/me and /api/auth/refresh for unauthenticated public users - this is normal behavior and not an error. All data endpoints return 200 OK."

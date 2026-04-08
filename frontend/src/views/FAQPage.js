@@ -3,14 +3,15 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 
-export default function FAQPage() {
+export default function FAQPage({ initialFaqs = [] }) {
   const { lang, t } = useLanguage();
-  const [faqs, setFaqs] = useState([]);
+  const [faqs, setFaqs] = useState(initialFaqs);
   const [openFaq, setOpenFaq] = useState(null);
 
   useEffect(() => {
+    if (initialFaqs.length) return;
     api.get('/faqs').then(r => setFaqs(r.data)).catch(() => {});
-  }, []);
+  }, [initialFaqs]);
 
   return (
     <div data-testid="faq-page">
@@ -25,10 +26,16 @@ export default function FAQPage() {
         <div className="sf-faq-grid">
           {faqs.map((faq) => (
             <div key={faq.id} className="sf-faq-item" data-testid={`faq-item-${faq.id}`}>
-              <div className="sf-faq-q" onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}>
+              <button
+                type="button"
+                className="sf-faq-q"
+                onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
+                data-testid={`faq-toggle-${faq.id}`}
+                aria-expanded={openFaq === faq.id}
+              >
                 {faq[`question_${lang}`]}
                 <span className={`sf-faq-icon ${openFaq === faq.id ? 'open' : ''}`}>+</span>
-              </div>
+              </button>
               {openFaq === faq.id && (
                 <div className="sf-faq-a">{faq[`answer_${lang}`]}</div>
               )}

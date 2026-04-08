@@ -25,13 +25,14 @@ function FadeUp({ children, delay = 0, className = '' }) {
   );
 }
 
-export default function TrucksListPage() {
-  const [trucks, setTrucks] = useState([]);
+export default function TrucksListPage({ initialTrucks = [] }) {
+  const [trucks, setTrucks] = useState(initialTrucks);
   const { lang, t } = useLanguage();
 
   useEffect(() => {
+    if (initialTrucks.length) return;
     api.get('/trucks').then(r => setTrucks(r.data)).catch(() => {});
-  }, []);
+  }, [initialTrucks]);
 
   return (
     <div data-testid="trucks-list-page">

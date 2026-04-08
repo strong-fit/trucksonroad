@@ -403,10 +403,16 @@ export default function HomePage() {
         <div className="sf-faq-grid">
           {faqs.slice(0, 6).map((faq) => (
             <div key={faq.id} className="sf-faq-item" data-testid={`faq-item-${faq.id}`}>
-              <div className="sf-faq-q" onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}>
+              <button
+                type="button"
+                className="sf-faq-q"
+                onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
+                data-testid={`home-faq-toggle-${faq.id}`}
+                aria-expanded={openFaq === faq.id}
+              >
                 {faq[`question_${lang}`]}
                 <span className={`sf-faq-icon ${openFaq === faq.id ? 'open' : ''}`}>+</span>
-              </div>
+              </button>
               {openFaq === faq.id && (
                 <div className="sf-faq-a">{faq[`answer_${lang}`]}</div>
               )}

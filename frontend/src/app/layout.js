@@ -1,6 +1,8 @@
 import Providers from "@/components/Providers";
+import { JsonLdScript } from "@/components/JsonLdScript";
 import "@/index.css";
 import "@/App.css";
+import { buildOrganizationSchema, buildWebsiteSchema, getLayoutSeoData } from "@/lib/seo";
 
 export const metadata = {
   title: "TRUCKSonROAD – Einzigartige Foodtrucks für Events, die in Erinnerung bleiben",
@@ -16,7 +18,10 @@ export const metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const { business, events, verification } = await getLayoutSeoData();
+  const seoScripts = [business, buildOrganizationSchema(business), buildWebsiteSchema(), ...events].filter(Boolean);
+
   return (
     <html lang="de">
       <head>
@@ -25,31 +30,10 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FoodEstablishment",
-              name: "TRUCKSonROAD GmbH",
-              alternateName: "TRUCKSonROAD - Einzigartige Foodtrucks für Events",
-              description: "Einzigartige Foodtrucks für Events, die in Erinnerung bleiben. Firmenanlässe, Hochzeiten, Festivals und private Feiern in der ganzen Schweiz.",
-              url: "https://trucksonroad.ch",
-              telephone: "+41 79 696 98 99",
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "Bahnhofstrasse 75",
-                addressLocality: "Wetzikon",
-                postalCode: "8620",
-                addressCountry: "CH",
-              },
-              geo: { "@type": "GeoCoordinates", latitude: 47.3236, longitude: 8.7976 },
-              servesCuisine: ["Burger", "Bowls", "Empanadas", "Streetfood"],
-              priceRange: "$$",
-              areaServed: { "@type": "Country", name: "Switzerland" },
-            }),
-          }}
-        />
+        {verification ? <meta name="google-site-verification" content={verification} /> : null}
+        {seoScripts.map((script, index) => (
+          <JsonLdScript key={`layout-jsonld-${index}`} id={`layout-jsonld-${index}`} data={script} />
+        ))}
       </head>
       <body>
         <Providers>{children}</Providers>
