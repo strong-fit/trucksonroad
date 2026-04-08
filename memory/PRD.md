@@ -51,6 +51,7 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - [x] Server-Side Rendering fuer alle oeffentlichen Seiten
 - [x] JSON-LD Structured Data, Meta-Tags, OpenGraph, Sitemap.xml
 - [x] **Erweiterte SSR-SEO-Ausgabe**: Canonical Tags + serverseitige JSON-LD-Skripte fuer Layout, /trucks, /faq und Truck-Detailseiten (NEU 08.04.2026)
+- [x] **Landingpage-SEO erweitert**: Blog-, ContactPage-, AboutPage-, Service- und Breadcrumb-JSON-LD fuer /blog, /kontakt, /ueber-uns, /fuer-veranstalter und /private-events (NEU 08.04.2026)
 - [x] **FAQ-Interaktion verbessert**: FAQ-Toggles als echte Buttons mit data-testid und aria-expanded (NEU 08.04.2026)
 - [x] **Sicheres CSS-Aufraeumen**: doppelte Font-Einbindung entfernt, mehrere `transition: all` auf gezielte Properties reduziert (NEU 08.04.2026)
 
@@ -64,6 +65,8 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - /trucks rendert zusaetzlich ItemList + BreadcrumbList serverseitig; /faq rendert FAQPage + BreadcrumbList serverseitig; Truck-Detailseiten rendert truck-spezifisches JSON-LD + BreadcrumbList serverseitig.
 - Canonical Tags sind auf /trucks, /faq und /trucks/[slug] aktiv.
 - Frontend-Produktions-Build aktualisiert (`yarn build`) und Frontend-Service neu gestartet, damit Next.js `next start` die neuen App-Router-Aenderungen ausliefert.
+- /blog rendert jetzt Blog- + Breadcrumb-JSON-LD serverseitig; /kontakt, /ueber-uns, /fuer-veranstalter und /private-events liefern zusaetzlich LandingPage-/Service-/Breadcrumb-JSON-LD inkl. Canonical Tags direkt im HTML.
+- Preview-Smoke-Test erfolgreich; Frontend-Testagent bestaetigt 5/5 Landingpages ohne Layout-Regressionen; Backend-Testagent bestaetigt 5/5 relevante SEO-Endpunkte ohne Regressionen.
 
 ## Test Reports
 - iteration_32: 100% (13/13 Backend, Frontend komplett)
@@ -71,3 +74,6 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - 08.04.2026: Frontend Smoke-Test auf Preview erfolgreich (/trucks, /faq, /trucks/burger-truck)
 - 08.04.2026: Frontend-Testagent erfolgreich - Canonical + JSON-LD + FAQ-Toggles ohne Layout-Regression
 - 08.04.2026: Backend-Testagent erfolgreich - API-/SEO-Endpunkte 11/11 bestanden
+- 08.04.2026: Frontend Smoke-Test erfolgreich (/blog) inkl. visueller Kontrolle der neuen SEO-Landingpage-Ausgabe
+- 08.04.2026: Frontend-Testagent erfolgreich - /blog, /kontakt, /ueber-uns, /fuer-veranstalter, /private-events mit Canonical + JSON-LD 5/5 bestanden
+- 08.04.2026: Backend-Testagent erfolgreich - /api/blog, /api/seo/structured-data, /api/seo/events-schema, /api/seo/google-verification, /api/trucks 5/5 bestanden
