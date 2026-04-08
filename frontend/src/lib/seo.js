@@ -163,3 +163,99 @@ export function buildFaqSchema(faqs = []) {
     })),
   };
 }
+
+export function buildLandingPageSchema({
+  title,
+  description,
+  url,
+  pageType = "WebPage",
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": pageType,
+    name: title,
+    description,
+    url,
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    about: { "@id": `${SITE_URL}/#organization` },
+    inLanguage: SUPPORTED_LANGUAGES,
+  };
+}
+
+export function buildServiceSchema({
+  name,
+  description,
+  url,
+  serviceType,
+  audienceType,
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name,
+    description,
+    url,
+    serviceType,
+    provider: { "@id": `${SITE_URL}/#organization` },
+    areaServed: { "@type": "Country", name: "Switzerland" },
+    audience: audienceType
+      ? {
+          "@type": "Audience",
+          audienceType,
+        }
+      : undefined,
+    availableChannel: {
+      "@type": "ServiceChannel",
+      serviceUrl: `${SITE_URL}/anfrage`,
+    },
+  };
+}
+
+export function buildBlogSchema(posts = []) {
+  if (!posts.length) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${SITE_URL}/blog#blog`,
+    name: "TRUCKSonROAD Blog",
+    description: "Tipps, Trends und Neuigkeiten rund um Foodtruck-Catering, Events und Streetfood in der Schweiz.",
+    url: `${SITE_URL}/blog`,
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    blogPost: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title_de || post.slug,
+      url: `${SITE_URL}/blog/${post.slug}`,
+      datePublished: post.created_at,
+      image: post.image,
+      articleSection: post.category,
+      author: {
+        "@type": "Person",
+        name: post.author || "TRUCKSonROAD Team",
+      },
+    })),
+  };
+}
+
+export function buildBlogPostingSchema(post) {
+  if (!post) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title_de || post.slug,
+    description: post.meta_description_de || post.excerpt_de || "",
+    image: post.image ? [post.image] : [],
+    datePublished: post.created_at,
+    dateModified: post.updated_at || post.created_at,
+    mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
+    articleSection: post.category,
+    keywords: (post.tags || []).join(", "),
+    inLanguage: ["de", "en", "fr", "it"],
+    author: {
+      "@type": "Person",
+      name: post.author || "TRUCKSonROAD Team",
+    },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+  };
+}

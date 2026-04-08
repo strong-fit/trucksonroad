@@ -6,20 +6,22 @@ import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
-export default function ContactPage() {
+export default function ContactPage({ initialInfo }) {
   const { lang, t } = useLanguage();
   const [info, setInfo] = useState({
     company_name: 'TRUCKSonROAD GmbH',
     address: 'Bahnhofstrasse 75, 8620 Wetzikon',
     phone: '+41 79 696 98 99',
     email: 'info@trucksonroad.ch',
+    ...(initialInfo || {}),
   });
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
+    if (initialInfo?.company_name || initialInfo?.email || initialInfo?.phone) return;
     api.get('/contact-info').then(r => setInfo(r.data)).catch(() => {});
-  }, []);
+  }, [initialInfo]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

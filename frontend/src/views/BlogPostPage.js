@@ -4,16 +4,24 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
-import { ArrowLeft, Calendar, Tag, User, Share2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Tag, User } from 'lucide-react';
 
-export default function BlogPostPage() {
-  const { slug } = useParams();
+export default function BlogPostPage({ slug: propSlug, initialPost = null, initialRelatedPosts = [] }) {
+  const params = useParams();
+  const slug = propSlug || params?.slug;
   const { lang, t } = useLanguage();
-  const [post, setPost] = useState(null);
-  const [relatedPosts, setRelatedPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [post, setPost] = useState(initialPost);
+  const [relatedPosts, setRelatedPosts] = useState(initialRelatedPosts);
+  const [loading, setLoading] = useState(!initialPost);
 
   useEffect(() => {
+    if (initialPost?.slug === slug) {
+      setPost(initialPost);
+      setRelatedPosts(initialRelatedPosts);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     api.get(`/blog/${slug}`)
       .then(r => {
@@ -35,7 +43,7 @@ export default function BlogPostPage() {
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [slug]);
+  }, [initialPost, initialRelatedPosts, slug]);
 
   if (loading) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--sf-gray)' }}>{t('loading')}</div>;
   if (!post) return (
@@ -48,9 +56,6 @@ export default function BlogPostPage() {
   const title = post[`title_${lang}`] || post.title_de;
   const content = post[`content_${lang}`] || post.content_de;
   const excerpt = post[`excerpt_${lang}`] || post.excerpt_de;
-  const metaTitle = post.meta_title_de || title;
-  const metaDesc = post.meta_description_de || excerpt;
-
   const renderInlineLinks = (text) => {
     // Parse [text](/path) markdown links
     const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);

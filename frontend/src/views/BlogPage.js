@@ -5,20 +5,28 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { ArrowRight, Calendar, Tag, ChevronRight } from 'lucide-react';
 
-export default function BlogPage() {
+export default function BlogPage({ initialPosts = [], initialCategories = {} }) {
   const { lang, t } = useLanguage();
-  const [posts, setPosts] = useState([]);
-  const [categories, setCategories] = useState({});
+  const [posts, setPosts] = useState(initialPosts);
+  const [categories, setCategories] = useState(initialCategories);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialPosts.length);
 
   useEffect(() => {
+    if (activeCategory === null && initialPosts.length && Object.keys(initialCategories).length) {
+      setPosts(initialPosts);
+      setCategories(initialCategories);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
     const params = activeCategory ? `?category=${activeCategory}` : '';
     api.get(`/blog${params}`)
       .then(r => { setPosts(r.data.posts); setCategories(r.data.categories); })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [activeCategory]);
+  }, [activeCategory, initialCategories, initialPosts]);
 
   const getTitle = (p) => p[`title_${lang}`] || p.title_de;
   const getExcerpt = (p) => p[`excerpt_${lang}`] || p.excerpt_de;
