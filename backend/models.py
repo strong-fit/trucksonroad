@@ -52,10 +52,11 @@ class FAQCreate(BaseModel):
 
 class QuickInquiryCreate(BaseModel):
     name: str
-    event_date: str
-    location: str
-    guest_count: int
-    concept: str
+    contact: Optional[str] = ""
+    event_date: Optional[str] = ""
+    location: Optional[str] = ""
+    guest_count: Optional[int] = 0
+    concept: Optional[str] = ""
     email: Optional[str] = ""
     phone: Optional[str] = ""
 

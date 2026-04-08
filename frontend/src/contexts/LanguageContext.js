@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useCallback } from 'react';
 import { translations } from '@/lib/translations';
 
 const LanguageContext = createContext();
-const SUPPORTED_LANGS = ['de', 'en', 'fr', 'it'];
+const SUPPORTED_LANGS = ['de', 'en', 'fr', 'it', 'es'];
 
 function getInitialLang() {
   if (typeof window === 'undefined') return 'de';

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
-import { ArrowRight, Instagram, Star, Quote, ChevronRight, Calendar, Tag, Send, FileText, PartyPopper, Building2, Heart, Music, Cake, Users, Sparkles, Award } from 'lucide-react';
+import { ArrowRight, Instagram, Star, Quote, ChevronRight, Calendar, Tag, Send, FileText, PartyPopper, Building2, Heart, Music, Cake, Users, Sparkles, Award, Phone } from 'lucide-react';
 
 const HERO_IMG_MAIN = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=900&q=80";
 const HERO_IMG_ACCENT = "https://images.unsplash.com/photo-1509315811345-672d83ef2fbc?w=600&q=80";
@@ -45,6 +45,10 @@ export default function HomePage() {
   const [instaData, setInstaData] = useState({ username: '', images: [] });
   const [reviews, setReviews] = useState([]);
   const [blogPosts, setBlogPosts] = useState([]);
+  const [quickName, setQuickName] = useState('');
+  const [quickContact, setQuickContact] = useState('');
+  const [quickSending, setQuickSending] = useState(false);
+  const [quickDone, setQuickDone] = useState(false);
 
   useEffect(() => {
     api.get('/trucks').then(r => setTrucks(r.data)).catch(() => {});
@@ -308,6 +312,74 @@ export default function HomePage() {
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* ===== QUICK INQUIRY WIDGET ===== */}
+      <section className="sf-section" data-testid="quick-inquiry-section" style={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
+        <div className="sf-section-inner">
+          <div style={{
+            maxWidth: 560, margin: '0 auto', background: 'var(--sf-dark, #0a0a08)',
+            border: '1px solid var(--sf-border)', borderRadius: 16, padding: '2rem 2rem 1.75rem',
+            position: 'relative', overflow: 'hidden'
+          }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'var(--sf-gold)' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--sf-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Phone size={18} color="#fff" />
+              </div>
+              <div>
+                <h3 style={{ color: 'var(--sf-text)', fontSize: '1.1rem', fontWeight: 700, margin: 0 }}>{t('quick_title')}</h3>
+                <p style={{ color: 'var(--sf-gray)', fontSize: '0.78rem', margin: 0 }}>{t('quick_subtitle')}</p>
+              </div>
+            </div>
+            {quickDone ? (
+              <div style={{ textAlign: 'center', padding: '1rem 0' }} data-testid="quick-inquiry-success">
+                <div style={{ color: 'var(--sf-gold)', fontSize: '1.1rem', fontWeight: 700 }}>{t('quick_success')}</div>
+              </div>
+            ) : (
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                if (!quickName.trim() || !quickContact.trim()) return;
+                setQuickSending(true);
+                try {
+                  await api.post('/quick-inquiry', { name: quickName, contact: quickContact });
+                  setQuickDone(true);
+                } catch { /* ignore */ }
+                setQuickSending(false);
+              }} style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', flexWrap: 'wrap' }} data-testid="quick-inquiry-form">
+                <input
+                  type="text" required placeholder={t('quick_name')} value={quickName}
+                  onChange={e => setQuickName(e.target.value)}
+                  data-testid="quick-name-input"
+                  style={{
+                    flex: '1 1 140px', padding: '0.65rem 0.85rem', background: 'var(--sf-surface, #1a1a18)',
+                    border: '1px solid var(--sf-border)', borderRadius: 8, color: 'var(--sf-text)', fontSize: '0.88rem', outline: 'none'
+                  }}
+                />
+                <input
+                  type="text" required placeholder={t('quick_phone')} value={quickContact}
+                  onChange={e => setQuickContact(e.target.value)}
+                  data-testid="quick-contact-input"
+                  style={{
+                    flex: '1 1 160px', padding: '0.65rem 0.85rem', background: 'var(--sf-surface, #1a1a18)',
+                    border: '1px solid var(--sf-border)', borderRadius: 8, color: 'var(--sf-text)', fontSize: '0.88rem', outline: 'none'
+                  }}
+                />
+                <button
+                  type="submit" disabled={quickSending}
+                  data-testid="quick-submit-btn"
+                  style={{
+                    flex: '0 0 auto', padding: '0.65rem 1.2rem', background: 'var(--sf-gold)', color: '#fff',
+                    border: 'none', borderRadius: 8, fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+                    opacity: quickSending ? 0.7 : 1, whiteSpace: 'nowrap', transition: 'opacity 0.2s'
+                  }}
+                >
+                  {quickSending ? t('quick_sending') : t('quick_submit')}
+                </button>
+              </form>
+            )}
+          </div>
         </div>
       </section>
 

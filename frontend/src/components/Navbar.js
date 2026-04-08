@@ -6,7 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Menu, X, User, ChevronDown } from 'lucide-react';
 
-const LANG_LABELS = { de: 'DE', en: 'EN', fr: 'FR', it: 'IT' };
+const LANG_LABELS = { de: 'DE', en: 'EN', fr: 'FR', it: 'IT', es: 'ES' };
 
 export default function Navbar() {
   const { lang, setLang, t, SUPPORTED_LANGS } = useLanguage();
