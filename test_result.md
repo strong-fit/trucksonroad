@@ -104,6 +104,55 @@
 
 user_problem_statement: "Test the preview app at https://trucks-on-road.preview.emergentagent.com with focus on newly implemented SEO/UI changes. Verify /trucks, /faq, and /trucks/burger-truck pages load correctly with proper canonical tags, JSON-LD scripts, and no layout breaks."
 
+backend:
+  - task: "GET /api/trucks - Return Multiple Trucks with Slug/Name/Image"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/public.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "API endpoint working correctly. Returns 200 status with 6 trucks. Each truck contains required fields: slug, name_de, name_en, tagline_de, tagline_en, image. Data structure verified and matches expected format."
+
+  - task: "GET /api/faqs - Return FAQ Data"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/public.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "API endpoint working correctly. Returns 200 status with 8 FAQ items. Each FAQ contains required fields: id, question_de, answer_de, question_en, answer_en. Data structure verified."
+
+  - task: "GET /api/seo/structured-data - Return Valid JSON-LD"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/public.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "API endpoint working correctly. Returns 200 status with valid JSON-LD structured data. Contains required @context (https://schema.org), @type (FoodEstablishment), and name fields. Schema validation passed."
+
+  - task: "Public SEO/Data Endpoints Regression Check"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/public.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "All public endpoints tested for regression: /api/availability (200, 2 items), /api/contact-info (200, company details), /api/reviews (200, 1 review), /api/robots.txt (200, 304 bytes), /api/sitemap.xml (200, 3633 bytes). No regression detected."
+
 frontend:
   - task: "SEO Meta Tags - Canonical URLs"
     implemented: true
@@ -229,3 +278,5 @@ test_plan:
 agent_communication:
     - agent: "testing"
       message: "Completed comprehensive testing of SEO/UI changes on preview app. All requirements verified successfully: (1) /trucks page loads with 6 truck cards, canonical tag, and all JSON-LD scripts (layout-jsonld-*, trucks-list-jsonld, trucks-breadcrumb-jsonld). (2) /faq page loads with 8 FAQ items, working toggle functionality, canonical tag, and JSON-LD scripts (faq-jsonld, faq-breadcrumb-jsonld). (3) /trucks/burger-truck page loads correctly with visible CTA, canonical tag, and JSON-LD scripts (truck-detail-jsonld-burger-truck, truck-breadcrumb-jsonld-burger-truck). (4) No layout breaks detected from CSS cleanup. Minor note: Console shows expected 401 responses from /api/auth/me and /api/auth/refresh for unauthenticated public users - this is normal behavior and not an error. All data endpoints return 200 OK."
+    - agent: "testing"
+      message: "BACKEND TESTING COMPLETE: All backend API endpoints tested successfully per German review request. (1) GET /api/trucks returns 200 with 6 trucks containing slug/name/image fields. (2) GET /api/faqs returns 200 with 8 FAQ items. (3) GET /api/seo/structured-data returns 200 with valid JSON-LD (FoodEstablishment schema). (4) HTML pages verified: /trucks, /faq, /trucks/burger-truck all return 200 with correct canonical tags and JSON-LD scripts. (5) Regression check passed - all public SEO/data endpoints working (availability, contact-info, reviews, robots.txt, sitemap.xml). 11/11 tests passed (100% success rate). No critical issues found."

@@ -2,291 +2,284 @@
 
 import requests
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
+from bs4 import BeautifulSoup
 
-class StrongFoodAPITester:
+class TrucksOnRoadAPITester:
     def __init__(self, base_url="https://trucks-on-road.preview.emergentagent.com"):
         self.base_url = base_url
         self.session = requests.Session()
         self.tests_run = 0
         self.tests_passed = 0
-        self.admin_token = None
+        self.failed_tests = []
 
-    def run_test(self, name, method, endpoint, expected_status, data=None, headers=None, cookies=None):
+    def run_api_test(self, name, endpoint, expected_status=200):
         """Run a single API test"""
         url = f"{self.base_url}/api/{endpoint}"
-        test_headers = {'Content-Type': 'application/json'}
-        if headers:
-            test_headers.update(headers)
-
         self.tests_run += 1
         print(f"\n🔍 Testing {name}...")
-        print(f"   URL: {method} {url}")
+        print(f"   URL: GET {url}")
         
         try:
-            if method == 'GET':
-                response = self.session.get(url, headers=test_headers, cookies=cookies)
-            elif method == 'POST':
-                response = self.session.post(url, json=data, headers=test_headers, cookies=cookies)
-            elif method == 'PUT':
-                response = self.session.put(url, json=data, headers=test_headers, cookies=cookies)
-            elif method == 'DELETE':
-                response = self.session.delete(url, headers=test_headers, cookies=cookies)
-
+            response = self.session.get(url)
             success = response.status_code == expected_status
+            
             if success:
                 self.tests_passed += 1
                 print(f"✅ Passed - Status: {response.status_code}")
-                try:
-                    response_data = response.json()
-                    if isinstance(response_data, dict) and len(response_data) <= 5:
-                        print(f"   Response: {response_data}")
-                    elif isinstance(response_data, list) and len(response_data) <= 3:
-                        print(f"   Response: {len(response_data)} items")
-                except:
-                    pass
+                
+                # Show response details for key endpoints
+                if response.content:
+                    try:
+                        response_data = response.json()
+                        if isinstance(response_data, list):
+                            print(f"   Response: {len(response_data)} items")
+                            if len(response_data) > 0 and isinstance(response_data[0], dict):
+                                # Show first item keys for structure verification
+                                keys = list(response_data[0].keys())
+                                print(f"   First item keys: {keys[:5]}{'...' if len(keys) > 5 else ''}")
+                        elif isinstance(response_data, dict):
+                            keys = list(response_data.keys())
+                            print(f"   Response keys: {keys[:5]}{'...' if len(keys) > 5 else ''}")
+                    except:
+                        print(f"   Response length: {len(response.content)} bytes")
+                
+                return True, response
             else:
+                self.tests_passed += 0
+                self.failed_tests.append(f"{name}: Expected {expected_status}, got {response.status_code}")
                 print(f"❌ Failed - Expected {expected_status}, got {response.status_code}")
                 try:
                     error_data = response.json()
                     print(f"   Error: {error_data}")
                 except:
                     print(f"   Error: {response.text[:200]}")
-
-            return success, response.json() if response.content else {}
+                return False, response
 
         except Exception as e:
+            self.failed_tests.append(f"{name}: Exception - {str(e)}")
             print(f"❌ Failed - Error: {str(e)}")
-            return False, {}
+            return False, None
 
-    def test_public_endpoints(self):
-        """Test public endpoints that don't require authentication"""
-        print("\n" + "="*50)
-        print("TESTING PUBLIC ENDPOINTS")
-        print("="*50)
+    def run_html_test(self, name, endpoint, expected_status=200):
+        """Run a single HTML page test"""
+        url = f"{self.base_url}{endpoint}"
+        self.tests_run += 1
+        print(f"\n🔍 Testing {name}...")
+        print(f"   URL: GET {url}")
         
-        # Test trucks endpoint
-        success, trucks = self.run_test("Get Trucks", "GET", "trucks", 200)
-        if success and isinstance(trucks, list):
-            print(f"   Found {len(trucks)} trucks")
-            if len(trucks) > 0:
-                print(f"   First truck: {trucks[0].get('name_de', 'Unknown')}")
-        
-        # Test individual truck
-        if trucks and len(trucks) > 0:
-            truck_slug = trucks[0].get('slug', 'burger-truck')
-            self.run_test(f"Get Truck {truck_slug}", "GET", f"trucks/{truck_slug}", 200)
-        
-        # Test FAQs
-        success, faqs = self.run_test("Get FAQs", "GET", "faqs", 200)
-        if success and isinstance(faqs, list):
-            print(f"   Found {len(faqs)} FAQs")
-        
-        # Test availability
-        self.run_test("Get Availability", "GET", "availability", 200)
-        
-        # Test specific date availability
-        tomorrow = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
-        self.run_test(f"Check Date {tomorrow}", "GET", f"availability/{tomorrow}", 200)
-
-    def test_inquiry_endpoints(self):
-        """Test inquiry creation endpoints"""
-        print("\n" + "="*50)
-        print("TESTING INQUIRY ENDPOINTS")
-        print("="*50)
-        
-        # Test regular inquiry
-        inquiry_data = {
-            "first_name": "Test",
-            "last_name": "User",
-            "company": "Test Company",
-            "email": "test@example.com",
-            "phone": "+41791234567",
-            "event_date": (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d'),
-            "event_time": "12:00 - 20:00",
-            "location": "Zurich",
-            "guest_count": 100,
-            "event_type": "Firmenevent",
-            "indoor_outdoor": "Outdoor",
-            "selected_trucks": ["Burger Truck"],
-            "extras": ["Getränke"],
-            "budget": "5000-10000 CHF",
-            "remarks": "Test inquiry",
-            "is_organizer": False,
-            "privacy_accepted": True,
-            "customer_type": "Privatkunde"
-        }
-        
-        success, response = self.run_test("Create Inquiry", "POST", "inquiries", 200, inquiry_data)
-        if success:
-            self.inquiry_id = response.get('id')
-            print(f"   Created inquiry with ID: {self.inquiry_id}")
-        
-        # Test quick inquiry
-        quick_inquiry_data = {
-            "name": "Quick Test",
-            "event_date": (datetime.now() + timedelta(days=15)).strftime('%Y-%m-%d'),
-            "location": "Basel",
-            "guest_count": 50,
-            "concept": "Street Food",
-            "email": "quick@example.com",
-            "phone": "+41791234568"
-        }
-        
-        self.run_test("Create Quick Inquiry", "POST", "quick-inquiry", 200, quick_inquiry_data)
-
-    def test_auth_endpoints(self):
-        """Test authentication endpoints"""
-        print("\n" + "="*50)
-        print("TESTING AUTH ENDPOINTS")
-        print("="*50)
-        
-        # Test login with correct credentials
-        login_data = {
-            "email": "admin@strongfood.ch",
-            "password": "StrongFood2026!"
-        }
-        
-        success, response = self.run_test("Admin Login", "POST", "auth/login", 200, login_data)
-        if success:
-            print(f"   Logged in as: {response.get('email')} (Role: {response.get('role')})")
-            # Store cookies for subsequent requests
-            self.admin_cookies = self.session.cookies
-        
-        # Test login with wrong credentials
-        wrong_login_data = {
-            "email": "admin@strongfood.ch",
-            "password": "wrongpassword"
-        }
-        
-        self.run_test("Wrong Password Login", "POST", "auth/login", 401, wrong_login_data)
-        
-        # Test /me endpoint
-        if hasattr(self, 'admin_cookies'):
-            self.run_test("Get Current User", "GET", "auth/me", 200, cookies=self.admin_cookies)
-        
-        # Test refresh token
-        if hasattr(self, 'admin_cookies'):
-            self.run_test("Refresh Token", "POST", "auth/refresh", 200, cookies=self.admin_cookies)
-
-    def test_admin_endpoints(self):
-        """Test admin-only endpoints"""
-        print("\n" + "="*50)
-        print("TESTING ADMIN ENDPOINTS")
-        print("="*50)
-        
-        if not hasattr(self, 'admin_cookies'):
-            print("❌ Skipping admin tests - no admin session")
-            return
-        
-        # Test admin stats
-        success, stats = self.run_test("Admin Stats", "GET", "admin/stats", 200, cookies=self.admin_cookies)
-        if success:
-            print(f"   Stats: {stats}")
-        
-        # Test admin inquiries
-        success, inquiries = self.run_test("Admin Get Inquiries", "GET", "admin/inquiries", 200, cookies=self.admin_cookies)
-        if success and isinstance(inquiries, list):
-            print(f"   Found {len(inquiries)} inquiries")
-            if len(inquiries) > 0:
-                inquiry_id = inquiries[0].get('id')
-                if inquiry_id:
-                    # Test get single inquiry
-                    self.run_test("Admin Get Single Inquiry", "GET", f"admin/inquiries/{inquiry_id}", 200, cookies=self.admin_cookies)
-                    
-                    # Test update inquiry status
-                    update_data = {
-                        "status": "in_review",
-                        "internal_notes": "Test note from API test"
-                    }
-                    self.run_test("Admin Update Inquiry", "PUT", f"admin/inquiries/{inquiry_id}", 200, update_data, cookies=self.admin_cookies)
-        
-        # Test admin trucks
-        success, trucks = self.run_test("Admin Get Trucks", "GET", "admin/trucks", 200, cookies=self.admin_cookies)
-        if success and isinstance(trucks, list) and len(trucks) > 0:
-            truck_slug = trucks[0].get('slug')
-            if truck_slug:
-                update_truck_data = {"is_active": True}
-                self.run_test("Admin Update Truck", "PUT", f"admin/trucks/{truck_slug}", 200, update_truck_data, cookies=self.admin_cookies)
-        
-        # Test admin calendar
-        self.run_test("Admin Get Calendar", "GET", "admin/calendar", 200, cookies=self.admin_cookies)
-        
-        # Test create calendar block
-        block_data = {
-            "truck_slug": "burger-truck",
-            "date": (datetime.now() + timedelta(days=60)).strftime('%Y-%m-%d'),
-            "status": "blocked",
-            "notes": "API test block"
-        }
-        success, block_response = self.run_test("Admin Create Calendar Block", "POST", "admin/calendar", 200, block_data, cookies=self.admin_cookies)
-        
-        # Test admin settings
-        self.run_test("Admin Get Settings", "GET", "admin/settings", 200, cookies=self.admin_cookies)
-        
-        settings_data = {
-            "company_name": "StrongFood",
-            "email_notifications": True,
-            "notification_email": "admin@strongfood.ch",
-            "whatsapp_number": "+41791234567"
-        }
-        self.run_test("Admin Update Settings", "PUT", "admin/settings", 200, settings_data, cookies=self.admin_cookies)
-
-    def test_error_cases(self):
-        """Test error handling"""
-        print("\n" + "="*50)
-        print("TESTING ERROR CASES")
-        print("="*50)
-        
-        # Test non-existent truck
-        self.run_test("Get Non-existent Truck", "GET", "trucks/non-existent", 404)
-        
-        # Test admin endpoint without auth
-        self.run_test("Admin Stats Without Auth", "GET", "admin/stats", 401)
-        
-        # Test invalid inquiry data
-        invalid_inquiry = {
-            "first_name": "",  # Required field empty
-            "email": "invalid-email",  # Invalid email
-            "guest_count": "not-a-number"  # Invalid number
-        }
-        self.run_test("Invalid Inquiry Data", "POST", "inquiries", 422, invalid_inquiry)
-
-    def test_logout(self):
-        """Test logout"""
-        print("\n" + "="*50)
-        print("TESTING LOGOUT")
-        print("="*50)
-        
-        if hasattr(self, 'admin_cookies'):
-            self.run_test("Admin Logout", "POST", "auth/logout", 200, cookies=self.admin_cookies)
+        try:
+            response = self.session.get(url)
+            success = response.status_code == expected_status
             
-            # Test that protected endpoint now fails
-            self.run_test("Admin Stats After Logout", "GET", "admin/stats", 401, cookies=self.admin_cookies)
+            if success:
+                self.tests_passed += 1
+                print(f"✅ Passed - Status: {response.status_code}")
+                return True, response
+            else:
+                self.failed_tests.append(f"{name}: Expected {expected_status}, got {response.status_code}")
+                print(f"❌ Failed - Expected {expected_status}, got {response.status_code}")
+                return False, response
+
+        except Exception as e:
+            self.failed_tests.append(f"{name}: Exception - {str(e)}")
+            print(f"❌ Failed - Error: {str(e)}")
+            return False, None
+
+    def verify_trucks_api_data(self, trucks_data):
+        """Verify trucks API returns proper data structure"""
+        if not isinstance(trucks_data, list):
+            print(f"❌ Trucks API should return list, got {type(trucks_data)}")
+            return False
+        
+        if len(trucks_data) == 0:
+            print(f"❌ Trucks API returned empty list")
+            return False
+        
+        # Check first truck has required fields
+        first_truck = trucks_data[0]
+        required_fields = ['slug', 'name_de', 'image']
+        missing_fields = [field for field in required_fields if field not in first_truck]
+        
+        if missing_fields:
+            print(f"❌ First truck missing fields: {missing_fields}")
+            return False
+        
+        print(f"✅ Trucks data structure verified - {len(trucks_data)} trucks with required fields")
+        return True
+
+    def verify_faqs_api_data(self, faqs_data):
+        """Verify FAQs API returns proper data structure"""
+        if not isinstance(faqs_data, list):
+            print(f"❌ FAQs API should return list, got {type(faqs_data)}")
+            return False
+        
+        if len(faqs_data) == 0:
+            print(f"❌ FAQs API returned empty list")
+            return False
+        
+        print(f"✅ FAQs data structure verified - {len(faqs_data)} FAQs")
+        return True
+
+    def verify_structured_data_api(self, structured_data):
+        """Verify structured data API returns valid JSON-LD"""
+        if not isinstance(structured_data, dict):
+            print(f"❌ Structured data should return dict, got {type(structured_data)}")
+            return False
+        
+        required_fields = ['@context', '@type', 'name']
+        missing_fields = [field for field in required_fields if field not in structured_data]
+        
+        if missing_fields:
+            print(f"❌ Structured data missing fields: {missing_fields}")
+            return False
+        
+        if structured_data.get('@context') != 'https://schema.org':
+            print(f"❌ Invalid @context: {structured_data.get('@context')}")
+            return False
+        
+        print(f"✅ Structured data JSON-LD verified - type: {structured_data.get('@type')}")
+        return True
+
+    def verify_html_seo_elements(self, name, html_content, expected_canonical, expected_jsonld_ids):
+        """Verify HTML contains proper canonical tags and JSON-LD scripts"""
+        soup = BeautifulSoup(html_content, 'html.parser')
+        
+        # Check canonical tag
+        canonical = soup.find('link', {'rel': 'canonical'})
+        if not canonical:
+            print(f"❌ {name}: No canonical tag found")
+            return False
+        
+        canonical_href = canonical.get('href')
+        if canonical_href != expected_canonical:
+            print(f"❌ {name}: Wrong canonical URL - expected {expected_canonical}, got {canonical_href}")
+            return False
+        
+        print(f"✅ {name}: Canonical tag verified - {canonical_href}")
+        
+        # Check JSON-LD scripts
+        jsonld_scripts = soup.find_all('script', {'type': 'application/ld+json'})
+        if not jsonld_scripts:
+            print(f"❌ {name}: No JSON-LD scripts found")
+            return False
+        
+        found_ids = []
+        for script in jsonld_scripts:
+            script_id = script.get('id')
+            if script_id:
+                found_ids.append(script_id)
+        
+        # Check if all expected JSON-LD IDs are present
+        missing_ids = [id for id in expected_jsonld_ids if id not in found_ids]
+        if missing_ids:
+            print(f"❌ {name}: Missing JSON-LD scripts: {missing_ids}")
+            print(f"   Found IDs: {found_ids}")
+            return False
+        
+        print(f"✅ {name}: JSON-LD scripts verified - found {len(jsonld_scripts)} scripts")
+        print(f"   Script IDs: {found_ids}")
+        return True
+
+    def test_backend_api_endpoints(self):
+        """Test the backend API endpoints as specified in the German review request"""
+        print("\n" + "="*60)
+        print("TESTING BACKEND API ENDPOINTS")
+        print("="*60)
+        
+        # 1. GET /api/trucks -> 200, liefert mehrere Trucks mit slug/name/image
+        success, response = self.run_api_test("GET /api/trucks", "trucks")
+        if success and response:
+            try:
+                trucks_data = response.json()
+                self.verify_trucks_api_data(trucks_data)
+            except:
+                print("❌ Failed to parse trucks JSON response")
+        
+        # 2. GET /api/faqs -> 200, liefert FAQ-Daten
+        success, response = self.run_api_test("GET /api/faqs", "faqs")
+        if success and response:
+            try:
+                faqs_data = response.json()
+                self.verify_faqs_api_data(faqs_data)
+            except:
+                print("❌ Failed to parse FAQs JSON response")
+        
+        # 3. GET /api/seo/structured-data -> 200, liefert valides JSON-LD
+        success, response = self.run_api_test("GET /api/seo/structured-data", "seo/structured-data")
+        if success and response:
+            try:
+                structured_data = response.json()
+                self.verify_structured_data_api(structured_data)
+            except:
+                print("❌ Failed to parse structured data JSON response")
+
+    def test_html_seo_endpoints(self):
+        """Test the HTML endpoints for SEO elements as specified in the German review request"""
+        print("\n" + "="*60)
+        print("TESTING HTML SEO ENDPOINTS")
+        print("="*60)
+        
+        # 4. GET /trucks -> 200, HTML enthält canonical und JSON-LD für ItemList/BreadcrumbList/layout-jsonld
+        success, response = self.run_html_test("GET /trucks (HTML)", "/trucks")
+        if success and response:
+            expected_canonical = "https://trucksonroad.ch/trucks"
+            expected_jsonld_ids = ["trucks-list-jsonld", "trucks-breadcrumb-jsonld", "layout-jsonld-0"]
+            self.verify_html_seo_elements("Trucks Page", response.text, expected_canonical, expected_jsonld_ids)
+        
+        # 5. GET /faq -> 200, HTML enthält canonical und JSON-LD für FAQPage/BreadcrumbList/layout-jsonld
+        success, response = self.run_html_test("GET /faq (HTML)", "/faq")
+        if success and response:
+            expected_canonical = "https://trucksonroad.ch/faq"
+            expected_jsonld_ids = ["faq-jsonld", "faq-breadcrumb-jsonld", "layout-jsonld-0"]
+            self.verify_html_seo_elements("FAQ Page", response.text, expected_canonical, expected_jsonld_ids)
+        
+        # 6. GET /trucks/burger-truck -> 200, HTML enthält canonical und truck-detail-jsonld/truck-breadcrumb-jsonld
+        success, response = self.run_html_test("GET /trucks/burger-truck (HTML)", "/trucks/burger-truck")
+        if success and response:
+            expected_canonical = "https://trucksonroad.ch/trucks/burger-truck"
+            expected_jsonld_ids = ["truck-detail-jsonld-burger-truck", "truck-breadcrumb-jsonld-burger-truck", "layout-jsonld-0"]
+            self.verify_html_seo_elements("Truck Detail Page", response.text, expected_canonical, expected_jsonld_ids)
+
+    def test_regression_check(self):
+        """Test that no regression of public SEO/data endpoints is visible"""
+        print("\n" + "="*60)
+        print("TESTING REGRESSION CHECK - PUBLIC SEO/DATA ENDPOINTS")
+        print("="*60)
+        
+        # Test additional public endpoints to ensure no regression
+        self.run_api_test("GET /api/availability", "availability")
+        self.run_api_test("GET /api/contact-info", "contact-info")
+        self.run_api_test("GET /api/reviews", "reviews")
+        self.run_api_test("GET /api/robots.txt", "robots.txt")
+        self.run_api_test("GET /api/sitemap.xml", "sitemap.xml")
 
 def main():
-    print("🚀 Starting StrongFood API Tests")
+    print("🚀 Starting TrucksOnRoad API Tests")
+    print("📋 Testing SSR-SEO Output as requested in German review")
     print(f"⏰ Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
-    tester = StrongFoodAPITester()
+    tester = TrucksOnRoadAPITester()
     
     try:
-        # Run all test suites
-        tester.test_public_endpoints()
-        tester.test_inquiry_endpoints()
-        tester.test_auth_endpoints()
-        tester.test_admin_endpoints()
-        tester.test_error_cases()
-        tester.test_logout()
+        # Run all test suites as specified in the German review request
+        tester.test_backend_api_endpoints()
+        tester.test_html_seo_endpoints()
+        tester.test_regression_check()
         
         # Print final results
-        print("\n" + "="*50)
+        print("\n" + "="*60)
         print("TEST RESULTS")
-        print("="*50)
+        print("="*60)
         print(f"📊 Tests passed: {tester.tests_passed}/{tester.tests_run}")
         success_rate = (tester.tests_passed / tester.tests_run * 100) if tester.tests_run > 0 else 0
         print(f"📈 Success rate: {success_rate:.1f}%")
+        
+        if tester.failed_tests:
+            print(f"\n❌ Failed tests:")
+            for failed_test in tester.failed_tests:
+                print(f"   - {failed_test}")
         
         if tester.tests_passed == tester.tests_run:
             print("🎉 All tests passed!")
