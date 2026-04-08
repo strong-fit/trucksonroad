@@ -1,4 +1,13 @@
 #!/usr/bin/env python3
+"""
+Backend API Testing for TRUCKSonROAD SEO Changes
+Testing the specific endpoints requested in the German review request:
+1. GET /api/blog -> successful response, meaningful structure for posts/categories
+2. GET /api/seo/structured-data -> successful response, valid business/organization data
+3. GET /api/seo/events-schema -> successful response (array or empty valid response, but no error)
+4. GET /api/seo/google-verification -> successful response
+5. Optional: GET /api/public/trucks -> successful response for general SEO data integrity
+"""
 
 import requests
 import sys
@@ -182,6 +191,108 @@ class TrucksOnRoadAPITester:
         print(f"   Script IDs: {found_ids}")
         return True
 
+    def test_german_review_seo_endpoints(self):
+        """Test the specific SEO endpoints as requested in the German review"""
+        print("\n" + "="*60)
+        print("TESTING GERMAN REVIEW REQUEST - SEO BACKEND ENDPOINTS")
+        print("="*60)
+        print("Testing per German request: Backend/API testing for SEO changes")
+        
+        # 1. GET /api/blog -> successful response, meaningful structure for posts/categories
+        print("\n1. Testing GET /api/blog")
+        success, response = self.run_api_test("Blog API", "blog")
+        if success and response:
+            try:
+                blog_data = response.json()
+                if isinstance(blog_data, dict) and "posts" in blog_data and "categories" in blog_data:
+                    posts = blog_data["posts"]
+                    categories = blog_data["categories"]
+                    print(f"✅ Blog structure verified: {len(posts)} posts, {len(categories)} categories")
+                    print(f"   Categories: {list(categories.keys())}")
+                    if len(posts) > 0:
+                        print(f"   Sample post fields: {list(posts[0].keys())}")
+                else:
+                    print(f"❌ Blog API structure invalid - expected dict with 'posts' and 'categories'")
+                    self.failed_tests.append("Blog API: Invalid structure")
+            except Exception as e:
+                print(f"❌ Failed to parse blog JSON: {str(e)}")
+                self.failed_tests.append(f"Blog API: JSON parse error - {str(e)}")
+        
+        # 2. GET /api/seo/structured-data -> successful response, valid business/organization data
+        print("\n2. Testing GET /api/seo/structured-data")
+        success, response = self.run_api_test("SEO Structured Data", "seo/structured-data")
+        if success and response:
+            try:
+                structured_data = response.json()
+                if self.verify_structured_data_api(structured_data):
+                    # Additional business data verification
+                    business_fields = ["name", "telephone", "email", "address"]
+                    present_fields = [field for field in business_fields if field in structured_data]
+                    print(f"✅ Business data fields present: {present_fields}")
+                    if "address" in structured_data and isinstance(structured_data["address"], dict):
+                        print(f"   Address type: {structured_data['address'].get('@type')}")
+                else:
+                    self.failed_tests.append("SEO Structured Data: Invalid business data")
+            except Exception as e:
+                print(f"❌ Failed to parse structured data JSON: {str(e)}")
+                self.failed_tests.append(f"SEO Structured Data: JSON parse error - {str(e)}")
+        
+        # 3. GET /api/seo/events-schema -> successful response (array or empty valid response, but no error)
+        print("\n3. Testing GET /api/seo/events-schema")
+        success, response = self.run_api_test("SEO Events Schema", "seo/events-schema")
+        if success and response:
+            try:
+                events_data = response.json()
+                if isinstance(events_data, list):
+                    print(f"✅ Events schema is valid array with {len(events_data)} events")
+                    if len(events_data) > 0:
+                        event = events_data[0]
+                        if isinstance(event, dict) and "@type" in event:
+                            print(f"   First event type: {event.get('@type')}")
+                            print(f"   First event name: {event.get('name')}")
+                        else:
+                            print(f"❌ Event items missing required schema fields")
+                            self.failed_tests.append("Events Schema: Invalid event structure")
+                    else:
+                        print(f"   Empty events array (valid response)")
+                else:
+                    print(f"❌ Events schema should be array, got {type(events_data)}")
+                    self.failed_tests.append("Events Schema: Not an array")
+            except Exception as e:
+                print(f"❌ Failed to parse events schema JSON: {str(e)}")
+                self.failed_tests.append(f"Events Schema: JSON parse error - {str(e)}")
+        
+        # 4. GET /api/seo/google-verification -> successful response
+        print("\n4. Testing GET /api/seo/google-verification")
+        success, response = self.run_api_test("Google Verification", "seo/google-verification")
+        if success and response:
+            try:
+                verification_data = response.json()
+                if isinstance(verification_data, dict) and "code" in verification_data:
+                    code = verification_data["code"]
+                    print(f"✅ Google verification response valid")
+                    print(f"   Verification code present: {'Yes' if code else 'No (empty)'}")
+                else:
+                    print(f"❌ Google verification response invalid structure")
+                    self.failed_tests.append("Google Verification: Invalid structure")
+            except Exception as e:
+                print(f"❌ Failed to parse google verification JSON: {str(e)}")
+                self.failed_tests.append(f"Google Verification: JSON parse error - {str(e)}")
+        
+        # 5. Optional: GET /api/trucks -> successful response for general SEO data integrity
+        print("\n5. Testing GET /api/trucks (SEO data sanity check)")
+        success, response = self.run_api_test("Public Trucks (Sanity Check)", "trucks")
+        if success and response:
+            try:
+                trucks_data = response.json()
+                if self.verify_trucks_api_data(trucks_data):
+                    print(f"✅ Public trucks API intact - SEO data basis functional")
+                else:
+                    self.failed_tests.append("Public Trucks: SEO data integrity issue")
+            except Exception as e:
+                print(f"❌ Failed to parse trucks JSON: {str(e)}")
+                self.failed_tests.append(f"Public Trucks: JSON parse error - {str(e)}")
+
     def test_backend_api_endpoints(self):
         """Test the backend API endpoints as specified in the German review request"""
         print("\n" + "="*60)
@@ -257,32 +368,41 @@ class TrucksOnRoadAPITester:
 
 def main():
     print("🚀 Starting TrucksOnRoad API Tests")
-    print("📋 Testing SSR-SEO Output as requested in German review")
+    print("📋 Testing Backend SEO Endpoints per German Review Request")
     print(f"⏰ Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"🌐 Base URL: https://trucks-on-road.preview.emergentagent.com")
     
     tester = TrucksOnRoadAPITester()
     
     try:
-        # Run all test suites as specified in the German review request
-        tester.test_backend_api_endpoints()
-        tester.test_html_seo_endpoints()
-        tester.test_regression_check()
+        # Run the specific German review request tests
+        tester.test_german_review_seo_endpoints()
         
         # Print final results
         print("\n" + "="*60)
-        print("TEST RESULTS")
+        print("GERMAN REVIEW REQUEST - TEST RESULTS")
         print("="*60)
         print(f"📊 Tests passed: {tester.tests_passed}/{tester.tests_run}")
         success_rate = (tester.tests_passed / tester.tests_run * 100) if tester.tests_run > 0 else 0
         print(f"📈 Success rate: {success_rate:.1f}%")
         
+        # Report per endpoint as requested
+        print(f"\n📋 STATUS CODE REPORT PER ENDPOINT:")
+        print(f"   1. GET /api/blog: {'✅ Working' if not any('Blog API' in test for test in tester.failed_tests) else '❌ Failed'}")
+        print(f"   2. GET /api/seo/structured-data: {'✅ Working' if not any('SEO Structured Data' in test for test in tester.failed_tests) else '❌ Failed'}")
+        print(f"   3. GET /api/seo/events-schema: {'✅ Working' if not any('Events Schema' in test for test in tester.failed_tests) else '❌ Failed'}")
+        print(f"   4. GET /api/seo/google-verification: {'✅ Working' if not any('Google Verification' in test for test in tester.failed_tests) else '❌ Failed'}")
+        print(f"   5. GET /api/trucks: {'✅ Working' if not any('Public Trucks' in test for test in tester.failed_tests) else '❌ Failed'}")
+        
         if tester.failed_tests:
-            print(f"\n❌ Failed tests:")
+            print(f"\n❌ BLOCKERS/REGRESSIONS FOUND:")
             for failed_test in tester.failed_tests:
                 print(f"   - {failed_test}")
+        else:
+            print(f"\n✅ NO BLOCKERS OR REGRESSIONS - ALL ENDPOINTS FUNCTIONAL")
         
         if tester.tests_passed == tester.tests_run:
-            print("🎉 All tests passed!")
+            print("🎉 All German review tests passed!")
             return 0
         else:
             print(f"⚠️  {tester.tests_run - tester.tests_passed} tests failed")

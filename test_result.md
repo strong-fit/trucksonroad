@@ -153,6 +153,42 @@ backend:
           agent: "testing"
           comment: "All public endpoints tested for regression: /api/availability (200, 2 items), /api/contact-info (200, company details), /api/reviews (200, 1 review), /api/robots.txt (200, 304 bytes), /api/sitemap.xml (200, 3633 bytes). No regression detected."
 
+  - task: "GET /api/blog - Blog Posts and Categories API"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/blog.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "API endpoint working correctly. Returns HTTP 200 with proper structure: 12 posts array and 7 categories object. Categories include: guide, locations, tipps, events, regionen, rezepte, news. Sample post contains all required multilingual fields (title_de/en/fr/it, excerpt_de/en/fr/it, content fields, category, image, tags, meta fields). Functional structure for SEO purposes verified."
+
+  - task: "GET /api/seo/events-schema - Events JSON-LD Schema"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/public.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "API endpoint working correctly. Returns HTTP 200 with valid array containing 2 FoodEvent schema items. Each event has proper JSON-LD structure with @context (schema.org), @type (FoodEvent), name, startDate, location with Place schema, organizer with Organization schema. No errors, valid response as requested."
+
+  - task: "GET /api/seo/google-verification - Google Verification Code"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/public.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "API endpoint working correctly. Returns HTTP 200 with proper JSON structure containing 'code' field. Currently returns empty verification code but response structure is valid and functional. No errors or blockers."
+
 frontend:
   - task: "SEO Meta Tags - Canonical URLs"
     implemented: true
@@ -330,7 +366,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "All SEO landing pages tested and verified successfully"
+    - "German review request backend testing completed successfully"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
@@ -342,3 +378,5 @@ agent_communication:
       message: "BACKEND TESTING COMPLETE: All backend API endpoints tested successfully per German review request. (1) GET /api/trucks returns 200 with 6 trucks containing slug/name/image fields. (2) GET /api/faqs returns 200 with 8 FAQ items. (3) GET /api/seo/structured-data returns 200 with valid JSON-LD (FoodEstablishment schema). (4) HTML pages verified: /trucks, /faq, /trucks/burger-truck all return 200 with correct canonical tags and JSON-LD scripts. (5) Regression check passed - all public SEO/data endpoints working (availability, contact-info, reviews, robots.txt, sitemap.xml). 11/11 tests passed (100% success rate). No critical issues found."
     - agent: "testing"
       message: "NEW SEO LANDING PAGES TESTING COMPLETE (2026-04-08): Tested 5 additional public SEO landing pages per German review request. ALL 5 PAGES PASSED (100% success rate). Results: (1) /blog - HTTP 200, all data-testid elements present (blog-tag, blog-category-filter, blog-grid), JSON-LD scripts verified (blog-jsonld, blog-breadcrumb-jsonld), canonical link correct. (2) /kontakt - HTTP 200, all elements present (contact-page, contact-grid, contact-form), JSON-LD scripts verified (contact-page-jsonld, contact-breadcrumb-jsonld), canonical link correct. (3) /ueber-uns - HTTP 200, all elements present (about-page, about-story, about-values), JSON-LD scripts verified (about-page-jsonld, about-breadcrumb-jsonld), canonical link correct. (4) /fuer-veranstalter - HTTP 200, all elements present (organizers-page, org-inquiry-btn), all 3 JSON-LD scripts verified (organizers-page-jsonld, organizers-service-jsonld, organizers-breadcrumb-jsonld), canonical link correct. (5) /private-events - HTTP 200, all elements present (private-events-page, priv-inquiry-btn), all 3 JSON-LD scripts verified (private-events-page-jsonld, private-events-service-jsonld, private-events-breadcrumb-jsonld), canonical link correct. Visual rendering clean on all pages with no layout regressions, broken navigation, or empty states. Screenshots captured for all pages showing professional UI."
+    - agent: "testing"
+      message: "GERMAN REVIEW REQUEST BACKEND TESTING COMPLETE (2026-04-08): Tested all 5 requested SEO backend endpoints with 100% success rate. RESULTS: (1) GET /api/blog - HTTP 200, returns 12 posts and 7 categories with proper structure (posts array + categories object). Sample post contains all required multilingual fields. (2) GET /api/seo/structured-data - HTTP 200, returns valid JSON-LD with @context=schema.org, @type=FoodEstablishment, includes all business data (name, telephone, email, address with PostalAddress type). (3) GET /api/seo/events-schema - HTTP 200, returns valid array with 2 FoodEvent items, each with proper schema structure (@context, @type, name, startDate, location). (4) GET /api/seo/google-verification - HTTP 200, returns proper structure with 'code' field (currently empty but valid response). (5) GET /api/trucks - HTTP 200, returns 6 trucks with required fields (slug, name_de, image) confirming SEO data integrity. NO BLOCKERS OR REGRESSIONS FOUND. All endpoints functional and returning expected data structures."
