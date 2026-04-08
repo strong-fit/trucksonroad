@@ -50,12 +50,24 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 ### SEO & SSR
 - [x] Server-Side Rendering fuer alle oeffentlichen Seiten
 - [x] JSON-LD Structured Data, Meta-Tags, OpenGraph, Sitemap.xml
+- [x] **Erweiterte SSR-SEO-Ausgabe**: Canonical Tags + serverseitige JSON-LD-Skripte fuer Layout, /trucks, /faq und Truck-Detailseiten (NEU 08.04.2026)
+- [x] **FAQ-Interaktion verbessert**: FAQ-Toggles als echte Buttons mit data-testid und aria-expanded (NEU 08.04.2026)
+- [x] **Sicheres CSS-Aufraeumen**: doppelte Font-Einbindung entfernt, mehrere `transition: all` auf gezielte Properties reduziert (NEU 08.04.2026)
 
 ## Remaining Tasks
 - [ ] Impressum-Seite mit MWST/UID (wartet auf Nutzerdaten) (P2)
-- [ ] Google Search Console setup (manueller Schritt) (P2)
+- [x] Google Search Console setup (laut Nutzer bereits erledigt)
 - [ ] Emergent LLM Key Budget auffuellen (P3)
+
+## Latest Update - 08.04.2026
+- SSR-SEO fuer AI-Crawler/Google deutlich erweitert: Layout liefert jetzt serverseitig FoodEstablishment-, Organization-, WebSite- und Event-JSON-LD direkt im HTML.
+- /trucks rendert zusaetzlich ItemList + BreadcrumbList serverseitig; /faq rendert FAQPage + BreadcrumbList serverseitig; Truck-Detailseiten rendert truck-spezifisches JSON-LD + BreadcrumbList serverseitig.
+- Canonical Tags sind auf /trucks, /faq und /trucks/[slug] aktiv.
+- Frontend-Produktions-Build aktualisiert (`yarn build`) und Frontend-Service neu gestartet, damit Next.js `next start` die neuen App-Router-Aenderungen ausliefert.
 
 ## Test Reports
 - iteration_32: 100% (13/13 Backend, Frontend komplett)
 - iteration_33: **100%** (9/9 Backend, alle 5 Sprachen + Quick Inquiry Widget)
+- 08.04.2026: Frontend Smoke-Test auf Preview erfolgreich (/trucks, /faq, /trucks/burger-truck)
+- 08.04.2026: Frontend-Testagent erfolgreich - Canonical + JSON-LD + FAQ-Toggles ohne Layout-Regression
+- 08.04.2026: Backend-Testagent erfolgreich - API-/SEO-Endpunkte 11/11 bestanden
