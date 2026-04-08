@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the preview app at https://trucks-on-road.preview.emergentagent.com with focus on newly implemented SEO/UI changes. Verify /trucks, /faq, and /trucks/burger-truck pages load correctly with proper canonical tags, JSON-LD scripts, and no layout breaks."
+user_problem_statement: "Test the updated public SEO landing pages at https://trucks-on-road.preview.emergentagent.com. Verify /blog, /kontakt, /ueber-uns, /fuer-veranstalter, and /private-events pages load correctly with proper canonical tags, JSON-LD scripts, critical data-testid elements, and no layout regressions."
 
 backend:
   - task: "GET /api/trucks - Return Multiple Trucks with Slug/Name/Image"
@@ -262,15 +262,75 @@ frontend:
           agent: "testing"
           comment: "Verified no obvious layout breaks from CSS cleanup. All pages render correctly with proper spacing, typography, and responsive design. Main content is visible on all tested pages. Screenshots confirm clean, professional UI."
 
+  - task: "Blog Page - SEO and UI"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/app/blog/page.js, /app/frontend/src/views/BlogPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Page loads correctly with HTTP 200. All critical data-testid elements present (blog-tag, blog-category-filter, blog-grid). JSON-LD scripts verified (script#blog-jsonld, script#blog-breadcrumb-jsonld). Canonical link correct (https://trucksonroad.ch/blog). Visual rendering clean with no layout issues. Blog posts display in grid format with proper images and content."
+
+  - task: "Contact Page - SEO and UI"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/app/kontakt/page.js, /app/frontend/src/views/ContactPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Page loads correctly with HTTP 200. All critical data-testid elements present (contact-page, contact-grid, contact-form). JSON-LD scripts verified (script#contact-page-jsonld, script#contact-breadcrumb-jsonld). Canonical link correct (https://trucksonroad.ch/kontakt). Contact information and form render properly with professional layout."
+
+  - task: "About Page - SEO and UI"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/app/ueber-uns/page.js, /app/frontend/src/views/AboutPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Page loads correctly with HTTP 200. All critical data-testid elements present (about-page, about-story, about-values). JSON-LD scripts verified (script#about-page-jsonld, script#about-breadcrumb-jsonld). Canonical link correct (https://trucksonroad.ch/ueber-uns). Company story, values, and statistics display correctly with clean layout."
+
+  - task: "Event Organizers Page - SEO and UI"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/app/fuer-veranstalter/page.js, /app/frontend/src/views/EventOrganizersPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Page loads correctly with HTTP 200. All critical data-testid elements present (organizers-page, org-inquiry-btn). All three JSON-LD scripts verified (script#organizers-page-jsonld, script#organizers-service-jsonld, script#organizers-breadcrumb-jsonld). Canonical link correct (https://trucksonroad.ch/fuer-veranstalter). Features grid, technical details, and CTA sections render properly."
+
+  - task: "Private Events Page - SEO and UI"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/app/private-events/page.js, /app/frontend/src/views/PrivateEventsPage.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Page loads correctly with HTTP 200. All critical data-testid elements present (private-events-page, priv-inquiry-btn). All three JSON-LD scripts verified (script#private-events-page-jsonld, script#private-events-service-jsonld, script#private-events-breadcrumb-jsonld). Canonical link correct (https://trucksonroad.ch/private-events). Event types, process steps, and information sections display correctly."
+
 metadata:
   created_by: "testing_agent"
-  version: "1.0"
-  test_sequence: 1
+  version: "1.1"
+  test_sequence: 2
   run_ui: true
 
 test_plan:
   current_focus:
-    - "All SEO and UI tasks completed and verified"
+    - "All SEO landing pages tested and verified successfully"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
@@ -280,3 +340,5 @@ agent_communication:
       message: "Completed comprehensive testing of SEO/UI changes on preview app. All requirements verified successfully: (1) /trucks page loads with 6 truck cards, canonical tag, and all JSON-LD scripts (layout-jsonld-*, trucks-list-jsonld, trucks-breadcrumb-jsonld). (2) /faq page loads with 8 FAQ items, working toggle functionality, canonical tag, and JSON-LD scripts (faq-jsonld, faq-breadcrumb-jsonld). (3) /trucks/burger-truck page loads correctly with visible CTA, canonical tag, and JSON-LD scripts (truck-detail-jsonld-burger-truck, truck-breadcrumb-jsonld-burger-truck). (4) No layout breaks detected from CSS cleanup. Minor note: Console shows expected 401 responses from /api/auth/me and /api/auth/refresh for unauthenticated public users - this is normal behavior and not an error. All data endpoints return 200 OK."
     - agent: "testing"
       message: "BACKEND TESTING COMPLETE: All backend API endpoints tested successfully per German review request. (1) GET /api/trucks returns 200 with 6 trucks containing slug/name/image fields. (2) GET /api/faqs returns 200 with 8 FAQ items. (3) GET /api/seo/structured-data returns 200 with valid JSON-LD (FoodEstablishment schema). (4) HTML pages verified: /trucks, /faq, /trucks/burger-truck all return 200 with correct canonical tags and JSON-LD scripts. (5) Regression check passed - all public SEO/data endpoints working (availability, contact-info, reviews, robots.txt, sitemap.xml). 11/11 tests passed (100% success rate). No critical issues found."
+    - agent: "testing"
+      message: "NEW SEO LANDING PAGES TESTING COMPLETE (2026-04-08): Tested 5 additional public SEO landing pages per German review request. ALL 5 PAGES PASSED (100% success rate). Results: (1) /blog - HTTP 200, all data-testid elements present (blog-tag, blog-category-filter, blog-grid), JSON-LD scripts verified (blog-jsonld, blog-breadcrumb-jsonld), canonical link correct. (2) /kontakt - HTTP 200, all elements present (contact-page, contact-grid, contact-form), JSON-LD scripts verified (contact-page-jsonld, contact-breadcrumb-jsonld), canonical link correct. (3) /ueber-uns - HTTP 200, all elements present (about-page, about-story, about-values), JSON-LD scripts verified (about-page-jsonld, about-breadcrumb-jsonld), canonical link correct. (4) /fuer-veranstalter - HTTP 200, all elements present (organizers-page, org-inquiry-btn), all 3 JSON-LD scripts verified (organizers-page-jsonld, organizers-service-jsonld, organizers-breadcrumb-jsonld), canonical link correct. (5) /private-events - HTTP 200, all elements present (private-events-page, priv-inquiry-btn), all 3 JSON-LD scripts verified (private-events-page-jsonld, private-events-service-jsonld, private-events-breadcrumb-jsonld), canonical link correct. Visual rendering clean on all pages with no layout regressions, broken navigation, or empty states. Screenshots captured for all pages showing professional UI."
