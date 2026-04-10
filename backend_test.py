@@ -16,7 +16,7 @@ import json
 from bs4 import BeautifulSoup
 
 class TrucksOnRoadAPITester:
-    def __init__(self, base_url="https://trucks-on-road.preview.emergentagent.com"):
+    def __init__(self, base_url="https://truck-management-pro.preview.emergentagent.com"):
         self.base_url = base_url
         self.session = requests.Session()
         self.tests_run = 0
@@ -370,7 +370,7 @@ def main():
     print("🚀 Starting TrucksOnRoad API Tests")
     print("📋 Testing Backend SEO Endpoints per German Review Request")
     print(f"⏰ Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"🌐 Base URL: https://trucks-on-road.preview.emergentagent.com")
+    print(f"🌐 Base URL: https://truck-management-pro.preview.emergentagent.com")
     
     tester = TrucksOnRoadAPITester()
     

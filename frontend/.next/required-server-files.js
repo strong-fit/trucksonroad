@@ -2,7 +2,7 @@ self.__SERVER_FILES_MANIFEST={
   "version": 1,
   "config": {
     "env": {
-      "REACT_APP_BACKEND_URL": "https://trucks-on-road.preview.emergentagent.com"
+      "REACT_APP_BACKEND_URL": "https://truck-management-pro.preview.emergentagent.com"
     },
     "webpack": null,
     "typescript": {
@@ -181,7 +181,7 @@ self.__SERVER_FILES_MANIFEST={
       "proxyPrefetch": "flexible",
       "optimisticClientCache": true,
       "manualClientBasePath": false,
-      "cpus": 15,
+      "cpus": 7,
       "memoryBasedWorkersCount": false,
       "imgOptConcurrency": null,
       "imgOptTimeoutInSeconds": 7,

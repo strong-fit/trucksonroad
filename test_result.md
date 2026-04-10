@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test the updated public SEO landing pages at https://trucks-on-road.preview.emergentagent.com. Verify /blog, /kontakt, /ueber-uns, /fuer-veranstalter, and /private-events pages load correctly with proper canonical tags, JSON-LD scripts, critical data-testid elements, and no layout regressions."
+user_problem_statement: "Test the updated public SEO landing pages at https://truck-management-pro.preview.emergentagent.com. Verify /blog, /kontakt, /ueber-uns, /fuer-veranstalter, and /private-events pages load correctly with proper canonical tags, JSON-LD scripts, critical data-testid elements, and no layout regressions."
 
 backend:
   - task: "GET /api/trucks - Return Multiple Trucks with Slug/Name/Image"
