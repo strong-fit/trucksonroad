@@ -6,7 +6,6 @@ import api from '@/lib/api';
 import { ArrowRight, Instagram, Star, Quote, ChevronRight, Calendar, Tag, Send, FileText, PartyPopper, Building2, Heart, Music, Cake, Users, Sparkles, Award, Phone } from 'lucide-react';
 
 const HERO_IMG_MAIN = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=900&q=80";
-const HERO_IMG_ACCENT = "https://images.unsplash.com/photo-1509315811345-672d83ef2fbc?w=600&q=80";
 
 const UC_IMAGES = {
   corporate: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80",
@@ -32,6 +31,38 @@ function FadeUp({ children, delay = 0, className = '' }) {
     <div ref={ref} className={`sf-fade-up ${visible ? 'visible' : ''} ${className}`} style={{ transitionDelay: `${delay}s` }}>
       {children}
     </div>
+  );
+}
+
+function CountUp({ end, suffix = '', duration = 2000 }) {
+  const [count, setCount] = useState(0);
+  const [ref, visible] = useInView();
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    if (!visible || hasAnimated.current) return;
+    hasAnimated.current = true;
+    const num = parseInt(end, 10);
+    if (isNaN(num)) { setCount(end); return; }
+    const steps = 40;
+    const increment = num / steps;
+    let current = 0;
+    const interval = setInterval(() => {
+      current += increment;
+      if (current >= num) {
+        setCount(num);
+        clearInterval(interval);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, duration / steps);
+    return () => clearInterval(interval);
+  }, [visible, end, duration]);
+
+  return (
+    <span ref={ref} className="sf-count-up">
+      {typeof count === 'number' ? count : end}{suffix}
+    </span>
   );
 }
 
@@ -79,7 +110,6 @@ export default function HomePage() {
         <div className="sf-hero-grid" />
         <div className="sf-hero-trucks">
           <img src={HERO_IMG_MAIN} alt="Foodtruck Event" className="sf-hero-truck-main" />
-          <img src={HERO_IMG_ACCENT} alt="Foodtruck" className="sf-hero-truck-accent" />
         </div>
         <div className="sf-hero-content">
           <div className="sf-hero-eyebrow">{t('hero_eyebrow')}</div>
@@ -94,11 +124,11 @@ export default function HomePage() {
             <Link href="/anfrage" className="sf-btn-primary" data-testid="hero-inquiry-btn">{t('hero_btn_inquiry')}</Link>
             <Link href="/trucks" className="sf-btn-outline" data-testid="hero-how-btn">{t('hero_btn_trucks')}</Link>
           </div>
-        </div>
-        <div className="sf-hero-stats">
-          <div className="sf-stat"><div className="sf-stat-num">{t('hero_stat_1_num')}</div><div className="sf-stat-label">{t('hero_stat_1_label')}</div></div>
-          <div className="sf-stat"><div className="sf-stat-num">{t('hero_stat_2_num')}</div><div className="sf-stat-label">{t('hero_stat_2_label')}</div></div>
-          <div className="sf-stat"><div className="sf-stat-num">{t('hero_stat_3_num')}</div><div className="sf-stat-label">{t('hero_stat_3_label')}</div></div>
+          <div className="sf-hero-stats">
+            <div className="sf-stat"><div className="sf-stat-num">{t('hero_stat_1_num')}</div><div className="sf-stat-label">{t('hero_stat_1_label')}</div></div>
+            <div className="sf-stat"><div className="sf-stat-num">{t('hero_stat_2_num')}</div><div className="sf-stat-label">{t('hero_stat_2_label')}</div></div>
+            <div className="sf-stat"><div className="sf-stat-num">{t('hero_stat_3_num')}</div><div className="sf-stat-label">{t('hero_stat_3_label')}</div></div>
+          </div>
         </div>
       </section>
 
@@ -139,7 +169,8 @@ export default function HomePage() {
       </section>
 
       {/* ===== HOW IT WORKS – "So funktioniert's" ===== */}
-      <section className="sf-how-section" id="how-it-works" data-testid="how-it-works-section">
+      <div className="sf-section-divider" />
+      <section className="sf-how-section sf-section-grain" id="how-it-works" data-testid="how-it-works-section">
         <FadeUp>
           <div className="sf-section-tag">{t('how_tag')}</div>
           <h2 className="sf-section-title">{t('how_title')}</h2>
@@ -151,12 +182,12 @@ export default function HomePage() {
               <FadeUp key={step.key} delay={i * 0.15}>
                 <div className="sf-how-step" data-testid={`how-step-${step.key}`}>
                   <div className="sf-how-num-wrap">
+                    <span className="sf-how-num-bg">{step.num}</span>
                     <span className="sf-how-num">{step.num}</span>
-                    <Icon size={24} className="sf-how-icon" />
+                    <Icon size={28} className="sf-how-icon" />
                   </div>
                   <h3 className="sf-how-step-title">{t(`how_step${step.key}_title`)}</h3>
                   <p className="sf-how-step-desc">{t(`how_step${step.key}_desc`)}</p>
-                  {i < howSteps.length - 1 && <div className="sf-how-connector" />}
                 </div>
               </FadeUp>
             );
@@ -170,7 +201,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== PRICING – "Preis auf Anfrage" ===== */}
-      <section className="sf-section" data-testid="pricing-section">
+      <section className="sf-section sf-section-alt" data-testid="pricing-section">
         <FadeUp>
           <div className="sf-section-tag">{t('pricing_tag')}</div>
           <h2 className="sf-section-title">{t('pricing_title')}</h2>
@@ -211,10 +242,10 @@ export default function HomePage() {
       {/* ===== TRUST NUMBERS ===== */}
       <section className="sf-trust-bar" data-testid="trust-numbers-section">
         <div className="sf-trust-inner">
-          <FadeUp><div className="sf-trust-item"><span className="sf-trust-num">{t('trust_events_num')}</span><span className="sf-trust-label">{t('trust_events_label')}</span></div></FadeUp>
-          <FadeUp delay={0.1}><div className="sf-trust-item"><span className="sf-trust-num">{t('trust_satisfaction_num')}</span><span className="sf-trust-label">{t('trust_satisfaction_label')}</span></div></FadeUp>
-          <FadeUp delay={0.2}><div className="sf-trust-item"><span className="sf-trust-num">{t('trust_response_num')}</span><span className="sf-trust-label">{t('trust_response_label')}</span></div></FadeUp>
-          <FadeUp delay={0.3}><div className="sf-trust-item"><span className="sf-trust-num">{t('trust_concepts_num')}</span><span className="sf-trust-label">{t('trust_concepts_label')}</span></div></FadeUp>
+          <FadeUp><div className="sf-trust-item"><span className="sf-trust-num"><CountUp end={500} suffix="+" /></span><span className="sf-trust-label">{t('trust_events_label')}</span></div></FadeUp>
+          <FadeUp delay={0.1}><div className="sf-trust-item"><span className="sf-trust-num"><CountUp end={98} suffix="%" /></span><span className="sf-trust-label">{t('trust_satisfaction_label')}</span></div></FadeUp>
+          <FadeUp delay={0.2}><div className="sf-trust-item"><span className="sf-trust-num"><CountUp end={24} suffix="H" /></span><span className="sf-trust-label">{t('trust_response_label')}</span></div></FadeUp>
+          <FadeUp delay={0.3}><div className="sf-trust-item"><span className="sf-trust-num"><CountUp end={6} suffix="" /></span><span className="sf-trust-label">{t('trust_concepts_label')}</span></div></FadeUp>
         </div>
       </section>
 
