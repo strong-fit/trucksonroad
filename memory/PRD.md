@@ -60,13 +60,18 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - [x] Google Search Console setup (laut Nutzer bereits erledigt)
 - [ ] Emergent LLM Key Budget auffuellen (P3)
 
-## Latest Update - 08.04.2026
-- SSR-SEO fuer AI-Crawler/Google deutlich erweitert: Layout liefert jetzt serverseitig FoodEstablishment-, Organization-, WebSite- und Event-JSON-LD direkt im HTML.
-- /trucks rendert zusaetzlich ItemList + BreadcrumbList serverseitig; /faq rendert FAQPage + BreadcrumbList serverseitig; Truck-Detailseiten rendert truck-spezifisches JSON-LD + BreadcrumbList serverseitig.
-- Canonical Tags sind auf /trucks, /faq und /trucks/[slug] aktiv.
-- Frontend-Produktions-Build aktualisiert (`yarn build`) und Frontend-Service neu gestartet, damit Next.js `next start` die neuen App-Router-Aenderungen ausliefert.
-- /blog rendert jetzt Blog- + Breadcrumb-JSON-LD serverseitig; /kontakt, /ueber-uns, /fuer-veranstalter und /private-events liefern zusaetzlich LandingPage-/Service-/Breadcrumb-JSON-LD inkl. Canonical Tags direkt im HTML.
-- Preview-Smoke-Test erfolgreich; Frontend-Testagent bestaetigt 5/5 Landingpages ohne Layout-Regressionen; Backend-Testagent bestaetigt 5/5 relevante SEO-Endpunkte ohne Regressionen.
+## Latest Update - 10.04.2026
+- **Homepage Premium Visual Upgrade** (8 Verbesserungen):
+  1. Hero-Section: Ghost-Akzentbild entfernt, Hauptbild mit Gradient-Mask, Stats unterhalb der CTA-Buttons als Glassmorphism-Cards
+  2. Section-Titel: Groesse reduziert von clamp(3rem,6vw,5.5rem) auf clamp(2.4rem,4.5vw,3.8rem) fuer bessere Balance
+  3. Visuelle Abwechslung: CTA mit anthrazit-Hintergrund, Pricing mit Gradient-Background, Section-Divider
+  4. So funktioniert's: Groessere Nummern (3.5rem), Hintergrund-Nummer-Effekt, verbindende Linie zwischen Steps
+  5. Pricing: Featured-Card mit Glow/Shadow-Effekt, prominenteres BELIEBT-Badge mit Schatten
+  6. Micro-Animationen: Cubic-bezier Transitions, Hover-Box-Shadows auf allen Cards, Button-Glow
+  7. Kundenlogos: Frosted-Glass-Pill-Styling mit Border und Backdrop-Blur
+  8. Trust-Bar: Gradient-Hintergrund, Count-Up-Animation fuer Zahlen (500+, 98%, 24H, 6)
+- Frontend-Build aktualisiert und neu gestartet
+- Testing-Agent bestaetigt: 100% Erfolgsrate, alle 13 Frontend-Features verifiziert
 
 ## Test Reports
 - iteration_32: 100% (13/13 Backend, Frontend komplett)
@@ -77,3 +82,4 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - 08.04.2026: Frontend Smoke-Test erfolgreich (/blog) inkl. visueller Kontrolle der neuen SEO-Landingpage-Ausgabe
 - 08.04.2026: Frontend-Testagent erfolgreich - /blog, /kontakt, /ueber-uns, /fuer-veranstalter, /private-events mit Canonical + JSON-LD 5/5 bestanden
 - 08.04.2026: Backend-Testagent erfolgreich - /api/blog, /api/seo/structured-data, /api/seo/events-schema, /api/seo/google-verification, /api/trucks 5/5 bestanden
+- iteration_34: **100%** Frontend-Visual-Upgrade (13/13 Features verifiziert, alle 8 Verbesserungen bestanden)
