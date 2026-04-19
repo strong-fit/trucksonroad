@@ -73,6 +73,12 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - Frontend-Build aktualisiert und neu gestartet
 - Testing-Agent bestaetigt: 100% Erfolgsrate, alle 13 Frontend-Features verifiziert
 
+## Bugfix - 19.04.2026
+- **KRITISCH: Weisse Live-Seite behoben** — Alte Create React App `public/index.html` entfernt, die Next.js App Router blockierte
+  - Ursache: `public/index.html` (CRA-Relikt) wurde als statische Datei vor dem App Router ausgeliefert — leere Seite ohne React/JS-Bundles
+  - Fix: Datei geloescht, Frontend neu gebaut. Alle Routen werden jetzt korrekt vom Next.js App Router bedient
+  - `/admin/login` war nicht betroffen, da kein entsprechendes Static File existierte
+
 ## Test Reports
 - iteration_32: 100% (13/13 Backend, Frontend komplett)
 - iteration_33: **100%** (9/9 Backend, alle 5 Sprachen + Quick Inquiry Widget)
