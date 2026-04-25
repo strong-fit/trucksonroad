@@ -37,13 +37,26 @@ export default function AdminSettings() {
     setSaving(false);
   };
 
+  const [testResult, setTestResult] = useState(null);
+
   const sendTest = async () => {
     if (!testEmail) return;
     setTestingSend(true);
+    setTestResult(null);
     try {
-      await api.post('/admin/settings/test-email', { to: testEmail });
-      toast.success('Test-E-Mail wird gesendet');
-    } catch { toast.error('Fehler beim Senden'); }
+      const r = await api.post('/admin/settings/test-email', { to: testEmail });
+      if (r.data.success) {
+        setTestResult({ ok: true, msg: r.data.message });
+        toast.success(r.data.message);
+      } else {
+        setTestResult({ ok: false, msg: r.data.error });
+        toast.error(r.data.error);
+      }
+    } catch (err) {
+      const detail = err?.response?.data?.detail || 'Verbindungsfehler';
+      setTestResult({ ok: false, msg: detail });
+      toast.error(detail);
+    }
     setTestingSend(false);
   };
 
@@ -155,11 +168,21 @@ export default function AdminSettings() {
             <div style={{ borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem', marginTop: '0.25rem' }}>
               <div className="adm-form-label">Test-E-Mail senden</div>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <input className="adm-input" type="email" value={testEmail} onChange={e => setTestEmail(e.target.value)} placeholder="test@beispiel.ch" data-testid="settings-test-email-input" />
+                <input className="adm-input" type="email" value={testEmail} onChange={e => { setTestEmail(e.target.value); setTestResult(null); }} placeholder="test@beispiel.ch" data-testid="settings-test-email-input" />
                 <button className="adm-btn adm-btn-secondary adm-btn-sm" onClick={sendTest} disabled={testingSend} data-testid="settings-test-email-btn" style={{ whiteSpace: 'nowrap' }}>
-                  <Send size={13} /> Test
+                  <Send size={13} /> {testingSend ? 'Sende...' : 'Test senden'}
                 </button>
               </div>
+              {testResult && (
+                <div data-testid="test-email-result" style={{
+                  marginTop: '0.5rem', padding: '0.6rem 0.8rem', borderRadius: '6px', fontSize: '0.82rem',
+                  background: testResult.ok ? '#dcfce7' : '#fef2f2',
+                  color: testResult.ok ? '#166534' : '#991b1b',
+                  border: `1px solid ${testResult.ok ? '#bbf7d0' : '#fecaca'}`
+                }}>
+                  {testResult.ok ? '\u2705 ' : '\u274c '}{testResult.msg}
+                </div>
+              )}
             </div>
           </div>
         </div>

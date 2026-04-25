@@ -459,14 +459,57 @@ async def admin_update_settings(request: Request):
 
 
 @router.post("/admin/settings/test-email")
-async def admin_test_email(request: Request, background_tasks: BackgroundTasks):
+async def admin_test_email(request: Request):
     await get_current_user(request)
     body = await request.json()
     to = body.get("to", "")
     if not to:
         raise HTTPException(status_code=400, detail="E-Mail-Adresse fehlt")
-    background_tasks.add_task(send_email_background, to, "TrucksOnRoad Test-E-Mail", "<h2>Test erfolgreich!</h2><p>Die E-Mail-Konfiguration funktioniert korrekt.</p>")
-    return {"message": "Test-E-Mail wird gesendet"}
+    settings = await db.settings.find_one({"type": "general"}, {"_id": 0}) or {}
+    smtp_host = settings.get("smtp_host", "smtp.gmail.com")
+    smtp_port = settings.get("smtp_port", 587)
+    smtp_email = settings.get("smtp_email", "")
+    smtp_password = settings.get("smtp_password", "")
+    if not smtp_email or not smtp_password:
+        return {"success": False, "error": "SMTP nicht konfiguriert. Bitte SMTP E-Mail und Passwort in den Einstellungen eintragen und speichern."}
+    try:
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+        test_html = """
+        <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+          <div style="background:#1a1a18;padding:2rem;text-align:center;">
+            <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
+              <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+            </span>
+          </div>
+          <div style="padding:2rem;text-align:center;">
+            <div style="font-size:2rem;margin-bottom:0.5rem;">&#9989;</div>
+            <h2 style="color:#1a1a18;margin:0 0 0.5rem;">Test erfolgreich!</h2>
+            <p style="color:#6b6b64;line-height:1.6;">Die E-Mail-Konfiguration funktioniert korrekt. E-Mails werden ueber <strong>{smtp_email}</strong> versendet.</p>
+          </div>
+          <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
+            TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+          </div>
+        </div>""".replace("{smtp_email}", smtp_email)
+        msg = MIMEMultipart("alternative")
+        msg["From"] = smtp_email
+        msg["To"] = to
+        msg["Subject"] = "TrucksOnRoad – Test-E-Mail"
+        msg.attach(MIMEText(test_html, "html"))
+        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+            server.starttls()
+            server.login(smtp_email, smtp_password)
+            server.sendmail(smtp_email, to, msg.as_string())
+        return {"success": True, "message": f"Test-E-Mail erfolgreich an {to} gesendet!"}
+    except smtplib.SMTPAuthenticationError:
+        return {"success": False, "error": "SMTP-Authentifizierung fehlgeschlagen. Bitte App-Passwort pruefen (nicht das normale Google-Passwort)."}
+    except smtplib.SMTPConnectError:
+        return {"success": False, "error": f"Verbindung zu {smtp_host}:{smtp_port} fehlgeschlagen. Bitte Host und Port pruefen."}
+    except smtplib.SMTPRecipientsRefused:
+        return {"success": False, "error": f"Empfaenger-Adresse {to} wurde abgelehnt."}
+    except Exception as e:
+        return {"success": False, "error": f"Fehler: {str(e)}"}
 
 
 # --- ADMIN EMPLOYEES ---
