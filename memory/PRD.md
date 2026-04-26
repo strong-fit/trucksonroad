@@ -79,6 +79,17 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
   - Fix: Datei geloescht, Frontend neu gebaut. Alle Routen werden jetzt korrekt vom Next.js App Router bedient
   - `/admin/login` war nicht betroffen, da kein entsprechendes Static File existierte
 
+## Feature - 26.04.2026: Passwortlose Kunden-Authentifizierung
+- **Neuer Auth-Flow ohne Passwort** — Kunden melden sich per E-Mail + 6-stelligem Bestaetigungscode an
+  - Schritt 1: E-Mail eingeben → Code wird per E-Mail gesendet
+  - Schritt 2: 6-stelligen Code eingeben (Auto-Verify wenn alle 6 Felder ausgefuellt)
+  - Schritt 3: (Nur neue Kunden) Profil vervollstaendigen: Vorname, Name, Strasse, PLZ, Ort, Mobile (Pflicht), Firma (optional)
+  - Bestehende Kunden: Direkt zum Konto nach Code-Verifikation
+- **Sicherheit:** Rate-Limiting (max 3 Codes/10min), max 5 Fehlversuche pro Code, Code 10min gueltig, Admin-Emails blockiert
+- **Backend-Endpoints:** POST /api/auth/send-code, POST /api/auth/verify-code, POST /api/auth/complete-profile
+- **DB:** Neue Collection 'verification_codes', User-Felder erweitert (street, plz, city, mobile, profile_complete, email_verified)
+- Testing-Agent bestaetigt: 100% (12/12 Backend, Frontend UI verifiziert)
+
 ## Test Reports
 - iteration_32: 100% (13/13 Backend, Frontend komplett)
 - iteration_33: **100%** (9/9 Backend, alle 5 Sprachen + Quick Inquiry Widget)
@@ -89,3 +100,4 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - 08.04.2026: Frontend-Testagent erfolgreich - /blog, /kontakt, /ueber-uns, /fuer-veranstalter, /private-events mit Canonical + JSON-LD 5/5 bestanden
 - 08.04.2026: Backend-Testagent erfolgreich - /api/blog, /api/seo/structured-data, /api/seo/events-schema, /api/seo/google-verification, /api/trucks 5/5 bestanden
 - iteration_34: **100%** Frontend-Visual-Upgrade (13/13 Features verifiziert, alle 8 Verbesserungen bestanden)
+- iteration_35: **100%** Passwortlose Kunden-Auth (12/12 Backend, Frontend UI verifiziert)
