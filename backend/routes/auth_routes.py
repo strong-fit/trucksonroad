@@ -6,11 +6,12 @@ from auth import (
     hash_password, verify_password, create_access_token, create_refresh_token,
     get_current_user, get_jwt_secret, JWT_ALGORITHM
 )
-from models import LoginRequest, CustomerRegister
+from models import LoginRequest, CustomerRegister, CustomerProfileComplete
 from services.email import get_email_t, send_email_background
 import jwt
 import uuid
 import os
+import random
 
 router = APIRouter()
 
@@ -104,6 +105,173 @@ async def register_customer(body: CustomerRegister, response: Response):
     rt = create_refresh_token(uid)
     set_auth_cookies(response, at, rt)
     return {"id": uid, "email": email, "name": user_doc["name"], "role": "customer"}
+
+
+# --- PASSWORDLESS AUTH (E-Mail + Code) ---
+
+def build_verification_code_email(code: str, lang: str = "de") -> str:
+    labels = {
+        "de": {"title": "Ihr Bestaetigungscode", "text": "Verwenden Sie den folgenden Code, um sich bei TrucksOnRoad anzumelden:", "expire": "Dieser Code ist 10 Minuten gueltig.", "ignore": "Falls Sie diese Anfrage nicht gestellt haben, ignorieren Sie diese E-Mail."},
+        "en": {"title": "Your Verification Code", "text": "Use the following code to sign in to TrucksOnRoad:", "expire": "This code is valid for 10 minutes.", "ignore": "If you did not request this, please ignore this email."},
+        "fr": {"title": "Votre code de verification", "text": "Utilisez le code suivant pour vous connecter a TrucksOnRoad :", "expire": "Ce code est valide pendant 10 minutes.", "ignore": "Si vous n'avez pas fait cette demande, ignorez cet e-mail."},
+        "it": {"title": "Il tuo codice di verifica", "text": "Usa il seguente codice per accedere a TrucksOnRoad:", "expire": "Questo codice e valido per 10 minuti.", "ignore": "Se non hai effettuato questa richiesta, ignora questa e-mail."},
+    }
+    l = labels.get(lang, labels["de"])
+    return f"""
+    <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+      <div style="background:#1a1a18;padding:2rem;text-align:center;">
+        <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+        </span>
+      </div>
+      <div style="padding:2rem;text-align:center;">
+        <h2 style="color:#1a1a18;margin:0 0 0.5rem;">{l['title']}</h2>
+        <p style="color:#6b6b64;line-height:1.6;">{l['text']}</p>
+        <div style="margin:1.5rem 0;padding:1.2rem;background:#fff;border:2px solid #4db6ac;border-radius:12px;display:inline-block;">
+          <span style="font-family:'Bebas Neue',monospace;font-size:2.5rem;letter-spacing:0.3em;color:#1a1a18;font-weight:700;">{code}</span>
+        </div>
+        <p style="color:#9c9c94;font-size:0.8rem;margin-top:1rem;">{l['expire']}</p>
+        <p style="color:#9c9c94;font-size:0.8rem;">{l['ignore']}</p>
+      </div>
+      <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
+        TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+      </div>
+    </div>"""
+
+
+@router.post("/auth/send-code")
+async def send_verification_code(request: Request, background_tasks: BackgroundTasks):
+    body = await request.json()
+    email = body.get("email", "").lower().strip()
+    if not email or "@" not in email:
+        raise HTTPException(status_code=400, detail="Gueltige E-Mail-Adresse erforderlich")
+
+    # Rate limit: max 3 codes per email per 10 minutes
+    ten_min_ago = (datetime.now(timezone.utc) - timedelta(minutes=10)).isoformat()
+    recent_count = await db.verification_codes.count_documents({
+        "email": email, "created_at": {"$gte": ten_min_ago}
+    })
+    if recent_count >= 3:
+        raise HTTPException(status_code=429, detail="Zu viele Versuche. Bitte warten Sie 10 Minuten.")
+
+    # Block admin emails from passwordless login
+    admin_user = await db.users.find_one({"email": email, "role": "admin"})
+    if admin_user:
+        raise HTTPException(status_code=400, detail="Admin-Konten verwenden bitte den Admin-Login.")
+
+    code = f"{random.randint(0, 999999):06d}"
+    await db.verification_codes.insert_one({
+        "email": email,
+        "code": code,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat(),
+        "used": False,
+        "attempts": 0
+    })
+    lang = body.get("lang", "de")
+    subject_map = {"de": "Ihr Bestaetigungscode", "en": "Your Verification Code", "fr": "Votre code de verification", "it": "Il tuo codice di verifica"}
+    html = build_verification_code_email(code, lang)
+    background_tasks.add_task(send_email_background, email, f"{subject_map.get(lang, subject_map['de'])} – TrucksOnRoad", html)
+    return {"message": "Code gesendet", "email": email}
+
+
+@router.post("/auth/verify-code")
+async def verify_code(request: Request, response: Response):
+    body = await request.json()
+    email = body.get("email", "").lower().strip()
+    code = body.get("code", "").strip()
+    if not email or not code:
+        raise HTTPException(status_code=400, detail="E-Mail und Code erforderlich")
+
+    # Find the latest unused code for this email
+    code_doc = await db.verification_codes.find_one(
+        {"email": email, "used": False},
+        sort=[("created_at", -1)]
+    )
+    if not code_doc:
+        raise HTTPException(status_code=400, detail="Kein gueltiger Code gefunden. Bitte neuen Code anfordern.")
+
+    # Check if expired
+    expires = datetime.fromisoformat(code_doc["expires_at"])
+    if datetime.now(timezone.utc) > expires:
+        await db.verification_codes.update_one({"_id": code_doc["_id"]}, {"$set": {"used": True}})
+        raise HTTPException(status_code=400, detail="Code abgelaufen. Bitte neuen Code anfordern.")
+
+    # Max 5 wrong attempts per code
+    if code_doc.get("attempts", 0) >= 5:
+        await db.verification_codes.update_one({"_id": code_doc["_id"]}, {"$set": {"used": True}})
+        raise HTTPException(status_code=400, detail="Zu viele Fehlversuche. Bitte neuen Code anfordern.")
+
+    if code_doc["code"] != code:
+        await db.verification_codes.update_one({"_id": code_doc["_id"]}, {"$inc": {"attempts": 1}})
+        raise HTTPException(status_code=400, detail="Falscher Code")
+
+    # Mark code as used
+    await db.verification_codes.update_one({"_id": code_doc["_id"]}, {"$set": {"used": True}})
+    # Invalidate all other codes for this email
+    await db.verification_codes.update_many({"email": email, "used": False}, {"$set": {"used": True}})
+
+    # Find or create user
+    user = await db.users.find_one({"email": email})
+    is_new = False
+    if not user:
+        # Create new user with minimal info
+        user_doc = {
+            "email": email,
+            "password_hash": "",
+            "name": "",
+            "first_name": "",
+            "last_name": "",
+            "company": "",
+            "phone": "",
+            "mobile": "",
+            "street": "",
+            "plz": "",
+            "city": "",
+            "role": "customer",
+            "profile_complete": False,
+            "email_verified": True,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        result = await db.users.insert_one(user_doc)
+        uid = str(result.inserted_id)
+        is_new = True
+    else:
+        uid = str(user["_id"])
+        is_new = not user.get("profile_complete", False) and not user.get("first_name")
+        # Mark email as verified
+        await db.users.update_one({"_id": user["_id"]}, {"$set": {"email_verified": True}})
+
+    at = create_access_token(uid, email)
+    rt = create_refresh_token(uid)
+    set_auth_cookies(response, at, rt)
+    return {
+        "id": uid, "email": email, "role": "customer",
+        "is_new": is_new, "profile_complete": not is_new
+    }
+
+
+@router.post("/auth/complete-profile")
+async def complete_profile(request: Request, body: CustomerProfileComplete):
+    user = await get_current_user(request)
+    name = f"{body.first_name} {body.last_name}".strip()
+    await db.users.update_one(
+        {"_id": ObjectId(user["_id"])},
+        {"$set": {
+            "first_name": body.first_name,
+            "last_name": body.last_name,
+            "street": body.street,
+            "plz": body.plz,
+            "city": body.city,
+            "mobile": body.mobile,
+            "phone": body.mobile,
+            "company": body.company or "",
+            "name": name,
+            "profile_complete": True,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    return {"message": "Profil vervollstaendigt", "name": name}
 
 
 def build_reset_email(reset_url: str, name: str, lang: str = "de") -> str:

@@ -28,7 +28,11 @@ async def customer_get_profile(request: Request):
         "email": user["email"], "name": user.get("name", ""),
         "first_name": user.get("first_name", ""), "last_name": user.get("last_name", ""),
         "company": user.get("company", ""), "phone": user.get("phone", ""),
-        "role": user.get("role", "customer"), "lang": user.get("lang", "de")
+        "mobile": user.get("mobile", ""), "street": user.get("street", ""),
+        "plz": user.get("plz", ""), "city": user.get("city", ""),
+        "role": user.get("role", "customer"), "lang": user.get("lang", "de"),
+        "profile_complete": user.get("profile_complete", True),
+        "email_verified": user.get("email_verified", False)
     }
 
 
@@ -40,14 +44,13 @@ async def customer_update_profile(request: Request):
     if "lang" in body and body["lang"] in ("de", "en", "fr", "it"):
         update_fields["lang"] = body["lang"]
         await db.inquiries.update_many({"customer_id": user["_id"]}, {"$set": {"lang": body["lang"]}})
-    if "first_name" in body:
-        update_fields["first_name"] = body["first_name"]
-    if "last_name" in body:
-        update_fields["last_name"] = body["last_name"]
-    if "phone" in body:
-        update_fields["phone"] = body["phone"]
-    if "company" in body:
-        update_fields["company"] = body["company"]
+    for field in ("first_name", "last_name", "phone", "company", "mobile", "street", "plz", "city"):
+        if field in body:
+            update_fields[field] = body[field]
+    if "first_name" in update_fields or "last_name" in update_fields:
+        fn = update_fields.get("first_name", user.get("first_name", ""))
+        ln = update_fields.get("last_name", user.get("last_name", ""))
+        update_fields["name"] = f"{fn} {ln}".strip()
     if update_fields:
         await db.users.update_one({"_id": ObjectId(user["_id"])}, {"$set": update_fields})
     return {"message": "Updated"}

@@ -126,7 +126,7 @@ export default function InquiryPage() {
             <p style={{ color: 'var(--sf-gray)', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
               {t('form_register_hint')}
             </p>
-            <Link href="/konto/registrieren" className="sf-btn-outline" style={{ textDecoration: 'none' }} data-testid="register-after-inquiry">
+            <Link href="/konto/login" className="sf-btn-outline" style={{ textDecoration: 'none' }} data-testid="register-after-inquiry">
               {t('form_register_btn')}
             </Link>
           </div>

@@ -95,3 +95,13 @@ class CustomerRegister(BaseModel):
     last_name: str
     company: Optional[str] = ""
     phone: Optional[str] = ""
+
+
+class CustomerProfileComplete(BaseModel):
+    first_name: str
+    last_name: str
+    street: str
+    plz: str
+    city: str
+    mobile: str
+    company: Optional[str] = ""
