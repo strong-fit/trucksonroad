@@ -4,7 +4,7 @@ import { AdminLayout } from '@/views/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
-import { Trash2, Inbox, FileDown, Users, Receipt, Paperclip, Send, X } from 'lucide-react';
+import { Trash2, Inbox, FileDown, Users, Receipt, Paperclip, Send, X, CheckCircle2 } from 'lucide-react';
 import FileUpload from '@/components/FileUpload';
 
 export default function AdminInquiries() {
@@ -231,6 +231,29 @@ export default function AdminInquiries() {
                   </button>
                 ))}
               </div>
+
+              {/* Prominent Accept Button for new/in_review bookings */}
+              {(selected.status === 'new' || selected.status === 'in_review') && (
+                <button
+                  className="adm-btn adm-btn-primary"
+                  onClick={async () => {
+                    try {
+                      await api.post(`/admin/inquiries/${selected.id}/accept`);
+                      toast.success('Buchung akzeptiert! Bestätigung wird gesendet.');
+                      setSelected(prev => ({ ...prev, status: 'confirmed' }));
+                      load();
+                    } catch { toast.error('Fehler beim Akzeptieren'); }
+                  }}
+                  data-testid="accept-booking-btn"
+                  style={{
+                    width: '100%', padding: '0.65rem', fontSize: '0.85rem',
+                    background: '#22c55e', fontWeight: 600, display: 'flex',
+                    alignItems: 'center', justifyContent: 'center', gap: '0.4rem'
+                  }}
+                >
+                  <CheckCircle2 size={16} /> Buchung akzeptieren & Kunde benachrichtigen
+                </button>
+              )}
             </div>
 
             <div style={{ marginTop: '0.75rem' }}>

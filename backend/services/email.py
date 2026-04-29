@@ -518,3 +518,110 @@ def build_event_scan_notification_email(all_new_events: list) -> str:
         <p style="color:#6b6b64;margin-top:1.5rem;">Melden Sie sich im <a href="#" style="color:#4db6ac;font-weight:600;">Admin-Dashboard</a> an, um die Events zu verwalten und Bewerbungen zu versenden.</p>
       </div>
     </div>"""
+
+
+def build_booking_confirmation_email(inquiry: dict, lang: str = "de") -> str:
+    """Build a detailed booking confirmation email for the customer."""
+    t = get_email_t(lang)
+    name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or "Kunde"
+    trucks = ", ".join(inquiry.get("selected_trucks", [])) or "-"
+    event_date = inquiry.get("event_date", "-")
+    event_time = inquiry.get("event_time", "-")
+    location = inquiry.get("location", "-")
+    guest_count = inquiry.get("guest_count", "-")
+    event_type = inquiry.get("event_type", "-")
+    remarks = inquiry.get("remarks", "")
+
+    # Parse catering info from remarks
+    catering = ""
+    menu = ""
+    delivery = ""
+    date_to = ""
+    customer_remark = ""
+    for part in remarks.split("|"):
+        part = part.strip()
+        if part.startswith("Catering:"):
+            catering = part.replace("Catering:", "").strip()
+        elif part.startswith("Menü:") or "Menu:" in part:
+            menu = part.replace("Menü:", "").replace("Menu:", "").strip()
+        elif part.startswith("Lieferung:"):
+            delivery = part.replace("Lieferung:", "").strip()
+        elif part.startswith("Bis:"):
+            date_to = part.replace("Bis:", "").strip()
+        elif part.startswith("Bemerkung:"):
+            customer_remark = part.replace("Bemerkung:", "").strip()
+
+    date_display = event_date
+    if date_to:
+        date_display = f"{event_date} – {date_to}"
+
+    titles = {
+        "de": "Ihre Buchung ist bestaetigt!",
+        "en": "Your booking is confirmed!",
+        "fr": "Votre reservation est confirmee!",
+        "it": "La tua prenotazione e confermata!"
+    }
+    intros = {
+        "de": f"Guten Tag {name},<br><br>Wir freuen uns, Ihnen mitzuteilen, dass Ihre Buchung bestaetigt wurde. Hier sind die Details:",
+        "en": f"Hello {name},<br><br>We are pleased to confirm your booking. Here are the details:",
+        "fr": f"Bonjour {name},<br><br>Nous avons le plaisir de confirmer votre reservation. Voici les details:",
+        "it": f"Buongiorno {name},<br><br>Siamo lieti di confermare la tua prenotazione. Ecco i dettagli:"
+    }
+    footers = {
+        "de": "Bei Fragen stehen wir Ihnen jederzeit zur Verfuegung.",
+        "en": "If you have any questions, please don't hesitate to contact us.",
+        "fr": "N'hesitez pas a nous contacter pour toute question.",
+        "it": "Non esitare a contattarci per qualsiasi domanda."
+    }
+
+    title = titles.get(lang, titles["de"])
+    intro = intros.get(lang, intros["de"])
+    footer = footers.get(lang, footers["de"])
+
+    detail_rows = f"""
+      <tr><td style="padding:0.5rem 0;color:#9c9c94;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.05em;width:140px;">Truck</td><td style="padding:0.5rem 0;color:#1a1a18;font-weight:500;">{trucks}</td></tr>
+      <tr><td style="padding:0.5rem 0;color:#9c9c94;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.05em;">Typ</td><td style="padding:0.5rem 0;color:#1a1a18;">{event_type}</td></tr>
+    """
+    if catering:
+        detail_rows += f'<tr><td style="padding:0.5rem 0;color:#9c9c94;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.05em;">Catering</td><td style="padding:0.5rem 0;color:#1a1a18;">{catering}</td></tr>'
+    if menu:
+        detail_rows += f'<tr><td style="padding:0.5rem 0;color:#9c9c94;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.05em;">Menü</td><td style="padding:0.5rem 0;color:#1a1a18;">{menu}</td></tr>'
+    if guest_count and guest_count != "-":
+        detail_rows += f'<tr><td style="padding:0.5rem 0;color:#9c9c94;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.05em;">Gäste</td><td style="padding:0.5rem 0;color:#1a1a18;">{guest_count}</td></tr>'
+    detail_rows += f"""
+      <tr><td style="padding:0.5rem 0;color:#9c9c94;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.05em;">Datum</td><td style="padding:0.5rem 0;color:#1a1a18;font-weight:600;">{date_display}</td></tr>
+      <tr><td style="padding:0.5rem 0;color:#9c9c94;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.05em;">Uhrzeit</td><td style="padding:0.5rem 0;color:#1a1a18;">{event_time}</td></tr>
+      <tr><td style="padding:0.5rem 0;color:#9c9c94;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.05em;">Standort</td><td style="padding:0.5rem 0;color:#1a1a18;">{location}</td></tr>
+    """
+    if delivery:
+        detail_rows += f'<tr><td style="padding:0.5rem 0;color:#9c9c94;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.05em;">Lieferung</td><td style="padding:0.5rem 0;color:#1a1a18;">{delivery}</td></tr>'
+    if customer_remark:
+        detail_rows += f'<tr><td style="padding:0.5rem 0;color:#9c9c94;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.05em;">Bemerkung</td><td style="padding:0.5rem 0;color:#1a1a18;">{customer_remark}</td></tr>'
+
+    return f"""
+    <div style="font-family:'DM Sans',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafaf8;border:1px solid #e8e7e3;border-radius:12px;overflow:hidden;">
+      <div style="background:#1a1a18;padding:2rem;text-align:center;">
+        <span style="font-family:'Bebas Neue',Arial,sans-serif;font-size:1.6rem;letter-spacing:0.08em;">
+          <span style="color:#f5f0e8;">TRUCKS</span><span style="color:#4db6ac;">ON</span><span style="color:#f5f0e8;">ROAD</span>
+        </span>
+      </div>
+      <div style="padding:2rem;">
+        <div style="text-align:center;margin-bottom:1.5rem;">
+          <div style="display:inline-block;background:#22c55e;color:#fff;padding:0.5rem 1.5rem;border-radius:30px;font-size:0.85rem;font-weight:700;letter-spacing:0.05em;">
+            &#10003; BESTAETIGT
+          </div>
+        </div>
+        <h2 style="color:#1a1a18;text-align:center;margin:0 0 1rem;font-size:1.3rem;">{title}</h2>
+        <p style="color:#6b6b64;line-height:1.7;">{intro}</p>
+        <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1.2rem;margin:1.5rem 0;">
+          <table style="width:100%;border-collapse:collapse;">
+            {detail_rows}
+          </table>
+        </div>
+        <p style="color:#6b6b64;font-size:0.88rem;line-height:1.6;">{footer}</p>
+        <p style="color:#6b6b64;font-size:0.88rem;margin-top:1rem;">Freundliche Gruesse,<br/><strong>TrucksOnRoad Team</strong></p>
+      </div>
+      <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
+        TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
+      </div>
+    </div>"""

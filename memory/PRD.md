@@ -79,7 +79,15 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
   - Fix: Datei geloescht, Frontend neu gebaut. Alle Routen werden jetzt korrekt vom Next.js App Router bedient
   - `/admin/login` war nicht betroffen, da kein entsprechendes Static File existierte
 
-## Feature - 29.04.2026: Neuer Multi-Step Buchungs-Wizard
+## Feature - 29.04.2026: Admin Buchung akzeptieren + Bestaetigungsmail
+- **Prominenter "Buchung akzeptieren" Button** (gruen, volle Breite) in Anfragen-Detail bei Status Neu/In Prüfung
+- **Beim Akzeptieren passiert automatisch:**
+  1. Status wird auf "confirmed" gesetzt
+  2. Truck-Kalender wird fuer die gebuchten Tage (inkl. mehrtaegig) blockiert
+  3. Detaillierte Bestaetigungs-E-Mail an Kunden gesendet (Truck, Catering-Typ, Menü, Gaeste, Datum/Uhrzeit, Standort, Lieferkosten)
+- **Backend:** POST /api/admin/inquiries/{id}/accept (setzt Status, erstellt calendar_blocks, sendet E-Mail)
+- **E-Mail-Template:** Gebrandetes HTML mit gruener "BESTAETIGT" Badge, alle Buchungsdetails in Tabelle, TrucksOnRoad Footer
+- Curl-Test bestaetigt: Status→confirmed, Kalender-Blocks erstellt, E-Mail-Funktion aufgerufen
 - **Alter Anfrage-Flow ersetzt** durch 6-Schritte Buchungs-Wizard:
   1. Truck auswaehlen (Grid mit Bildern)
   2. Catering-Art (Eigenes / Unser) + Menü-Kategorie + Gaeste-Anzahl
@@ -113,3 +121,4 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - iteration_34: **100%** Frontend-Visual-Upgrade (13/13 Features verifiziert, alle 8 Verbesserungen bestanden)
 - iteration_35: **100%** Passwortlose Kunden-Auth (12/12 Backend, Frontend UI verifiziert)
 - iteration_36: **100%** Buchungs-Wizard (15/15 Backend, 6 Frontend-Steps + Admin Menu-Kategorien verifiziert)
+- iteration_37: **Manueller Curl-Test** Accept-Booking-Flow: Status→confirmed, Kalender-Block erstellt, E-Mail-Template generiert

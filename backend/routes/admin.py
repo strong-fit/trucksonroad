@@ -9,7 +9,7 @@ from services.email import (
     build_confirmation_email, build_admin_notification_email, build_offer_email,
     build_status_notification_email, build_invoice_notification_email,
     build_file_upload_notification_email, build_event_reminder_email,
-    build_event_application_email
+    build_event_application_email, build_booking_confirmation_email
 )
 from services.pdf import generate_offer_pdf, generate_export_pdf
 from services.storage import put_object, get_object, APP_NAME
@@ -172,7 +172,83 @@ async def admin_update_inquiry(inquiry_id: str, update: InquiryStatusUpdate, req
     return {"message": "Updated"}
 
 
-@router.put("/admin/inquiries/{inquiry_id}/lang")
+@router.post("/admin/inquiries/{inquiry_id}/accept")
+async def admin_accept_booking(inquiry_id: str, request: Request, background_tasks: BackgroundTasks):
+    """Accept a booking: set status to confirmed, block calendar dates, send confirmation email."""
+    await get_current_user(request)
+    inquiry = await db.inquiries.find_one({"id": inquiry_id}, {"_id": 0})
+    if not inquiry:
+        raise HTTPException(status_code=404, detail="Anfrage nicht gefunden")
+
+    # Update status to confirmed
+    await db.inquiries.update_one({"id": inquiry_id}, {"$set": {
+        "status": "confirmed",
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }})
+
+    # Block calendar dates for the truck
+    trucks = inquiry.get("selected_trucks", [])
+    event_date = inquiry.get("event_date", "")
+    if event_date and trucks:
+        # Parse remarks to find "Bis: YYYY-MM-DD" for multi-day bookings
+        remarks = inquiry.get("remarks", "")
+        date_to = ""
+        if "Bis:" in remarks:
+            try:
+                date_to = remarks.split("Bis:")[1].strip().split(" ")[0].split("|")[0].strip()
+            except Exception:
+                pass
+
+        # Determine truck slug from name
+        all_trucks = await db.trucks.find({}, {"_id": 0, "slug": 1, "name_de": 1}).to_list(100)
+        truck_name = trucks[0] if trucks else ""
+        truck_slug = ""
+        for t in all_trucks:
+            if t.get("name_de", "") == truck_name or t.get("slug", "") == truck_name:
+                truck_slug = t["slug"]
+                break
+        if not truck_slug and truck_name:
+            truck_slug = truck_name.lower().replace(" ", "-")
+
+        if truck_slug:
+            # Block from event_date to date_to (or just event_date if single day)
+            from datetime import timedelta as td
+            try:
+                start = datetime.strptime(event_date, "%Y-%m-%d")
+                end = datetime.strptime(date_to, "%Y-%m-%d") if date_to else start
+                current = start
+                while current <= end:
+                    date_str = current.strftime("%Y-%m-%d")
+                    existing = await db.calendar_blocks.find_one({"truck_slug": truck_slug, "date": date_str})
+                    if not existing:
+                        await db.calendar_blocks.insert_one({
+                            "truck_slug": truck_slug,
+                            "date": date_str,
+                            "status": "confirmed",
+                            "notes": f"Buchung: {inquiry.get('first_name', '')} {inquiry.get('last_name', '')} – {inquiry.get('event_type', '')}"
+                        })
+                    else:
+                        await db.calendar_blocks.update_one(
+                            {"truck_slug": truck_slug, "date": date_str},
+                            {"$set": {"status": "confirmed", "notes": f"Buchung: {inquiry.get('first_name', '')} {inquiry.get('last_name', '')}"}}
+                        )
+                    current += td(days=1)
+            except Exception:
+                pass
+
+    # Send confirmation email
+    if inquiry.get("email"):
+        il = inquiry.get("lang", "de")
+        it_labels = get_email_t(il)
+        html = build_booking_confirmation_email(inquiry, il)
+        background_tasks.add_task(
+            send_email_background,
+            inquiry["email"],
+            f"{it_labels.get('subject_confirmed', 'Buchung bestaetigt')} – TrucksOnRoad",
+            html
+        )
+
+    return {"message": "Buchung akzeptiert und Kunde benachrichtigt"}
 async def admin_update_inquiry_lang(inquiry_id: str, request: Request):
     await get_current_user(request)
     body = await request.json()

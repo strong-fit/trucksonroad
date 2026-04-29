@@ -67,13 +67,13 @@
   },
   {
     "route": "/admin/anfragen",
-    "firstLoadUncompressedJsBytes": 755141,
+    "firstLoadUncompressedJsBytes": 755783,
     "firstLoadChunkPaths": [
       ".next/static/chunks/0qjl~-elh72d1.js",
       ".next/static/chunks/07~~_oeopqc_j.js",
       ".next/static/chunks/0o-4-16x3i5s1.js",
       ".next/static/chunks/0scts3bm58wjt.js",
-      ".next/static/chunks/0wx3urwyk8asb.js",
+      ".next/static/chunks/0u3ff2yyiwf5h.js",
       ".next/static/chunks/177b739xw9ggc.js",
       ".next/static/chunks/0t80zuao1l2o5.js",
       ".next/static/chunks/0uqcitglesvgt.js",
