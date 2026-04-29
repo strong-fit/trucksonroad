@@ -11,6 +11,7 @@
   "/admin/finanzen/page": "/admin/finanzen",
   "/admin/kalender/page": "/admin/kalender",
   "/admin/login/page": "/admin/login",
+  "/admin/menu-kategorien/page": "/admin/menu-kategorien",
   "/admin/mitarbeiter/page": "/admin/mitarbeiter",
   "/admin/page": "/admin",
   "/admin/passwort-vergessen/page": "/admin/passwort-vergessen",

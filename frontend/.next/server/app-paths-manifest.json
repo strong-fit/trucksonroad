@@ -11,6 +11,7 @@
   "/admin/finanzen/page": "app/admin/finanzen/page.js",
   "/admin/kalender/page": "app/admin/kalender/page.js",
   "/admin/login/page": "app/admin/login/page.js",
+  "/admin/menu-kategorien/page": "app/admin/menu-kategorien/page.js",
   "/admin/mitarbeiter/page": "app/admin/mitarbeiter/page.js",
   "/admin/page": "app/admin/page.js",
   "/admin/passwort-vergessen/page": "app/admin/passwort-vergessen/page.js",

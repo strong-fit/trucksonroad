@@ -310,6 +310,51 @@ async def admin_get_faqs(request: Request):
     return await db.faqs.find({}, {"_id": 0}).sort("order", 1).to_list(100)
 
 
+# --- ADMIN MENU CATEGORIES ---
+@router.get("/admin/menu-categories")
+async def admin_get_menu_categories(request: Request):
+    await get_current_user(request)
+    return await db.menu_categories.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+
+
+@router.post("/admin/menu-categories")
+async def admin_create_menu_category(request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    doc = {
+        "id": str(uuid.uuid4()),
+        "name_de": body.get("name_de", ""),
+        "name_en": body.get("name_en", ""),
+        "name_fr": body.get("name_fr", ""),
+        "name_it": body.get("name_it", ""),
+        "truck_slug": body.get("truck_slug", ""),
+        "order": body.get("order", 0),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.menu_categories.insert_one(doc)
+    return {"message": "Created", "id": doc["id"]}
+
+
+@router.put("/admin/menu-categories/{cat_id}")
+async def admin_update_menu_category(cat_id: str, request: Request):
+    await get_current_user(request)
+    body = await request.json()
+    update = {}
+    for f in ("name_de", "name_en", "name_fr", "name_it", "truck_slug", "order"):
+        if f in body:
+            update[f] = body[f]
+    if update:
+        await db.menu_categories.update_one({"id": cat_id}, {"$set": update})
+    return {"message": "Updated"}
+
+
+@router.delete("/admin/menu-categories/{cat_id}")
+async def admin_delete_menu_category(cat_id: str, request: Request):
+    await get_current_user(request)
+    await db.menu_categories.delete_one({"id": cat_id})
+    return {"message": "Deleted"}
+
+
 @router.post("/admin/faqs")
 async def admin_create_faq(faq: FAQCreate, request: Request):
     await get_current_user(request)

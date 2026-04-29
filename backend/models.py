@@ -56,6 +56,15 @@ class QuickInquiryCreate(BaseModel):
     event_date: Optional[str] = ""
     location: Optional[str] = ""
     guest_count: Optional[int] = 0
+
+
+class MenuCategoryCreate(BaseModel):
+    name_de: str
+    name_en: Optional[str] = ""
+    name_fr: Optional[str] = ""
+    name_it: Optional[str] = ""
+    truck_slug: Optional[str] = ""
+    order: int = 0
     concept: Optional[str] = ""
     email: Optional[str] = ""
     phone: Optional[str] = ""

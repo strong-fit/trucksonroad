@@ -10,6 +10,8 @@ from services.email import (
     build_file_upload_notification_email, build_event_reminder_email
 )
 import uuid
+import math
+import httpx
 
 router = APIRouter()
 
@@ -61,6 +63,73 @@ async def create_quick_inquiry(inquiry: QuickInquiryCreate):
     doc["created_at"] = datetime.now(timezone.utc).isoformat()
     await db.inquiries.insert_one(doc)
     return {"message": "Schnellanfrage gesendet", "id": doc["id"]}
+
+
+# --- BOOKING FLOW: TRUCK AVAILABILITY ---
+@router.get("/truck-availability/{truck_slug}")
+async def get_truck_availability(truck_slug: str, year: int = 2026, month: int = 1):
+    blocks = await db.calendar_blocks.find(
+        {"truck_slug": truck_slug, "date": {"$regex": f"^{year}-{month:02d}"}},
+        {"_id": 0}
+    ).to_list(100)
+    return blocks
+
+
+# --- BOOKING FLOW: MENU CATEGORIES ---
+@router.get("/menu-categories")
+async def get_menu_categories():
+    cats = await db.menu_categories.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+    return cats
+
+
+# --- BOOKING FLOW: DELIVERY COST CALCULATION ---
+BASE_COORDS = {"lat": 47.3230, "lng": 8.7990}  # Wetzikon default
+
+@router.post("/calculate-delivery")
+async def calculate_delivery(request: Request):
+    body = await request.json()
+    plz = body.get("plz", "").strip()
+    if not plz:
+        raise HTTPException(status_code=400, detail="PLZ erforderlich")
+    settings = await db.settings.find_one({"type": "general"}, {"_id": 0}) or {}
+    price_per_km = settings.get("delivery_price_per_km", 2.0)
+    base_plz = settings.get("company_plz", "8620")
+    # Geocode customer PLZ
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            r = await client.get(
+                "https://nominatim.openstreetmap.org/search",
+                params={"postalcode": plz, "country": "CH", "format": "json", "limit": 1},
+                headers={"User-Agent": "TrucksOnRoad/1.0"}
+            )
+            data = r.json()
+            if not data:
+                return {"km": 0, "cost": 0, "error": "PLZ nicht gefunden"}
+            cust_lat, cust_lng = float(data[0]["lat"]), float(data[0]["lon"])
+        # Geocode base PLZ
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            r2 = await client.get(
+                "https://nominatim.openstreetmap.org/search",
+                params={"postalcode": base_plz, "country": "CH", "format": "json", "limit": 1},
+                headers={"User-Agent": "TrucksOnRoad/1.0"}
+            )
+            data2 = r2.json()
+            if data2:
+                base_lat, base_lng = float(data2[0]["lat"]), float(data2[0]["lon"])
+            else:
+                base_lat, base_lng = BASE_COORDS["lat"], BASE_COORDS["lng"]
+    except Exception:
+        return {"km": 0, "cost": 0, "error": "Berechnung fehlgeschlagen"}
+    # Haversine distance
+    R = 6371
+    dlat = math.radians(cust_lat - base_lat)
+    dlng = math.radians(cust_lng - base_lng)
+    a = math.sin(dlat/2)**2 + math.cos(math.radians(base_lat)) * math.cos(math.radians(cust_lat)) * math.sin(dlng/2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    straight_km = R * c
+    road_km = round(straight_km * 1.3, 1)  # Road factor
+    cost = round(road_km * price_per_km, 2)
+    return {"km": road_km, "cost": cost, "price_per_km": price_per_km}
 
 
 # --- PUBLIC CONTACT INFO ---

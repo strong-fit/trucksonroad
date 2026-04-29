@@ -131,6 +131,12 @@
       "namedRegex": "^/admin/login(?:/)?$"
     },
     {
+      "page": "/admin/menu-kategorien",
+      "regex": "^/admin/menu\\-kategorien(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/menu\\-kategorien(?:/)?$"
+    },
+    {
       "page": "/admin/mitarbeiter",
       "regex": "^/admin/mitarbeiter(?:/)?$",
       "routeKeys": {},

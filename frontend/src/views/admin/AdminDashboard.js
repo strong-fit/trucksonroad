@@ -8,7 +8,7 @@ import api from '@/lib/api';
 import {
   LayoutDashboard, FileText, CalendarDays, Truck, LogOut,
   Search, Menu, X, ExternalLink, Inbox, CheckCircle2, Clock,
-  Settings, HelpCircle, Users, Download, DollarSign, MapPin, Star, Sparkles, BookOpen
+  Settings, HelpCircle, Users, Download, DollarSign, MapPin, Star, Sparkles, BookOpen, UtensilsCrossed
 } from 'lucide-react';
 
 function AdminLayout({ children, title }) {
@@ -30,6 +30,7 @@ function AdminLayout({ children, title }) {
     { to: '/admin/blog', icon: BookOpen, label: t('admin_blog') },
     { to: '/admin/event-scout', icon: Sparkles, label: t('admin_event_scout') },
     { to: '/admin/faqs', icon: HelpCircle, label: t('admin_faqs') },
+    { to: '/admin/menu-kategorien', icon: UtensilsCrossed, label: 'Menü-Kategorien' },
     { to: '/admin/export', icon: Download, label: t('admin_export') },
     { to: '/admin/einstellungen', icon: Settings, label: t('admin_settings') },
   ];

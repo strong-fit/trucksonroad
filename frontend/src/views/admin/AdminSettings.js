@@ -131,6 +131,14 @@ export default function AdminSettings() {
               <div className="adm-form-label">WhatsApp Nummer</div>
               <input className="adm-input" value={settings.whatsapp_number || ''} onChange={e => update('whatsapp_number', e.target.value)} placeholder="+41791234567" data-testid="settings-whatsapp" />
             </div>
+            <div style={{ borderTop: '1px solid var(--adm-border)', paddingTop: '0.75rem', marginTop: '0.5rem' }}>
+              <div className="adm-form-label">Firmen-PLZ (Basis für Lieferkosten)</div>
+              <input className="adm-input" value={settings.company_plz || ''} onChange={e => update('company_plz', e.target.value)} placeholder="8620" data-testid="settings-company-plz" />
+            </div>
+            <div>
+              <div className="adm-form-label">Lieferpreis pro km (CHF)</div>
+              <input className="adm-input" type="number" step="0.1" min="0" value={settings.delivery_price_per_km || ''} onChange={e => update('delivery_price_per_km', parseFloat(e.target.value) || 0)} placeholder="2.00" data-testid="settings-delivery-price" />
+            </div>
           </div>
         </div>
 
