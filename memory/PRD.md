@@ -79,7 +79,18 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
   - Fix: Datei geloescht, Frontend neu gebaut. Alle Routen werden jetzt korrekt vom Next.js App Router bedient
   - `/admin/login` war nicht betroffen, da kein entsprechendes Static File existierte
 
-## Feature - 26.04.2026: Passwortlose Kunden-Authentifizierung
+## Feature - 29.04.2026: Neuer Multi-Step Buchungs-Wizard
+- **Alter Anfrage-Flow ersetzt** durch 6-Schritte Buchungs-Wizard:
+  1. Truck auswaehlen (Grid mit Bildern)
+  2. Catering-Art (Eigenes / Unser) + Menü-Kategorie + Gaeste-Anzahl
+  3. Standort (Adresse) + automatische Lieferkosten-Berechnung (PLZ → km × CHF/km)
+  4. Kalender (Truck-Verfuegbarkeit) + Datum Von-Bis + Uhrzeit Von-Bis
+  5. Kundendaten (vorausgefuellt wenn eingeloggt)
+  6. Zusammenfassung & Absenden
+- **Lieferkosten:** Nominatim OpenStreetMap API (gratis) fuer Geocoding, Haversine-Distanz × Road-Factor × Preis/km
+- **Admin:** Menü-Kategorien CRUD unter /admin/menu-kategorien, Lieferpreis/km + Firmen-PLZ in Einstellungen
+- **Backend:** /api/truck-availability/{slug}, /api/menu-categories, /api/calculate-delivery, /api/admin/menu-categories CRUD
+- Testing-Agent bestaetigt: 100% (15/15 Backend + Frontend alle 6 Wizard-Steps verifiziert)
 - **Neuer Auth-Flow ohne Passwort** — Kunden melden sich per E-Mail + 6-stelligem Bestaetigungscode an
   - Schritt 1: E-Mail eingeben → Code wird per E-Mail gesendet
   - Schritt 2: 6-stelligen Code eingeben (Auto-Verify wenn alle 6 Felder ausgefuellt)
@@ -101,3 +112,4 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - 08.04.2026: Backend-Testagent erfolgreich - /api/blog, /api/seo/structured-data, /api/seo/events-schema, /api/seo/google-verification, /api/trucks 5/5 bestanden
 - iteration_34: **100%** Frontend-Visual-Upgrade (13/13 Features verifiziert, alle 8 Verbesserungen bestanden)
 - iteration_35: **100%** Passwortlose Kunden-Auth (12/12 Backend, Frontend UI verifiziert)
+- iteration_36: **100%** Buchungs-Wizard (15/15 Backend, 6 Frontend-Steps + Admin Menu-Kategorien verifiziert)
