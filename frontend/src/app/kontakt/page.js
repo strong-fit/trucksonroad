@@ -4,7 +4,7 @@ import { buildBreadcrumbSchema, buildLandingPageSchema, fetchPublicApi, SITE_URL
 import ContactPage from "@/views/ContactPage";
 
 export const metadata = {
-  title: "Kontakt – TRUCKSonROAD GmbH",
+  title: "Kontakt – TRUCKSonROAD",
   description: "Kontaktiere TRUCKSonROAD für dein nächstes Event. Bahnhofstrasse 75, 8620 Wetzikon. +41 79 696 98 99.",
   alternates: {
     canonical: `${SITE_URL}/kontakt`,
@@ -13,7 +13,7 @@ export const metadata = {
 
 export default async function Page() {
   const info = await fetchPublicApi("/contact-info");
-  const title = "Kontakt – TRUCKSonROAD GmbH";
+  const title = "Kontakt – TRUCKSonROAD";
   const description = "Kontaktiere TRUCKSonROAD für dein nächstes Event. Bahnhofstrasse 75, 8620 Wetzikon. +41 79 696 98 99.";
 
   return (

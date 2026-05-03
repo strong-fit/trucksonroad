@@ -501,6 +501,31 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/agb": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
+      "srcRoute": "/agb",
+      "dataRoute": "/agb.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/agenda": {
       "experimentalBypassFor": [
         {
@@ -576,6 +601,31 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/datenschutz": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
+      "srcRoute": "/datenschutz",
+      "dataRoute": "/datenschutz.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/faq": {
       "experimentalBypassFor": [
         {
@@ -617,6 +667,31 @@
       "initialExpireSeconds": 31536000,
       "srcRoute": "/fuer-veranstalter",
       "dataRoute": "/fuer-veranstalter.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/impressum": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
+      "srcRoute": "/impressum",
+      "dataRoute": "/impressum.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -905,8 +980,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "b43f27c8781f0941ffbf5fe307fff6fd",
-    "previewModeSigningKey": "dd2631028ef5b5136f7ffa53d0c67ad3cbadba6d0a82577916ab4a13d964c50a",
-    "previewModeEncryptionKey": "c6a0efbab7bfaed7f44855619e926bb142538334a5e390ebc91cc129c33702c4"
+    "previewModeId": "7e34f6df61907b4b191b3307c3198346",
+    "previewModeSigningKey": "8e0a756e36d0efe0f608cc7151dcb773b24ed34b4b3c53c5fef03d72beb01075",
+    "previewModeEncryptionKey": "65cd810e69e217575cbf190cfc7a19a75748121509f3d2351d8ea9e2ba8551cc"
   }
 }

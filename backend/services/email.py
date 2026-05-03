@@ -11,7 +11,7 @@ EMAIL_I18N = {
     "de": {
         "thank_you": "Vielen Dank fuer Ihre Anfrage, {name}!",
         "inquiry_received": "Wir haben Ihre Anfrage erhalten und melden uns innerhalb von 24 Stunden mit einem individuellen Angebot.",
-        "event_date": "Event-Datum", "location": "Ort", "guests": "Gaeste", "event_type": "Eventtyp",
+        "event_date": "Event-Datum", "location": "Ort", "guests": "Gäste", "event_type": "Eventtyp",
         "trucks": "Trucks", "budget": "Budget", "questions_contact": "Bei Fragen erreichen Sie uns jederzeit unter info@trucksonroad.ch oder +41 79 696 98 99.",
         "greeting": "Herzliche Gruesse", "team": "TrucksOnRoad Team",
         "new_inquiry": "NEUE ANFRAGE", "new_inquiry_from": "Neue Anfrage von {name}",
@@ -19,9 +19,9 @@ EMAIL_I18N = {
         "your_offer": "Ihr Angebot, {name}", "offer_intro": "Vielen Dank fuer Ihr Interesse! Basierend auf Ihrer Anfrage haben wir folgendes Angebot fuer Sie zusammengestellt:",
         "offer_follow_up": "Wir melden uns in Kuerze mit den detaillierten Konditionen. Bei Fragen stehen wir Ihnen gerne zur Verfuegung.",
         "status_update": "STATUS-UPDATE", "hello": "Hallo {name},",
-        "status_in_review": "Ihre Anfrage wird aktuell von unserem Team geprueft. Wir melden uns in Kuerze bei Ihnen.",
-        "status_offer_sent": "Wir haben ein Angebot fuer Sie erstellt. Bitte pruefen Sie die Details und melden Sie sich bei Fragen.",
-        "status_confirmed": "Ihre Buchung ist bestaetigt! Wir freuen uns auf Ihren Event.",
+        "status_in_review": "Ihre Anfrage wird aktuell von unserem Team geprüft. Wir melden uns in Kürze bei Ihnen.",
+        "status_offer_sent": "Wir haben ein Angebot für Sie erstellt. Bitte prüfen Sie die Details und melden Sie sich bei Fragen.",
+        "status_confirmed": "Ihre Buchung ist bestätigt! Wir freuen uns auf Ihren Event.",
         "status_completed": "Vielen Dank fuer Ihren Auftrag! Wir hoffen, der Event war ein voller Erfolg.",
         "status_cancelled": "Ihre Anfrage wurde leider storniert. Bei Fragen kontaktieren Sie uns gerne.",
         "status_default": "Der Status Ihrer Anfrage wurde aktualisiert: {status}",
@@ -30,23 +30,23 @@ EMAIL_I18N = {
         "inv_pending": "Fuer Ihren Event wurde eine Rechnung erstellt.",
         "inv_sent": "Wir haben Ihnen eine Rechnung zugesendet. Bitte beachten Sie die Zahlungsfrist.",
         "inv_paid": "Vielen Dank! Ihre Zahlung ist bei uns eingegangen.",
-        "inv_overdue": "Ihre Rechnung ist ueberfaellig. Bitte ueberpruefen Sie die Zahlung.",
+        "inv_overdue": "Ihre Rechnung ist überfällig. Bitte überprüfen Sie die Zahlung.",
         "inv_default": "Ihr Rechnungsstatus wurde aktualisiert: {status}",
-        "new_file": "NEUE DATEI", "file_added": "Wir haben eine neue Datei zu Ihrer Anfrage hinzugefuegt:",
-        "file_download": "Sie koennen diese Datei in Ihrem Kundenportal herunterladen.",
+        "new_file": "NEUE DATEI", "file_added": "Wir haben eine neue Datei zu Ihrer Anfrage hinzugefügt:",
+        "file_download": "Sie können diese Datei in Ihrem Kundenportal herunterladen.",
         "reminder": "ERINNERUNG", "days_until": "Nur noch {days} Tage bis zu Ihrem Event!",
         "ready_for_event": "Wir sind bereit und freuen uns auf Ihren Event! Bei letzten Fragen erreichen Sie uns unter info@trucksonroad.ch oder +41 79 696 98 99.",
         "subject_inquiry": "Anfrage erhalten", "subject_offer": "Ihr Angebot von TrucksOnRoad",
-        "subject_confirmed": "Ihre Buchung ist bestaetigt!", "subject_completed": "Event abgeschlossen",
+        "subject_confirmed": "Ihre Buchung ist bestätigt!", "subject_completed": "Event abgeschlossen",
         "subject_cancelled": "Anfrage storniert", "subject_status": "Status-Update",
         "subject_inv_pending": "Rechnung erstellt", "subject_inv_sent": "Rechnung zugestellt",
-        "subject_inv_paid": "Zahlung erhalten", "subject_inv_overdue": "Rechnung ueberfaellig",
+        "subject_inv_paid": "Zahlung erhalten", "subject_inv_overdue": "Rechnung überfällig",
         "subject_reminder": "Noch {days} Tage bis zu Ihrem Event!",
         "pdf_offer": "Angebot", "pdf_created": "Erstellt am", "pdf_inquiry_nr": "Anfrage-Nr.",
         "pdf_customer": "Kundendaten", "pdf_event_details": "Event-Details", "pdf_indoor": "Indoor/Outdoor",
-        "pdf_remarks": "Bemerkungen", "pdf_disclaimer": "Dieses Angebot ist unverbindlich und 30 Tage gueltig. Fuer Fragen stehen wir Ihnen gerne zur Verfuegung.",
+        "pdf_remarks": "Bemerkungen", "pdf_disclaimer": "Dieses Angebot ist unverbindlich und 30 Tage gültig. Für Fragen stehen wir Ihnen gerne zur Verfügung.",
         "pdf_company": "Firma", "pdf_date": "Datum",
-        "status_labels": {"new": "Neu", "in_review": "In Pruefung", "offer_sent": "Angebot gesendet", "confirmed": "Bestaetigt", "completed": "Abgeschlossen", "cancelled": "Storniert"},
+        "status_labels": {"new": "Neu", "in_review": "In Prüfung", "offer_sent": "Angebot gesendet", "confirmed": "Bestätigt", "completed": "Abgeschlossen", "cancelled": "Storniert"},
         "invoice_labels": {"none": "Keine", "pending": "Offen", "sent": "Gesendet", "paid": "Bezahlt", "overdue": "Ueberfaellig"},
     },
     "en": {
@@ -470,7 +470,7 @@ def build_event_application_email(event: dict, custom_message: str, settings: di
           <ul style="color:#6b6b64;line-height:1.8;">
             <li>Professionelle Ausstattung &amp; Hygiene</li>
             <li>Flexible Menuezusammenstellung</li>
-            <li>Erfahrung mit Grossevents (500+ Gaeste)</li>
+            <li>Erfahrung mit Grossevents (500+ Gäste)</li>
             <li>Kompletter Service inkl. Auf-/Abbau</li>
           </ul>
         </div>
@@ -556,19 +556,19 @@ def build_booking_confirmation_email(inquiry: dict, lang: str = "de") -> str:
         date_display = f"{event_date} – {date_to}"
 
     titles = {
-        "de": "Ihre Buchung ist bestaetigt!",
+        "de": "Ihre Buchung ist bestätigt!",
         "en": "Your booking is confirmed!",
         "fr": "Votre reservation est confirmee!",
         "it": "La tua prenotazione e confermata!"
     }
     intros = {
-        "de": f"Guten Tag {name},<br><br>Wir freuen uns, Ihnen mitzuteilen, dass Ihre Buchung bestaetigt wurde. Hier sind die Details:",
+        "de": f"Guten Tag {name},<br><br>Wir freuen uns, Ihnen mitzuteilen, dass Ihre Buchung bestätigt wurde. Hier sind die Details:",
         "en": f"Hello {name},<br><br>We are pleased to confirm your booking. Here are the details:",
         "fr": f"Bonjour {name},<br><br>Nous avons le plaisir de confirmer votre reservation. Voici les details:",
         "it": f"Buongiorno {name},<br><br>Siamo lieti di confermare la tua prenotazione. Ecco i dettagli:"
     }
     footers = {
-        "de": "Bei Fragen stehen wir Ihnen jederzeit zur Verfuegung.",
+        "de": "Bei Fragen stehen wir Ihnen jederzeit zur Verfügung.",
         "en": "If you have any questions, please don't hesitate to contact us.",
         "fr": "N'hesitez pas a nous contacter pour toute question.",
         "it": "Non esitare a contattarci per qualsiasi domanda."
@@ -619,7 +619,7 @@ def build_booking_confirmation_email(inquiry: dict, lang: str = "de") -> str:
           </table>
         </div>
         <p style="color:#6b6b64;font-size:0.88rem;line-height:1.6;">{footer}</p>
-        <p style="color:#6b6b64;font-size:0.88rem;margin-top:1rem;">Freundliche Gruesse,<br/><strong>TrucksOnRoad Team</strong></p>
+        <p style="color:#6b6b64;font-size:0.88rem;margin-top:1rem;">Freundliche Grüsse,<br/><strong>TrucksOnRoad Team</strong></p>
       </div>
       <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
         TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon

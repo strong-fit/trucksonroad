@@ -52,11 +52,11 @@ export default function Footer() {
       </footer>
 
       <div className="sf-footer-bottom" data-testid="footer-bottom">
-        <span>&copy; 2026 TRUCKSonROAD GmbH &ndash; {t('footer_rights')}</span>
+        <span>&copy; 2026 TRUCKSonROAD &ndash; {t('footer_rights')}</span>
         <div style={{ display: 'flex', gap: '2rem' }}>
-          <a href="#">{t('footer_privacy')}</a>
-          <a href="#">{t('footer_imprint')}</a>
-          <a href="#">{t('footer_terms')}</a>
+          <Link href="/datenschutz" data-testid="footer-link-privacy">{t('footer_privacy')}</Link>
+          <Link href="/impressum" data-testid="footer-link-imprint">{t('footer_imprint')}</Link>
+          <Link href="/agb" data-testid="footer-link-terms">{t('footer_terms')}</Link>
           <Link href="/admin/login" style={{ opacity: 0.4 }}>Admin</Link>
         </div>
       </div>

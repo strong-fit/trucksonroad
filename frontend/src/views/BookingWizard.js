@@ -182,11 +182,11 @@ export default function BookingWizard() {
           <CheckCircle2 size={48} color="var(--sf-gold)" />
           <h2 className="sf-section-title" style={{ fontSize: '1.8rem', marginTop: '1rem' }}>Anfrage gesendet!</h2>
           <p style={{ color: 'var(--sf-gray)', maxWidth: 400, textAlign: 'center', lineHeight: 1.6 }}>
-            Vielen Dank! Wir haben Ihre Buchungsanfrage erhalten und melden uns innerhalb von 24 Stunden bei Ihnen.
-            Sie erhalten eine Bestaetigungs-E-Mail an <strong>{booking.email}</strong>.
+            Wir haben Ihre Buchungsanfrage erhalten und melden uns innerhalb von 24 Stunden bei Ihnen.
+            Sie erhalten eine Bestätigungs-E-Mail an <strong>{booking.email}</strong>.
           </p>
           <button className="sf-btn-primary" onClick={() => router.push('/')} style={{ marginTop: '1.5rem' }}>
-            Zurueck zur Startseite
+            Zurück zur Startseite
           </button>
         </div>
       </div>
@@ -219,7 +219,7 @@ export default function BookingWizard() {
         {/* STEP 1: Select Truck */}
         {STEPS[step] === 'truck' && (
           <div className="sf-booking-step-content" data-testid="step-truck">
-            <h2 className="sf-booking-step-title">Welchen Truck moechten Sie?</h2>
+            <h2 className="sf-booking-step-title">Welchen Truck möchten Sie?</h2>
             <div className="sf-booking-truck-grid">
               {trucks.map(truck => (
                 <button
@@ -268,7 +268,7 @@ export default function BookingWizard() {
               >
                 <UtensilsCrossed size={32} />
                 <h3>Unser Catering</h3>
-                <p>Wir uebernehmen alles — Truck, Essen und Service fuer Ihre Gaeste.</p>
+                <p>Wir übernehmen alles — Truck, Essen und Service für Ihre Gäste.</p>
               </button>
             </div>
 
@@ -370,7 +370,7 @@ export default function BookingWizard() {
                   data-testid="booking-calendar"
                 />
                 <div className="sf-booking-legend">
-                  <span><span className="sf-avail-dot available" /> Verfuegbar</span>
+                  <span><span className="sf-avail-dot available" /> Verfügbar</span>
                   <span><span className="sf-avail-dot booked" /> Besetzt</span>
                 </div>
               </div>
@@ -403,7 +403,7 @@ export default function BookingWizard() {
         {STEPS[step] === 'customer' && (
           <div className="sf-booking-step-content" data-testid="step-customer">
             <h2 className="sf-booking-step-title">Ihre Kontaktdaten</h2>
-            {user && <p style={{ color: 'var(--sf-gold)', fontSize: '0.85rem', marginBottom: '1rem' }}>Daten aus Ihrem Profil vorausgefuellt.</p>}
+            {user && <p style={{ color: 'var(--sf-gold)', fontSize: '0.85rem', marginBottom: '1rem' }}>Daten aus Ihrem Profil vorausgefüllt.</p>}
             <div className="sf-booking-customer-form">
               <div className="sf-booking-row">
                 <div className="sf-booking-field"><label>Vorname *</label><input value={booking.first_name} onChange={e => up('first_name', e.target.value)} data-testid="cust-first-name" /></div>
@@ -414,7 +414,7 @@ export default function BookingWizard() {
                 <div className="sf-booking-field"><label>Mobile *</label><input type="tel" value={booking.mobile} onChange={e => up('mobile', e.target.value)} placeholder="+41 79..." data-testid="cust-mobile" /></div>
               </div>
               <div className="sf-booking-field"><label>Firma (optional)</label><input value={booking.company} onChange={e => up('company', e.target.value)} data-testid="cust-company" /></div>
-              <div className="sf-booking-field"><label>Bemerkungen</label><textarea value={booking.remarks} onChange={e => up('remarks', e.target.value)} placeholder="Weitere Wuensche oder Infos..." data-testid="cust-remarks" /></div>
+              <div className="sf-booking-field"><label>Bemerkungen</label><textarea value={booking.remarks} onChange={e => up('remarks', e.target.value)} placeholder="Weitere Wünsche oder Infos..." data-testid="cust-remarks" /></div>
               <label className="sf-booking-checkbox">
                 <input type="checkbox" checked={booking.privacy_accepted} onChange={e => up('privacy_accepted', e.target.checked)} data-testid="cust-privacy" />
                 Ich akzeptiere die Datenschutzbestimmungen *
@@ -482,7 +482,7 @@ export default function BookingWizard() {
       <div className="sf-booking-nav">
         {step > 0 && (
           <button type="button" className="sf-btn-outline" onClick={() => setStep(s => s - 1)} data-testid="booking-back-btn">
-            <ArrowLeft size={16} /> Zurueck
+            <ArrowLeft size={16} /> Zurück
           </button>
         )}
         <div style={{ flex: 1 }} />

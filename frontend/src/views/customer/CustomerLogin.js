@@ -32,11 +32,11 @@ export default function CustomerLogin() {
 
   const sendCode = async (e) => {
     if (e) e.preventDefault();
-    if (!email.includes('@')) { toast.error('Bitte gueltige E-Mail eingeben'); return; }
+    if (!email.includes('@')) { toast.error('Bitte gültige E-Mail eingeben'); return; }
     setLoading(true);
     try {
       await api.post('/auth/send-code', { email, lang: 'de' });
-      toast.success('Bestaetigungscode gesendet!');
+      toast.success('Bestätigungscode gesendet!');
       setStep(STEPS.CODE);
       setCountdown(60);
       setCode(['', '', '', '', '', '']);
@@ -78,7 +78,7 @@ export default function CustomerLogin() {
     try {
       const r = await api.post('/auth/verify-code', { email, code: fullCode });
       if (r.data.is_new || !r.data.profile_complete) {
-        toast.success('E-Mail bestaetigt! Bitte Profil vervollstaendigen.');
+        toast.success('E-Mail bestätigt! Bitte Profil vervollständigen.');
         setStep(STEPS.PROFILE);
       } else {
         await checkAuth();
@@ -87,7 +87,7 @@ export default function CustomerLogin() {
       }
     } catch (err) {
       const detail = err?.response?.data?.detail;
-      toast.error(typeof detail === 'string' ? detail : 'Code ungueltig');
+      toast.error(typeof detail === 'string' ? detail : 'Code ungültig');
       setCode(['', '', '', '', '', '']);
       codeRefs.current[0]?.focus();
     }
@@ -120,8 +120,8 @@ export default function CustomerLogin() {
           </span>
           <div className="sf-auth-subtitle">
             {step === STEPS.EMAIL && 'Kundenportal'}
-            {step === STEPS.CODE && 'Bestaetigungscode'}
-            {step === STEPS.PROFILE && 'Profil vervollstaendigen'}
+            {step === STEPS.CODE && 'Bestätigungscode'}
+            {step === STEPS.PROFILE && 'Profil vervollständigen'}
           </div>
         </div>
 
@@ -140,7 +140,7 @@ export default function CustomerLogin() {
         {step === STEPS.EMAIL && (
           <form onSubmit={sendCode} className="sf-auth-form" data-testid="step-email">
             <p style={{ fontSize: '0.88rem', color: '#6b6b64', textAlign: 'center', lineHeight: 1.6, marginBottom: '1rem' }}>
-              Geben Sie Ihre E-Mail-Adresse ein. Sie erhalten einen Bestaetigungscode per E-Mail.
+              Geben Sie Ihre E-Mail-Adresse ein. Sie erhalten einen Bestätigungscode per E-Mail.
             </p>
             <div className="sf-auth-field">
               <label>E-Mail-Adresse</label>
@@ -190,7 +190,7 @@ export default function CustomerLogin() {
             </div>
             {loading && (
               <div style={{ textAlign: 'center', marginBottom: '1rem', color: 'var(--sf-gold, #4db6ac)' }}>
-                <Loader2 size={20} className="spin" style={{ display: 'inline-block' }} /> Wird geprueft...
+                <Loader2 size={20} className="spin" style={{ display: 'inline-block' }} /> Wird geprüft...
               </div>
             )}
             <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
@@ -224,7 +224,7 @@ export default function CustomerLogin() {
         {step === STEPS.PROFILE && (
           <form onSubmit={completeProfile} className="sf-auth-form" data-testid="step-profile">
             <p style={{ fontSize: '0.88rem', color: '#6b6b64', textAlign: 'center', lineHeight: 1.6, marginBottom: '1rem' }}>
-              Fast geschafft! Bitte vervollstaendigen Sie Ihr Profil.
+              Fast geschafft! Bitte vervollständigen Sie Ihr Profil.
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
               <div className="sf-auth-field">
@@ -267,7 +267,7 @@ export default function CustomerLogin() {
 
         {step === STEPS.EMAIL && (
           <div className="sf-auth-footer" style={{ marginTop: '1rem' }}>
-            <span style={{ fontSize: '0.82rem', color: '#9c9c94' }}>Kein Passwort noetig – sicher per E-Mail-Code</span>
+            <span style={{ fontSize: '0.82rem', color: '#9c9c94' }}>Kein Passwort nötig – sicher per E-Mail-Code</span>
           </div>
         )}
       </div>

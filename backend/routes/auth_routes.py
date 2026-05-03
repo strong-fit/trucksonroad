@@ -42,7 +42,7 @@ async def login(request: Request, response: Response, body: LoginRequest):
             {"$inc": {"count": 1}, "$set": {"last_attempt": datetime.now(timezone.utc).isoformat()}},
             upsert=True
         )
-        raise HTTPException(status_code=401, detail="Ungueltige Anmeldedaten")
+        raise HTTPException(status_code=401, detail="Ungültige Anmeldedaten")
     await db.login_attempts.delete_one({"identifier": identifier})
     uid = str(user["_id"])
     at = create_access_token(uid, email)
@@ -144,7 +144,7 @@ async def send_verification_code(request: Request, background_tasks: BackgroundT
     body = await request.json()
     email = body.get("email", "").lower().strip()
     if not email or "@" not in email:
-        raise HTTPException(status_code=400, detail="Gueltige E-Mail-Adresse erforderlich")
+        raise HTTPException(status_code=400, detail="Gültige E-Mail-Adresse erforderlich")
 
     # Rate limit: max 3 codes per email per 10 minutes
     ten_min_ago = (datetime.now(timezone.utc) - timedelta(minutes=10)).isoformat()
@@ -169,7 +169,7 @@ async def send_verification_code(request: Request, background_tasks: BackgroundT
         "attempts": 0
     })
     lang = body.get("lang", "de")
-    subject_map = {"de": "Ihr Bestaetigungscode", "en": "Your Verification Code", "fr": "Votre code de verification", "it": "Il tuo codice di verifica"}
+    subject_map = {"de": "Ihr Bestätigungscode", "en": "Your Verification Code", "fr": "Votre code de verification", "it": "Il tuo codice di verifica"}
     html = build_verification_code_email(code, lang)
     background_tasks.add_task(send_email_background, email, f"{subject_map.get(lang, subject_map['de'])} – TrucksOnRoad", html)
     return {"message": "Code gesendet", "email": email}
@@ -189,7 +189,7 @@ async def verify_code(request: Request, response: Response):
         sort=[("created_at", -1)]
     )
     if not code_doc:
-        raise HTTPException(status_code=400, detail="Kein gueltiger Code gefunden. Bitte neuen Code anfordern.")
+        raise HTTPException(status_code=400, detail="Kein gültiger Code gefunden. Bitte neuen Code anfordern.")
 
     # Check if expired
     expires = datetime.fromisoformat(code_doc["expires_at"])
@@ -271,7 +271,7 @@ async def complete_profile(request: Request, body: CustomerProfileComplete):
             "updated_at": datetime.now(timezone.utc).isoformat()
         }}
     )
-    return {"message": "Profil vervollstaendigt", "name": name}
+    return {"message": "Profil vervollständigt", "name": name}
 
 
 def build_reset_email(reset_url: str, name: str, lang: str = "de") -> str:

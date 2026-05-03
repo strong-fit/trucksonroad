@@ -244,7 +244,7 @@ async def admin_accept_booking(inquiry_id: str, request: Request, background_tas
         background_tasks.add_task(
             send_email_background,
             inquiry["email"],
-            f"{it_labels.get('subject_confirmed', 'Buchung bestaetigt')} – TrucksOnRoad",
+            f"{it_labels.get('subject_confirmed', 'Buchung bestätigt')} – TrucksOnRoad",
             html
         )
 
@@ -607,7 +607,7 @@ async def admin_test_email(request: Request):
           <div style="padding:2rem;text-align:center;">
             <div style="font-size:2rem;margin-bottom:0.5rem;">&#9989;</div>
             <h2 style="color:#1a1a18;margin:0 0 0.5rem;">Test erfolgreich!</h2>
-            <p style="color:#6b6b64;line-height:1.6;">Die E-Mail-Konfiguration funktioniert korrekt. E-Mails werden ueber <strong>{smtp_email}</strong> versendet.</p>
+            <p style="color:#6b6b64;line-height:1.6;">Die E-Mail-Konfiguration funktioniert korrekt. E-Mails werden über <strong>{smtp_email}</strong> versendet.</p>
           </div>
           <div style="background:#f0efeb;padding:1rem 2rem;text-align:center;font-size:0.75rem;color:#9c9c94;">
             TrucksOnRoad &middot; Bahnhofstrasse 75 &middot; 8620 Wetzikon
@@ -955,11 +955,11 @@ Antworte IMMER im folgenden JSON-Format (Array von Events):
     "location": "Stadt/Ort",
     "type": "festival|weihnachtsmarkt|markt|firmenevent|strassenfest|andere",
     "description": "Kurzbeschreibung (1-2 Saetze)",
-    "organizer_email": "E-Mail des Veranstalters falls verfuegbar, sonst leer",
-    "website": "URL zur Event-Website falls verfuegbar"
+    "organizer_email": "E-Mail des Veranstalters falls verfügbar, sonst leer",
+    "website": "URL zur Event-Website falls verfügbar"
   }}
 ]
-Liefere so viele relevante Events wie moeglich (mindestens 5-10). Gib NUR den JSON-Array zurueck, keine zusaetzliche Erklaerung."""
+Liefere so viele relevante Events wie möglich (mindestens 5-10). Gib NUR den JSON-Array zurück, keine zusätzliche Erklärung."""
 
     try:
         async with httpx.AsyncClient(timeout=60) as http_client:
@@ -976,7 +976,7 @@ Liefere so viele relevante Events wie moeglich (mindestens 5-10). Gib NUR den JS
                 }
             )
             if resp.status_code == 401:
-                raise HTTPException(status_code=400, detail="Perplexity API-Key ungueltig.")
+                raise HTTPException(status_code=400, detail="Perplexity API-Key ungültig.")
             resp.raise_for_status()
             data = resp.json()
             content = data.get("choices", [{}])[0].get("message", {}).get("content", "[]")

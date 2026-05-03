@@ -122,3 +122,21 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - iteration_35: **100%** Passwortlose Kunden-Auth (12/12 Backend, Frontend UI verifiziert)
 - iteration_36: **100%** Buchungs-Wizard (15/15 Backend, 6 Frontend-Steps + Admin Menu-Kategorien verifiziert)
 - iteration_37: **Manueller Curl-Test** Accept-Booking-Flow: Status→confirmed, Kalender-Block erstellt, E-Mail-Template generiert
+
+
+## 03.02.2026 — Rechtsseiten + GmbH-Entfernung
+- **AGB** (`/agb`): 16 Paragraphen, Schweizer-Recht-konform, Foodtruck-Catering spezifisch
+  (Geltungsbereich, Buchung, Preise/MWST, Anzahlung, Stornierung-Staffelung, Höhere Gewalt,
+  HACCP/Lebensmittel, Haftung, Bildrechte, Reklamationen, Gerichtsstand Wetzikon)
+- **Datenschutzerklärung** (`/datenschutz`): DSGVO + nDSG (Schweiz) konform, 17 Sektionen
+  (Verantwortliche Stelle, Datenkategorien, Rechtsgrundlagen, Cookies, OTP-Login,
+  Drittanbieter, Speicherdauer, Betroffenenrechte, EDÖB-Beschwerderecht)
+- **Impressum** (`/impressum`): Anbieterkennzeichnung, Haftungsausschluss, Urheberrechte
+- Footer-Links auf alle 3 Legal-Pages aktiv (`/agb`, `/datenschutz`, `/impressum`)
+- Eigenes CSS-Modul `.sf-legal` für Long-Form-Typografie (Heading-Hierarchie, Bullet-Lists,
+  goldene Akzent-Boxen, Mobile-Responsive)
+- Alle Seiten SSR mit JSON-LD (WebPage Schema + BreadcrumbList) + Canonical-Tags
+- **GmbH überall entfernt:** Footer, Kontakt-Page, ContactPage-Default, PDF-Generator (3
+  Stellen), Settings-DB-Eintrag (`company_name: TRUCKSonROAD`) – verifiziert, dass kein
+  einziges "GmbH" mehr im öffentlichen HTML serviert wird (außer Test-Mock)
+- Verifizierung: HTTP 200 für alle 3 Seiten, Build erfolgreich, Smoke-Test grün

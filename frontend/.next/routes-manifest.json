@@ -167,6 +167,12 @@
       "namedRegex": "^/admin/trucks(?:/)?$"
     },
     {
+      "page": "/agb",
+      "regex": "^/agb(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/agb(?:/)?$"
+    },
+    {
       "page": "/agenda",
       "regex": "^/agenda(?:/)?$",
       "routeKeys": {},
@@ -185,6 +191,12 @@
       "namedRegex": "^/blog(?:/)?$"
     },
     {
+      "page": "/datenschutz",
+      "regex": "^/datenschutz(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/datenschutz(?:/)?$"
+    },
+    {
       "page": "/faq",
       "regex": "^/faq(?:/)?$",
       "routeKeys": {},
@@ -195,6 +207,12 @@
       "regex": "^/fuer\\-veranstalter(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/fuer\\-veranstalter(?:/)?$"
+    },
+    {
+      "page": "/impressum",
+      "regex": "^/impressum(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/impressum(?:/)?$"
     },
     {
       "page": "/kontakt",
