@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import api from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -82,14 +82,6 @@ export default function ContactPage({ initialInfo }) {
                   <div className="sf-contact-item-value">
                     <a href={`mailto:${info.email}`} style={{ color: 'var(--sf-cream)' }}>{info.email}</a>
                   </div>
-                </div>
-              </div>
-
-              <div className="sf-contact-item" data-testid="contact-hours">
-                <div className="sf-contact-item-icon"><Clock size={18} /></div>
-                <div>
-                  <div className="sf-contact-item-label">{t('contact_hours')}</div>
-                  <div className="sf-contact-item-value">{t('contact_hours_value')}</div>
                 </div>
               </div>
             </div>
