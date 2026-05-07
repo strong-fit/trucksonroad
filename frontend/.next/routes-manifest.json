@@ -29,6 +29,14 @@
   },
   "dynamicRoutes": [
     {
+      "page": "/admin/legal/[type]",
+      "regex": "^/admin/legal/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPtype": "nxtPtype"
+      },
+      "namedRegex": "^/admin/legal/(?<nxtPtype>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/blog/[slug]",
       "regex": "^/blog/([^/]+?)(?:/)?$",
       "routeKeys": {
@@ -123,6 +131,12 @@
       "regex": "^/admin/kalender(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/admin/kalender(?:/)?$"
+    },
+    {
+      "page": "/admin/legal",
+      "regex": "^/admin/legal(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/legal(?:/)?$"
     },
     {
       "page": "/admin/login",

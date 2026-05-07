@@ -1,0 +1,66 @@
+{
+  "summary": "Legal documents (AGB/Datenschutz/Impressum) feature fully tested - both backend versioning system and frontend editor UI. 10/10 backend pytest tests pass. Public pages render correctly with all sections, markdown-light (bullet lists, bold, links), and version info. Admin index shows 3 cards with version badges, editor opens correctly, history modal lists all versions with diff/restore buttons, diff modal shows unified diff text. Sidebar nav 'Rechtliches' link present. Versioning flow (v_n -> edit -> v_n+1 -> restore -> v_n+2 with restored_from_version) verified end-to-end against real API.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_legal.py",
+    "/app/test_reports/pytest/pytest_legal.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "AdminLegalEditor.js client-side validation requires sections.length>=1 (line 88) but backend allows empty sections array — minor inconsistency, not blocking.",
+    "Public 401 console errors observed on /agb /datenschutz /impressum and /admin/legal pages from background /auth/me calls; cosmetic only, doesn't affect functionality."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_legal.py"
+  ],
+  "success_rate": {
+    "backend": "100% (10/10 pytest passed)",
+    "frontend": "100% (all data-testid present, all flows verified: card grid, editor, history modal, diff modal, restore buttons)"
+  },
+  "test_credentials": {
+    "admin": "admin@truckonroad.ch / TrucksOnRoad2026! (cookie-based)"
+  },
+  "seed_data_creation": "Backend auto-seeds v1 of agb/datenschutz/impressum on startup via legal_seed.py. Test created additional versions (v5+ for AGB) — restored to original via test cleanup",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Legal feature complete & stable. Tests in /app/backend/tests/test_legal.py cover public GETs, admin auth, full versioning flow (edit, list, get-by-id, restore), and PUT validation. AGB doc has accumulated test versions (v5+) due to test runs - main DB; if you need clean state, can manually reset legal_documents/legal_versions collections. All data-testids confirmed: admin-legal-card-{type}, admin-legal-current-version, admin-legal-section-{idx}, admin-legal-section-heading-{idx}, admin-legal-section-content-{idx}, admin-legal-section-remove-{idx}, admin-legal-add-section, admin-legal-save-btn, admin-legal-history-btn, admin-legal-history-modal, admin-legal-version-{n}, admin-legal-version-diff-{n}, admin-legal-version-restore-{n}, admin-legal-diff-modal, admin-legal-diff-pre, admin-nav-legal, footer-link-terms/privacy/imprint.",
+  "features_tested": {
+    "backend_public": {
+      "GET /api/legal/agb": "PASS - 16 sections, version, no _id",
+      "GET /api/legal/datenschutz": "PASS - 17 sections",
+      "GET /api/legal/impressum": "PASS - 10 sections",
+      "GET /api/legal/unbekannt": "PASS - 404"
+    },
+    "backend_admin": {
+      "GET /api/admin/legal (no auth)": "PASS - 401",
+      "GET /api/admin/legal (cookie auth)": "PASS - all 3 docs with version field",
+      "GET /api/admin/legal/agb": "PASS - full doc",
+      "PUT /api/admin/legal/agb": "PASS - increments version, persists, creates legal_versions entry with admin_email/admin_name/diff_added/diff_removed",
+      "GET /api/admin/legal/agb/versions": "PASS - desc-sorted list with all metadata",
+      "GET /api/admin/legal/agb/versions/{id}": "PASS - includes sections + diff_text",
+      "POST /api/admin/legal/agb/restore/{id}": "PASS - creates new higher version with restored_from_version, public reflects rollback",
+      "PUT empty sections": "PASS - 200 (allowed)",
+      "PUT missing title": "PASS - 422 validation error"
+    },
+    "frontend_public": {
+      "/agb /datenschutz /impressum render": "PASS - all sections, version/Stand text, bullet lists (15 li), bold (6 strong), links rendered",
+      "Footer-links": "PASS - footer-link-terms/privacy/imprint testids present"
+    },
+    "frontend_admin": {
+      "/admin/legal grid (3 cards with version badges)": "PASS - 3 cards, 3 badges",
+      "Card click → /admin/legal/{type}": "PASS - navigates correctly",
+      "Editor (title, subtitle, sections)": "PASS - 16 section rows, all testids present",
+      "History modal (timeline, diff badge, restore buttons)": "PASS - 14 versions, 5 diff buttons, 4 restore buttons (current excluded)",
+      "Diff modal (unified diff text)": "PASS - admin-legal-diff-pre renders diff content",
+      "Sidebar 'Rechtliches' link": "PASS - admin-nav-legal present"
+    }
+  }
+}

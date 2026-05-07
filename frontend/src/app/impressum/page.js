@@ -1,20 +1,20 @@
 import { JsonLdScript } from "@/components/JsonLdScript";
+import LegalRenderer from "@/components/LegalRenderer";
 import PublicShell from "@/components/PublicShell";
-import { buildBreadcrumbSchema, buildLandingPageSchema, SITE_URL } from "@/lib/seo";
-import ImpressumPage from "@/views/ImpressumPage";
+import { buildBreadcrumbSchema, buildLandingPageSchema, fetchPublicApi, SITE_URL } from "@/lib/seo";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Impressum | TRUCKSonROAD",
-  description:
-    "Impressum von TRUCKSonROAD – Anbieterkennzeichnung, Kontakt und rechtliche Hinweise.",
-  alternates: {
-    canonical: `${SITE_URL}/impressum`,
-  },
+  description: "Impressum von TRUCKSonROAD – Anbieterkennzeichnung und rechtliche Hinweise.",
+  alternates: { canonical: `${SITE_URL}/impressum` },
 };
 
-export default function Page() {
+export default async function Page() {
+  const doc = await fetchPublicApi("/legal/impressum", 60);
   const title = "Impressum | TRUCKSonROAD";
-  const description = "Impressum von TRUCKSonROAD – Anbieterkennzeichnung, Kontakt und rechtliche Hinweise.";
+  const description = "Impressum von TRUCKSonROAD – Anbieterkennzeichnung und rechtliche Hinweise.";
 
   return (
     <PublicShell>
@@ -29,7 +29,7 @@ export default function Page() {
           { name: "Impressum", url: `${SITE_URL}/impressum` },
         ])}
       />
-      <ImpressumPage />
+      <LegalRenderer doc={doc} testIdPrefix="impressum" />
     </PublicShell>
   );
 }

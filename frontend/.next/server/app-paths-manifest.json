@@ -10,6 +10,8 @@
   "/admin/faqs/page": "app/admin/faqs/page.js",
   "/admin/finanzen/page": "app/admin/finanzen/page.js",
   "/admin/kalender/page": "app/admin/kalender/page.js",
+  "/admin/legal/[type]/page": "app/admin/legal/[type]/page.js",
+  "/admin/legal/page": "app/admin/legal/page.js",
   "/admin/login/page": "app/admin/login/page.js",
   "/admin/menu-kategorien/page": "app/admin/menu-kategorien/page.js",
   "/admin/mitarbeiter/page": "app/admin/mitarbeiter/page.js",

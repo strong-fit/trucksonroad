@@ -10,6 +10,8 @@
   "/admin/faqs/page": "/admin/faqs",
   "/admin/finanzen/page": "/admin/finanzen",
   "/admin/kalender/page": "/admin/kalender",
+  "/admin/legal/[type]/page": "/admin/legal/[type]",
+  "/admin/legal/page": "/admin/legal",
   "/admin/login/page": "/admin/login",
   "/admin/menu-kategorien/page": "/admin/menu-kategorien",
   "/admin/mitarbeiter/page": "/admin/mitarbeiter",

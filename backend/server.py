@@ -9,6 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 import os
 import logging
 import asyncio
+import uuid
 from datetime import datetime, timezone
 
 from database import db, client
@@ -23,6 +24,8 @@ from routes.public import router as public_router
 from routes.customer import router as customer_router
 from routes.admin import router as admin_router
 from routes.blog import router as blog_router
+from routes.legal import router as legal_router
+from legal_seed import LEGAL_SEED
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -36,6 +39,7 @@ api_router.include_router(public_router)
 api_router.include_router(customer_router)
 api_router.include_router(admin_router)
 api_router.include_router(blog_router)
+api_router.include_router(legal_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -90,6 +94,38 @@ async def startup():
             await db.blog_posts.insert_one(bp.copy())
         logger.info(f"Blog posts seeded: {len(BLOG_SEED)}")
     await db.blog_posts.create_index("slug", unique=True)
+
+    # Seed legal documents (AGB, Datenschutz, Impressum) as version 1 if not present
+    await db.legal_documents.create_index("type", unique=True)
+    await db.legal_versions.create_index([("doc_type", 1), ("version", -1)])
+    for doc_type, seed_doc in LEGAL_SEED.items():
+        if not await db.legal_documents.find_one({"type": doc_type}):
+            now = datetime.now(timezone.utc).isoformat()
+            initial = {
+                **seed_doc,
+                "version": 1,
+                "updated_at": now,
+                "updated_by_email": admin_email,
+                "updated_by_name": "System (Initial Seed)",
+            }
+            await db.legal_documents.insert_one(initial.copy())
+            version_entry = {
+                "id": str(uuid.uuid4()),
+                "doc_type": doc_type,
+                "version": 1,
+                "title": seed_doc["title"],
+                "subtitle": seed_doc.get("subtitle", ""),
+                "sections": seed_doc["sections"],
+                "change_notes": "Initiale Version (System-Seed)",
+                "admin_email": admin_email,
+                "admin_name": "System",
+                "created_at": now,
+                "diff_added": sum(len(s["content"].splitlines()) for s in seed_doc["sections"]),
+                "diff_removed": 0,
+                "diff_text": "",
+            }
+            await db.legal_versions.insert_one(version_entry)
+            logger.info(f"Legal seeded: {doc_type} v1")
 
     Path("/app/memory").mkdir(exist_ok=True)
     with open("/app/memory/test_credentials.md", "w") as f:
