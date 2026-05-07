@@ -140,3 +140,32 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
   Stellen), Settings-DB-Eintrag (`company_name: TRUCKSonROAD`) – verifiziert, dass kein
   einziges "GmbH" mehr im öffentlichen HTML serviert wird (außer Test-Mock)
 - Verifizierung: HTTP 200 für alle 3 Seiten, Build erfolgreich, Smoke-Test grün
+
+
+## 07.05.2026 — Legal-Editor + Versions-/Audit-Log (revDSG/DSGVO-konform)
+- **Backend** (`routes/legal.py`, `legal_seed.py`):
+  - 7 neue API-Endpoints: GET /api/legal/{type} (public), GET/PUT /api/admin/legal,
+    GET /api/admin/legal/{type}/versions, GET .../{version_id}, POST .../restore/{version_id}
+  - 2 neue Collections: `legal_documents` (current state), `legal_versions` (audit log)
+  - Auto-Seed v1 beim Startup für AGB/Datenschutz/Impressum aus `legal_seed.py`
+  - Unified Diff-Berechnung pro Speicherung (added/removed lines + diff_text bis 500 lines)
+- **Frontend Public** (`/agb`, `/datenschutz`, `/impressum`):
+  - Force-dynamic SSR — fetcht jeweils aktuelle Version aus DB
+  - Neuer `LegalRenderer.js` mit Markdown-light: Bullet-Listen (`- `), Bold (`**…**`),
+    Links (`[text](url)`), automatische Absatz-Splittung
+  - Footer-Meta zeigt "Letzte Aktualisierung: TT. Monat JJJJ · Version N"
+- **Admin Editor** (`/admin/legal`, `/admin/legal/{type}`):
+  - Index-Page mit 3 Cards (AGB/Datenschutz/Impressum) + Versions-Badges
+  - Editor mit Titel, Untertitel, frei sortierbaren Sektionen (Add/Move/Remove),
+    Pro-Section: Heading-Input + Markdown-Textarea, Format-Hilfe inline
+  - Sticky Save-Bar mit "Änderungsnotiz"-Feld (für Audit-Log)
+  - Historie-Modal: Timeline aller Versionen mit Diff-Badge (+X/−Y), Admin, Datum,
+    Notes; "Wiederherstellen"-Button erstellt neue Version mit `restored_from_version`
+  - Diff-Modal: Unified-Diff-Anzeige im Terminal-Style
+  - Sidebar-Eintrag "Rechtliches" mit Scale-Icon
+- **Compliance-Wert:** Bei revDSG-/DSGVO-Audit kann jederzeit nachgewiesen werden,
+  welche Fassung der Rechtstexte zwischen welchen Datums-Werten gültig war. Ein Klick
+  reicht für Rollback ohne Verlust der Audit-Historie.
+- **Test-Status:** iteration_37 — 100% Backend (10/10 pytest) + 100% Frontend
+  (alle Flows: Card-Grid, Editor, Historie-Modal, Diff-Modal, Restore)
+- DB nach Test-Cleanup zurück auf v1 für alle 3 Dokumente
