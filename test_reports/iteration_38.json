@@ -1,0 +1,66 @@
+{
+  "summary": "P0 Umlaut-Fix in auth_routes.py build_verification_code_email and P2 Cookie-Consent-Banner (DSGVO/nDSG-konform mit 4 Kategorien) fully verified. 10/10 backend pytest tests pass (umlaut/accents in DE/FR/IT, send-code endpoint, datenschutz section). All 7 frontend cookie banner flows verified end-to-end: banner appears after localStorage.clear+reload, accept-all/necessary-only/save-preferences persist correctly to trucksonroad-consent-v1 with version+consent+decided_at, settings modal shows 4 categories with necessary disabled, footer-cookie-settings reopens modal, datenschutz page renders with all 4 cookie categories.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_cookie_auth_umlauts.py",
+    "/app/test_reports/pytest/pytest_cookie_umlauts.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Hidden checkbox inputs in CookieBanner.js (.sf-cookie-toggle input) are visually toggled via .sf-cookie-toggle-track span. Playwright cannot click hidden checkboxes directly with .click() — used JS .click() in tests. Consider associating the visual track via <label> wrapper which is already done; no fix needed (works for real users), but worth noting for future automated tests.",
+    "CookieConsentContext.js: useEffect on mount only checks localStorage once — if user changes consent in another tab, current tab is not synced. Minor edge case for SSR/multi-tab scenarios; not blocking for MVP.",
+    "build_verification_code_email() inlines all 4 language labels directly. With future i18n expansion, consider extracting to a translations module to keep auth_routes.py lean (current file is ~383 lines, still acceptable)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_cookie_auth_umlauts.py"
+  ],
+  "success_rate": {
+    "backend": "100% (10/10 pytest passed)",
+    "frontend": "100% (cookie banner: visibility, accept-all, necessary-only, settings modal with 4 categories, save-preferences with selective toggles, footer-cookie-settings reopens modal, datenschutz page renders 4 categories + Cookie-Einstellungen text, AGB+Impressum render)"
+  },
+  "test_credentials": {
+    "admin": "admin@truckonroad.ch / TrucksOnRoad2026! (not needed - all tests public)"
+  },
+  "seed_data_creation": "None. No persistent test data left behind. Verification codes are auto-expired in 10 min.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Cookie banner is a 'use client' component — REQUIRES localStorage.clear() + page.reload() + page.wait_for_timeout(4500) for hydration before banner appears. Visual toggle inputs (cookie-toggle-{key}) are <input type='checkbox'> hidden via CSS, the visible UI is .sf-cookie-toggle-track span. Use page.evaluate JS .click() on the input rather than playwright .click() with force=True. data-testids confirmed: cookie-banner, cookie-banner-overlay, cookie-banner-settings-btn, cookie-banner-necessary-btn, cookie-banner-accept-all-btn, cookie-banner-privacy-link, cookie-settings-modal, cookie-settings-close, cookie-cat-{necessary|functional|analytics|marketing}, cookie-toggle-{key}, cookie-settings-reject-btn, cookie-settings-save-btn, cookie-settings-accept-all-btn, footer-cookie-settings. Storage key: trucksonroad-consent-v1, payload schema: {version:'1', consent:{4 booleans}, decided_at:ISO}.",
+  "features_tested": {
+    "backend_email_umlauts": {
+      "DE 'Bestätigungscode' + 'gültig'": "PASS",
+      "DE no 'Bestaetigung'/'gueltig'": "PASS",
+      "FR 'vérification' + 'à TrucksOnRoad'": "PASS",
+      "IT 'è valido'": "PASS",
+      "EN 'Verification Code' + '10 minutes'": "PASS",
+      "subject_map['fr']='Votre code de vérification'": "PASS",
+      "Default lang fallback to DE": "PASS"
+    },
+    "backend_send_code_endpoint": {
+      "POST /api/auth/send-code (invalid email) → 400": "PASS",
+      "POST /api/auth/send-code (valid email,lang=de) → 200": "PASS"
+    },
+    "backend_legal_datenschutz": {
+      "GET /api/legal/datenschutz returns 200 with 4 cookie categories in section 6": "PASS",
+      "Section mentions Cookie-Einstellungen footer link": "PASS",
+      "Version >=1": "PASS"
+    },
+    "frontend_cookie_banner": {
+      "Banner appears with all 3 buttons + privacy link to /datenschutz": "PASS",
+      "Click accept-all → localStorage all 4 categories=true + version='1' + decided_at, banner disappears": "PASS",
+      "Click necessary-only → only necessary=true": "PASS",
+      "Settings modal: 4 cookie-cat-{key} present, necessary toggle disabled": "PASS",
+      "Toggle functional+analytics + save → consent={n:true,f:true,a:true,m:false}": "PASS",
+      "Footer footer-cookie-settings present and reopens settings modal": "PASS",
+      "/datenschutz renders with 4 cookie categories text + Cookie-Einstellungen mention": "PASS",
+      "/agb /impressum render": "PASS"
+    }
+  }
+}

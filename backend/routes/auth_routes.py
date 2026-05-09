@@ -111,10 +111,10 @@ async def register_customer(body: CustomerRegister, response: Response):
 
 def build_verification_code_email(code: str, lang: str = "de") -> str:
     labels = {
-        "de": {"title": "Ihr Bestaetigungscode", "text": "Verwenden Sie den folgenden Code, um sich bei TrucksOnRoad anzumelden:", "expire": "Dieser Code ist 10 Minuten gueltig.", "ignore": "Falls Sie diese Anfrage nicht gestellt haben, ignorieren Sie diese E-Mail."},
+        "de": {"title": "Ihr Bestätigungscode", "text": "Verwenden Sie den folgenden Code, um sich bei TrucksOnRoad anzumelden:", "expire": "Dieser Code ist 10 Minuten gültig.", "ignore": "Falls Sie diese Anfrage nicht gestellt haben, ignorieren Sie diese E-Mail."},
         "en": {"title": "Your Verification Code", "text": "Use the following code to sign in to TrucksOnRoad:", "expire": "This code is valid for 10 minutes.", "ignore": "If you did not request this, please ignore this email."},
-        "fr": {"title": "Votre code de verification", "text": "Utilisez le code suivant pour vous connecter a TrucksOnRoad :", "expire": "Ce code est valide pendant 10 minutes.", "ignore": "Si vous n'avez pas fait cette demande, ignorez cet e-mail."},
-        "it": {"title": "Il tuo codice di verifica", "text": "Usa il seguente codice per accedere a TrucksOnRoad:", "expire": "Questo codice e valido per 10 minuti.", "ignore": "Se non hai effettuato questa richiesta, ignora questa e-mail."},
+        "fr": {"title": "Votre code de vérification", "text": "Utilisez le code suivant pour vous connecter à TrucksOnRoad :", "expire": "Ce code est valide pendant 10 minutes.", "ignore": "Si vous n'avez pas fait cette demande, ignorez cet e-mail."},
+        "it": {"title": "Il tuo codice di verifica", "text": "Usa il seguente codice per accedere a TrucksOnRoad:", "expire": "Questo codice è valido per 10 minuti.", "ignore": "Se non hai effettuato questa richiesta, ignora questa e-mail."},
     }
     l = labels.get(lang, labels["de"])
     return f"""
@@ -169,7 +169,7 @@ async def send_verification_code(request: Request, background_tasks: BackgroundT
         "attempts": 0
     })
     lang = body.get("lang", "de")
-    subject_map = {"de": "Ihr Bestätigungscode", "en": "Your Verification Code", "fr": "Votre code de verification", "it": "Il tuo codice di verifica"}
+    subject_map = {"de": "Ihr Bestätigungscode", "en": "Your Verification Code", "fr": "Votre code de vérification", "it": "Il tuo codice di verifica"}
     html = build_verification_code_email(code, lang)
     background_tasks.add_task(send_email_background, email, f"{subject_map.get(lang, subject_map['de'])} – TrucksOnRoad", html)
     return {"message": "Code gesendet", "email": email}

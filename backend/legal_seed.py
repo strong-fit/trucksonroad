@@ -250,11 +250,16 @@ LEGAL_SEED = {
                     "- **Technisch notwendige Cookies:** Erforderlich für den Betrieb der Website und für die "
                     "Login-Funktion (Session-Cookies). Rechtsgrundlage: berechtigtes Interesse.\n"
                     "- **Funktionale Cookies:** Speicherung Ihrer Spracheinstellung (DE/EN/FR/IT/ES). Rechtsgrundlage: "
-                    "berechtigtes Interesse.\n"
-                    "- **Analyse- und Marketing-Cookies:** Werden – soweit eingesetzt – nur mit Ihrer ausdrücklichen "
-                    "Einwilligung gesetzt.\n\n"
-                    "Sie können das Setzen von Cookies in Ihrem Browser jederzeit unterbinden bzw. gesetzte Cookies "
-                    "löschen. Dies kann jedoch die Funktionsfähigkeit der Website einschränken."
+                    "Einwilligung.\n"
+                    "- **Analyse-Cookies:** Helfen uns zu verstehen, wie Besucher unsere Website nutzen. "
+                    "Rechtsgrundlage: Einwilligung.\n"
+                    "- **Marketing-Cookies:** Personalisierte Werbung und Re-Targeting auf Drittplattformen. "
+                    "Rechtsgrundlage: Einwilligung.\n\n"
+                    "Beim ersten Besuch unserer Website fragen wir Sie über einen Consent-Banner aktiv um Ihre "
+                    "Einwilligung. Sie können Ihre Auswahl jederzeit über den Footer-Link «Cookie-Einstellungen» "
+                    "anpassen oder vollständig widerrufen. Sie können das Setzen von Cookies zusätzlich in Ihrem "
+                    "Browser unterbinden bzw. gesetzte Cookies löschen. Dies kann jedoch die Funktionsfähigkeit der "
+                    "Website einschränken."
                 ),
             },
             {

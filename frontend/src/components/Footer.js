@@ -1,10 +1,12 @@
 "use client";
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { useCookieConsent } from '@/contexts/CookieConsentContext';
+import { Mail, Phone, MapPin, Cookie } from 'lucide-react';
 
 export default function Footer() {
   const { t } = useLanguage();
+  const { openBanner } = useCookieConsent();
 
   return (
     <>
@@ -53,10 +55,22 @@ export default function Footer() {
 
       <div className="sf-footer-bottom" data-testid="footer-bottom">
         <span>&copy; 2026 TRUCKSonROAD &ndash; {t('footer_rights')}</span>
-        <div style={{ display: 'flex', gap: '2rem' }}>
+        <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', alignItems: 'center' }}>
           <Link href="/datenschutz" data-testid="footer-link-privacy">{t('footer_privacy')}</Link>
           <Link href="/impressum" data-testid="footer-link-imprint">{t('footer_imprint')}</Link>
           <Link href="/agb" data-testid="footer-link-terms">{t('footer_terms')}</Link>
+          <button
+            type="button"
+            onClick={openBanner}
+            data-testid="footer-cookie-settings"
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: 'inherit', fontSize: 'inherit', font: 'inherit',
+              padding: 0, display: 'inline-flex', alignItems: 'center', gap: '0.35rem'
+            }}
+          >
+            <Cookie size={13} /> Cookie-Einstellungen
+          </button>
           <Link href="/admin/login" style={{ opacity: 0.4 }}>Admin</Link>
         </div>
       </div>
