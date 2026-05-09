@@ -169,3 +169,28 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - **Test-Status:** iteration_37 — 100% Backend (10/10 pytest) + 100% Frontend
   (alle Flows: Card-Grid, Editor, Historie-Modal, Diff-Modal, Restore)
 - DB nach Test-Cleanup zurück auf v1 für alle 3 Dokumente
+
+
+## 09.05.2026 — Umlaut-Fix + DSGVO Cookie-Consent-Banner
+- **P0 Umlaut-Fix:** `auth_routes.py` build_verification_code_email + subject_map
+  korrigiert für DE (Bestätigungscode/gültig), FR (vérification/à TrucksOnRoad),
+  IT (è valido). EN bleibt korrekt.
+- **P2 Cookie-Banner (DSGVO + Schweizer nDSG konform):**
+  - `CookieConsentContext.js`: Provider mit useState+useEffect, localStorage-Persistenz,
+    Versionierung (COOKIE_VERSION='1'), Storage-Key `trucksonroad-consent-v1`
+  - `CookieBanner.js`: 2-stufiges UI – kompakter Bottom-Banner (3 Buttons:
+    "Einstellungen" / "Nur notwendige" / "Alle akzeptieren") + ausführliches
+    Settings-Modal mit 4 Kategorien (Notwendig/Funktional/Analyse/Marketing)
+  - 4 Kategorien als iOS-Style Toggle-Switches; "Notwendig" ist immer aktiv (golden)
+  - Footer-Link "Cookie-Einstellungen" (Cookie-Icon) öffnet Modal jederzeit erneut
+  - Premium-Design im Brand-Theme (dunkles Glas, gold/teal Akzente, slide-up Animation)
+  - Datenschutzerklärung Section 6 automatisch auf v2 aktualisiert mit Hinweis auf
+    die 4 Kategorien + den "Cookie-Einstellungen"-Footer-Link
+- **Compliance:**
+  - Opt-In Standard (alle nicht-notwendigen Cookies initial OFF)
+  - "Alle ablehnen" gleich prominent wie "Alle akzeptieren"
+  - Granulare Kontrolle, jederzeit änderbar, Versions-Re-Consent möglich
+  - Verlinkt auf Datenschutzerklärung
+- **Test-Status:** iteration_38 — 100% Backend (10/10 pytest umlauts + send-code +
+  datenschutz section) + 100% Frontend (Banner-Visibility, Accept-All, Necessary-Only,
+  Settings-Modal, selective Save, Footer-Reopen, Datenschutz-Render)
