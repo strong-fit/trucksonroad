@@ -202,7 +202,8 @@ async def _db_backup_loop():
                 continue
 
             cfg = await db.settings.find_one({"type": "cloud_backup"}, {"_id": 0}) or {}
-            if cfg.get("enabled"):
+            environment = (os.environ.get("ENVIRONMENT") or "preview").lower()
+            if cfg.get("enabled") and environment == "production":
                 try:
                     up = cloud_backup.upload_archive(cfg, result["path"])
                     logger.info(f"DB-Backup: cloud upload OK key={up['key']}")
@@ -214,6 +215,8 @@ async def _db_backup_loop():
                         logger.warning(f"DB-Backup: cloud prune failed: {prune_exc}")
                 except Exception as exc:
                     logger.error(f"DB-Backup: cloud upload failed: {exc}")
+            elif cfg.get("enabled"):
+                logger.info(f"DB-Backup: cloud upload skipped (environment='{environment}', only 'production' uploads)")
         except Exception as exc:
             logger.error(f"DB-Backup loop fatal: {exc}")
             await asyncio.sleep(3600)

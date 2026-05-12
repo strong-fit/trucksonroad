@@ -230,3 +230,21 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
   - Optional: role=='admin' Check in routes/backups.py (konsistent mit Rest:
     aktuell nur Login-Pflicht via get_current_user)
 
+
+
+## 12.05.2026 — Backup: Preview/Production-Trennung
+- **Auto-Disable Cloud-Upload in Preview:** Cloud-Upload (Infomaniak) läuft nur,
+  wenn `ENVIRONMENT=production` in `backend/.env` gesetzt ist. Andernfalls werden
+  lokale Backups weiterhin erstellt, aber NICHT in den Bucket hochgeladen.
+- **Sichtbar im Admin-UI:** Goldener Warn-Banner *"Cloud-Upload in „preview"-Umgebung
+  blockiert"* mit Erklärung. data-testid: `admin-backups-env-warning`
+- **Backend-Helper:** `get_environment()` + `is_production()` + `cloud_upload_allowed(cfg)`
+  in `routes/backups.py`. Cron-Loop und manuelles "Backup jetzt starten" wenden
+  beide den Check an.
+- **API-Response Erweiterung:** GET `/admin/backups/cloud/config` liefert jetzt
+  zusätzlich `environment`, `is_production`, `cloud_upload_blocked`.
+  POST `/admin/backups` liefert `cloud: {ok:false, skipped:true, reason:"..."}`
+  wenn Upload geskippt wurde.
+- **Test-Bucket bereinigt:** alle `truck/mongodump-*` aus Preview-Tests gelöscht.
+- **Production-Deploy-Hinweis:** Vor dem Live-Schalten muss `ENVIRONMENT=production`
+  in der Production-`.env` gesetzt sein, sonst läuft auch dort kein Cloud-Upload.

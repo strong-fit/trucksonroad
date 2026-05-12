@@ -66,7 +66,11 @@ export default function AdminBackups() {
       const r = await api.post('/admin/backups');
       const local = r.data.local;
       const cloud = r.data.cloud;
-      if (cloud && cloud.ok) {
+      if (cloud && cloud.skipped) {
+        toast.success(`Lokal-Backup OK · ${local.filename} (${local.size_mb} MB)`, {
+          description: cloud.reason,
+        });
+      } else if (cloud && cloud.ok) {
         toast.success(`Backup OK · ${local.filename} (${local.size_mb} MB) → Cloud`);
       } else if (cloud && !cloud.ok) {
         toast.warning(`Lokal OK · Cloud-Upload fehlgeschlagen: ${cloud.error || 'unbekannt'}`);
@@ -148,6 +152,25 @@ export default function AdminBackups() {
           </div>
         </div>
       </div>
+
+      {cfg && cfg.cloud_upload_blocked && (
+        <div className="adm-card adm-backup-env-warning" data-testid="admin-backups-env-warning" style={{ marginTop: '1rem', borderColor: '#d4af37', background: 'rgba(212,175,55,0.06)' }}>
+          <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'flex-start' }}>
+            <AlertCircle size={20} style={{ color: '#d4af37', flexShrink: 0, marginTop: '2px' }} />
+            <div>
+              <strong style={{ color: 'var(--adm-text, #0f172a)', display: 'block', marginBottom: '0.3rem' }}>
+                Cloud-Upload in „{cfg.environment}"-Umgebung blockiert
+              </strong>
+              <p style={{ margin: 0, fontSize: '0.86rem', lineHeight: 1.55, color: 'var(--adm-text-secondary, #475569)' }}>
+                Cloud-Uploads zu Infomaniak Swiss Backup laufen ausschließlich in der <strong>Production</strong>-Umgebung
+                (<code style={{ background: 'rgba(0,0,0,0.06)', padding: '1px 6px', borderRadius: '4px' }}>ENVIRONMENT=production</code>).
+                Lokale Backups werden weiterhin erstellt — so verhindern wir, dass Preview-/Test-Daten den
+                Production-Bucket verschmutzen. Nach dem Deploy startet der Cloud-Upload automatisch.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Cloud config */}
       <div className="adm-card" style={{ marginTop: '1.5rem' }} data-testid="admin-backups-cloud-card">

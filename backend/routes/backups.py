@@ -1,4 +1,8 @@
-"""Admin endpoints for DB backups (local + Infomaniak Swiss Backup S3)."""
+"""Admin endpoints for DB backups (local + Infomaniak Swiss Backup S3).
+
+Cloud uploads are AUTO-DISABLED unless ENVIRONMENT=production.
+This prevents preview/dev environments from polluting the production backup bucket.
+"""
 import os
 import logging
 from typing import Optional
@@ -26,6 +30,20 @@ DEFAULT_CLOUD_CFG = {
     "region": "us-east-1",
     "retention_days": 30,
 }
+
+
+def get_environment() -> str:
+    """Returns current environment label (production / preview / development)."""
+    return (os.environ.get("ENVIRONMENT") or "preview").lower()
+
+
+def is_production() -> bool:
+    return get_environment() == "production"
+
+
+def cloud_upload_allowed(cfg: dict) -> bool:
+    """Cloud uploads only happen in production AND when admin has enabled them."""
+    return bool(cfg.get("enabled")) and is_production()
 
 
 class CloudConfigUpdate(BaseModel):
@@ -82,7 +100,7 @@ async def create_backup(request: Request, background_tasks: BackgroundTasks):
     # Optional cloud upload (best effort, errors do not fail the local backup)
     cfg = await _get_cloud_cfg()
     cloud_result = None
-    if cfg.get("enabled"):
+    if cloud_upload_allowed(cfg):
         try:
             cloud_result = cloud_backup.upload_archive(cfg, result["path"])
             try:
@@ -94,8 +112,14 @@ async def create_backup(request: Request, background_tasks: BackgroundTasks):
         except Exception as exc:
             logger.error(f"Cloud upload failed: {exc}")
             cloud_result = {"ok": False, "error": str(exc)}
+    elif cfg.get("enabled") and not is_production():
+        cloud_result = {
+            "ok": False,
+            "skipped": True,
+            "reason": f"Cloud-Upload in '{get_environment()}'-Umgebung blockiert (nur production lädt hoch)",
+        }
 
-    return {"ok": True, "local": result, "cloud": cloud_result}
+    return {"ok": True, "local": result, "cloud": cloud_result, "environment": get_environment()}
 
 
 @router.delete("/admin/backups/{filename}")
@@ -121,6 +145,7 @@ async def download_backup(filename: str, request: Request):
 async def get_cloud_config(request: Request):
     await get_current_user(request)
     cfg = await _get_cloud_cfg()
+    env = get_environment()
     return {
         "enabled": cfg.get("enabled", False),
         "endpoint": cfg.get("endpoint", ""),
@@ -131,6 +156,9 @@ async def get_cloud_config(request: Request):
         "prefix": cfg.get("prefix", "truck"),
         "region": cfg.get("region", "us-east-1"),
         "retention_days": cfg.get("retention_days", 30),
+        "environment": env,
+        "is_production": env == "production",
+        "cloud_upload_blocked": cfg.get("enabled", False) and env != "production",
     }
 
 
