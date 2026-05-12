@@ -2,6 +2,7 @@
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
   "/admin/anfragen/page": "app/admin/anfragen/page.js",
+  "/admin/backups/page": "app/admin/backups/page.js",
   "/admin/blog/page": "app/admin/blog/page.js",
   "/admin/dashboard/page": "app/admin/dashboard/page.js",
   "/admin/einstellungen/page": "app/admin/einstellungen/page.js",

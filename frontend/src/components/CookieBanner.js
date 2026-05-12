@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Cookie, ShieldCheck, Settings, X } from "lucide-react";
 import { useCookieConsent } from "@/contexts/CookieConsentContext";
 
@@ -42,6 +43,7 @@ export default function CookieBanner() {
     acceptNecessary,
     savePreferences,
   } = useCookieConsent();
+  const pathname = usePathname();
 
   const [draft, setDraft] = useState({
     necessary: true,
@@ -57,6 +59,8 @@ export default function CookieBanner() {
   }, [consent, showSettings]);
 
   if (!showBanner) return null;
+  // Hide on admin pages — internal users don't need the consent banner
+  if (pathname && pathname.startsWith('/admin')) return null;
 
   const toggle = (key) => {
     if (key === "necessary") return;

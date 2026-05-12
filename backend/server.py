@@ -10,7 +10,7 @@ import os
 import logging
 import asyncio
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from database import db, client
 from auth import hash_password, verify_password
@@ -25,6 +25,8 @@ from routes.customer import router as customer_router
 from routes.admin import router as admin_router
 from routes.blog import router as blog_router
 from routes.legal import router as legal_router
+from routes.backups import router as backups_router
+from services import db_backup, cloud_backup
 from legal_seed import LEGAL_SEED
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -40,6 +42,7 @@ api_router.include_router(customer_router)
 api_router.include_router(admin_router)
 api_router.include_router(blog_router)
 api_router.include_router(legal_router)
+api_router.include_router(backups_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -141,6 +144,7 @@ async def startup():
     asyncio.create_task(event_reminder_loop())
     asyncio.create_task(event_scan_loop())
     asyncio.create_task(blog_auto_loop())
+    asyncio.create_task(_db_backup_loop())
 
 
 @app.on_event("shutdown")
@@ -164,4 +168,52 @@ async def blog_auto_loop():
             await asyncio.sleep(interval_hours * 3600)
         except Exception as e:
             logger.error(f"Auto-Blog loop error: {e}")
+            await asyncio.sleep(3600)
+
+
+
+async def _db_backup_loop():
+    """Runs mongodump daily at 03:00 Europe/Zurich, packs as tar.gz, uploads to Cloud."""
+    try:
+        from zoneinfo import ZoneInfo
+        tz = ZoneInfo("Europe/Zurich")
+    except Exception:
+        tz = timezone.utc
+    while True:
+        try:
+            now = datetime.now(tz)
+            target = now.replace(hour=3, minute=0, second=0, microsecond=0)
+            if target <= now:
+                target = target + timedelta(days=1)
+            sleep_seconds = max(60.0, (target - now).total_seconds())
+            logger.info(f"DB-Backup: next run at {target.isoformat()} (in {int(sleep_seconds)}s)")
+            await asyncio.sleep(sleep_seconds)
+
+            mongo_url = os.environ.get("MONGO_URL")
+            db_name = os.environ.get("DB_NAME")
+            if not mongo_url:
+                logger.warning("DB-Backup: MONGO_URL not set, skipping")
+                continue
+            try:
+                result = db_backup.run_mongodump(mongo_url, db_name)
+                logger.info(f"DB-Backup: local archive {result['filename']} ({result['size_mb']} MB)")
+            except Exception as exc:
+                logger.error(f"DB-Backup: mongodump failed: {exc}")
+                continue
+
+            cfg = await db.settings.find_one({"type": "cloud_backup"}, {"_id": 0}) or {}
+            if cfg.get("enabled"):
+                try:
+                    up = cloud_backup.upload_archive(cfg, result["path"])
+                    logger.info(f"DB-Backup: cloud upload OK key={up['key']}")
+                    try:
+                        deleted = cloud_backup.prune_cloud_backups(cfg, cfg.get("retention_days", 30))
+                        if deleted:
+                            logger.info(f"DB-Backup: cloud retention pruned {len(deleted)} object(s)")
+                    except Exception as prune_exc:
+                        logger.warning(f"DB-Backup: cloud prune failed: {prune_exc}")
+                except Exception as exc:
+                    logger.error(f"DB-Backup: cloud upload failed: {exc}")
+        except Exception as exc:
+            logger.error(f"DB-Backup loop fatal: {exc}")
             await asyncio.sleep(3600)

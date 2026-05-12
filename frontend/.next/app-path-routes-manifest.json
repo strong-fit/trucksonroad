@@ -2,6 +2,7 @@
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
   "/admin/anfragen/page": "/admin/anfragen",
+  "/admin/backups/page": "/admin/backups",
   "/admin/blog/page": "/admin/blog",
   "/admin/dashboard/page": "/admin/dashboard",
   "/admin/einstellungen/page": "/admin/einstellungen",
