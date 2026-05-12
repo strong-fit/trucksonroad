@@ -194,3 +194,39 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - **Test-Status:** iteration_38 — 100% Backend (10/10 pytest umlauts + send-code +
   datenschutz section) + 100% Frontend (Banner-Visibility, Accept-All, Necessary-Only,
   Settings-Modal, selective Save, Footer-Reopen, Datenschutz-Render)
+
+## 12.05.2026 — DB-Backup-System mit Infomaniak Swiss Backup S3
+- **Backend Services:**
+  - `services/db_backup.py` – mongodump → tar.gz, lokale Rotation (14 Tage default)
+  - `services/cloud_backup.py` – boto3 S3-Client (Infomaniak Swiss Backup),
+    upload/list/prune/delete + test_connection
+  - `services/frontend_url.py` – Helper für externe URLs
+- **9 Admin-Endpoints in `routes/backups.py`:**
+  - GET/POST/DELETE `/api/admin/backups` (local list, run, delete)
+  - GET `/api/admin/backups/download/{filename}`
+  - GET/PUT `/api/admin/backups/cloud/config` (secret_key MASKED in response)
+  - POST `/api/admin/backups/cloud/test` (Verbindungstest)
+  - GET `/api/admin/backups/cloud/list` + DELETE `/api/admin/backups/cloud/{key}`
+- **Cron-Loop `_db_backup_loop` in server.py:** täglich 03:00 Europe/Zurich,
+  mongodump → tar.gz → Infomaniak Upload → Cloud-Retention-Pruning
+- **Settings (`type:"cloud_backup"`):** enabled, endpoint, access_key, secret_key,
+  bucket, prefix (**`truck`** für App-Trennung), region, retention_days (default 30)
+- **Frontend Admin UI** (`/admin/backups`):
+  - DB-Backup-System Card mit "Backup jetzt starten"-Button
+  - Infomaniak S3 Config-Card mit allen 8 Feldern, Secret-Key-Mask mit Show/Hide,
+    Aktivieren-Toggle, "Verbindung testen" + "Speichern"
+  - Lokale Backups Liste mit Download/Delete pro Eintrag, Rotations-Hinweis
+  - Cloud-Backups Liste mit Key-Anzeige + Delete (Infomaniak)
+  - Sidebar-Eintrag "Backups" mit Database-Icon
+- **UX-Verbesserung:** Cookie-Consent-Banner ist auf `/admin/*` Routes deaktiviert
+  (via usePathname Check) — Admins sind interne Nutzer
+- **Pakete:** boto3==1.42.75, mongodump (system binary) bereits vorhanden
+- **Test-Status:** iteration_39 — 12/12 Backend pytest gegen REAL Infomaniak Bucket
+  `emergent-apps-backup` mit Prefix `truck/` + 16 Frontend-Flows (alle 100%)
+- **Live verifiziert:** mongodump (68 KB) erstellt + zu Infomaniak hochgeladen
+  unter `s3://emergent-apps-backup/truck/mongodump-20260512T073215Z.tar.gz`
+- **Backlog (Testing Agent Code Review):**
+  - Optional: access_key in GET /cloud/config maskieren (defense-in-depth)
+  - Optional: role=='admin' Check in routes/backups.py (konsistent mit Rest:
+    aktuell nur Login-Pflicht via get_current_user)
+
