@@ -563,13 +563,13 @@
   },
   {
     "route": "/konto/login",
-    "firstLoadUncompressedJsBytes": 735597,
+    "firstLoadUncompressedJsBytes": 737274,
     "firstLoadChunkPaths": [
       ".next/static/chunks/0gygnvmh4-zd~.js",
       ".next/static/chunks/015_ekzi9x_3d.js",
       ".next/static/chunks/0o-4-16x3i5s1.js",
       ".next/static/chunks/0x_fqqijdug_h.js",
-      ".next/static/chunks/12l6u87p~88jy.js",
+      ".next/static/chunks/0xp4gq7gt~r63.js",
       ".next/static/chunks/177b739xw9ggc.js",
       ".next/static/chunks/0t80zuao1l2o5.js",
       ".next/static/chunks/0uqcitglesvgt.js",
@@ -579,13 +579,13 @@
   },
   {
     "route": "/konto/passwort-reset",
-    "firstLoadUncompressedJsBytes": 735597,
+    "firstLoadUncompressedJsBytes": 737274,
     "firstLoadChunkPaths": [
       ".next/static/chunks/0gygnvmh4-zd~.js",
       ".next/static/chunks/015_ekzi9x_3d.js",
       ".next/static/chunks/0o-4-16x3i5s1.js",
       ".next/static/chunks/0x_fqqijdug_h.js",
-      ".next/static/chunks/09v4471r.bm3r.js",
+      ".next/static/chunks/0xp4gq7gt~r63.js",
       ".next/static/chunks/177b739xw9ggc.js",
       ".next/static/chunks/0t80zuao1l2o5.js",
       ".next/static/chunks/0uqcitglesvgt.js",
@@ -595,13 +595,13 @@
   },
   {
     "route": "/konto/passwort-vergessen",
-    "firstLoadUncompressedJsBytes": 735597,
+    "firstLoadUncompressedJsBytes": 737274,
     "firstLoadChunkPaths": [
       ".next/static/chunks/0gygnvmh4-zd~.js",
       ".next/static/chunks/015_ekzi9x_3d.js",
       ".next/static/chunks/0o-4-16x3i5s1.js",
       ".next/static/chunks/0x_fqqijdug_h.js",
-      ".next/static/chunks/0pejfkz9i2cyz.js",
+      ".next/static/chunks/0xp4gq7gt~r63.js",
       ".next/static/chunks/177b739xw9ggc.js",
       ".next/static/chunks/0t80zuao1l2o5.js",
       ".next/static/chunks/0uqcitglesvgt.js",

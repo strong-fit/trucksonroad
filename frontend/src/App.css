@@ -2766,3 +2766,50 @@
   .sf-cookie-settings-footer button { width: 100%; justify-content: center; }
 }
 
+
+/* ===== Google Login Button ===== */
+.sf-auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.2rem 0 1rem;
+  color: #94928a;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.sf-auth-divider::before,
+.sf-auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.12), transparent);
+}
+.sf-auth-google-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  background: #ffffff;
+  color: #1a1a18;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: box-shadow 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+}
+.sf-auth-google-btn:hover {
+  box-shadow: 0 1px 6px rgba(60, 64, 67, 0.18);
+  border-color: #c1c4c7;
+}
+.sf-auth-google-btn:active {
+  transform: translateY(1px);
+}
+.sf-auth-google-btn svg {
+  flex-shrink: 0;
+}
+

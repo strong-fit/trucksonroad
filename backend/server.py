@@ -26,6 +26,7 @@ from routes.admin import router as admin_router
 from routes.blog import router as blog_router
 from routes.legal import router as legal_router
 from routes.backups import router as backups_router
+from routes.google_auth import router as google_auth_router
 from services import db_backup, cloud_backup
 from legal_seed import LEGAL_SEED
 
@@ -43,6 +44,7 @@ api_router.include_router(admin_router)
 api_router.include_router(blog_router)
 api_router.include_router(legal_router)
 api_router.include_router(backups_router)
+api_router.include_router(google_auth_router)
 
 app.add_middleware(
     CORSMiddleware,

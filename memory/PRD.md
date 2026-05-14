@@ -248,3 +248,22 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - **Test-Bucket bereinigt:** alle `truck/mongodump-*` aus Preview-Tests gelöscht.
 - **Production-Deploy-Hinweis:** Vor dem Live-Schalten muss `ENVIRONMENT=production`
   in der Production-`.env` gesetzt sein, sonst läuft auch dort kein Cloud-Upload.
+
+## 14.05.2026 — Google OAuth Customer Login
+- **Eigenes Google Cloud Projekt** (Client ID 589307861900-...) — kein Emergent-managed Auth
+- **Backend** `routes/google_auth.py`:
+  - GET `/api/auth/google/login` — 302 zu Google mit CSRF-State + `next`-Cookie
+  - GET `/api/auth/google/callback` — Code-Exchange, Userinfo, User-Lookup/Create, JWT-Cookie, 302 zur App
+  - Dynamische `redirect_uri` aus Request (X-Forwarded-Host/Proto) — funktioniert in Preview & Production ohne Hardcoding
+  - Auto-Create Customer wenn E-Mail neu, sonst Link via E-Mail. Felder: `auth_provider="google"`, `google_sub`, `google_picture`
+  - Neue User → Redirect zu `/konto/profil-vervollstaendigen`, bestehende → `/konto`
+  - Error-Handling: state_mismatch / token_exchange_failed / email_not_verified → 302 zu `/konto/login?error=...`
+- **Frontend** `CustomerLogin.js`:
+  - "ODER"-Divider + "Mit Google anmelden"-Button mit 4-Farben Google-G-Logo
+  - Error-Toast bei `?error=` Query-Param (lokalisierte Meldungen)
+  - `useSearchParams` benötigt Suspense — 3 Konto-Pages mit `dynamic="force-dynamic"` + `<Suspense>` umhüllt
+- **Pakete:** `authlib==1.7.2`, `itsdangerous==2.2.0` (installiert für künftige Erweiterungen)
+- **Credentials in `backend/.env`:** `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+- **Test-Status:** Manuell verifiziert — 302-Redirect zu Google korrekt, State-Cookie HttpOnly/Secure/lax gesetzt, Build erfolgreich, UI rendert sauber
+- **Production-Hinweis:** Vor Deploy müssen `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` in Production-.env vorhanden sein. Google Cloud Console enthält bereits beide Redirect-URIs (Preview + trucksonroad.ch)
+
