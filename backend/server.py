@@ -46,15 +46,17 @@ api_router.include_router(legal_router)
 api_router.include_router(backups_router)
 api_router.include_router(google_auth_router)
 
+_cors_origins_env = os.environ.get("CORS_ORIGINS", "*")
+_allow_origins = ["*"] if _cors_origins_env.strip() == "*" else [
+    o.strip() for o in _cors_origins_env.split(",") if o.strip()
+]
+# When using wildcard, allow_credentials must be False (CORS spec).
+_allow_credentials = _allow_origins != ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        os.environ.get("FRONTEND_URL", "http://localhost:3000"),
-        "http://localhost:3000",
-        "https://trucksonroad.ch",
-        "https://www.trucksonroad.ch",
-    ],
-    allow_credentials=True,
+    allow_origins=_allow_origins,
+    allow_credentials=_allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
