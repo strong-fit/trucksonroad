@@ -54,10 +54,9 @@ export default function CustomerLogin() {
   }, []);
 
   // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-  // The backend builds its own redirect URI from the incoming request. Frontend just navigates.
+  // Use window.location.origin directly — works in preview, production, custom domains.
   const handleGoogleLogin = () => {
-    const apiBase = process.env.NEXT_PUBLIC_BACKEND_URL || '';
-    window.location.href = `${apiBase}/api/auth/google/login?next=/konto`;
+    window.location.href = `${window.location.origin}/api/auth/google/login?next=/konto`;
   };
 
   const sendCode = async (e) => {
