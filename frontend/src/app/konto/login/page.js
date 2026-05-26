@@ -1,12 +1,3 @@
-import { Suspense } from "react";
+"use client";
 import CustomerLogin from "@/views/customer/CustomerLogin";
-
-export const dynamic = "force-dynamic";
-
-export default function Page() {
-  return (
-    <Suspense fallback={null}>
-      <CustomerLogin />
-    </Suspense>
-  );
-}
+export default function Page() { return <CustomerLogin />; }
