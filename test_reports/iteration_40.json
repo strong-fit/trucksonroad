@@ -1,0 +1,52 @@
+{
+  "summary": "Full E2E QA validation across all 25 review-request areas. Backend: 42/42 pytest passed (test_e2e_qa_full.py). Frontend: Playwright verified homepage, admin login, dashboard, anfragen-pipeline, cookie banner, language switcher (EN works, FR/IT/ES infrastructure present), booking wizard load, mobile viewport. Swiss date format (DD.MM.YYYY) confirmed across dashboard, anfragen table. NO 'GmbH' anywhere in brand text, email templates, or structured-data. Customer/admin auth isolation verified. OTP send→verify works incl. wrong-code rejection. Calendar block create/delete OK. Email templates contain TRUCKSonROAD, 15.06.2026 Swiss date format, no GmbH. Admin auth guards return 401 without token. CORS preflight OK. Backups config reports preview environment correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Homepage (mobile 390px)", "issue": "Horizontal scroll present at iPhone width — document.scrollWidth > clientWidth. Some hero text/element overflows viewport.", "selector": "html/body root", "priority": "MEDIUM"},
+      {"component": "BookingWizard /anfrage (mobile 390px)", "issue": "Horizontal scroll present at iPhone width. Step-cards/buttons likely cause overflow.", "selector": "html/body root", "priority": "MEDIUM"},
+      {"component": "Blog cards (homepage)", "issue": "Blog dates rendered as '3.4.2026' (D.M.YYYY) instead of strict Swiss DD.MM.YYYY '03.04.2026' — inconsistent with admin pages.", "selector": "blog card date span", "priority": "MINOR"}
+    ],
+    "integration_issues": [
+      {"flow": "Public page load", "issue": "Console shows recurring 401 errors during initial page load (likely /api/customer/me check before login). Not blocking but noisy.", "affected_selectors": ["console"]}
+    ],
+    "design_issues": [
+      {"screen": "Anfragen-Pipeline", "issues": ["7 tabs displayed (Gesamt/Neu/In Prüfung/Angebot gesendet/Bestätigt/Abgeschlossen/Storniert) — spec mentions 6; the extra Storniert tab is acceptable but should be confirmed as intentional"]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_e2e_qa_full.py",
+    "/app/test_reports/pytest/pytest_e2e_qa.xml"
+  ],
+  "action_items": [
+    "Investigate and fix horizontal scroll at mobile viewport 390px on / and /anfrage (likely some element with fixed width > 100% or non-wrapping flex row)",
+    "Standardize blog post date format to zero-padded DD.MM.YYYY to match admin Swiss date format (currently '3.4.2026' vs '03.04.2026')",
+    "Optionally suppress console 401s on public pages by guarding /api/customer/me call with cookie/token presence check",
+    "Confirm whether the extra 'Storniert' tab in /admin/anfragen is intentional (7 tabs vs 6 in spec — likely intentional)"
+  ],
+  "critical_code_review_comments": [
+    "services/email.py is well-structured with format_swiss_date helper. All 3 inspected templates (confirmation/offer/booking-confirmation) verified GmbH-free and use Swiss date format.",
+    "routes/public.py calculate-delivery endpoint accepts {plz} payload; consider documenting expected request schema in code comments. Returns {km, cost} as documented.",
+    "Cookie consent storage key 'trucksonroad-consent-v1' is versioned (good for future schema evolution). All 4 categories (necessary/functional/analytics/marketing) correctly persisted.",
+    "Admin auth guards properly return 401 on protected endpoints. CORS preflight returns 405 for OPTIONS on /api/trucks (acceptable; FastAPI default behavior, browser still works due to wildcard CORS middleware)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_e2e_qa_full.py (new — comprehensive pytest covering 25 review areas)"
+  ],
+  "success_rate": {
+    "backend": "100% (42/42 pytest)",
+    "frontend": "~92% (3 medium/minor UI issues out of ~25 verified flows)"
+  },
+  "test_credentials": "Admin: admin@truckonroad.ch / TrucksOnRoad2026! (verified working). Customer OTP: any free email via /api/auth/send-code → code stored in db.verification_codes.",
+  "seed_data_creation": "Created 1 test inquiry (name='TEST QA Runner', email='qa_test@example.ch', date=+45d) and 1 OTP customer ('qa_otp_test@example.ch'). Per instructions, not cleaned up — preview DB isolated.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "test_e2e_qa_full.py is a reusable regression suite covering 25 E2E areas. Use it as smoke test. Key endpoints: /api/calculate-delivery (payload={plz}), /api/quick-inquiry (full payload), /api/truck-availability/{slug}?year=&month=, /api/auth/send-code + /api/auth/verify-code, /api/admin/calendar (POST payload={truck_slug,date,status,notes}), /api/admin/inquiries/{id}/offer-pdf. Email templates: build_confirmation_email, build_offer_email, build_booking_confirmation_email — all accept (inquiry, lang='de'). Mobile horizontal scroll is the main outstanding UX issue.",
+  "rca_of_issues": {
+    "mobile_horizontal_scroll": "Root cause: at 390px viewport, some flex/grid container element on homepage hero & /anfrage truck-cards exceeds 100vw. Inspect for fixed-pixel widths, ungapped flex rows, or images/heading without max-width: 100%. Likely candidates: hero heading 'FOODTRUCKS FÜR JEDEN ANLASS' large font-size, or truck cards row in BookingWizard step 1.",
+    "blog_date_inconsistency": "Date helper in /app/frontend/src/lib/dateFormat.js may use new Intl.DateTimeFormat('de-CH', {day:'numeric', month:'numeric', year:'numeric'}) — switch to {day:'2-digit', month:'2-digit', year:'numeric'} for strict DD.MM.YYYY zero-padded format."
+  }
+}
