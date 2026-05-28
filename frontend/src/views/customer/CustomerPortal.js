@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
+import { formatSwissDate } from '@/lib/dateFormat';
 import { LogOut, FileText, Clock, CheckCircle2, Send, XCircle, Receipt, Plus, ChevronDown, ChevronUp, User, Paperclip, Lock } from 'lucide-react';
 import FileUpload from '@/components/FileUpload';
 import { toast } from 'sonner';
@@ -167,7 +168,7 @@ export default function CustomerPortal() {
                         {inq.event_type || t('nav_inquiry')} – {inq.location}
                       </div>
                       <div className="sf-portal-inquiry-meta">
-                        {inq.event_date} | {inq.guest_count} {t('guests')}
+                        {formatSwissDate(inq.event_date)} | {inq.guest_count} {t('guests')}
                         {inq.selected_trucks?.length > 0 && ` | ${inq.selected_trucks.join(', ')}`}
                       </div>
                     </div>
@@ -187,7 +188,7 @@ export default function CustomerPortal() {
                   {isOpen && (
                     <div className="sf-portal-inquiry-detail">
                       <div className="sf-portal-detail-grid">
-                        <div><span className="sf-portal-detail-label">{t('event_date')}</span><span>{inq.event_date}</span></div>
+                        <div><span className="sf-portal-detail-label">{t('event_date')}</span><span>{formatSwissDate(inq.event_date)}</span></div>
                         <div><span className="sf-portal-detail-label">{t('time')}</span><span>{inq.event_time || '–'}</span></div>
                         <div><span className="sf-portal-detail-label">{t('location')}</span><span>{inq.location}</span></div>
                         <div><span className="sf-portal-detail-label">{t('guests')}</span><span>{inq.guest_count}</span></div>

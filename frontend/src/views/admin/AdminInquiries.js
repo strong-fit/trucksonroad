@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/views/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
+import { formatSwissDate } from '@/lib/dateFormat';
 import { toast } from 'sonner';
 import { Trash2, Inbox, FileDown, Users, Receipt, Paperclip, Send, X, CheckCircle2 } from 'lucide-react';
 import FileUpload from '@/components/FileUpload';
@@ -127,7 +128,7 @@ export default function AdminInquiries() {
                     data-testid={`inquiry-row-${inq.id}`}
                   >
                     <td style={{ fontWeight: 500 }}>{inq.first_name || inq.name || ''} {inq.last_name || ''}</td>
-                    <td>{inq.event_date || '-'}</td>
+                    <td>{formatSwissDate(inq.event_date)}</td>
                     <td style={{ fontSize: '0.78rem' }}>{inq.event_type || inq.concept || '-'}</td>
                     <td>{inq.guest_count || '-'}</td>
                     <td>
@@ -177,7 +178,7 @@ export default function AdminInquiries() {
               <div><div className="label">{t('auth_email')}</div><div className="value">{selected.email || '-'}</div></div>
               <div><div className="label">{t('auth_phone')}</div><div className="value">{selected.phone || '-'}</div></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
-                <div><div className="label">{t('admin_date')}</div><div className="value">{selected.event_date || '-'}</div></div>
+                <div><div className="label">{t('admin_date')}</div><div className="value">{formatSwissDate(selected.event_date)}</div></div>
                 <div><div className="label">{t('time')}</div><div className="value">{selected.event_time || '-'}</div></div>
               </div>
               <div><div className="label">{t('location')}</div><div className="value">{selected.location || '-'}</div></div>
@@ -390,7 +391,7 @@ export default function AdminInquiries() {
             {selected && (
               <div style={{ background: 'var(--adm-bg)', border: '1px solid var(--adm-border)', borderRadius: 8, padding: '0.85rem', marginBottom: '1rem', fontSize: '0.82rem' }}>
                 <div style={{ color: 'var(--adm-text)', fontWeight: 600, marginBottom: '0.4rem' }}>{selected.first_name} {selected.last_name}</div>
-                <div style={{ color: 'var(--adm-text-muted)' }}>{selected.event_type} · {selected.event_date} · {selected.guest_count} Gäste</div>
+                <div style={{ color: 'var(--adm-text-muted)' }}>{selected.event_type} · {formatSwissDate(selected.event_date)} · {selected.guest_count} Gäste</div>
                 <div style={{ color: 'var(--adm-text-muted)' }}>{selected.location}</div>
                 {selected.selected_trucks?.length > 0 && (
                   <div style={{ color: 'var(--adm-text-muted)', marginTop: '0.2rem' }}>Trucks: {selected.selected_trucks.join(', ')}</div>

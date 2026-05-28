@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle2, FileText, MapPin, Calendar, Users, CreditCard, Banknote, Loader2 } from 'lucide-react';
+import { formatSwissDate } from '@/lib/dateFormat';
 
 export default function OfferConfirmPage() {
   const searchParams = useSearchParams();
@@ -94,7 +95,7 @@ export default function OfferConfirmPage() {
                   <Calendar size={16} color={accentColor} />
                   <div>
                     <div style={{ color: '#9c9c94', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Datum</div>
-                    <div style={{ color: '#f5f0e8', fontSize: '0.92rem' }}>{offer.event_date || '–'} {offer.event_time && `· ${offer.event_time}`}</div>
+                    <div style={{ color: '#f5f0e8', fontSize: '0.92rem' }}>{formatSwissDate(offer.event_date)} {offer.event_time && `· ${offer.event_time}`}</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>

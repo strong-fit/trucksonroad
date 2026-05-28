@@ -1,10 +1,35 @@
 import smtplib
 import logging
+from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from database import db
 
 logger = logging.getLogger(__name__)
+
+
+def format_swiss_date(value, with_time: bool = False) -> str:
+    """
+    Formats any date value into Swiss format DD.MM.YYYY (optionally + HH:MM).
+    Accepts: ISO strings (2026-08-15, 2026-08-15T10:30:00+00:00), datetime objects, or returns
+    the original string if it cannot be parsed (e.g. for dashes / placeholders).
+    """
+    if not value or value == "-":
+        return "-"
+    if isinstance(value, datetime):
+        return value.strftime("%d.%m.%Y %H:%M" if with_time else "%d.%m.%Y")
+    s = str(value).strip()
+    # Try common ISO formats
+    for fmt in ("%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M:%S",
+                "%Y-%m-%dT%H:%M", "%Y-%m-%d %H:%M", "%Y-%m-%d"):
+        try:
+            # Strip timezone suffix like +00:00 / Z so strptime works reliably
+            clean = s.replace("Z", "").split("+")[0].split(".")[0] if "T" in s or " " in s else s
+            dt = datetime.strptime(clean, fmt)
+            return dt.strftime("%d.%m.%Y %H:%M" if with_time and ("T" in s or " " in s) else "%d.%m.%Y")
+        except (ValueError, TypeError):
+            continue
+    return s
 
 # --- MULTILINGUAL EMAIL/PDF TRANSLATIONS ---
 EMAIL_I18N = {
@@ -242,7 +267,7 @@ def build_confirmation_email(inquiry: dict, lang: str = "de") -> str:
         <h2 style="color:#1a1a18;margin:0 0 1rem;">{t['thank_you'].format(name=name)}</h2>
         <p style="color:#6b6b64;line-height:1.6;">{t['inquiry_received']}</p>
         <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1.25rem;margin:1.5rem 0;">
-          <p style="margin:0.3rem 0;"><strong>{t['event_date']}:</strong> {inquiry.get('event_date', '-')}</p>
+          <p style="margin:0.3rem 0;"><strong>{t['event_date']}:</strong> {format_swiss_date(inquiry.get('event_date'))}</p>
           <p style="margin:0.3rem 0;"><strong>{t['location']}:</strong> {inquiry.get('location', '-')}</p>
           <p style="margin:0.3rem 0;"><strong>{t['guests']}:</strong> {inquiry.get('guest_count', '-')}</p>
           <p style="margin:0.3rem 0;"><strong>{t['event_type']}:</strong> {inquiry.get('event_type', inquiry.get('concept', '-'))}</p>
@@ -273,7 +298,7 @@ def build_admin_notification_email(inquiry: dict, lang: str = "de") -> str:
           <tr><td style="padding:0.4rem 0;color:#6b6b64;width:120px;">{t['name']}</td><td>{name}</td></tr>
           <tr><td style="padding:0.4rem 0;color:#6b6b64;">{t['email']}</td><td>{inquiry.get('email', '-')}</td></tr>
           <tr><td style="padding:0.4rem 0;color:#6b6b64;">{t['phone']}</td><td>{inquiry.get('phone', '-')}</td></tr>
-          <tr><td style="padding:0.4rem 0;color:#6b6b64;">{t['event_date']}</td><td>{inquiry.get('event_date', '-')}</td></tr>
+          <tr><td style="padding:0.4rem 0;color:#6b6b64;">{t['event_date']}</td><td>{format_swiss_date(inquiry.get('event_date'))}</td></tr>
           <tr><td style="padding:0.4rem 0;color:#6b6b64;">{t['location']}</td><td>{inquiry.get('location', '-')}</td></tr>
           <tr><td style="padding:0.4rem 0;color:#6b6b64;">{t['guests']}</td><td>{inquiry.get('guest_count', '-')}</td></tr>
           <tr><td style="padding:0.4rem 0;color:#6b6b64;">{t['event_type']}</td><td>{inquiry.get('event_type', inquiry.get('concept', '-'))}</td></tr>
@@ -306,7 +331,7 @@ def build_offer_email(inquiry: dict, lang: str = "de", confirm_url: str = "") ->
         <h2 style="color:#1a1a18;margin:0 0 1rem;">{t['your_offer'].format(name=name)}</h2>
         <p style="color:#6b6b64;line-height:1.6;">{t['offer_intro']}</p>
         <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1.25rem;margin:1.5rem 0;">
-          <p style="margin:0.3rem 0;"><strong>{t['event_date']}:</strong> {inquiry.get('event_date', '-')}</p>
+          <p style="margin:0.3rem 0;"><strong>{t['event_date']}:</strong> {format_swiss_date(inquiry.get('event_date'))}</p>
           <p style="margin:0.3rem 0;"><strong>{t['location']}:</strong> {inquiry.get('location', '-')}</p>
           <p style="margin:0.3rem 0;"><strong>{t['guests']}:</strong> {inquiry.get('guest_count', '-')}</p>
           <p style="margin:0.3rem 0;"><strong>{t['trucks']}:</strong> {trucks}</p>
@@ -345,7 +370,7 @@ def build_status_notification_email(inquiry: dict, new_status: str, lang: str = 
         </div>
         <p style="color:#6b6b64;line-height:1.7;margin-top:0.5rem;">{msg}</p>
         <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1rem;margin:1.5rem 0;">
-          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>{t['event']}:</strong> {inquiry.get('event_type', '-')} {t['at']} {inquiry.get('event_date', '-')}</p>
+          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>{t['event']}:</strong> {inquiry.get('event_type', '-')} {t['at']} {format_swiss_date(inquiry.get('event_date'))}</p>
           <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>{t['location']}:</strong> {inquiry.get('location', '-')}</p>
           <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>{t['guests']}:</strong> {inquiry.get('guest_count', '-')}</p>
         </div>
@@ -382,7 +407,7 @@ def build_invoice_notification_email(inquiry: dict, invoice_status: str, invoice
         <p style="color:#6b6b64;line-height:1.7;margin-top:0.5rem;">{msg}</p>
         <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1.25rem;margin:1.5rem 0;text-align:center;">
           {amount_line}
-          <p style="margin:0.3rem 0;font-size:0.88rem;color:#6b6b64;"><strong>{t['event']}:</strong> {inquiry.get('event_type', '-')} {t['at']} {inquiry.get('event_date', '-')}</p>
+          <p style="margin:0.3rem 0;font-size:0.88rem;color:#6b6b64;"><strong>{t['event']}:</strong> {inquiry.get('event_type', '-')} {t['at']} {format_swiss_date(inquiry.get('event_date'))}</p>
           <p style="margin:0.3rem 0;font-size:0.88rem;color:#6b6b64;"><strong>{t['location']}:</strong> {inquiry.get('location', '-')}</p>
         </div>
         <p style="color:#6b6b64;font-size:0.85rem;">{t['questions_contact']}</p>
@@ -435,7 +460,7 @@ def build_event_reminder_email(inquiry: dict, days_until: int, lang: str = "de")
         <h2 style="color:#1a1a18;margin:0 0 1rem;">{t['hello'].format(name=name)}</h2>
         <p style="color:#6b6b64;line-height:1.7;"><strong>{t['days_until'].format(days=days_until)}</strong></p>
         <div style="background:#fff;border:1px solid #e8e7e3;border-radius:8px;padding:1rem;margin:1.5rem 0;">
-          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>{t['event']}:</strong> {inquiry.get('event_type', '-')} {t['at']} {inquiry.get('event_date', '-')}</p>
+          <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>{t['event']}:</strong> {inquiry.get('event_type', '-')} {t['at']} {format_swiss_date(inquiry.get('event_date'))}</p>
           <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>{t['location']}:</strong> {inquiry.get('location', '-')}</p>
           <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>{t['guests']}:</strong> {inquiry.get('guest_count', '-')}</p>
           <p style="margin:0.3rem 0;font-size:0.88rem;"><strong>{t['trucks']}:</strong> {', '.join(inquiry.get('selected_trucks', []))}</p>
@@ -525,7 +550,7 @@ def build_booking_confirmation_email(inquiry: dict, lang: str = "de") -> str:
     t = get_email_t(lang)
     name = f"{inquiry.get('first_name', '')} {inquiry.get('last_name', '')}".strip() or "Kunde"
     trucks = ", ".join(inquiry.get("selected_trucks", [])) or "-"
-    event_date = inquiry.get("event_date", "-")
+    event_date = format_swiss_date(inquiry.get("event_date"))
     event_time = inquiry.get("event_time", "-")
     location = inquiry.get("location", "-")
     guest_count = inquiry.get("guest_count", "-")
@@ -547,7 +572,7 @@ def build_booking_confirmation_email(inquiry: dict, lang: str = "de") -> str:
         elif part.startswith("Lieferung:"):
             delivery = part.replace("Lieferung:", "").strip()
         elif part.startswith("Bis:"):
-            date_to = part.replace("Bis:", "").strip()
+            date_to = format_swiss_date(part.replace("Bis:", "").strip())
         elif part.startswith("Bemerkung:"):
             customer_remark = part.replace("Bemerkung:", "").strip()
 

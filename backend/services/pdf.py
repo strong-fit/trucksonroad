@@ -1,4 +1,5 @@
 from fpdf import FPDF
+from services.email import format_swiss_date as _fmt_date
 from datetime import datetime, timezone
 import io
 from services.email import get_email_t
@@ -46,7 +47,7 @@ def generate_offer_pdf(inquiry: dict, lang: str = "de") -> bytes:
     pdf.set_text_color(0, 0, 0)
     pdf.set_font("Helvetica", "", 10)
     event_fields = [
-        (t["pdf_date"], inquiry.get("event_date", "-")), (t["location"], inquiry.get("location", "-")),
+        (t["pdf_date"], _fmt_date(inquiry.get("event_date"))), (t["location"], inquiry.get("location", "-")),
         (t["guests"], str(inquiry.get("guest_count", "-"))), (t["event_type"], inquiry.get("event_type", inquiry.get("concept", "-"))),
         (t["pdf_indoor"], inquiry.get("indoor_outdoor", "-")), (t["budget"], inquiry.get("budget", "-")),
     ]

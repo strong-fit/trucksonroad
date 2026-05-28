@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
+import { formatSwissDate } from '@/lib/dateFormat';
 import {
   LayoutDashboard, FileText, CalendarDays, Truck, LogOut,
   Search, Menu, X, ExternalLink, Inbox, CheckCircle2, Clock,
@@ -188,7 +189,7 @@ export default function AdminDashboard() {
               {recentInquiries.map(inq => (
                 <tr key={inq.id} data-testid={`inquiry-row-${inq.id}`}>
                   <td style={{ fontWeight: 500 }}>{inq.first_name || inq.name || ''} {inq.last_name || ''}</td>
-                  <td>{inq.event_date || '-'}</td>
+                  <td>{formatSwissDate(inq.event_date)}</td>
                   <td>{inq.event_type || inq.concept || '-'}</td>
                   <td>{inq.guest_count || '-'}</td>
                   <td>

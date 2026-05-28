@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { AdminLayout } from '@/views/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
+import { formatSwissDate } from '@/lib/dateFormat';
 import { toast } from 'sonner';
 import { MapPin, Navigation, Clock, Route, Search } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
@@ -118,7 +119,7 @@ export default function AdminRoutes() {
               <Marker key={e.id} position={[e.lat, e.lon]}>
                 <Popup>
                   <strong>{e.name}</strong><br/>
-                  {e.event_date}<br/>
+                  {formatSwissDate(e.event_date)}<br/>
                   {e.location}<br/>
                   <span style={{ fontSize: '0.75rem', color: statusColors[e.status] }}>{e.status}</span>
                 </Popup>
@@ -167,7 +168,7 @@ export default function AdminRoutes() {
                   <input type="checkbox" checked={selectedEvents.includes(e.id)} onChange={() => toggleEvent(e.id)} style={{ marginTop: '0.15rem' }} />
                   <div>
                     <div style={{ fontWeight: 500 }}>{e.name}</div>
-                    <div style={{ color: 'var(--adm-text-muted)', fontSize: '0.72rem' }}>{e.event_date} - {e.location}</div>
+                    <div style={{ color: 'var(--adm-text-muted)', fontSize: '0.72rem' }}>{formatSwissDate(e.event_date)} - {e.location}</div>
                   </div>
                 </label>
               ))}

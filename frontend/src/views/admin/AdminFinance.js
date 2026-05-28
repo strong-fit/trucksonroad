@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/views/admin/AdminDashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
+import { formatSwissDate } from '@/lib/dateFormat';
 import { toast } from 'sonner';
 import { DollarSign, TrendingUp, TrendingDown, BarChart3, Save } from 'lucide-react';
 
@@ -129,7 +130,7 @@ export default function AdminFinance() {
               return (
                 <tr key={inq.id} data-testid={`finance-row-${inq.id}`}>
                   <td style={{ fontWeight: 500 }}>{inq.first_name || inq.name} {inq.last_name || ''}</td>
-                  <td>{inq.event_date || '-'}</td>
+                  <td>{formatSwissDate(inq.event_date)}</td>
                   {editing === inq.id ? (
                     <>
                       <td><input className="adm-input" type="number" value={form.revenue} onChange={e => setForm({...form, revenue: parseFloat(e.target.value) || 0})} style={{ width: '80px' }} data-testid="fin-revenue" /></td>
