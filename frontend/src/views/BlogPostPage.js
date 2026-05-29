@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
+import { formatSwissDate } from '@/lib/dateFormat';
 import { ArrowLeft, Calendar, Tag, User } from 'lucide-react';
 
 export default function BlogPostPage({ slug: propSlug, initialPost = null, initialRelatedPosts = [] }) {
@@ -112,7 +113,7 @@ export default function BlogPostPage({ slug: propSlug, initialPost = null, initi
             <Tag size={10} style={{ marginRight: '3px', display: 'inline' }} /> {post.category}
           </span>
           <span style={{ fontSize: '0.8rem', color: 'var(--sf-gray)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Calendar size={13} /> {new Date(post.created_at).toLocaleDateString(lang === 'de' ? 'de-CH' : 'en-GB')}
+            <Calendar size={13} /> {formatSwissDate(post.created_at)}
           </span>
           <span style={{ fontSize: '0.8rem', color: 'var(--sf-gray)', display: 'flex', alignItems: 'center', gap: '4px' }}>
             <User size={13} /> {post.author}

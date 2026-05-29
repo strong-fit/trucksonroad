@@ -267,3 +267,17 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 - **Test-Status:** Manuell verifiziert — 302-Redirect zu Google korrekt, State-Cookie HttpOnly/Secure/lax gesetzt, Build erfolgreich, UI rendert sauber
 - **Production-Hinweis:** Vor Deploy müssen `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` in Production-.env vorhanden sein. Google Cloud Console enthält bereits beide Redirect-URIs (Preview + trucksonroad.ch)
 
+
+## 29.05.2026 — E2E QA Bugfixes nach iteration_40
+- **MEDIUM Bug: Mobile-Scroll Homepage (390px)** behoben — Navbar überlief Viewport.
+  Fix: `@media (max-width: 900px)` in `App.css` blendet `.sf-nav-cta` & `.sf-lang-dropdown`
+  aus (beide bereits im Mobile-Menü vorhanden), reduziert Padding/Gap.
+- **MEDIUM Bug: Mobile-Scroll /anfrage (390px)** behoben — Footer-Grid (2 Spalten) lief
+  bei <540px über. Fix: neuer Breakpoint `@media (max-width: 540px)` → 1-Spalten-Footer.
+- **Safety-Net:** `html, body { overflow-x: hidden; max-width: 100vw }` global gegen
+  zukünftige Overflow-Regressionen.
+- **MINOR Bug: Blog-Datum** auf `/`, `/blog`, `/blog/[slug]` von `3.4.2026` auf strict
+  Swiss `03.04.2026` gefixt — alle drei Komponenten nutzen jetzt `formatSwissDate()`.
+- **Verifikation (Playwright 390×800):** scrollW=390 (= viewport), keine Offender mehr;
+  Blog-Karten zeigen `03.04.2026`.
+- **Backend:** Keine Änderungen nötig — 42/42 pytest grün geblieben.

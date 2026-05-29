@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
+import { formatSwissDate } from '@/lib/dateFormat';
 import { ArrowRight, Instagram, Star, Quote, ChevronRight, Calendar, Tag, Send, FileText, PartyPopper, Building2, Heart, Music, Cake, Users, Sparkles, Award, Phone } from 'lucide-react';
 
 const HERO_IMG_MAIN = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=900&q=80";
@@ -483,7 +484,7 @@ export default function HomePage() {
                         </span>
                         <span style={{ fontSize: '0.7rem', color: 'var(--sf-gray)' }}>
                           <Calendar size={10} style={{ marginRight: '3px', display: 'inline' }} />
-                          {new Date(post.created_at).toLocaleDateString('de-CH')}
+                          {formatSwissDate(post.created_at)}
                         </span>
                       </div>
                       <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--sf-text)', lineHeight: 1.3, marginBottom: '0.4rem' }}>

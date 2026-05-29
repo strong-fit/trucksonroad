@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
+import { formatSwissDate } from '@/lib/dateFormat';
 import { ArrowRight, Calendar, Tag, ChevronRight } from 'lucide-react';
 
 export default function BlogPage({ initialPosts = [], initialCategories = {} }) {
@@ -131,7 +132,7 @@ export default function BlogPage({ initialPosts = [], initialCategories = {} }) 
                       </span>
                       <span style={{ fontSize: '0.72rem', color: 'var(--sf-gray)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <Calendar size={11} />
-                        {new Date(post.created_at).toLocaleDateString(lang === 'de' ? 'de-CH' : lang === 'fr' ? 'fr-CH' : lang === 'it' ? 'it-CH' : 'en-GB')}
+                        {formatSwissDate(post.created_at)}
                       </span>
                     </div>
                     <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--sf-text)', marginBottom: '0.5rem', lineHeight: 1.35 }}>
