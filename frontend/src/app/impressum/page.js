@@ -1,9 +1,7 @@
 import { JsonLdScript } from "@/components/JsonLdScript";
-import LegalRenderer from "@/components/LegalRenderer";
+import LegalPageClient from "@/components/LegalPageClient";
 import PublicShell from "@/components/PublicShell";
-import { buildBreadcrumbSchema, buildLandingPageSchema, fetchPublicApi, SITE_URL } from "@/lib/seo";
-
-export const dynamic = "force-dynamic";
+import { buildBreadcrumbSchema, buildLandingPageSchema, SITE_URL } from "@/lib/seo";
 
 export const metadata = {
   title: "Impressum | TRUCKSonROAD",
@@ -11,8 +9,7 @@ export const metadata = {
   alternates: { canonical: `${SITE_URL}/impressum` },
 };
 
-export default async function Page() {
-  const doc = await fetchPublicApi("/legal/impressum", 60);
+export default function Page() {
   const title = "Impressum | TRUCKSonROAD";
   const description = "Impressum von TRUCKSonROAD – Anbieterkennzeichnung und rechtliche Hinweise.";
 
@@ -29,7 +26,7 @@ export default async function Page() {
           { name: "Impressum", url: `${SITE_URL}/impressum` },
         ])}
       />
-      <LegalRenderer doc={doc} testIdPrefix="impressum" />
+      <LegalPageClient docType="impressum" testIdPrefix="impressum" />
     </PublicShell>
   );
 }

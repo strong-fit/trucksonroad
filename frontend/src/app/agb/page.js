@@ -1,9 +1,7 @@
 import { JsonLdScript } from "@/components/JsonLdScript";
-import LegalRenderer from "@/components/LegalRenderer";
+import LegalPageClient from "@/components/LegalPageClient";
 import PublicShell from "@/components/PublicShell";
-import { buildBreadcrumbSchema, buildLandingPageSchema, fetchPublicApi, SITE_URL } from "@/lib/seo";
-
-export const dynamic = "force-dynamic";
+import { buildBreadcrumbSchema, buildLandingPageSchema, SITE_URL } from "@/lib/seo";
 
 export const metadata = {
   title: "AGB – Allgemeine Geschäftsbedingungen | TRUCKSonROAD",
@@ -12,8 +10,7 @@ export const metadata = {
   alternates: { canonical: `${SITE_URL}/agb` },
 };
 
-export default async function Page() {
-  const doc = await fetchPublicApi("/legal/agb", 60);
+export default function Page() {
   const title = "AGB – Allgemeine Geschäftsbedingungen | TRUCKSonROAD";
   const description = "Allgemeine Geschäftsbedingungen von TRUCKSonROAD – Foodtruck-Catering und Eventverpflegung.";
 
@@ -30,7 +27,7 @@ export default async function Page() {
           { name: "AGB", url: `${SITE_URL}/agb` },
         ])}
       />
-      <LegalRenderer doc={doc} testIdPrefix="agb" />
+      <LegalPageClient docType="agb" testIdPrefix="agb" />
     </PublicShell>
   );
 }

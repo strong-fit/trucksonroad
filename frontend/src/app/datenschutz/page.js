@@ -1,9 +1,7 @@
 import { JsonLdScript } from "@/components/JsonLdScript";
-import LegalRenderer from "@/components/LegalRenderer";
+import LegalPageClient from "@/components/LegalPageClient";
 import PublicShell from "@/components/PublicShell";
-import { buildBreadcrumbSchema, buildLandingPageSchema, fetchPublicApi, SITE_URL } from "@/lib/seo";
-
-export const dynamic = "force-dynamic";
+import { buildBreadcrumbSchema, buildLandingPageSchema, SITE_URL } from "@/lib/seo";
 
 export const metadata = {
   title: "Datenschutzerklärung | TRUCKSonROAD",
@@ -11,8 +9,7 @@ export const metadata = {
   alternates: { canonical: `${SITE_URL}/datenschutz` },
 };
 
-export default async function Page() {
-  const doc = await fetchPublicApi("/legal/datenschutz", 60);
+export default function Page() {
   const title = "Datenschutzerklärung | TRUCKSonROAD";
   const description = "DSGVO- und nDSG-konforme Datenschutzerklärung von TRUCKSonROAD.";
 
@@ -29,7 +26,7 @@ export default async function Page() {
           { name: "Datenschutz", url: `${SITE_URL}/datenschutz` },
         ])}
       />
-      <LegalRenderer doc={doc} testIdPrefix="datenschutz" />
+      <LegalPageClient docType="datenschutz" testIdPrefix="datenschutz" />
     </PublicShell>
   );
 }
