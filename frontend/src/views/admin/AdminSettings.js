@@ -379,6 +379,11 @@ export default function AdminSettings() {
               API-Key von <a href="https://www.perplexity.ai/settings/api" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--adm-accent)' }}>perplexity.ai/settings/api</a> – wird fuer den KI Event-Scout verwendet
             </div>
           </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+            <button className="adm-btn adm-btn-primary" onClick={save} disabled={saving} data-testid="settings-save-btn-bottom">
+              <Save size={15} /> {saving ? 'Speichern...' : 'Einstellungen speichern'}
+            </button>
+          </div>
         </div>
       </div>
 
