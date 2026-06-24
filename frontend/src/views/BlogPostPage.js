@@ -133,6 +133,19 @@ export default function BlogPostPage({ slug: propSlug, initialPost = null, initi
           {renderMarkdown(content)}
         </div>
 
+        {/* Gallery */}
+        {post.gallery && post.gallery.length > 1 && (
+          <div style={{ marginTop: '2rem' }} data-testid="blog-post-gallery">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
+              {post.gallery.map((src, i) => (
+                <a key={i} href={src} target="_blank" rel="noopener noreferrer" style={{ display: 'block', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }} data-testid={`blog-gallery-item-${i}`}>
+                  <img src={src} alt={`${title} – Bild ${i + 1}`} loading="lazy" style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block', transition: 'transform 0.4s ease' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.04)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'} />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
           <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
