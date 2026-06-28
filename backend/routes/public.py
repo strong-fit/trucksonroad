@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, BackgroundTasks
 from fastapi.responses import Response as FastAPIResponse
 from datetime import datetime, timezone
 from database import db
@@ -7,10 +7,12 @@ from services.pdf import generate_veranstalter_pdf
 from services.email import (
     get_email_t, build_confirmation_email, build_admin_notification_email,
     build_status_notification_email, build_invoice_notification_email,
-    build_file_upload_notification_email, build_event_reminder_email
+    build_file_upload_notification_email, build_event_reminder_email,
+    send_email_background, get_email_settings
 )
 import uuid
 import math
+import re
 import httpx
 
 router = APIRouter()
@@ -55,13 +57,60 @@ async def check_date(date: str):
 
 # --- QUICK INQUIRY ---
 @router.post("/quick-inquiry")
-async def create_quick_inquiry(inquiry: QuickInquiryCreate):
+async def create_quick_inquiry(inquiry: QuickInquiryCreate, background_tasks: BackgroundTasks):
     doc = inquiry.model_dump()
     doc["id"] = str(uuid.uuid4())
     doc["status"] = "new"
     doc["type"] = "quick"
     doc["created_at"] = datetime.now(timezone.utc).isoformat()
+
+    # Split contact into email/phone for the admin notification template
+    contact = (doc.get("contact") or "").strip()
+    email_match = re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", contact)
+    if email_match:
+        doc["email"] = contact
+        doc["phone"] = ""
+    else:
+        doc["email"] = ""
+        doc["phone"] = contact
+
     await db.inquiries.insert_one(doc)
+
+    # Notify admin in background (does not block the response)
+    settings = await get_email_settings()
+    admin_email = settings.get("admin_notification_email") or settings.get("smtp_email") or ""
+    if admin_email:
+        try:
+            notif_doc = {
+                "name": doc.get("name", ""),
+                "email": doc.get("email", ""),
+                "phone": doc.get("phone", ""),
+                "event_date": doc.get("event_date", ""),
+                "location": doc.get("location", ""),
+                "guest_count": doc.get("guest_count", 0),
+                "event_type": "Rueckruf-Anfrage (Schnellanfrage)",
+                "selected_trucks": [],
+                "budget": "-",
+            }
+            html = build_admin_notification_email(notif_doc, lang="de")
+            subject = f"Neue Rueckruf-Anfrage von {doc.get('name', 'Gast')}"
+            background_tasks.add_task(send_email_background, admin_email, subject, html)
+        except Exception:
+            pass  # do not break the public endpoint if email fails
+
+    # Confirmation to customer if they provided a valid email
+    if doc.get("email"):
+        try:
+            conf_html = build_confirmation_email(doc, lang="de")
+            background_tasks.add_task(
+                send_email_background,
+                doc["email"],
+                "Wir haben deine Anfrage erhalten | TRUCKSonROAD",
+                conf_html,
+            )
+        except Exception:
+            pass
+
     return {"message": "Schnellanfrage gesendet", "id": doc["id"]}
 
 
