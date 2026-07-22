@@ -24,6 +24,28 @@ async def get_trucks():
     return await db.trucks.find({"is_active": True}, {"_id": 0}).sort("order", 1).to_list(100)
 
 
+# --- PUBLIC MARKETING / TRACKING CONFIG ---
+@router.get("/marketing/config")
+async def get_marketing_config():
+    """
+    Returns non-sensitive tracking IDs that the frontend uses to inject
+    analytics scripts. Consent gating is done client-side via the cookie banner.
+    """
+    s = await db.settings.find_one({"type": "general"}, {"_id": 0}) or {}
+    return {
+        "ga4_measurement_id": s.get("ga4_measurement_id", ""),
+        "gtm_container_id": s.get("gtm_container_id", ""),
+        "meta_pixel_id": s.get("meta_pixel_id", ""),
+        "google_ads_conversion_id": s.get("google_ads_conversion_id", ""),
+        "google_ads_conversion_label": s.get("google_ads_conversion_label", ""),
+        "clarity_project_id": s.get("clarity_project_id", ""),
+        "tiktok_pixel_id": s.get("tiktok_pixel_id", ""),
+        "linkedin_partner_id": s.get("linkedin_partner_id", ""),
+        "bing_uet_tag": s.get("bing_uet_tag", ""),
+        "google_verification": s.get("google_verification", ""),
+    }
+
+
 @router.get("/trucks/{slug}")
 async def get_truck(slug: str):
     truck = await db.trucks.find_one({"slug": slug}, {"_id": 0})

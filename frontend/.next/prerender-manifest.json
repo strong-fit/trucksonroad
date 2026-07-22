@@ -351,6 +351,31 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/admin/marketing": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": 3600,
+      "initialExpireSeconds": 31536000,
+      "srcRoute": "/admin/marketing",
+      "dataRoute": "/admin/marketing.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/admin/menu-kategorien": {
       "experimentalBypassFor": [
         {
@@ -980,8 +1005,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "54c21fb98e0830b73196e5f2773c25b3",
-    "previewModeSigningKey": "ff5929cfb957fef11fa37eda672a0cfdddcd91f8407b144a3eb65fbac4a9080b",
-    "previewModeEncryptionKey": "6028d7d85e535e0cf6dca6a4a7d3ef9bf5d18044e0f7a13b6358dbfdcc67c233"
+    "previewModeId": "27b4461409b70287d1a78bc30238cb48",
+    "previewModeSigningKey": "467d6a4540afd472f47a444467921734515c4369cc31ac951c2f49a4a8be5032",
+    "previewModeEncryptionKey": "acaea1c63ab78a5419e046d68d8bbb8d3a5b67b07e6344a6f00d554775fae777"
   }
 }

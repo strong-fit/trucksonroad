@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { trackEvent } from '@/lib/analytics';
 
 export default function ContactPage({ initialInfo }) {
   const { lang, t } = useLanguage();
@@ -70,7 +71,7 @@ export default function ContactPage({ initialInfo }) {
                 <div>
                   <div className="sf-contact-item-label">{t('contact_phone')}</div>
                   <div className="sf-contact-item-value">
-                    <a href={`tel:${info.phone.replace(/\s/g, '')}`} style={{ color: 'var(--sf-cream)' }}>{info.phone}</a>
+                    <a href={`tel:${info.phone.replace(/\s/g, '')}`} style={{ color: 'var(--sf-cream)' }} onClick={() => trackEvent('phone_click', { source: 'contact_page' })}>{info.phone}</a>
                   </div>
                 </div>
               </div>

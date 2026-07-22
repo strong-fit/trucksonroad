@@ -5,6 +5,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import api from '@/lib/api';
 import { toast } from 'sonner';
+import { trackConversion } from '@/lib/analytics';
 import { Calendar } from '@/components/ui/calendar';
 import { format, addDays } from 'date-fns';
 import { de, fr, it } from 'date-fns/locale';
@@ -169,6 +170,11 @@ export default function BookingWizard() {
       });
       toast.success('Buchungsanfrage erfolgreich gesendet!');
       setSubmitted(true);
+      trackConversion('booking_complete', {
+        truck: selectedTruck?.name_de || booking.truck_slug,
+        guests: payload.guest_count,
+        delivery_km: payload.delivery_km,
+      });
     } catch (err) {
       toast.error('Fehler beim Senden. Bitte versuchen Sie es erneut.');
     }

@@ -14,6 +14,7 @@
   "/admin/legal/[type]/page": "app/admin/legal/[type]/page.js",
   "/admin/legal/page": "app/admin/legal/page.js",
   "/admin/login/page": "app/admin/login/page.js",
+  "/admin/marketing/page": "app/admin/marketing/page.js",
   "/admin/menu-kategorien/page": "app/admin/menu-kategorien/page.js",
   "/admin/mitarbeiter/page": "app/admin/mitarbeiter/page.js",
   "/admin/page": "app/admin/page.js",

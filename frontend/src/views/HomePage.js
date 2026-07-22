@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { formatSwissDate } from '@/lib/dateFormat';
+import { trackConversion, trackEvent } from '@/lib/analytics';
 import { ArrowRight, Instagram, Star, Quote, ChevronRight, Calendar, Tag, Send, FileText, PartyPopper, Building2, Heart, Music, Cake, Users, Sparkles, Award, Phone } from 'lucide-react';
 
 const HERO_IMG_MAIN = "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=900&q=80";
@@ -377,6 +378,7 @@ export default function HomePage() {
                 try {
                   await api.post('/quick-inquiry', { name: quickName, contact: quickContact });
                   setQuickDone(true);
+                  trackConversion('rueckruf_submit', { form_location: 'home_hero' });
                 } catch { /* ignore */ }
                 setQuickSending(false);
               }} style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', flexWrap: 'wrap' }} data-testid="quick-inquiry-form">

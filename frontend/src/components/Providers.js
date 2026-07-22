@@ -3,6 +3,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { CookieConsentProvider } from "@/contexts/CookieConsentContext";
 import CookieBanner from "@/components/CookieBanner";
+import MarketingScripts from "@/components/MarketingScripts";
 import { Toaster } from "sonner";
 
 export default function Providers({ children }) {
@@ -13,6 +14,7 @@ export default function Providers({ children }) {
           <Toaster position="top-right" theme="dark" richColors />
           {children}
           <CookieBanner />
+          <MarketingScripts />
         </CookieConsentProvider>
       </LanguageProvider>
     </AuthProvider>

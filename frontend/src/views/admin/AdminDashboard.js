@@ -10,7 +10,7 @@ import {
   LayoutDashboard, FileText, CalendarDays, Truck, LogOut,
   Search, Menu, X, ExternalLink, Inbox, CheckCircle2, Clock,
   Settings, HelpCircle, Users, Download, DollarSign, MapPin, Star, Sparkles, BookOpen, UtensilsCrossed,
-  Scale, Database,
+  Scale, Database, TrendingUp,
 } from 'lucide-react';
 
 function AdminLayout({ children, title }) {
@@ -35,6 +35,7 @@ function AdminLayout({ children, title }) {
     { to: '/admin/menu-kategorien', icon: UtensilsCrossed, label: 'Menü-Kategorien' },
     { to: '/admin/legal', icon: Scale, label: 'Rechtliches' },
     { to: '/admin/backups', icon: Database, label: 'Backups' },
+    { to: '/admin/marketing', icon: TrendingUp, label: 'Marketing & Tracking' },
     { to: '/admin/export', icon: Download, label: t('admin_export') },
     { to: '/admin/einstellungen', icon: Settings, label: t('admin_settings') },
   ];

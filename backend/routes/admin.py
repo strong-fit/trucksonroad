@@ -562,7 +562,17 @@ async def admin_get_settings(request: Request):
         "email_notifications": False, "notification_email": "",
         "smtp_host": "smtp.gmail.com", "smtp_port": 587,
         "smtp_email": "", "smtp_password": "",
-        "perplexity_api_key": ""
+        "perplexity_api_key": "",
+        # --- Marketing & Tracking IDs ---
+        "ga4_measurement_id": "",         # G-XXXXXXX
+        "gtm_container_id": "",           # GTM-XXXXXXX
+        "meta_pixel_id": "",              # numeric ID
+        "google_ads_conversion_id": "",   # AW-XXXXXXX
+        "google_ads_conversion_label": "",# label part after / for form-submit
+        "clarity_project_id": "",         # Microsoft Clarity
+        "tiktok_pixel_id": "",
+        "linkedin_partner_id": "",
+        "bing_uet_tag": "",
     }
     if s:
         defaults.update(s)
