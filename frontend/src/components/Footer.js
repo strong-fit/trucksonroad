@@ -78,10 +78,11 @@ export default function Footer() {
 
       {/* Powered by InvictaX */}
       <div className="sf-powered-by" data-testid="footer-powered-by">
-        Softwareplattform und digitale Infrastruktur entwickelt, betrieben und lizenziert durch{' '}
+        Diese Website sowie die zugrunde liegende Softwareplattform werden von der{' '}
         <a href="https://www.invictaflow.ch" target="_blank" rel="noopener noreferrer">
           InvictaX Group GmbH
-        </a>
+        </a>{' '}
+        entwickelt, betrieben und lizenziert.
       </div>
 
       <a
