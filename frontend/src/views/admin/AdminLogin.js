@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from 'sonner';
+import PoweredByInvictaX from '@/components/PoweredByInvictaX';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -51,6 +52,7 @@ export default function AdminLogin() {
         <div style={{ textAlign: 'center', marginTop: '1rem' }}>
           <Link href="/admin/passwort-vergessen" style={{ fontSize: '0.85rem', color: 'var(--sf-gold)' }} data-testid="admin-forgot-link">{t('forgot_password')}</Link>
         </div>
+        <PoweredByInvictaX variant="light" />
       </div>
     </div>
   );

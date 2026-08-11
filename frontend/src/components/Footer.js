@@ -76,6 +76,14 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* Powered by InvictaX */}
+      <div className="sf-powered-by" data-testid="footer-powered-by">
+        Softwareplattform und digitale Infrastruktur entwickelt, betrieben und lizenziert durch{' '}
+        <a href="https://www.invictaflow.ch" target="_blank" rel="noopener noreferrer">
+          InvictaX Group GmbH
+        </a>
+      </div>
+
       <a
         href="https://api.whatsapp.com/send/?phone=41796969899&text&type=phone_number&app_absent=0"
         className="sf-whatsapp-btn"

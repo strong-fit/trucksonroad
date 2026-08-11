@@ -81,6 +81,34 @@ function AdminLayout({ children, title }) {
           <button className="adm-nav-link" onClick={handleLogout} data-testid="admin-logout-btn">
             <LogOut size={16} className="adm-nav-icon" /> {t('admin_logout')}
           </button>
+          <div
+            data-testid="admin-powered-by"
+            style={{
+              marginTop: '0.9rem',
+              paddingTop: '0.75rem',
+              borderTop: '1px solid rgba(255,255,255,0.06)',
+              fontSize: '0.65rem',
+              lineHeight: 1.5,
+              color: 'rgba(255,255,255,0.35)',
+              textAlign: 'center',
+              letterSpacing: '0.02em',
+            }}
+          >
+            Platform operated by
+            <br />
+            <a
+              href="https://www.invictaflow.ch"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: 'rgba(255,255,255,0.6)',
+                textDecoration: 'none',
+                borderBottom: '1px dotted rgba(255,255,255,0.25)',
+              }}
+            >
+              InvictaX Group GmbH
+            </a>
+          </div>
         </div>
       </aside>
 

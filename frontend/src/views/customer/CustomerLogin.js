@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
+import PoweredByInvictaX from '@/components/PoweredByInvictaX';
 import { toast } from 'sonner';
 import { Mail, ArrowRight, KeyRound, UserCheck, Loader2, ArrowLeft } from 'lucide-react';
 
@@ -270,6 +271,7 @@ export default function CustomerLogin() {
             <span style={{ fontSize: '0.82rem', color: '#9c9c94' }}>Kein Passwort nötig – sicher per E-Mail-Code</span>
           </div>
         )}
+        <PoweredByInvictaX variant="light" />
       </div>
     </div>
   );

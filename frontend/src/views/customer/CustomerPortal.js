@@ -7,6 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import api from '@/lib/api';
 import { formatSwissDate } from '@/lib/dateFormat';
 import { LogOut, FileText, Clock, CheckCircle2, Send, XCircle, Receipt, Plus, ChevronDown, ChevronUp, User, Paperclip, Lock } from 'lucide-react';
+import PoweredByInvictaX from '@/components/PoweredByInvictaX';
 import FileUpload from '@/components/FileUpload';
 import { toast } from 'sonner';
 
@@ -246,6 +247,7 @@ export default function CustomerPortal() {
             })}
           </div>
         )}
+        <PoweredByInvictaX variant="dark" />
       </div>
     </div>
   );
