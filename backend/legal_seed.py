@@ -172,7 +172,7 @@ LEGAL_SEED = {
                     "basierenden Verträgen ist – soweit gesetzlich zulässig – der Sitz des Anbieters in Wetzikon ZH.\n\n"
                     "**TRUCKSonROAD**\n"
                     "Bahnhofstrasse 75 · 8620 Wetzikon · Schweiz\n"
-                    "info@truckonroad.ch · +41 79 696 98 99"
+                    "info@trucksonroad.ch · +41 79 696 98 99"
                 ),
             },
         ],
@@ -190,7 +190,7 @@ LEGAL_SEED = {
                     "**TRUCKSonROAD**\n"
                     "Bahnhofstrasse 75\n"
                     "8620 Wetzikon ZH · Schweiz\n"
-                    "info@truckonroad.ch\n"
+                    "info@trucksonroad.ch\n"
                     "Telefon: +41 79 696 98 99"
                 ),
             },
@@ -338,7 +338,7 @@ LEGAL_SEED = {
                     "- **auf Datenübertragbarkeit** (Art. 20 DSGVO);\n"
                     "- **auf Widerspruch gegen die Verarbeitung** (Art. 21 DSGVO);\n"
                     "- **auf Widerruf erteilter Einwilligungen** mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO).\n\n"
-                    "Zur Ausübung Ihrer Rechte genügt eine formlose Mitteilung per E-Mail an info@truckonroad.ch."
+                    "Zur Ausübung Ihrer Rechte genügt eine formlose Mitteilung per E-Mail an info@trucksonroad.ch."
                 ),
             },
             {
@@ -367,7 +367,7 @@ LEGAL_SEED = {
                     "Wir behalten uns vor, diese Datenschutzerklärung jederzeit anzupassen, um sie geänderten "
                     "Rechtsvorschriften oder Änderungen unserer Leistungen anzupassen. Für den erneuten Besuch gilt dann "
                     "die jeweils aktuelle Fassung.\n\n"
-                    "Bei Fragen zum Datenschutz erreichen Sie uns unter info@truckonroad.ch."
+                    "Bei Fragen zum Datenschutz erreichen Sie uns unter info@trucksonroad.ch."
                 ),
             },
         ],
@@ -390,7 +390,7 @@ LEGAL_SEED = {
                 "heading": "Kontakt",
                 "content": (
                     "Telefon: +41 79 696 98 99\n"
-                    "E-Mail: info@truckonroad.ch\n"
+                    "E-Mail: info@trucksonroad.ch\n"
                     "Web: www.trucksonroad.ch"
                 ),
             },

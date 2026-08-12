@@ -145,7 +145,7 @@ export default function LegalRenderer({ doc, badgeLabel = 'Rechtliches', testIdP
                 <>Letzte Aktualisierung: <strong>{updatedDate}</strong> · Version {doc.version}<br /></>
               )}
               <strong>TRUCKSonROAD</strong> · Bahnhofstrasse 75 · 8620 Wetzikon · Schweiz<br />
-              <a href="mailto:info@truckonroad.ch">info@truckonroad.ch</a> · +41 79 696 98 99
+              <a href="mailto:info@trucksonroad.ch">info@trucksonroad.ch</a> · +41 79 696 98 99
             </p>
           </div>
         </div>
