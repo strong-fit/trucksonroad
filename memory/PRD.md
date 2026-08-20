@@ -24,6 +24,9 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
   src/lib/ (api.js, translations.js)
 ```
 
+## Deployment Fixes Log
+- **2026-06 — Production JS chunks 404 (P0, FIXED in code):** Root cause was NOT DNS/Cloudflare (previous fork's theory was wrong). Next.js 16.2.x defaults to the **Turbopack** build bundler, which emits `/_next/static/chunks/*.js` filenames containing `~` (tilde, a URL-reserved char). Emergent's production ingress/WAF rejected those JS URLs (returned 153-byte `text/html` 404) while `.css` served fine. Verified via curl on `hellpetrol-staging.emergent.host` (JS 404) vs preview (identical build, all 200). Fix: changed `frontend/package.json` build script to `next build --webpack`, which produces standard hex chunk names (e.g. `9627-fbb82a7a97c049f2.js`). Rebuilt + verified all 16 chunks serve 200 in preview. **User must REDEPLOY for production to pick this up.**
+
 ## Completed Features
 
 ### Public Website

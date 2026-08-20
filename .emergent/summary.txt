@@ -1,121 +1,151 @@
-<analysis>**original_problem_statement**: The user wants to build a premium, highly professional website for a food truck business (formerly StrongFood, now rebranded to TruckOnRoad) targeting festivals, corporate events, and private parties. Requirements include a strong visual start page, dedicated pages for specific truck concepts, detailed inquiry form, availability calendar, an admin dashboard, and automated email flows.
+<analysis>**original_problem_statement**: 
+The user is building a premium, highly professional full-stack website for a food truck business rebranded to TRUCKSonROAD. The platform features a strong visual start page, dedicated truck pages, a detailed inquiry form, automated email flows, PDF offer generation, and a comprehensive Admin Dashboard. The core requirement is Conversion Rate Optimization (CRO), emotional sales UX, perfect SEO (Server-Side Rendering), and multilingual support. 
+PRODUCT REQUIREMENTS:
+- Emotional, conversion-optimized landing pages.
+- Dynamic Next.js SSR to fix JS-only crawler issues.
+- Complete B2B/B2C inquiry flow including a Multi-Step Booking Wizard.
+- Passwordless Authentication for Customers (Email & 6-digit OTP).
+- Multilingual support (DE, EN, FR, IT, ES).
+- DSGVO & Swiss DSG compliant legal pages and cookie handling.
+- Automated Infomaniak S3 database backups.
+- Comprehensive Marketing & Tracking suite.
 
-**User's preferred language**: German (INSTRUCT NEXT AGENT: You MUST respond and provide all user-facing communication in German).
+**User's preferred language**: German (You MUST automatically detect the user's primary language from their messages inside the <trajectory> tag and INSTRUCT next agent to respond in the user's preferred language only)
 
 **what currently exists?** 
-A full-stack application with a React frontend and FastAPI/MongoDB backend. The public-facing pages (Home, Trucks, etc.) have been completely restyled to match the user's exact HTML/CSS requirements and rebranded to TruckOnRoad. The Admin area currently has a basic functional UI, but the user has just provided a new comprehensive HTML template to completely redesign it.
+A fully functional React (Next.js App Router) + FastAPI + MongoDB application. Features include passwordless customer login, a multi-step booking wizard, calendar availability blocking, and a comprehensive admin portal. The app now features a fully integrated, consent-gated Marketing & Tracking module (GA4, Meta, etc.), static legal pages (AGB, Datenschutz, Impressum) that fetch content client-side from the DB to bypass production hosting limits, and universal InvictaX Group GmbH branding.
 
-**Last working item**:
-- Last item agent was working: Preparing to refactor the Admin Dashboard UI. The user provided a massive raw HTML snippet for a new Admin layout and explicitly requested to make the design lighter so it is more readable (alles heller damit es leserlicher ist). The agent was just viewing the existing Admin React components to plan the decomposition.
-- Status: IN PROGRESS
-- Agent Testing Done: N
-- Which testing method agent to use? Frontend testing agent (to verify the complex new Admin routing and UI state) + manual screenshot tool.
-- User Testing Done: N
+**Last working item**: 
+    - Last item agent was working: Diagnosing a production deployment issue where the site renders HTML but fails to load Next.js JavaScript chunks, resulting in a broken/blank frontend for visitors. Agent identified this as a DNS/Cloudflare redirect issue (the  subdomain returns 404 for static assets) and drafted an email for the user to send to Emergent Support.
+    - Status: BLOCKED (Awaiting Emergent Support / DNS fix by user)
+    - Agent Testing Done: Y (Diagnosed via curl)
+    - Which testing method agent to use? manual testing by curl
+    - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-Issue 1: Admin Dashboard Redesign & Light Theme Adaptation (Priority: P0)
-- Attempted fixes: Agent viewed the existing , , , and  files to understand the current structure. No code changes made yet.
-- Next debug checklist: 
-  1. Extract the CSS from the user's provided HTML and adapt the CSS variables (, , , etc.) to *lighter* colors as explicitly requested by the user. 
-  2. Refactor the  layout to include the new sidebar and topbar structure.
-  3. Break down the provided HTML into the respective React components (, , etc.).
-- Why fix this issue and what will be achieved with the fix? Fulfills the user's immediate request for a highly polished, readable, and structured Admin UI.
-- Status: IN PROGRESS
-- Is recurring issue? N
-- Should Test frontend/backend/both after fix? Frontend (Screenshots + Testing Agent)
+  Issue 1: Production Deployment Static Assets 404 (Priority: P0)
+     - Attempted fixes: Agent verified preview works perfectly. Used curl to trace production requests and found that HTML is served, but JS chunks request are redirected to the  subdomain which returns a 404 from a foreign nginx server.
+     - Next debug checklist: Check if the user has received a response from Emergent Support or fixed their Cloudflare DNS rules. **DO NOT attempt to fix this by modifying Next.js config or code; this is strictly an infrastructure/DNS issue.**
+     - Why fix this issue and what will be achieved with the fix? The live production site is currently non-interactive (JS broken).
+     - Status: BLOCKED
+     - Is recurring issue? Y (Related to deployment environment quirks)
+     - Should Test frontend/backend/both after fix? Frontend (via curl/browser)
+     - Blocked on other issue: User/Emergent Support action
 
-**In progress Task List**:
-Task 1: Admin UI HTML Integration
-- Where to resume: Modify  components to match the newly provided HTML structure. Make sure to update the CSS root variables for the Admin section to be light-themed instead of the dark theme provided in the raw HTML.
-- What will be achieved with this? A premium, highly functional, and readable Admin dashboard.
-- Status: IN PROGRESS
-- Should Test frontend/backend/both after fix? Frontend
+**In progress Task List**: 
+  (None - Agent successfully completed the Marketing Module and Branding tasks).
 
-**Upcoming and Future Tasks**:
-Upcoming Tasks:
-- Implement automated E-Mail flows (Confirmation to client, internal notification, PDF offer sending). (P1)
-- Create About Us & Contact pages. (P1)
+**Upcoming and Future Tasks**
+    Upcoming Tasks:
+    - PDF-Download-Event tracking integration (P1).
+    - Bewertungs-Automation: Auto-email customers 3 days after an event asking for a Google Review (P1).
+    - Newsletter-System: Integration with Brevo/Mailchimp + Admin UI (P2).
+    - Stripe Payment Integration for online deposits (P2).
+    - WhatsApp Business API integration (P3).
+    Future Tasks:
+    - Instruct user to ensure SMTP credentials are saved in the Admin Settings so emails actually send (P1).
+    - Local SEO Landing-Pages auto-generation (P3).
+    - App.css Refactoring (break down ~2800 lines into modules) (P4).
 
-Future Tasks:
-- Multi-language support (DE/EN) fully populated. (P2)
-- Downloadable PDF area for event organizers. (P2)
+**Completed work in this session**
+- Fixed E2E QA bugs: Horizontal mobile scrolling and zero-padded Swiss date formats (DONE)
+- Refactored Legal pages (, , ) from  to static exports with client-side DB fetching () to fix production routing failures (DONE)
+- Added 2nd Save button to Admin Settings UX (DONE)
+- Created new Stadtfest Wetzikon 2026 blog post and updated Burger Truck gallery with user images (DONE)
+- Fixed Quick Inquiry feature to actually trigger Admin and Customer emails (DONE)
+- Built comprehensive Marketing & Tracking module () with consent-gated injection for GA4, Meta Pixel, Clarity, etc., and wired up Conversion Events (DONE)
+- Integrated Powered by InvictaX Group GmbH branding across public footer, login pages, admin sidebar, and Impressum (DONE)
+- Updated Impressum with correct owner details (Alexander Araujo, Einzelfirma) and fixed a global typo ( -> ) across DB, PDF generation, and templates (DONE)
 
-**Completed work in this session**:
-- Rebranded the entire application from StrongFood to TruckOnRoad (Logo, text, DB credentials, environment variables). (DONE)
-- Perfected CSS and DOM alignment for the public Home Page, Hero section, Trucks section, and Footer based on user's exact HTML reference. (DONE)
-- Replaced local/placeholder images with specific Unsplash URLs provided by the user in the seed data and frontend. (DONE)
-- Updated Admin Login to  in the MongoDB  collection. (DONE)
+**Earlier issues found/mentioned but not fixed**
+    None.
 
-**Earlier issues found/mentioned but not fixed**:
-None
+**Known issue recurrence from previous fork**
+  - Issue recurrence in previous fork: Production hosting routing/asset serving issues (Static vs Dynamic Next.js handling on Emergent Native hosting).
+  - Recurrence count: 2
+  - Status: BLOCKED (On Infrastructure/DNS)
 
-**Known issue recurrence from previous fork**:
-- Issue recurrence in previous fork: NA
-- Recurrence count: 0
-- Status: NA
-
-**Code Architecture**:
+**Code Architecture**
 
 
-**Key Technical Concepts**:
-Frontend: React, Tailwind CSS (mostly overridden by custom CSS in ), Context API.
-Backend: FastAPI, Motor (async MongoDB), JWT Authentication.
-Database: MongoDB (Local).
+**Key Technical Concepts**
+Frontend: Next.js 16 (App Router), React, Tailwind CSS. Client-side fetch for legal pages to bypass static export limits. Consent-gated script injection.
+Backend: FastAPI, Motor (MongoDB).
+Tracking: GA4, GTM, Meta Pixel, Clarity via  and .
+Auth: Passwordless OTP for customers. JWT for Admins.
 
-**key DB schema**:
-- users: {email, password_hash, role}
-- trucks: {name, description, features, capacity, images}
-- inquiries: {first_name, last_name, email, phone, event_date, status, selected_trucks}
+**key DB schema**
+  - : {doc_type, version, sections, timestamp, changed_by, active}
+  - : Now includes , , , etc.
+  - : {status, event_date, budget, delivery_cost}
 
-**changes in tech stack**:
-None.
+**changes in tech stack**
+  - None.
 
-**All files of reference**:
--  (Contains all the global custom CSS, will need new Admin CSS)
--  (All admin files need complete refactoring)
--  (For any backend data structure adjustments if the new Admin UI requires it)
+**All files of reference** 
+  -  (New - Handles tracker injection)
+  -  (New - unified tracking methods)
+  -  (New - Admin UI for IDs)
+  -  (New - Client fetcher for legal text)
+  -  (New - Branding component)
+  -  &  (Updated to fix email typo)
 
-**Areas that need refactoring**:
-- : Needs a complete rewrite to match the user's provided HTML layout. Ensure you create a shared  component that houses the new Sidebar and Topbar.
+**Areas that need refactoring**: 
+  -  is massive (~2800 lines) and needs breaking into modules.
 
-**key api endpoints**:
-- 
--  (Admin)
-- 
-- 
+**key api endpoints**
+  -  (Public endpoint for tracking IDs)
+  -  (Now triggers emails)
+  - 
 
-**Critical Info for New Agent**:
-1. **Admin Redesign Constraint**: The user provided a raw HTML file for the Admin area that uses a *dark theme* (CSS variables like , ). However, their prompt explicitly says: *den Asmin bereich so auf evtl alles heller damit es leserlicher ist* (**Make it lighter so it is more readable**). You MUST adjust the CSS color palette to a light theme when implementing the React components.
-2. **Rebranding Completed**: The app name is now TruckOnRoad. The Admin email has been successfully updated in the DB to . 
-3. **File Editing**: Continue using  for existing files. DO NOT use  with overwrite for existing components.
+**Critical Info for New Agent** 
+  - **Language:** ALWAYS communicate with the user in **German**.
+  - **DNS/Deployment Crisis:** The live site () is currently failing to load JS chunks on the  subdomain due to a Cloudflare/DNS redirect misconfiguration by the user/Emergent. The agent has instructed the user to email support. **Do not attempt to fix this via code changes.** Wait for the user to confirm it is resolved on the infrastructure side.
+  - **SMTP Pending:** The user has not yet entered their SMTP app password in the Admin Settings. Quick Inquiries and Booking emails will log a warning and silently fail until this is done.
+  - **Typo Fixed:** The email  was a typo. It has been meticulously updated to  everywhere in the codebase and DB. Do not revert this.
 
-**documents and test reports created in this job**:
--  (Updated with rebranding and frontend task completion)
--  (Updated)
--  (Passed for public site CSS refactor)
+**documents and test reports created in this job** 
+  -  (Updated)
 
-**Last 10 User Messages and any pending HUMAN messages**:
-1. User provided HTML code to exactly match sizes and layout.
-2. User provided screenshots noting image design/positioning issues.
-3. User instructed to change the brand name to TruckOnRoad everywhere (Logo: TRUCK in cream, ON in gold, ROAD in cream).
-4. (Latest) User provided a massive new raw HTML snippet for the Admin Dashboard and requested: Bei mir den Asmin bereich so auf evtl alles heller damit es leserlicher ist (Set up the admin area like this, but possibly make everything lighter so it is more readable).
+**Last 10 User Messages and any pending HUMAN messages** 
+ 1. User: Asked for explanation of the whole system's marketing capabilities.
+ 2. Agent: Provided a comprehensive overview and suggested next steps (Newsletter, Reviews, WhatsApp).
+ 3. User: Requested InvictaX Group GmbH branding across all footers, admin pages, and Impressum with specific legal text.
+ 4. Agent: Implemented  and updated Impressum DB.
+ 5. User: Provided full InvictaX company details (HR-Nr, UID, address) and required exact wording.
+ 6. Agent: Updated Impressum to v4 and refined footer wording. Tested via screenshots.
+ 7. User: Noted that the actual owner of TrucksOnRoad is Alexander Araujo (Einzelfirma, no GmbH) and there was a typo in the email.
+ 8. Agent: Fixed the  typo globally, updated Impressum to v5 (Alexander Araujo as owner, InvictaX as platform provider).
+ 9. User: Sent screenshot of console errors on production ( for JS chunks).
+ 10. Agent: Diagnosed a Cloudflare DNS redirect issue ( vs ) blocking Next.js chunks. Wrote a support ticket for the user to send to Emergent Support. (PENDING HUMAN MESSAGE: Awaiting confirmation if the site is fixed via Emergent Support).
 
-**Project Health Check**:
-Healthy. The public site is functioning and visually correct. Admin area is functional but pending a major UI rewrite.
+**Project Health Check:**
+Preview: Healthy.
+Production: Broken (Infrastructure/DNS issue blocking static assets).
 
-**3rd Party Integrations**:
-None currently implemented. 
+**3rd Party Integrations** 
+  - Emergent Object Storage — uses Emergent LLM Key
+  - LiteLLM / Perplexity (via ) — uses Emergent LLM Key
+  - Infomaniak Swiss Backup (S3) — requires User API Key (Saved in DB)
+  - Gmail SMTP — requires User App Password (Pending user input in Admin)
+  - Google Analytics 4, Meta Pixel, Microsoft Clarity — requires User IDs (Configured in DB)
 
-**Testing status**:
-- Testing agent used after significant changes: YES (iteration_2.json passed for public frontend)
-- Troubleshoot agent used after agent stuck in loop: NO
-- Test files created: None
-- Known regressions: None currently, but Admin refactor is a high-risk change.
+**Testing status**
+  - Testing agent used after significant changes: NO (Used screenshot tool extensively for visual UI checks and verifying script tags in DOM).
+  - Troubleshoot agent used after agent stuck in loop: NO
+  - Test files created: None manually
+  - Known regressions: None code-related.
 
-**Credentials to test flow**:
-Admin Email: 
-Admin Password: 
-(Updated during this session, verify in )
+**Credentials to test flow:**
+Check 
+Admin:  (Login email deliberately kept as original for auth) / 
 
-**What agent forgot to execute**:
-Nothing forgotten; the agent just received the massive Admin HTML snippet and was planning the refactoring steps when the session ended.</analysis>
+**What agent forgot to execute**
+Nothing forgotten. Awaiting user/Emergent Support to fix the DNS issue.
+
+**Debugging checklist for current issue**
+    Issue: Production Deployment Static Assets 404 ( subdomain)
+    Action:
+    - Ask the user if Emergent Support has replied or if the Cloudflare redirect has been fixed.
+    - Run  to see if it still returns 404.
+    - If it returns 200, the infrastructure issue is resolved, and normal feature development (like Review Automations or Newsletters) can continue.</analysis>

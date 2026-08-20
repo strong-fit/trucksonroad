@@ -7,7 +7,7 @@ import requests
 # Add backend to path for direct module import
 sys.path.insert(0, "/app/backend")
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://truck-management-pro.preview.emergentagent.com").rstrip("/")
+BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://fleet-build.preview.emergentagent.com").rstrip("/")
 
 
 # --- Direct module tests for build_verification_code_email umlauts ---

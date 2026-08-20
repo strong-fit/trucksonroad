@@ -12,7 +12,7 @@ from datetime import datetime, timedelta, timezone
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "").rstrip("/")
 if not BASE_URL:
-    BASE_URL = "https://truck-management-pro.preview.emergentagent.com"
+    BASE_URL = "https://fleet-build.preview.emergentagent.com"
 API = f"{BASE_URL}/api"
 
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")

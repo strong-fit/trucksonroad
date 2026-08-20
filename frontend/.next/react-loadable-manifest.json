@@ -1,0 +1,28 @@
+{
+  "app/admin/marketing/page.js -> @/views/admin/AdminMarketing": {
+    "id": 8247,
+    "files": [
+      "static/chunks/5337-eb3ac1661eca0f6d.js",
+      "static/chunks/8500-9572900477fc9fdc.js",
+      "static/chunks/6609-19bc68b175b4424f.js",
+      "static/chunks/8156-610b3e6078ab33e5.js",
+      "static/chunks/3290-20e9c8f75358da5d.js",
+      "static/chunks/2811-e74f4cc92b6873ed.js",
+      "static/chunks/8247.41a4e3a89a6ae0ef.js"
+    ]
+  },
+  "app/admin/routen/page.js -> @/views/admin/AdminRoutes": {
+    "id": 8501,
+    "files": [
+      "static/css/85ef5570decbcc52.css",
+      "static/chunks/d0deef33.f8ec60445fe52e8c.js",
+      "static/chunks/5337-eb3ac1661eca0f6d.js",
+      "static/chunks/8500-9572900477fc9fdc.js",
+      "static/chunks/6609-19bc68b175b4424f.js",
+      "static/chunks/8156-610b3e6078ab33e5.js",
+      "static/chunks/3290-20e9c8f75358da5d.js",
+      "static/chunks/2811-e74f4cc92b6873ed.js",
+      "static/chunks/8501.3630afc2f77fd332.js"
+    ]
+  }
+}

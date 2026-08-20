@@ -1,3 +1,0 @@
-module.exports=[68282,a=>{"use strict";var b=a.i(57850),c=a.i(45056),d=a.i(93609);a.s(["default",0,function(){let a=(0,d.useRouter)();return(0,c.useEffect)(()=>{a.replace("/admin/dashboard")},[a]),(0,b.jsx)("div",{className:"min-h-screen flex items-center justify-center",style:{background:"var(--sf-bg)"},children:(0,b.jsx)("div",{className:"sf-spinner"})})}])}];
-
-//# sourceMappingURL=frontend_src_app_admin_page_0_bxv1k.js.map
