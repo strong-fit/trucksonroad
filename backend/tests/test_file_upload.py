@@ -357,5 +357,5 @@ def cleanup_temp_files(small_test_file, large_test_file, request):
         try:
             if f and os.path.exists(f):
                 os.remove(f)
-        except:
+        except Exception:
             pass

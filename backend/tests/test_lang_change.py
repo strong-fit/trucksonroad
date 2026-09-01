@@ -124,7 +124,7 @@ class TestAdminInquiryLanguageChange:
         if self.test_inquiry_id:
             try:
                 self.session.delete(f"{BASE_URL}/api/admin/inquiries/{self.test_inquiry_id}")
-            except:
+            except Exception:
                 pass
         self.session.close()
     
