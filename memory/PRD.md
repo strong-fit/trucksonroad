@@ -25,7 +25,8 @@ Premium, professionelle Website fuer "TRUCKSonROAD" – Foodtruck-Unternehmen fu
 ```
 
 ## Deployment Fixes Log
-- **2026-06 — Production JS chunks 404 (P0, FIXED in code):** Root cause was NOT DNS/Cloudflare (previous fork's theory was wrong). Next.js 16.2.x defaults to the **Turbopack** build bundler, which emits `/_next/static/chunks/*.js` filenames containing `~` (tilde, a URL-reserved char). Emergent's production ingress/WAF rejected those JS URLs (returned 153-byte `text/html` 404) while `.css` served fine. Verified via curl on `hellpetrol-staging.emergent.host` (JS 404) vs preview (identical build, all 200). Fix: changed `frontend/package.json` build script to `next build --webpack`, which produces standard hex chunk names (e.g. `9627-fbb82a7a97c049f2.js`). Rebuilt + verified all 16 chunks serve 200 in preview. **User must REDEPLOY for production to pick this up.**
+- **2026-06 — Production JS chunks 404, REAL ROOT CAUSE (P0):** The build output folder `frontend/.next/` was committed to git (698 files incl. `.next/cache/` and stale static chunks). Root `.gitignore` only ignored `/.next/` (repo root), NOT `frontend/.next/`. Deploy pulled in the stale committed build → SSR/HTML layer served fresh app-chunk hashes while the static layer shipped stale/mismatched ones → `app/*` + `main-app` chunks 404 → JS never loads (blank page). Fix: `git rm -r --cached frontend/.next` (untracked, files kept on disk) + changed `.gitignore` rule from `/.next/` to `.next/` (matches at any depth). Now deploy builds clean from scratch, HTML + static from same build. **Requires user REDEPLOY to take effect on production.**
+- **2026-06 — Turbopack tilde filenames (secondary, FIXED earlier):** next@16.2 Turbopack default build emitted `/_next/static/chunks/*.js` with `~` in names; nginx ingress 404'd them. Fixed by switching build script to `next build --webpack`. Live.
 
 ## Completed Features
 
