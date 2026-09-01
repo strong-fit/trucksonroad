@@ -31,17 +31,17 @@
   "/page": "app/page.js",
   "/trucks/[slug]/page": "app/trucks/[slug]/page.js",
   "/veranstalter/page": "app/veranstalter/page.js",
-  "/agb/page": "app/agb/page.js",
-  "/admin/backups/page": "app/admin/backups/page.js",
+  "/admin/legal/page": "app/admin/legal/page.js",
   "/admin/legal/[type]/page": "app/admin/legal/[type]/page.js",
   "/blog/page": "app/blog/page.js",
   "/datenschutz/page": "app/datenschutz/page.js",
   "/faq/page": "app/faq/page.js",
   "/fuer-veranstalter/page": "app/fuer-veranstalter/page.js",
   "/impressum/page": "app/impressum/page.js",
-  "/trucks/page": "app/trucks/page.js",
-  "/private-events/page": "app/private-events/page.js",
   "/kontakt/page": "app/kontakt/page.js",
+  "/private-events/page": "app/private-events/page.js",
+  "/trucks/page": "app/trucks/page.js",
   "/ueber-uns/page": "app/ueber-uns/page.js",
-  "/admin/legal/page": "app/admin/legal/page.js"
+  "/agb/page": "app/agb/page.js",
+  "/admin/backups/page": "app/admin/backups/page.js"
 }

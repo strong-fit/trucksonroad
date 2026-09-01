@@ -31,17 +31,17 @@
   "/page": "/",
   "/trucks/[slug]/page": "/trucks/[slug]",
   "/veranstalter/page": "/veranstalter",
-  "/agb/page": "/agb",
-  "/admin/backups/page": "/admin/backups",
+  "/admin/legal/page": "/admin/legal",
   "/admin/legal/[type]/page": "/admin/legal/[type]",
   "/blog/page": "/blog",
   "/datenschutz/page": "/datenschutz",
   "/faq/page": "/faq",
   "/fuer-veranstalter/page": "/fuer-veranstalter",
   "/impressum/page": "/impressum",
-  "/trucks/page": "/trucks",
-  "/private-events/page": "/private-events",
   "/kontakt/page": "/kontakt",
+  "/private-events/page": "/private-events",
+  "/trucks/page": "/trucks",
   "/ueber-uns/page": "/ueber-uns",
-  "/admin/legal/page": "/admin/legal"
+  "/agb/page": "/agb",
+  "/admin/backups/page": "/admin/backups"
 }
